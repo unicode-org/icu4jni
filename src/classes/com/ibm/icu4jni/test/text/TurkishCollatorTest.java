@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/TurkishCollatorTest.java,v $ 
-* $Date: 2001/03/23 19:43:17 $ 
-* $Revision: 1.5 $
+* $Date: 2001/06/04 16:15:36 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -121,8 +121,8 @@ public final class TurkishCollatorTest extends TestFmwk
     Collator.RESULT_LESS,
     Collator.RESULT_GREATER,
     Collator.RESULT_LESS,
-    Collator.RESULT_EQUAL,
-    Collator.RESULT_EQUAL                                               
+    Collator.RESULT_LESS,
+    Collator.RESULT_GREATER                                               
   };
 }
 
