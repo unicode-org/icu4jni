@@ -145,10 +145,10 @@ distclean-local: clean-local
 check-local: testconv testfmwk
 
 testfmwk:
-	LD_LIBRARY_PATH=$(prefix)/lib $(JAVA_EXEC) -classpath :./build/classes: -Djava.library.path=$(prefix)/lib:$(PATHWD)/build/lib: com.ibm.icu4jni.test.TestAll -nothrow
+	LD_LIBRARY_PATH=$(prefix)/lib ICU_DATA=$(prefix)/lib/icu/$(VERSION) $(JAVA_EXEC) -classpath :./build/classes: -Djava.library.path=$(prefix)/lib:$(PATHWD)/build/lib: com.ibm.icu4jni.test.TestAll -nothrow
 
 testconv:
-	LD_LIBRARY_PATH=$(prefix)/lib $(JAVA_EXEC) -classpath :./build/classes: -Djava.library.path=$(prefix)/lib:$(PATHWD)/build/lib: com.ibm.icu4jni.test.converters.TestConv
+	LD_LIBRARY_PATH=$(prefix)/lib ICU_DATA=$(prefix)/lib/icu/$(VERSION) $(JAVA_EXEC) -classpath :./build/classes: -Djava.library.path=$(prefix)/lib:$(PATHWD)/build/lib: com.ibm.icu4jni.test.converters.TestConv
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
