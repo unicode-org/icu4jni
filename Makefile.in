@@ -19,20 +19,24 @@ subdir = .
 ####################################################################
 # Load ICU information. You can copy this to other makefiles #######
 ####################################################################
+SHLIB_c=$(shell @ICU_CONFIG@ --shlib-c)
+SHLIB_cc=$(shell @ICU_CONFIG@ --shlib-cc)
+SHAREDLIBCFLAGS  =$(shell @ICU_CONFIG@ --cflags-dynamic)
+SHAREDLIBCXXFLAGS=$(shell @ICU_CONFIG@ --cxxflags-dynamic)
+SHREDLIBCPPFLAGS =$(shell @ICU_CONFIG@ --cppflags-dynamic)
 CC=$(shell @ICU_CONFIG@ --cc)
 CXX=$(shell @ICU_CONFIG@ --cxx)
-CPPFLAGS=$(shell @ICU_CONFIG@ --cppflags)
-CFLAGS=$(shell @ICU_CONFIG@ --cflags)
-CXXFLAGS=$(shell @ICU_CONFIG@ --cxxflags)
+CPPFLAGS=$(shell @ICU_CONFIG@ --cppflags) $(SHAREDLIBCFLAGS)
+CFLAGS=$(shell @ICU_CONFIG@ --cflags)  $(SHAREDLIBCXXFLAGS)
+CXXFLAGS=$(shell @ICU_CONFIG@ --cxxflags) $(SHREDLIBCPPFLAGS)
 LDFLAGS =$(shell @ICU_CONFIG@ --ldflags)
 INVOKE =$(shell @ICU_CONFIG@ --invoke)
 SO =$(shell @ICU_CONFIG@ --so)
 BINDIR = $(shell @ICU_CONFIG@ --bindir)
 GENRB=$(shell @ICU_CONFIG@ --invoke=genrb)
 PKGDATA=$(shell @ICU_CONFIG@ --invoke=pkgdata)
-SHLIB_c=$(shell @ICU_CONFIG@ --shlib-c)
-SHLIB_cc=$(shell @ICU_CONFIG@ --shlib-cc)
 ####################################################################
+
 MKINSTALLDIRS = $(SHELL) $(top_srcdir)/mkinstalldirs
 
 INSTALL = @INSTALL@

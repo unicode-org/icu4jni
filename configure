@@ -801,7 +801,7 @@ case "${host}" in
         *-*-freebsd*)   CANON="bsd" ;;
         *-*-aix*)       CANON="aix" ;;
         *-sequent-*)    CANON="ptx" ;;
-        *-*-hpux*)      CANON="hpux" ;;
+        *-*-hpux*)      CANON="hp-ux" ;;
         *-*-irix*)      CANON="irix" ;;
         *-*-os390*)     CANON="os390" ;;
         *-*-os400*)     CANON="os400" ;;
