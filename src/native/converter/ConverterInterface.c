@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/native/converter/ConverterInterface.c,v $ 
-* $Date: 2005/01/28 02:53:03 $ 
-* $Revision: 1.24 $
+* $Date: 2005/02/01 01:12:19 $ 
+* $Revision: 1.25 $
 *
 *******************************************************************************
 */
@@ -239,7 +239,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_encode(JNIEnv *env,
     if(cnv && myData){
         
        UErrorCode errorCode = U_ZERO_ERROR;
-        myData[3] = ucnv_fromUInputHeld(cnv, &errorCode);
+        myData[3] = ucnv_fromUCountPending(cnv, &errorCode);
 
         if(ec == U_ILLEGAL_CHAR_FOUND || ec == U_INVALID_CHAR_FOUND){
             jint count =0;
@@ -344,7 +344,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_decode(JNIEnv *env,
 
     if(myData && cnv){
         UErrorCode errorCode = U_ZERO_ERROR;
-        myData[3] = ucnv_toUInputHeld(cnv, &errorCode);
+        myData[3] = ucnv_toUCountPending(cnv, &errorCode);
 
         if(ec == U_ILLEGAL_CHAR_FOUND || ec == U_INVALID_CHAR_FOUND ){
             char invalidChars[32] = {'\0'};
