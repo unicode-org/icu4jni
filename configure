@@ -974,48 +974,10 @@ fi
 ICU_MAKEFILE=$prefix/lib/icu/Makefile.inc
 
 
-# Extract the first word of "java", so it can be a program name with args.
-set dummy java; ac_word=$2
-echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:981: checking for $ac_word" >&5
-if eval "test \"`echo '$''{'ac_cv_path_JAVA_HOME'+set}'`\" = set"; then
-  echo $ac_n "(cached) $ac_c" 1>&6
-else
-  case "$JAVA_HOME" in
-  /*)
-  ac_cv_path_JAVA_HOME="$JAVA_HOME" # Let the user override the test with a path.
-  ;;
-  ?:/*)			 
-  ac_cv_path_JAVA_HOME="$JAVA_HOME" # Let the user override the test with a dos path.
-  ;;
-  *)
-  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS=":"
-  ac_dummy="$PATH"
-  for ac_dir in $ac_dummy; do 
-    test -z "$ac_dir" && ac_dir=.
-    if test -f $ac_dir/$ac_word; then
-      ac_cv_path_JAVA_HOME="$ac_dir/$ac_word"
-      break
-    fi
-  done
-  IFS="$ac_save_ifs"
-  ;;
-esac
-fi
-JAVA_HOME="$ac_cv_path_JAVA_HOME"
-if test -n "$JAVA_HOME"; then
-  echo "$ac_t""$JAVA_HOME" 1>&6
-else
-  echo "$ac_t""no" 1>&6
-fi
-
-
-
-
 # Extract the first word of "java ", so it can be a program name with args.
 set dummy java ; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:1019: checking for $ac_word" >&5
+echo "configure:981: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_JAVA'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1045,7 +1007,7 @@ fi
 # Extract the first word of "javac ", so it can be a program name with args.
 set dummy javac ; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:1049: checking for $ac_word" >&5
+echo "configure:1011: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_JAVAC'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1072,10 +1034,17 @@ else
   echo "$ac_t""no" 1>&6
 fi
 
+if  "${JAVA}" == "false"  ; then
+     { echo "configure: error: Could not find JAVA virtual machine. Please check its existence." 1>&2; exit 1; }
+fi
+if  "${JAVAC}" == "false"  ; then
+     { echo "configure: error: Could not find JAVAC compiler. Please check its existence." 1>&2; exit 1; } 
+fi
+
 
 ac_safe=`echo "$JAVA_HOME/include/jni.h" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for $JAVA_HOME/include/jni.h""... $ac_c" 1>&6
-echo "configure:1079: checking for $JAVA_HOME/include/jni.h" >&5
+echo "configure:1048: checking for $JAVA_HOME/include/jni.h" >&5
 if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1100,7 +1069,7 @@ fi
 
 ac_safe=`echo "$JAVA_HOME/include/$OSTYPE/jni_md.h" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for $JAVA_HOME/include/$OSTYPE/jni_md.h""... $ac_c" 1>&6
-echo "configure:1104: checking for $JAVA_HOME/include/$OSTYPE/jni_md.h" >&5
+echo "configure:1073: checking for $JAVA_HOME/include/$OSTYPE/jni_md.h" >&5
 if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1119,7 +1088,31 @@ if eval "test \"`echo '$ac_cv_file_'$ac_safe`\" = yes"; then
   :
 else
   echo "$ac_t""no" 1>&6
+
+ac_safe=`echo "$JAVA_HOME/include/jni_md.h" | sed 'y%./+-%__p_%'`
+echo $ac_n "checking for $JAVA_HOME/include/jni_md.h""... $ac_c" 1>&6
+echo "configure:1095: checking for $JAVA_HOME/include/jni_md.h" >&5
+if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  if test "$cross_compiling" = yes; then
+    { echo "configure: error: Cannot check for file existence when cross compiling" 1>&2; exit 1; }
+else
+  if test -r $JAVA_HOME/include/jni_md.h; then
+    eval "ac_cv_file_$ac_safe=yes"
+  else
+    eval "ac_cv_file_$ac_safe=no"
+  fi
+fi
+fi
+if eval "test \"`echo '$ac_cv_file_'$ac_safe`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+  :
+else
+  echo "$ac_t""no" 1>&6
 { echo "configure: error: Could not find jni_md.h include file please check its existence." 1>&2; exit 1; }
+fi
+
 fi
 
 
@@ -1273,7 +1266,6 @@ s%@CPP@%$CPP%g
 s%@PACKAGE@%$PACKAGE%g
 s%@AUTOCONF@%$AUTOCONF%g
 s%@ICU_MAKEFILE@%$ICU_MAKEFILE%g
-s%@JAVA_HOME@%$JAVA_HOME%g
 s%@JAVA@%$JAVA%g
 s%@JAVAC@%$JAVAC%g
 
@@ -1384,12 +1376,84 @@ rm -fr confdefs* $ac_clean_files
 test "$no_create" = yes || ${CONFIG_SHELL-/bin/sh} $CONFIG_STATUS || exit 1
 
 
+ac_safe=`echo "build" | sed 'y%./+-%__p_%'`
+echo $ac_n "checking for build""... $ac_c" 1>&6
+echo "configure:1382: checking for build" >&5
+if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  if test "$cross_compiling" = yes; then
+    { echo "configure: error: Cannot check for file existence when cross compiling" 1>&2; exit 1; }
+else
+  if test -r build; then
+    eval "ac_cv_file_$ac_safe=yes"
+  else
+    eval "ac_cv_file_$ac_safe=no"
+  fi
+fi
+fi
+if eval "test \"`echo '$ac_cv_file_'$ac_safe`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+  :
+else
+  echo "$ac_t""no" 1>&6
+echo creating build directory.
+mkdir build
 
+fi
+
+
+ac_safe=`echo "build/lib" | sed 'y%./+-%__p_%'`
+echo $ac_n "checking for build/lib""... $ac_c" 1>&6
+echo "configure:1409: checking for build/lib" >&5
+if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  if test "$cross_compiling" = yes; then
+    { echo "configure: error: Cannot check for file existence when cross compiling" 1>&2; exit 1; }
+else
+  if test -r build/lib; then
+    eval "ac_cv_file_$ac_safe=yes"
+  else
+    eval "ac_cv_file_$ac_safe=no"
+  fi
+fi
+fi
+if eval "test \"`echo '$ac_cv_file_'$ac_safe`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+  :
+else
+  echo "$ac_t""no" 1>&6
+echo creating build/lib directory.
+mkdir build/lib
+
+fi
+
+
+ac_safe=`echo "build/classes" | sed 'y%./+-%__p_%'`
+echo $ac_n "checking for build/classes""... $ac_c" 1>&6
+echo "configure:1436: checking for build/classes" >&5
+if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  if test "$cross_compiling" = yes; then
+    { echo "configure: error: Cannot check for file existence when cross compiling" 1>&2; exit 1; }
+else
+  if test -r build/classes; then
+    eval "ac_cv_file_$ac_safe=yes"
+  else
+    eval "ac_cv_file_$ac_safe=no"
+  fi
+fi
+fi
+if eval "test \"`echo '$ac_cv_file_'$ac_safe`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+  :
+else
+  echo "$ac_t""no" 1>&6
+echo creating build/classes directory.
+mkdir build/classes
+
+fi
 
  
-echo creating build directory.
-echo creating build/lib directory.
-echo creating build/classes directory.
-mkdir build
-mkdir build/lib
-mkdir build/classes

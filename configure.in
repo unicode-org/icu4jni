@@ -22,18 +22,21 @@ AC_CHECK_PROG(AUTOCONF, autoconf, autoconf, true)
 ICU_MAKEFILE=$prefix/lib/icu/Makefile.inc
 AC_SUBST(ICU_MAKEFILE)
 
-AC_PATH_PROG(JAVA_HOME,java,,)
-
-AC_SUBST(JAVA_HOME)
-
 AC_CHECK_PROG(JAVA,java ,java ,false)
 AC_CHECK_PROG(JAVAC,javac ,javac ,false)
+if [ "${JAVA}" == "false" ] ; then
+     AC_MSG_ERROR([Could not find JAVA virtual machine. Please check its existence.])
+fi
+if [ "${JAVAC}" == "false" ] ; then
+     AC_MSG_ERROR([Could not find JAVAC compiler. Please check its existence.]) 
+fi
+
 AC_CHECK_FILE($JAVA_HOME/include/jni.h,,AC_MSG_ERROR([Could not find jni include file please check JAVA_HOME enviroment variable.]))
-AC_CHECK_FILE($JAVA_HOME/include/$OSTYPE/jni_md.h,,AC_MSG_ERROR([Could not find jni_md.h include file please check its existence.]))
+AC_CHECK_FILE($JAVA_HOME/include/$OSTYPE/jni_md.h,,AC_CHECK_FILE($JAVA_HOME/include/jni_md.h,,AC_MSG_ERROR([Could not find jni_md.h include file please check its existence.])))
 
 AC_OUTPUT([Makefile])
-AC_OUTPUT_COMMANDS([echo creating build directory.],mkdir build)
-AC_OUTPUT_COMMANDS([echo creating build/lib directory.],mkdir build/lib)
-AC_OUTPUT_COMMANDS([echo creating build/classes directory.], mkdir build/classes)
+AC_CHECK_FILE(build,,AC_OUTPUT_COMMANDS([echo creating build directory.],mkdir build))
+AC_CHECK_FILE(build/lib,,AC_OUTPUT_COMMANDS([echo creating build/lib directory.],mkdir build/lib))
+AC_CHECK_FILE(build/classes,,AC_OUTPUT_COMMANDS([echo creating build/classes directory.], mkdir build/classes))
  
-dnl # calexpo/Makefile
+dnl # Makefile

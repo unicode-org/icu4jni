@@ -18,54 +18,64 @@ subdir = /native
 CSRC_DIR=src/native
 BUILDDIR=build
 BUILD_DIR=build/lib
-JAVAC_EXEC= $(JAVA_HOME)/bin/javac
-JAVA_EXEC= $(JAVA_HOME)/bin/java
+JAVAC_EXEC= javac
+JAVA_EXEC= java
 JAVA_FLAGS=-d $(BUILDDIR)\classes
 JAVA_T_FLAGS=-d $(BUILDDIR)/classes -classpath $(BUILDDIR)/classes;.
 CLASSDIR=classes/com/ibm/icu4jni
-CONVDIR=$(CLASSDIR)/converters
-COMDIR=$(CLASSDIR)/common
-TESTDIR=$(CLASSDIR)/test
-COLDIR=$(CLASSDIR)/text
-TTDIR=$(TESTDIR)/text
-TCDIR=$(TESTDIR)/converters
+CONVDIR=converters
+COMDIR=common
+TESTDIR=test
+COLDIR=text
 SRCDIR=src
-MAKE_CLASS=$(SRCDIR)/$(CONVDIR)/ICUConverterInterface.java \
-$(SRCDIR)/$(COMDIR)/ErrorCode.java \
-$(SRCDIR)/$(CONVDIR)/ByteToCharConverterICU.java \
-$(SRCDIR)/$(CONVDIR)/CharToByteConverterICU.java \
-$(SRCDIR)/$(CONVDIR)/ByteToCharGB18030.java \
-$(SRCDIR)/$(CONVDIR)/CharToByteGB18030.java \
-$(SRCDIR)/$(TCDIR)/TestConv.java \
-$(SRCDIR)/$(COLDIR)/NativeCollation.java \
-$(SRCDIR)/$(COLDIR)/CollationAttribute.java \
-$(SRCDIR)/$(COLDIR)/CollationElementIterator.java \
-$(SRCDIR)/$(COLDIR)/CollationKey.java \
-$(SRCDIR)/$(COLDIR)/Collator.java \
-$(SRCDIR)/$(COLDIR)/NormalizationMode.java \
-$(SRCDIR)/$(COLDIR)/RuleBasedCollator.java \
-$(SRCDIR)/$(TESTDIR)/TestAll.java \
-$(SRCDIR)/$(TESTDIR)/TestFmwk.java \
-$(SRCDIR)/$(TESTDIR)/TestLog.java \
-$(SRCDIR)/$(TTDIR)/CollationElementIteratorTest.java \
-$(SRCDIR)/$(TTDIR)/CollatorAPITest.java \
-$(SRCDIR)/$(TTDIR)/CollatorPerformanceTest.java \
-$(SRCDIR)/$(TTDIR)/CollatorRegressionTest.java \
-$(SRCDIR)/$(TTDIR)/CollatorTest.java \
-$(SRCDIR)/$(TTDIR)/CurrencyCollatorTest.java \
-$(SRCDIR)/$(TTDIR)/DanishCollatorTest.java \
-$(SRCDIR)/$(TTDIR)/DummyCollatorTest.java \
-$(SRCDIR)/$(TTDIR)/EnglishCollatorTest.java \
-$(SRCDIR)/$(TTDIR)/FinnishCollatorTest.java \
-$(SRCDIR)/$(TTDIR)/FrenchCollatorTest.java \
-$(SRCDIR)/$(TTDIR)/G7CollatorTest.java \
-$(SRCDIR)/$(TTDIR)/GermanCollatorTest.java \
-$(SRCDIR)/$(TTDIR)/KanaCollatorTest.java \
-$(SRCDIR)/$(TTDIR)/MonkeyCollatorTest.java \
-$(SRCDIR)/$(TTDIR)/SpanishCollatorTest.java \
-$(SRCDIR)/$(TTDIR)/ThaiCollatorTest.java \
-$(SRCDIR)/$(TTDIR)/TurkishCollatorTest.java
 
+TESTCLASS=TestAll.java \
+TestFmwk.java \
+TestLog.java 
+
+TESTTEXTCLASS=CollationElementIteratorTest.java \
+CollatorAPITest.java \
+CollatorPerformanceTest.java \
+CollatorRegressionTest.java \
+CollatorTest.java \
+CurrencyCollatorTest.java \
+DanishCollatorTest.java \
+DummyCollatorTest.java \
+EnglishCollatorTest.java \
+FinnishCollatorTest.java \
+FrenchCollatorTest.java \
+G7CollatorTest.java \
+GermanCollatorTest.java \
+KanaCollatorTest.java \
+MonkeyCollatorTest.java \
+SpanishCollatorTest.java \
+ThaiCollatorTest.java \
+TurkishCollatorTest.java
+
+TESTCONVCLASS=TestConv.java
+
+COMCLASS=ErrorCode.java
+
+CONVCLASS=ICUConverterInterface.java \
+ByteToCharConverterICU.java \
+CharToByteConverterICU.java \
+ByteToCharGB18030.java \
+CharToByteGB18030.java 
+
+COLCLASS=NativeCollation.java \
+CollationAttribute.java \
+CollationElementIterator.java \
+CollationKey.java \
+Collator.java \
+NormalizationMode.java \
+RuleBasedCollator.java
+
+MAKE_CLASS =  $(CONVCLASS:%=$(SRCDIR)/$(CLASSDIR)/$(CONVDIR)/%)  \
+           $(COMCLASS:%=$(SRCDIR)/$(CLASSDIR)/$(COMDIR)/%)  \
+           $(COLCLASS:%=$(SRCDIR)/$(CLASSDIR)/$(COLDIR)/%) \
+           $(TESTCLASS:%=$(SRCDIR)/$(CLASSDIR)/$(TESTDIR)/%) \
+           $(TESTTEXTCLASS:%=$(SRCDIR)/$(CLASSDIR)/$(TESTDIR)/$(COLDIR)/%) \
+           $(TESTCONVCLASS:%=$(SRCDIR)/$(CLASSDIR)/$(TESTDIR)/$(CONVDIR)/%)
 
 ## Extra files to remove for 'make clean'
 CLEANFILES = *~
@@ -89,7 +99,7 @@ CPPFLAGS := -I$(JAVA_HOME)/include  -I$(JAVA_HOME)/include/$(OSTYPE) -I $(CSRC_D
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local \
-distclean distclean-local dist dist-local check check-local
+distclean distclean-local dist dist-local check check-local java javar
 
 ## Clear suffix list
 .SUFFIXES :
@@ -133,6 +143,9 @@ distclean-local: clean-local
 	rm -f Makefile $(DEPS)
 
 check-local:
+	LD_LIBRARY_PATH=$(prefix)/lib java -classpath :./build/classes: -Djava.library.path=$(prefix)/lib:$(PWD)/build/lib: com.ibm.icu4jni.test.TestAll -nothrow
+
+	LD_LIBRARY_PATH=$(prefix)/lib java -classpath :./build/classes: -Djava.library.path=$(prefix)/lib:$(PWD)/build/lib: com.ibm.icu4jni.test.converters.TestConv
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
