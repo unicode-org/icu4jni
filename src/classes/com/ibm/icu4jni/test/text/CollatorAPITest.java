@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/CollatorAPITest.java,v $ 
-* $Date: 2001/03/20 23:02:36 $ 
-* $Revision: 1.4 $
+* $Date: 2001/03/22 02:48:35 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -52,10 +52,7 @@ public final class CollatorAPITest extends TestFmwk
   public void TestProperties() throws Exception
   {
     logln("TestProperties --");
-    byte minversion[] = {0x01, 0x00, 0x00, 0x00};
-    byte maxversion[] = {0x01, 0x09, 0x09, 0x09};
-    byte version[];
-    Collator defaultcollator = Collator.getInstance();
+    Collator defaultcollator = Collator.getInstance(Locale.ENGLISH);
     
     if (defaultcollator.compare("ab", "abc") != Collator.RESULT_LESS)
       errln("Failed : ab < abc comparison");
@@ -97,7 +94,7 @@ public final class CollatorAPITest extends TestFmwk
     // should return the default
     Locale abcd = new Locale("ab", "CD");
     collator = Collator.getInstance(abcd);
-    defaultcollator = Collator.getInstance();
+    defaultcollator = Collator.getInstance(Locale.ENGLISH);
 
     if (!((RuleBasedCollator)collator).getRules().equals(
          ((RuleBasedCollator)defaultcollator).getRules()))
@@ -128,7 +125,7 @@ public final class CollatorAPITest extends TestFmwk
     Locale dk = new Locale("da", "DK");
     Collator collator = Collator.getInstance(dk);
     
-    Collator defaultcollator = Collator.getInstance();
+    Collator defaultcollator = Collator.getInstance(Locale.English);
     
     if (defaultcollator.hashCode() == collator.hashCode())
       errln("Failed : Default collator's hash code not equal to " +
@@ -149,7 +146,7 @@ public final class CollatorAPITest extends TestFmwk
     String test1 = "Abcda", 
            test2 = "abcda";
     
-    Collator defaultcollator = Collator.getInstance();
+    Collator defaultcollator = Collator.getInstance(Locale.ENGLISH);
     CollationKey sortk1 = defaultcollator.getCollationKey(test1), 
                  sortk2 = defaultcollator.getCollationKey(test2);
     if (sortk1.compareTo(sortk2) != Collator.RESULT_GREATER)
@@ -175,7 +172,7 @@ public final class CollatorAPITest extends TestFmwk
                    "highest probability of detecting the most errors?";
     String test2 = "Xf ile What subset of all possible test cases has the " +
                    "lowest probability of detecting the least errors?";
-    Collator defaultcollator = Collator.getInstance();
+    Collator defaultcollator = Collator.getInstance(Locale.ENGLISH);
     
     CollationElementIterator iterator1 = 
       ((RuleBasedCollator)defaultcollator).getCollationElementIterator(
@@ -278,7 +275,7 @@ public final class CollatorAPITest extends TestFmwk
       errln("Failed : Two different rule collations should return " +
                     "different comparisons");
     
-    Collator col3 = Collator.getInstance();
+    Collator col3 = Collator.getInstance(Locale.ENGLISH);
     
     Collator col4 = (Collator)col1.clone();
     Collator col5 = (Collator)col3.clone();
@@ -324,7 +321,7 @@ public final class CollatorAPITest extends TestFmwk
   {
     logln("TestDuplicate --");
 
-    Collator defaultcollator = Collator.getInstance();
+    Collator defaultcollator = Collator.getInstance(Locale.ENGLISH);
     Collator col2 = (Collator)defaultcollator.clone();
     
     if (!((RuleBasedCollator)defaultcollator).getRules().equals(
@@ -349,7 +346,7 @@ public final class CollatorAPITest extends TestFmwk
     String test1 = "Abcda", 
            test2 = "abcda";
            
-    Collator defaultcollator = Collator.getInstance();
+    Collator defaultcollator = Collator.getInstance(Locale.ENGLISH);
     
     if (defaultcollator.compare(test1, test2) != Collator.RESULT_GREATER)
       errln("Failed : Result should be Abcda >>> abcda");

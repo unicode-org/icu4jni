@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/MonkeyCollatorTest.java,v $ 
-* $Date: 2001/03/20 23:02:36 $ 
-* $Revision: 1.4 $
+* $Date: 2001/03/22 02:48:35 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -37,7 +37,7 @@ public final class MonkeyCollatorTest extends TestFmwk
   */
   public MonkeyCollatorTest() throws Exception
   {
-    m_collator_ = Collator.getInstance();
+    m_collator_ = Collator.getInstance(Locale.ENGLISH);
   }
   
   // public methods ================================================

@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/CollatorRegressionTest.java,v $ 
-* $Date: 2001/03/20 23:02:36 $ 
-* $Revision: 1.4 $
+* $Date: 2001/03/22 02:48:35 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -40,7 +40,7 @@ public final class CollatorRegressionTest extends TestFmwk
   */
   public CollatorRegressionTest() throws Exception
   {
-    m_collator_ = Collator.getInstance();
+    m_collator_ = Collator.getInstance(Locale.ENGLISH);
   }
   
   // public methods ================================================
@@ -125,8 +125,7 @@ public final class CollatorRegressionTest extends TestFmwk
     RuleBasedCollator c = (RuleBasedCollator)m_collator_.clone();
 
     c.setDecomposition(NormalizationMode.DECOMP_CAN);
-    CollationElementIterator i1 = c.getCollationElementIterator(
-                                                              TEST_STRING_3_);
+    c.getCollationElementIterator(TEST_STRING_3_);
     }
     catch(Exception e)
     {
@@ -183,7 +182,7 @@ public final class CollatorRegressionTest extends TestFmwk
     Locale oldDefault = Locale.getDefault();
     Locale.setDefault(Locale.KOREAN);
 
-    Collator c = Collator.getInstance();
+    Collator c = Collator.getInstance(Locale.ENGLISH);
 
     // Since the fix to this bug was to turn off decomposition for Korean 
     // collators, ensure that's what we got
@@ -503,7 +502,7 @@ public final class CollatorRegressionTest extends TestFmwk
   {
     Collator c = Collator.getInstance(Locale.JAPAN);
     String test = "\u0041\u0308\u0062\u0063";
-    CollationKey key = c.getCollationKey(test);
+    c.getCollationKey(test);
   }
   
   /**
@@ -538,7 +537,7 @@ public final class CollatorRegressionTest extends TestFmwk
     };
     final int result[] = {Collator.RESULT_LESS, Collator.RESULT_LESS,
                           Collator.RESULT_LESS};
-    compareStrings(m_collator_, tests, result);
+    compareStrings(c, tests, result);
   }
   
   /**
@@ -575,7 +574,7 @@ public final class CollatorRegressionTest extends TestFmwk
     Locale l = new Locale("es", "es");
     Collator col = Collator.getInstance(l);
 
-    CollationKey key = col.getCollationKey("Nombre De Objeto");
+    col.getCollationKey("Nombre De Objeto");
   }
   
   // private variables =============================================

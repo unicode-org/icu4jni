@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/CollationElementIteratorTest.java,v $ 
-* $Date: 2001/03/20 23:02:36 $ 
-* $Revision: 1.4 $
+* $Date: 2001/03/22 02:48:35 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -118,7 +118,7 @@ public final class CollationElementIteratorTest extends TestFmwk
       iterator = collator.getCollationElementIterator(source);
       previousNext(iterator);
       
-      collator = (RuleBasedCollator)Collator.getInstance();
+      collator = (RuleBasedCollator)Collator.getInstance(Locale.ENGLISH);
       
       iterator = collator.getCollationElementIterator(source);
       previousNext(iterator);
@@ -139,7 +139,7 @@ public final class CollationElementIteratorTest extends TestFmwk
                        m_collator_.getCollationElementIterator(TEST_CASE_1_);
 
     // Run all the way through the iterator, then get the offset
-    int orders[] = getOrders(iter);
+    getOrders(iter);
     int offset = iter.getOffset();
 
     if (offset != TEST_CASE_1_.length())

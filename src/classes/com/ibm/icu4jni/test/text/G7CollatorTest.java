@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/G7CollatorTest.java,v $ 
-* $Date: 2001/03/20 23:02:36 $ 
-* $Revision: 1.4 $
+* $Date: 2001/03/22 02:48:35 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -72,7 +72,7 @@ public final class G7CollatorTest extends TestFmwk
   */
   public void TestRules1() throws Exception
   {
-    Collator collator = Collator.getInstance();
+    Collator collator = Collator.getInstance(Locale.ENGLISH);
     String rules = ((RuleBasedCollator)collator).getRules();
     String newrules = rules + " & Z < p, P";
     RuleBasedCollator newcollator = new RuleBasedCollator(newrules);
@@ -91,7 +91,7 @@ public final class G7CollatorTest extends TestFmwk
   */
   public void TestRules2() throws Exception
   {
-    Collator collator = Collator.getInstance();
+    Collator collator = Collator.getInstance(Locale.ENGLISH);
     String rules = ((RuleBasedCollator)collator).getRules();
     String newrules = rules + "& C < ch , cH, Ch, CH";
     
@@ -111,7 +111,7 @@ public final class G7CollatorTest extends TestFmwk
   */
   public void TestRules3() throws Exception
   {
-    Collator collator = Collator.getInstance();
+    Collator collator = Collator.getInstance(Locale.ENGLISH);
     String rules = ((RuleBasedCollator)collator).getRules();
     String newrules = rules + 
              "& Question'-'mark ; '?' & Hash'-'mark ; '#' & Ampersand ; '&'";
@@ -132,7 +132,7 @@ public final class G7CollatorTest extends TestFmwk
   */
   public void TestRules4() throws Exception
   {
-    Collator collator = Collator.getInstance();
+    Collator collator = Collator.getInstance(Locale.ENGLISH);
     String rules = ((RuleBasedCollator)collator).getRules();
     String newrules = rules + 
              " & aa ; a'-' & ee ; e'-' & ii ; i'-' & oo ; o'-' & uu ; u'-' ";
