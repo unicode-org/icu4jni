@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/Collator.java,v $ 
-* $Date: 2002/11/07 22:38:22 $ 
-* $Revision: 1.8 $
+* $Date: 2002/11/07 22:41:42 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -345,13 +345,13 @@ public abstract class Collator implements Cloneable
 	 * . myCollation.setStrength(PRIMARY);
 	 * . // result will be "abc" == "ABC"
 	 * . // tertiary differences will be ignored
-	 * . int result = myCollation->compare("abc", "ABC");
+	 * . int result = myCollation->compare("abc", "ABC"); 
 	 * </pre>
 	 * @param strength the new comparison level.
 	 * @see #PRIMARY
 	 * @see #SECONDARY
 	 * @see #TERTIARY
-	 * @see #QUATERNARY
+	 * @see #QUATERNARY 
 	 * @see #IDENTICAL
 	 * @draft 2.4
 	 */
