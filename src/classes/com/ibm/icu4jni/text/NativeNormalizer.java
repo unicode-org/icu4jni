@@ -5,7 +5,7 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/NativeNormalizer.java,v $ 
-* $Date: 2001/10/27 00:34:55 $ 
+* $Date: 2001/11/03 03:25:12 $ 
 * $Revision: 
 *
 *******************************************************************************
@@ -96,5 +96,25 @@ final class NativeNormalizer {
                                        int sourceLength,
                                        int normalizationMode,
                                        int[] qcReturn);
-
+    /**
+    * Performing quick check on a string, to quickly determine if the string is 
+    * in a particular normalization format.
+    * Three types of result can be returned Normalizer.UNORM_YES, Normalizer.UNORM_NO or
+    * Normalizer.UNORM_MAYBE. Result Normalizer.UNORM_YES indicates that the argument
+    * string is in the desired normalized format, Normalizer.UNORM_NO determines that
+    * argument string is not in the desired normalized format. A Normalizer.UNORM_MAYBE
+    * result indicates that a more thorough check is required, the user may have to
+    * put the string in its normalized form and compare the results.
+    *
+    * @param source       string for determining if it is in a normalized format
+    * @param sourcelength length of source to test
+    * @paran mode         normalization format from the enum UNormalizationMode
+    * @param qcReturn     An array to receive quick check output which is  
+    *                     Normalizer.UNORM_YES, Normalizer.UNORM_NO or
+    *                     Normalizer.UNORM_MAYBE
+    * @return int error code returned by ICU          
+    */
+    static native final int quickCheck(String source,
+                                       int normalizationMode,
+                                       int[] qcReturn);
 }

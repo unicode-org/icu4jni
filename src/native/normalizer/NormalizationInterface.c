@@ -39,10 +39,16 @@ Java_com_ibm_icu4jni_text_NativeNormalizer_normalize___3CI_3CII_3I(  JNIEnv *env
                     (*env)->ReleasePrimitiveArrayCritical(env,requiredLength,reqLength,JNI_COMMIT);
                     return errorCode;
                 }
+            }else{
+                errorCode = U_ILLEGAL_ARGUMENT_ERROR;
             }
             (*env)->ReleasePrimitiveArrayCritical(env,requiredLength,reqLength,JNI_COMMIT);
+        }else{
+            errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         }
         (*env)->ReleasePrimitiveArrayCritical(env,target,uTarget,JNI_COMMIT);
+    }else{
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
     }
     (*env)->ReleasePrimitiveArrayCritical(env,source,(jchar*)uSource,JNI_COMMIT); 
 
@@ -52,7 +58,7 @@ Java_com_ibm_icu4jni_text_NativeNormalizer_normalize___3CI_3CII_3I(  JNIEnv *env
 
 
 JNIEXPORT jint JNICALL 
-Java_com_ibm_icu4jni_text_NativeNormalizer_quickCheck (JNIEnv *env, 
+Java_com_ibm_icu4jni_text_NativeNormalizer_quickCheck___3CII_3I (JNIEnv *env, 
                                                        jclass jClass, 
                                                        jcharArray source, 
                                                        jint sourceLength, 
@@ -64,18 +70,21 @@ Java_com_ibm_icu4jni_text_NativeNormalizer_quickCheck (JNIEnv *env,
     if(uSource){
         jint*  qcRetVal= (jint*) (*env)->GetPrimitiveArrayCritical(env,qcReturn,NULL);
         if(qcRetVal){
-            int retVal= (int) unorm_quickCheck( uSource, sourceLength,
+            *qcRetVal= (jint) unorm_quickCheck( uSource, sourceLength,
                                                 (UNormalizationMode) mode , 
                                                 &errorCode);
-            *qcRetVal = retVal; 
          
             if(U_FAILURE(errorCode)){
                 (*env)->ReleasePrimitiveArrayCritical(env,source,(jchar*)uSource,JNI_COMMIT);
                 (*env)->ReleasePrimitiveArrayCritical(env,qcReturn,qcRetVal,JNI_COMMIT);
                 return errorCode;
             }
+        }else{
+            errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         }
         (*env)->ReleasePrimitiveArrayCritical(env,qcReturn,qcRetVal,JNI_COMMIT);
+    }else{
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
     }
     (*env)->ReleasePrimitiveArrayCritical(env,source,(jchar*)uSource,JNI_COMMIT); 
     
@@ -129,11 +138,47 @@ Java_com_ibm_icu4jni_text_NativeNormalizer_normalize__Ljava_lang_String_2I_3I(JN
                return source;
            }
 
+       }else{
+           errorCode = U_ILLEGAL_ARGUMENT_ERROR;
        }
        (*env)->ReleasePrimitiveArrayCritical(env,data,ec,JNI_COMMIT);
 
+    }else{
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
     }
     (*env)->ReleaseStringChars(env,source,NULL);
     return retString;           
 }
 
+JNIEXPORT jint JNICALL 
+Java_com_ibm_icu4jni_text_NativeNormalizer_quickCheck__Ljava_lang_String_2I_3I(JNIEnv *env, 
+                                                                               jclass jClass, 
+                                                                               jstring source, 
+                                                                               jint mode, 
+                                                                               jintArray qcReturn){
+    UErrorCode errorCode =U_ZERO_ERROR;
+    const jchar* uSource =NULL;
+    jint sourceLength = 0;
+    uSource = (*env)->GetStringChars(env,source,NULL);
+    sourceLength = (*env)->GetStringLength(env,source);
+    if(uSource){
+        jint* qcRetVal = (*env)->GetPrimitiveArrayCritical(env,qcReturn,NULL);
+        if(qcRetVal){
+            *qcRetVal= (jint) unorm_quickCheck(uSource, sourceLength,
+                                        (UNormalizationMode) mode , 
+                                        &errorCode);
+            if(U_FAILURE(errorCode)){
+                (*env)->ReleaseStringChars(env,source,NULL);
+                (*env)->ReleasePrimitiveArrayCritical(env,qcReturn,qcRetVal,JNI_COMMIT);
+                return errorCode;
+            }
+        }else{
+            errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        }
+        (*env)->ReleasePrimitiveArrayCritical(env,qcReturn,qcRetVal,JNI_COMMIT);
+    }else{
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+    }
+    (*env)->ReleaseStringChars(env,source,NULL);
+    return errorCode;
+}

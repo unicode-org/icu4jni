@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/charset/CharsetDecoderICU.java,v $ 
-* $Date: 2001/10/27 00:34:55 $ 
-* $Revision: 1.4 $
+* $Date: 2001/11/03 03:25:11 $ 
+* $Revision: 1.5 $
 *
 *
 *******************************************************************************
@@ -46,12 +46,16 @@ public final class CharsetDecoderICU extends CharsetDecoder{
     
     // These instance variables are
     // always assigned in the methods
-    // before being used.
+    // before being used. This class
+    // inhrently multithread unsafe
+    // so we dont have to worry about
+    // synchronization
     private int inEnd;
     private int outEnd;
     private int save;
     private int ec;
     private int icuAction;
+    
     /** 
      * Construcs a new decoder for the given charset
      * @param charset for which the decoder is created
@@ -246,7 +250,9 @@ public final class CharsetDecoderICU extends CharsetDecoder{
             data[OUTPUT_WRITTEN] = (out.arrayOffset()+out.position());
         }else{
             outEnd = out.remaining();
-            output = new char[outEnd];
+            if(output==null || outEnd > output.length){
+                output = new char[outEnd];
+            }
             //since the new 
             // buffer start position 
             // is 0
@@ -261,7 +267,9 @@ public final class CharsetDecoderICU extends CharsetDecoder{
             data[INPUT_CONSUMED] = (in.arrayOffset()+in.position());
         }else{
             inEnd = in.remaining();
-            input = new byte[inEnd];
+            if(input==null|| inEnd > input.length){ 
+                input = new byte[inEnd];
+            }
             // save the current position
             int pos = in.position();
             in.get(input,0,inEnd);

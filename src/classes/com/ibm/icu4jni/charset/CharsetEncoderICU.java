@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/charset/CharsetEncoderICU.java,v $ 
-* $Date: 2001/10/27 00:34:55 $ 
-* $Revision: 1.4 $
+* $Date: 2001/11/03 03:25:11 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */ 
@@ -44,7 +44,10 @@ public final class CharsetEncoderICU extends CharsetEncoder{
     
     // These instance variables are
     // always assigned in the methods
-    // before being used.
+    // before being used. This class
+    // inhrently multithread unsafe
+    // so we dont have to worry about
+    // synchronization
     private int inEnd;
     private int outEnd;
     private int save;
@@ -203,7 +206,7 @@ public final class CharsetEncoderICU extends CharsetEncoder{
                                 false             /* donot flush the data */
                                 );
             if(ErrorCode.isFailure(ec)){            
-                /* If we don't have room for the output, throw an exception*/
+                /* If we don't have room for the output return error */
                 if(ec == ErrorCode.U_BUFFER_OVERFLOW_ERROR){
 		            return CoderResult.OVERFLOW;
 		        }
@@ -238,12 +241,12 @@ public final class CharsetEncoderICU extends CharsetEncoder{
      * can be converted to the target encoding. If the caller wants to test if a
      * surrogate pair can be converted to target encoding then the
      * responsibility of assembling the int value lies with the caller.
-     * For assembling a code point the caller has to do something like:
-     *
+     * For assembling a code point the caller can use UTF16 class of ICU4J and do something like:
+     * <pre>
      * while(i<mySource.length){
-     *        if(isFirstSurrogate(mySource[i])&& i+1< mySource.length){
-     *            if(isSecondSurrogate(mySource[i+1])){
-     *                temp = (((mySource[i])<<(long)10)+(mySource[i+1])-((0xd800<<(long)10)+0xdc00-0x10000));
+     *        if(UTF16.isLeadSurrogate(mySource[i])&& i+1< mySource.length){
+     *            if(UTF16.isTrailSurrogate(mySource[i+1])){
+     *                int temp = UTF16.charAt(mySource,i,i+1,0);
      *                if(!((CharsetEncoderICU) myConv).canEncode(temp)){
      *                    passed=false;
      *                }
@@ -252,7 +255,21 @@ public final class CharsetEncoderICU extends CharsetEncoder{
      *            }
      *       }
      * }
-     * 
+     * </pre>
+     * or
+     * <pre>
+     * String src = new String(mySource);
+     * int i,codepoint;
+     * boolean passed = false;
+     * while(i<src.length()){
+     *      codepoint = UTF16.charAt(src,i);
+     *      i+= (codepoint>0xfff)? 2:1;
+     *      if(!(CharsetEncoderICU) myConv).canEncode(codepoint)){
+     *          passed = false;
+     *      }
+     * }
+     * </pre>
+     *
      * @param Unicode code point as int value
      * @return true if a character can be converted
      * 
@@ -280,7 +297,9 @@ public final class CharsetEncoderICU extends CharsetEncoder{
             data[OUTPUT_WRITTEN] = (out.arrayOffset()+out.position());
         }else{
             outEnd = out.remaining();
-            output = new byte[outEnd];
+            if(output=null || outEnd > output.length){
+                output = new byte[outEnd];
+            }
             //since the new 
             // buffer start position 
             // is 0
@@ -295,7 +314,9 @@ public final class CharsetEncoderICU extends CharsetEncoder{
             data[INPUT_CONSUMED] = (in.arrayOffset()+in.position());
         }else{
             inEnd = in.remaining();
-            input = new char[inEnd];
+            if(input==null || inEnd > input.length){
+                input = new char[inEnd];
+            }
             int pos = in.position();
             in.get(input,0,inEnd);
             in.position(pos);

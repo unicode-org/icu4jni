@@ -13,8 +13,9 @@
 #include "unicode/ucnv_cb.h"  /* for callback functions */
 #include "ErrorCode.h"
 #include <stdlib.h>
-
- /* Prototype of callback for substituting user settable sub chars */
+#include <string.h>
+ 
+/* Prototype of callback for substituting user settable sub chars */
 void  JNI_TO_U_CALLBACK_SUBSTITUTE
  (const void *,UConverterToUnicodeArgs *,const char* ,int32_t ,UConverterCallbackReason ,UErrorCode * );
 
@@ -41,21 +42,27 @@ Java_com_ibm_icu4jni_converters_NativeConverter_openConverter (JNIEnv *env,
         if(u_cnvName){
             jsize count = (*env)->GetStringLength(env,converterName);
             if(count>0){
-                u_UCharsToChars(u_cnvName,&cnvName[0],count);
-                /* Sun's java.exe is passing down 0x10 if the string 
-                 * is of certain length so we need to null terminate 
-                 */
-                cnvName[count] = '\0';
+                if(count< 100){
+                    u_UCharsToChars(u_cnvName,&cnvName[0],count);
+                    /* Sun's java.exe is passing down 0x10 if the string 
+                     * is of certain length so we need to null terminate 
+                     */
+                    cnvName[count] = '\0';
         
-                conv = ucnv_open(cnvName,&errorCode);
+                    conv = ucnv_open(cnvName,&errorCode);
 
-                if(U_FAILURE(errorCode)){
-                    (*env)->ReleaseStringChars(env, converterName,u_cnvName);
-                    (*env)->ReleasePrimitiveArrayCritical(env,handle,(jlong*)myHandle,JNI_COMMIT);
-                    conv=NULL;
-                    return errorCode;
+                    if(U_FAILURE(errorCode)){
+                        (*env)->ReleaseStringChars(env, converterName,u_cnvName);
+                        (*env)->ReleasePrimitiveArrayCritical(env,handle,(jlong*)myHandle,JNI_COMMIT);
+                        conv=NULL;
+                        return errorCode;
+                    }
+                }else{
+                    errorCode = U_ILLEGAL_ARGUMENT_ERROR;
                 }
 
+            }else{
+                errorCode = U_ILLEGAL_ARGUMENT_ERROR;
             }
         }
         (*env)->ReleaseStringChars(env, converterName,u_cnvName);
@@ -181,10 +188,16 @@ Java_com_ibm_icu4jni_converters_NativeConverter_convertCharToByte(JNIEnv *env,
                         (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,JNI_COMMIT);
                         return errorCode;
                     }
+                }else{
+                    errorCode = U_ILLEGAL_ARGUMENT_ERROR;
                 }
                 (*env)->ReleasePrimitiveArrayCritical(env,target,uTarget,JNI_COMMIT);
+            }else{
+                    errorCode = U_ILLEGAL_ARGUMENT_ERROR;
             }
             (*env)->ReleasePrimitiveArrayCritical(env,source,(jchar*)uSource,JNI_COMMIT); 
+        }else{
+                    errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         }
         (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,JNI_COMMIT);
         return errorCode;
@@ -271,10 +284,16 @@ Java_com_ibm_icu4jni_converters_NativeConverter_convertByteToChar(JNIEnv *env,
                         (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,JNI_COMMIT);
                         return errorCode;
                     }
+                }else{
+                    errorCode = U_ILLEGAL_ARGUMENT_ERROR;
                 }
                 (*env)->ReleasePrimitiveArrayCritical(env,target,uTarget,JNI_COMMIT);
+            }else{
+                errorCode = U_ILLEGAL_ARGUMENT_ERROR;
             }
             (*env)->ReleasePrimitiveArrayCritical(env,source,(jchar*)uSource,JNI_COMMIT); 
+        }else{
+            errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         }
         (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,JNI_COMMIT);
         return errorCode;
@@ -308,6 +327,8 @@ Java_com_ibm_icu4jni_converters_NativeConverter_decode(JNIEnv *env,
             ucnv_getInvalidUChars(cnv,invalidUChars,(int8_t*)len,&errorCode);
             myData[2] = len;
             (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,JNI_COMMIT);
+        }else{
+            errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         }
     }
     return ec;
@@ -435,9 +456,13 @@ Java_com_ibm_icu4jni_converters_NativeConverter_flushByteToChar(JNIEnv *env,
                     (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,JNI_COMMIT);
                     return errorCode;
                 }
+            }else{
+                errorCode = U_ILLEGAL_ARGUMENT_ERROR;
             }
             (*env)->ReleasePrimitiveArrayCritical(env,target,uTarget,JNI_COMMIT);
 
+        }else{
+            errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         }
         (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,JNI_COMMIT);
         return errorCode;
@@ -479,8 +504,12 @@ Java_com_ibm_icu4jni_converters_NativeConverter_flushCharToByte (JNIEnv *env,
                     (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,JNI_COMMIT);
                     return errorCode;
                 }
+            }else{
+                errorCode = U_ILLEGAL_ARGUMENT_ERROR;
             }
             (*env)->ReleasePrimitiveArrayCritical(env,target,uTarget,JNI_COMMIT);
+        }else{
+            errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         }
         (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,JNI_COMMIT);
         return errorCode;
@@ -580,6 +609,8 @@ Java_com_ibm_icu4jni_converters_NativeConverter_setSubstitutionChars(JNIEnv *env
             u_subChars = (*env)->GetPrimitiveArrayCritical(env,subChars,NULL);
             if(u_subChars){
                errorCode =  setToUCallbackSubs(cnv,u_subChars,len,FALSE);
+            }else{
+                errorCode = U_ILLEGAL_ARGUMENT_ERROR;
             }
             (*env)->ReleasePrimitiveArrayCritical(env,subChars,u_subChars,JNI_COMMIT);
             return errorCode;
@@ -708,15 +739,13 @@ Java_com_ibm_icu4jni_converters_NativeConverter_getAvailable(JNIEnv *env, jclass
 
     for(;--i>=0;) {
         name = ucnv_getAvailableName(i);
-        if(strstr(name,",")!=NULL){
+        if(strstr(name,",")!=0){
             name = ucnv_getAlias(name,1,&error);
 
         }
         
         (*env)->SetObjectArrayElement(env,ret,i,(*env)->NewStringUTF(env,name));
         /* printf("canonical name : %s  at %i\n", name,i); */
-
-    
     }
     return (ret);
 }
@@ -754,7 +783,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_getAliases(JNIEnv *env, jclass j
         if(U_SUCCESS(error)){
             for(i=0,j=0;i<aliasNum;i++){
                 const char* name = ucnv_getAlias(encName,(uint16_t)i,&error);
-                if(strstr(name,",")==NULL){
+                if(strstr(name,",")==0){
                     aliasArray[j++]= name;
                 }
             }
@@ -780,7 +809,7 @@ JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getCanonicalName(JNIEnv 
     jstring ret;
     if(encName){
         canonicalName = ucnv_getAlias(encName,0,&error);
-        if(strstr(canonicalName,",")!=NULL){
+        if(strstr(canonicalName,",")!=0){
            canonicalName = ucnv_getAlias(canonicalName,1,&error);
         }
         ret = ((*env)->NewStringUTF(env, canonicalName));
