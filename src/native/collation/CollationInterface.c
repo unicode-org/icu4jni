@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/native/collation/CollationInterface.c,v $ 
-* $Date: 2001/03/23 19:44:55 $ 
-* $Revision: 1.4 $
+* $Date: 2001/06/06 19:49:48 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -284,6 +284,31 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_text_NativeCollation_next
 }
 
 /**
+* Opening a new C UCollator with the default locale.
+* Note determining if a collator currently exist for the caller is to be handled
+* by the caller. Hence if the caller has a existing collator, it is his 
+* responsibility to delete first before calling this method.
+* @param env JNI environment
+* @param obj RuleBasedCollatorJNI object
+* @return address of the new C UCollator
+* @exception thrown if creation of the UCollator fails
+*/
+JNIEXPORT jlong JNICALL Java_com_ibm_icu4jni_text_NativeCollation_openCollator__
+  (JNIEnv *env, jclass obj)
+{
+  jint result;
+  UErrorCode status = U_ZERO_ERROR;
+
+  result = (jint)ucol_open(NULL, &status);
+  
+  if ( error(env, status) != FALSE)
+    return 0;
+ 
+  return result;
+}
+
+
+/**
 * Opening a new C UCollator with the argument locale rules.
 * Note determining if a collator currently exist for the caller is to be handled
 * by the caller. Hence if the caller has a existing collator, it is his 
@@ -294,7 +319,7 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_text_NativeCollation_next
 * @return address of the new C UCollator
 * @exception thrown if creation of the UCollator fails
 */
-JNIEXPORT jlong JNICALL Java_com_ibm_icu4jni_text_NativeCollation_openCollator
+JNIEXPORT jlong JNICALL Java_com_ibm_icu4jni_text_NativeCollation_openCollator__Ljava_lang_String_2
   (JNIEnv *env, jclass obj, jstring locale)
 {
   /* this will be null terminated */

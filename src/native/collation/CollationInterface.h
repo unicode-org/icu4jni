@@ -106,10 +106,19 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_text_NativeCollation_next
 /*
  * Class:     com_ibm_icu4jni_text_NativeCollation
  * Method:    openCollator
+ * Signature: ()J
+ */
+JNIEXPORT jlong JNICALL Java_com_ibm_icu4jni_text_NativeCollation_openCollator__
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_ibm_icu4jni_text_NativeCollation
+ * Method:    openCollator
  * Signature: (Ljava/lang/String;)J
  */
-JNIEXPORT jlong JNICALL Java_com_ibm_icu4jni_text_NativeCollation_openCollator
+JNIEXPORT jlong JNICALL Java_com_ibm_icu4jni_text_NativeCollation_openCollator__Ljava_lang_String_2
   (JNIEnv *, jclass, jstring);
+
 
 /*
  * Class:     com_ibm_icu4jni_text_NativeCollation

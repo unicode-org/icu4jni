@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/RuleBasedCollator.java,v $ 
-* $Date: 2001/06/06 18:06:06 $ 
-* $Revision: 1.8 $
+* $Date: 2001/06/06 19:49:16 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -562,10 +562,7 @@ public final class RuleBasedCollator extends Collator
   */
   RuleBasedCollator()
   {
-    // default locales in ICU and Java may not be the same 
-    // this way forces the collator to take ICU's default locale
-    Locale locale = new Locale("", "");
-    m_collator_ = NativeCollation.openCollator(locale.toString());
+    m_collator_ = NativeCollation.openCollator();
   }
 
   /**
@@ -585,7 +582,13 @@ public final class RuleBasedCollator extends Collator
   */
   RuleBasedCollator(Locale locale)
   {
-    m_collator_ = NativeCollation.openCollator(locale.toString());
+    if (locale == null) {
+      m_collator_ = NativeCollation.openCollator();
+    }
+    else {
+      System.out.println("locale : " + locale.toString());
+      m_collator_ = NativeCollation.openCollator(locale.toString());
+    }
   }
   
   // protected methods --------------------------------------------

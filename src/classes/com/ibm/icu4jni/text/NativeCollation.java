@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/NativeCollation.java,v $ 
-* $Date: 2001/03/23 19:42:16 $ 
-* $Revision: 1.5 $
+* $Date: 2001/06/06 19:49:16 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -30,6 +30,12 @@ final class NativeCollation
   }
   
   // collator methods ---------------------------------------------
+  
+  /**
+  * Method to create a new C Collator using the default locale rules.
+  * @return new c collator
+  */
+  static native long openCollator();
   
   /**
   * Method to create a new C Collator using the argument locale rules.

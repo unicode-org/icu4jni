@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/Collator.java,v $ 
-* $Date: 2001/06/06 18:06:06 $ 
-* $Revision: 1.6 $
+* $Date: 2001/06/06 19:49:16 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -115,9 +115,7 @@ public abstract class Collator implements Cloneable
   */
   public static Collator getInstance()
   {
-    // ICU and Java's default locale may be different
-    // this forces the collator to take ICU's default locale
-    return getInstance(new Locale("", ""));
+    return getInstance(null);
   }
 
   /**
