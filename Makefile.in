@@ -78,7 +78,6 @@ CollatorPerformanceTest.java \
 CollatorRegressionTest.java \
 CollatorTest.java \
 CurrencyCollatorTest.java \
-DanishCollatorTest.java \
 DummyCollatorTest.java \
 EnglishCollatorTest.java \
 FinnishCollatorTest.java \
