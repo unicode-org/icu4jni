@@ -18,8 +18,8 @@ subdir = /native
 CSRC_DIR=src/native
 BUILDDIR=build
 BUILD_DIR=build/lib
-JAVAC_EXEC= javac
-JAVA_EXEC= java
+JAVAC_EXEC=$(JAVA_HOME)/bin/javac
+JAVA_EXEC=$(JAVA_HOME)/bin/java
 JAVA_FLAGS=-d $(BUILDDIR)\classes
 JAVA_T_FLAGS=-d $(BUILDDIR)/classes -classpath $(BUILDDIR)/classes;.
 CLASSDIR=classes/com/ibm/icu4jni
@@ -28,7 +28,7 @@ COMDIR=common
 TESTDIR=test
 COLDIR=text
 SRCDIR=src
-
+PATHWD=`pwd`
 TESTCLASS=TestAll.java \
 TestFmwk.java \
 TestLog.java 
@@ -142,10 +142,13 @@ clean-local:
 distclean-local: clean-local
 	rm -f Makefile $(DEPS)
 
-check-local:
-	LD_LIBRARY_PATH=$(prefix)/lib java -classpath :./build/classes: -Djava.library.path=$(prefix)/lib:$(PWD)/build/lib: com.ibm.icu4jni.test.TestAll -nothrow
+check-local: testconv testfmwk
 
-	LD_LIBRARY_PATH=$(prefix)/lib java -classpath :./build/classes: -Djava.library.path=$(prefix)/lib:$(PWD)/build/lib: com.ibm.icu4jni.test.converters.TestConv
+testfmwk:
+	LD_LIBRARY_PATH=$(prefix)/lib $(JAVA_EXEC) -classpath :./build/classes: -Djava.library.path=$(prefix)/lib:$(PATHWD)/build/lib: com.ibm.icu4jni.test.TestAll -nothrow
+
+testconv:
+	LD_LIBRARY_PATH=$(prefix)/lib $(JAVA_EXEC) -classpath :./build/classes: -Djava.library.path=$(prefix)/lib:$(PATHWD)/build/lib: com.ibm.icu4jni.test.converters.TestConv
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
