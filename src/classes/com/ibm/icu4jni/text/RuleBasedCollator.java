@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/RuleBasedCollator.java,v $ 
-* $Date: 2004/06/18 22:35:08 $ 
-* $Revision: 1.16 $
+* $Date: 2004/06/18 22:45:09 $ 
+* $Revision: 1.17 $
 *
 *******************************************************************************
 */
@@ -351,17 +351,17 @@ public final class RuleBasedCollator extends Collator
   * different strings. Returns information about whether a string is less 
   * than, greater than or equal to another string.
   * <p>Example of use:
-  * <pre>
-  * .  Collator myCollation = Collator.createInstance(Locale::US);
-  * .  myCollation.setStrength(CollationAttribute.VALUE_PRIMARY);
-  * .  // result would be Collator.RESULT_EQUAL ("abc" == "ABC")
-  * .  // (no primary difference between "abc" and "ABC")
-  * .  int result = myCollation.compare("abc", "ABC",3);
-  * .  myCollation.setStrength(CollationAttribute.VALUE_TERTIARY);
-  * .  // result would be Collation::LESS (abc" &lt;&lt;&lt; "ABC")
-  * .  // (with tertiary difference between "abc" and "ABC")
-  * .  int result = myCollation.compare("abc", "ABC",3);
-  * </pre>
+  * <code>
+  *   Collator myCollation = Collator.createInstance(Locale::US);
+  *   myCollation.setStrength(CollationAttribute.VALUE_PRIMARY);
+  *   // result would be Collator.RESULT_EQUAL ("abc" == "ABC")
+  *   // (no primary difference between "abc" and "ABC")
+  *   int result = myCollation.compare("abc", "ABC",3);
+  *   myCollation.setStrength(CollationAttribute.VALUE_TERTIARY);
+  *   // result would be Collation::LESS (abc" &lt;&lt;&lt; "ABC")
+  *   // (with tertiary difference between "abc" and "ABC")
+  *   int result = myCollation.compare("abc", "ABC",3);
+  * </code>
   * @param source The source string.
   * @param target The target string.
   * @return result of the comparison, Collator.RESULT_EQUAL, 
@@ -432,13 +432,13 @@ public final class RuleBasedCollator extends Collator
   /**
   * Sets the minimum strength to be used in comparison or transformation.
   * <p>Example of use:
-  * <pre>
-  * . Collator myCollation = Collator.createInstance(Locale::US);
-  * . myCollation.setStrength(PRIMARY);
-  * . // result will be "abc" == "ABC"
-  * . // tertiary differences will be ignored
-  * . int result = myCollation->compare("abc", "ABC");
-  * </pre>
+  * <code>
+  * Collator myCollation = Collator.createInstance(Locale::US);
+  * myCollation.setStrength(PRIMARY);
+  * // result will be "abc" == "ABC"
+  * // tertiary differences will be ignored
+  * int result = myCollation->compare("abc", "ABC");
+  * </code>
   * @param strength the new comparison level.
   * @exception IllegalArgumentException when argument does not belong to any collation strength 
   *            mode or error occurs while setting data.
@@ -460,14 +460,14 @@ public final class RuleBasedCollator extends Collator
   /**
   * Sets the attribute to be used in comparison or transformation.
   * <p>Example of use:
-  * <pre>
-  * . Collator myCollation = Collator.createInstance(Locale::US);
-  * . myCollation.setAttribute(CollationAttribute.CASE_LEVEL, 
-  * .                          CollationAttribute.VALUE_ON);
-  * . int result = myCollation->compare("\\u30C3\\u30CF", 
-  * .                                   "\\u30C4\\u30CF");
-  * . // result will be Collator.RESULT_LESS.
-  * </pre>
+  * <code>
+  *  Collator myCollation = Collator.createInstance(Locale::US);
+  *  myCollation.setAttribute(CollationAttribute.CASE_LEVEL, 
+  *                           CollationAttribute.VALUE_ON);
+  *  int result = myCollation->compare("\\u30C3\\u30CF", 
+  *                                    "\\u30C4\\u30CF");
+  * // result will be Collator.RESULT_LESS.
+  * </code>
   * @param type the attribute to be set from CollationAttribute
   * @param value attribute value from CollationAttribute
   * @stable ICU 2.4

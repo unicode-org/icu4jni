@@ -5,7 +5,7 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/Normalizer.java,v $ 
-* $Date: 2004/06/17 20:52:13 $ 
+* $Date: 2004/06/18 22:45:09 $ 
 * $Revision: 
 *
 *******************************************************************************
@@ -320,35 +320,65 @@ public final class Normalizer{
     }
     // public static data members -----------------------------------
           
-    /** No decomposition/composition @stable ICU 2.4  */
+    /** 
+     * No decomposition/composition 
+     * @stable ICU 2.4  
+     */
     public static final int UNORM_NONE = 1; 
-    /** Canonical decomposition  @stable ICU 2.4 */
+    /** 
+     * Canonical decomposition  
+     * @stable ICU 2.4 
+     */
     public static final int UNORM_NFD = 2;
-    /** Compatibility decomposition @stable ICU 2.4  */
+    /** 
+     * Compatibility decomposition 
+     * @stable ICU 2.4  
+     */
     public static final int UNORM_NFKD = 3;
-    /** Canonical decomposition followed by canonical composition @stable ICU 2.4  */
+    /** 
+     * Canonical decomposition followed by canonical composition 
+     * @stable ICU 2.4  
+     */
     public static final int UNORM_NFC = 4;
-    /** Default normalization @stable ICU 2.4 */
+    /** 
+     * Default normalization 
+     * @stable ICU 2.4 
+     */
     public static final int UNORM_DEFAULT = UNORM_NFC; 
-    /** Compatibility decomposition followed by canonical composition @stable ICU 2.4 */
+    /** 
+     * Compatibility decomposition followed by canonical composition 
+     * @stable ICU 2.4 
+     */
     public static final int UNORM_NFKC =5;
-    /** "Fast C or D" form */
+    /** 
+     * "Fast C or D" form
+     * @stable ICU 2.4 
+     */
     public static final int UNORM_FCD = 6;
-    /** Indicates that string is not in the normalized format @stable ICU 2.4 */
+    /** 
+     * Indicates that string is not in the normalized format 
+     * @stable ICU 2.4 
+     */
     public static final int UNORM_NO=0;
-    /** Indicates that string is in the normalized format @stable ICU 2.4 */
+    /** 
+     * Indicates that string is in the normalized format 
+     * @stable ICU 2.4 
+     */
     public static final int UNORM_YES=1;
-    /** Indicates that string cannot be determined if it is in the normalized 
-    * format without further thorough checks @stable ICU 2.4 */
+    /** 
+     * Indicates that string cannot be determined if it is in the normalized 
+     * format without further thorough checks 
+     * @stable ICU 2.4 
+     */
     public static final int UNORM_MAYBE=2;
           
 
     /**
-    * Checks if argument is a valid normalization format for use
-    * @param normalization format
-    * @return true if strength is a valid collation strength, false otherwise
-    * @stable ICU 2.4 
-    */
+     * Checks if argument is a valid normalization format for use
+     * @param normalization format
+     * @return true if strength is a valid collation strength, false otherwise
+     * @stable ICU 2.4 
+     */
     public static boolean check(int normalization){
         
         if ( normalization < UNORM_NONE || 
