@@ -64,7 +64,8 @@ ConformanceTest.java
 
 TESTCONVCLASS=TestConverter.java
 
-COMCLASS=ErrorCode.java
+COMCLASS=ErrorCode.java \
+ICU4JNILoader.java
 
 CONVCLASS=NativeConverter.java \
 ByteToCharConverterICU.java \
