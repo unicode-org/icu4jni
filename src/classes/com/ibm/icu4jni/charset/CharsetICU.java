@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/charset/CharsetICU.java,v $ 
-* $Date: 2004/12/30 21:17:38 $ 
-* $Revision: 1.11 $
+* $Date: 2005/01/28 02:51:30 $ 
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */ 
@@ -106,8 +106,38 @@ public final class CharsetICU extends Charset{
      * @param cs charset to test
      * @return true if the given charset is a subset of this charset
      * @stable ICU 2.4
+     * 
+     * //CSDL: major changes by Jack
      */
     public boolean contains(Charset cs){
+        if (null == cs) {
         return false;
+        } else if (this.equals(cs)) {
+            return true;
+        }
+        
+        long[] converterHandle1 = new long[] {0};
+        long[] converterHandle2 = new long[] {0};
+
+        try {
+            int ec = NativeConverter.openConverter(converterHandle1, this.name());
+            if (ErrorCode.isSuccess(ec)) {
+                ec = NativeConverter.openConverter(converterHandle2, cs.name());
+                if (ErrorCode.isSuccess(ec)) {
+                    return NativeConverter.contains(converterHandle1[0],
+                            converterHandle2[0]);
+                }
+            }
+            return false;
+        } finally {
+            if (0 != converterHandle1[0]) {
+                NativeConverter.closeConverter(converterHandle1[0]);
+                if (0 != converterHandle2[0]) {
+                    NativeConverter.closeConverter(converterHandle2[0]);
+                }
+            }
+        }
     }
 }
+
+

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/charset/CharsetDecoderICU.java,v $ 
-* $Date: 2004/06/17 20:52:12 $ 
-* $Revision: 1.11 $
+* $Date: 2005/01/28 02:51:30 $ 
+* $Revision: 1.12 $
 *
 *
 *******************************************************************************
@@ -28,23 +28,27 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
-import java.nio.ByteBuffer;;
+import java.nio.ByteBuffer;
 
 public final class CharsetDecoderICU extends CharsetDecoder{ 
         
-    /* data is 2 element array where
-     * data[INPUT_CONSUMED] = number of input bytes consumed
-     * data[OUTPUT_WRITTEN] = number of chars written to output
-     * data[INVALID_BYTES]  = number of invalid bytes
+
+    private static final int INPUT_OFFSET   = 0,
+                             OUTPUT_OFFSET  = 1,
+                             INVALID_BYTES  = 2,
+                             INPUT_HELD     = 3,
+                             LIMIT          = 4;
+    /* data is 3 element array where
+     * data[INPUT_OFFSET]   = on input contains the start of input and on output the number of input chars consumed
+     * data[OUTPUT_OFFSET]  = on input contains the start of output and on output the number of output bytes written
+     * data[INVALID_CHARS]  = number of invalid chars
+     * data[INPUT_HELD]     = number of input chars held in the converter's state
      */
-    private int[] data = new int[3];
+    private int[] data = new int[LIMIT];
     
     /* handle to the ICU converter that is opened */
     private final long converterHandle;
-      
-    private static final int INPUT_CONSUMED = 0;
-    private static final int OUTPUT_WRITTEN = 1;
-    private static final int INVALID_BYTES  = 2;
+
     
     private  byte[] input = null;
     private  char[] output= null;
@@ -57,9 +61,9 @@ public final class CharsetDecoderICU extends CharsetDecoder{
     // synchronization
     private int inEnd;
     private int outEnd;
-    private int save;
     private int ec;
     private int icuAction;
+    private int savedInputHeldLen;
     
     /** 
      * Construcs a new decoder for the given charset
@@ -158,7 +162,7 @@ public final class CharsetDecoderICU extends CharsetDecoder{
      */
     protected final CoderResult implFlush(CharBuffer out) {
        try{
-            getArray(out);
+           data[OUTPUT_OFFSET] = getArray(out);
             
             ec=NativeConverter.flushByteToChar(
                                             converterHandle,  /* Handle to ICU Converter */
@@ -168,10 +172,16 @@ public final class CharsetDecoderICU extends CharsetDecoder{
                                             );
                                       
             
-            /* if we donot have room for input throw an error*/
-            if(ec == ErrorCode.U_BUFFER_OVERFLOW_ERROR){
-		        return CoderResult.OVERFLOW;
-		    }
+            /* If we don't have room for the output, throw an exception*/
+            if (ErrorCode.isFailure(ec)) {
+                if (ec == ErrorCode.U_BUFFER_OVERFLOW_ERROR) {
+                    return CoderResult.OVERFLOW;
+                }else if (ec == ErrorCode.U_TRUNCATED_CHAR_FOUND) {//CSDL: add this truncated character error handling
+                    return CoderResult.malformedForLength(data[INPUT_OFFSET]);
+                }else {
+                    ErrorCode.getException(ec);
+                }
+            }
 	        implReset();
 	        return CoderResult.UNDERFLOW;
 	   }finally{
@@ -186,6 +196,11 @@ public final class CharsetDecoderICU extends CharsetDecoder{
      */
     protected void implReset() {
         NativeConverter.resetByteToChar(converterHandle);
+        data[INPUT_OFFSET] = 0;
+        data[OUTPUT_OFFSET] = 0;
+        data[INVALID_BYTES] = 0;
+        data[INPUT_HELD] = 0;
+        savedInputHeldLen = 0;
     }
       
     /**
@@ -207,13 +222,14 @@ public final class CharsetDecoderICU extends CharsetDecoder{
      */
     protected CoderResult decodeLoop(ByteBuffer in,CharBuffer out){
 
-
         if(!in.hasRemaining()){
             return CoderResult.UNDERFLOW;
         }
 
-        getArray(in);
-        getArray(out);
+        data[INPUT_OFFSET] = getArray(in);
+        data[OUTPUT_OFFSET]= getArray(out);
+        data[INPUT_HELD] = 0;
+        
         try{
             /* do the conversion */
             ec=NativeConverter.decode(
@@ -256,11 +272,11 @@ public final class CharsetDecoderICU extends CharsetDecoder{
     // private utility methods
     //------------------------------------------
 
-    private final void getArray(CharBuffer out){
+    private final int getArray(CharBuffer out){
         if(out.hasArray()){
             output = out.array();
-            outEnd = out.arrayOffset() + out.limit();
-            data[OUTPUT_WRITTEN] = (out.arrayOffset()+out.position());
+            outEnd = out.limit();
+            return out.position();
         }else{
             outEnd = out.remaining();
             if(output==null || (outEnd > output.length)){
@@ -269,15 +285,15 @@ public final class CharsetDecoderICU extends CharsetDecoder{
             //since the new 
             // buffer start position 
             // is 0
-            data[OUTPUT_WRITTEN] = 0;
+            return 0;
         }
         
     }
-    private  final void getArray(ByteBuffer in){
+    private  final int getArray(ByteBuffer in){
         if(in.hasArray()){
             input = in.array();
-            inEnd = in.arrayOffset() + in.limit();
-            data[INPUT_CONSUMED] = (in.arrayOffset()+in.position());
+            inEnd = in.limit();
+            return in.position()+savedInputHeldLen;/*exclude the number fo bytes held in previous conversion*/
         }else{
             inEnd = in.remaining();
             if(input==null|| (inEnd > input.length)){ 
@@ -290,23 +306,30 @@ public final class CharsetDecoderICU extends CharsetDecoder{
             in.position(pos);
             // the start position  
             // of the new buffer  
-            // is 0
-            data[INPUT_CONSUMED] = 0;
+            // is whatever is savedInputLen
+            return savedInputHeldLen;
         }
        
     }
     private final void setPosition(CharBuffer out){
         if(out.hasArray()){
-		    out.position(out.position() + data[OUTPUT_WRITTEN] - out.arrayOffset());
+		    out.position(out.position() + data[OUTPUT_OFFSET]);
         }else{
-            out.put(output,0,data[OUTPUT_WRITTEN]);
+            out.put(output,0,data[OUTPUT_OFFSET]);
         }
     }
-    private final void setPosition(ByteBuffer in){   
-        if(in.hasArray()){
-		    in.position(in.position()+data[INPUT_CONSUMED] - in.arrayOffset());
+    private final void setPosition(ByteBuffer in){
+
+        // ok was there input held in the previous invocation of decodeLoop 
+        // that resulted in output in this invocation?
+        if(data[OUTPUT_OFFSET]>0 && savedInputHeldLen >0){
+            int len = in.position() + data[INPUT_OFFSET] + savedInputHeldLen;
+            in.position(len);   
+            savedInputHeldLen = data[INPUT_HELD];
         }else{
-            in.position(in.position()+data[INPUT_CONSUMED]);
-        }     
+            in.position(in.position() + data[INPUT_OFFSET] + savedInputHeldLen);
+            savedInputHeldLen = data[INPUT_HELD];
+            in.position(in.position() - savedInputHeldLen);
+        }       
     }
 }

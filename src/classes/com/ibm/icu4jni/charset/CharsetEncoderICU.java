@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/charset/CharsetEncoderICU.java,v $ 
-* $Date: 2004/12/30 21:17:38 $ 
-* $Revision: 1.11 $
+* $Date: 2005/01/28 02:51:30 $ 
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -16,26 +16,32 @@
  * 
  * @author Ram Viswanadha, IBM
  */
-package com.ibm.icu4jni.charset;
-import java.nio.charset.*;
+package com.ibm.icu4jni.charset;  
+
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
-import java.nio.*;
-import com.ibm.icu4jni.converters.NativeConverter;
-import com.ibm.icu4jni.common.*;
+import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
 
+import com.ibm.icu4jni.common.ErrorCode;
+import com.ibm.icu4jni.converters.NativeConverter;
+
 public final class CharsetEncoderICU extends CharsetEncoder {
-	/* data is 3 element array where
-	 * data[INPUT_CONSUMED] = number of input chars consumed
-	 * data[OUTPUT_WRITTEN] = number of output bytes written
-	 * data[INVALID_CHARS]  = number of invalid chars
-	 */
-	private int[] data = new int[3];
 
-	private static final int INPUT_CONSUMED = 0;
-	private static final int OUTPUT_WRITTEN = 1;
-	private static final int INVALID_CHARS = 2;
-
+    private static final int INPUT_OFFSET = 0,
+	                         OUTPUT_OFFSET = 1,
+                             INVALID_CHARS  = 2,
+                             INPUT_HELD     = 3,
+                             LIMIT          = 4;
+    /* data is 3 element array where
+     * data[INPUT_OFFSET]   = on input contains the start of input and on output the number of input chars consumed
+     * data[OUTPUT_OFFSET]  = on input contains the start of output and on output the number of output bytes written
+     * data[INVALID_CHARS]  = number of invalid chars
+     * data[INPUT_HELD]     = number of input chars held in the converter's state
+     */
+    private int[] data = new int[LIMIT];
 	/* handle to the ICU converter that is opened */
 	private final long converterHandle;
 
@@ -50,14 +56,15 @@ public final class CharsetEncoderICU extends CharsetEncoder {
 	// synchronization
 	private int inEnd;
 	private int outEnd;
-	private int save;
 	private int ec;
 	private int icuAction;
+    private int savedInputHeldLen;
 
 	/** 
 	 * Construcs a new encoder for the given charset
 	 * @param cs for which the decoder is created
 	 * @param cHandle the address of ICU converter
+     * @param replacement the substitution bytes
      * @stable ICU 2.4
 	 */
 	public CharsetEncoderICU(Charset cs, long cHandle, byte[] replacement) {
@@ -89,7 +96,6 @@ public final class CharsetEncoderICU extends CharsetEncoder {
 		if (converterHandle != 0) {
 			if (newReplacement.length
 				> NativeConverter.getMaxBytesPerChar(converterHandle)) {
-				System.out.println(converterHandle);
 				throw new IllegalArgumentException("Number of replacement Bytes are greater than max bytes per char");
 			}
 			ec = NativeConverter.setSubstitutionBytes(converterHandle,
@@ -152,7 +158,7 @@ public final class CharsetEncoderICU extends CharsetEncoder {
 	 */
 	protected CoderResult implFlush(ByteBuffer out) {
 		try {
-			getArray(out);
+			data[OUTPUT_OFFSET] = getArray(out);
 			ec = NativeConverter.flushCharToByte(converterHandle,/* Handle to ICU Converter */
                                         		 output, /* output array of chars */
                                         		 outEnd, /* output index+1 to be written */
@@ -163,9 +169,11 @@ public final class CharsetEncoderICU extends CharsetEncoder {
 			if (ErrorCode.isFailure(ec)) {
 				if (ec == ErrorCode.U_BUFFER_OVERFLOW_ERROR) {
 					return CoderResult.OVERFLOW;
-				} else {
-					ErrorCode.getException(ec);
-				}
+				}else if (ec == ErrorCode.U_TRUNCATED_CHAR_FOUND) {//CSDL: add this truncated character error handling
+                    return CoderResult.malformedForLength(data[INPUT_OFFSET]);
+                }else {
+                    ErrorCode.getException(ec);
+                }
 			}
 			implReset();
 			return CoderResult.UNDERFLOW;
@@ -180,6 +188,11 @@ public final class CharsetEncoderICU extends CharsetEncoder {
 	 */
 	protected void implReset() {
 		NativeConverter.resetCharToByte(converterHandle);
+        data[INPUT_OFFSET] = 0;
+        data[OUTPUT_OFFSET] = 0;
+        data[INVALID_CHARS] = 0;
+        data[INPUT_HELD] = 0;
+        savedInputHeldLen = 0;
 	}
 
 	/**
@@ -198,8 +211,10 @@ public final class CharsetEncoderICU extends CharsetEncoder {
 			return CoderResult.UNDERFLOW;
 		}
 
-		getArray(in);
-		getArray(out);
+        data[INPUT_OFFSET] = getArray(in);
+        data[OUTPUT_OFFSET]= getArray(out);
+        data[INPUT_HELD] = 0;
+        
 		try {
 			/* do the conversion */
 			ec = NativeConverter.encode(converterHandle,/* Handle to ICU Converter */
@@ -277,8 +292,8 @@ public final class CharsetEncoderICU extends CharsetEncoder {
 	 *
 	 * @param codepoint Unicode code point as int value
 	 * @return true if a character can be converted
-     * @stable ICU 2.4
-	 * 
+     * @obsolete ICU 2.4
+	 * @deprecated ICU 3.4
 	 */
 	public boolean canEncode(int codepoint) {
 		return NativeConverter.canEncode(converterHandle, codepoint);
@@ -297,57 +312,69 @@ public final class CharsetEncoderICU extends CharsetEncoder {
 	//------------------------------------------
 	// private utility methods
 	//------------------------------------------
-	private final void getArray(ByteBuffer out) {
-		if (out.hasArray()) {
-			output = out.array();
-			outEnd = out.arrayOffset() + out.limit();
-			data[OUTPUT_WRITTEN] = (out.arrayOffset() + out.position());
-		} else {
-			outEnd = out.remaining();
-			if (output == null || (outEnd > output.length)) {
-				output = new byte[outEnd];
-			}
-			//since the new 
-			// buffer start position 
-			// is 0
-			data[OUTPUT_WRITTEN] = 0;
-		}
+	private final int getArray(ByteBuffer out) {
+        if(out.hasArray()){
+            output = out.array();
+            outEnd = out.limit();
+            return out.position();
+        }else{
+            outEnd = out.remaining();
+            if(output==null || (outEnd > output.length)){
+                output = new byte[outEnd];
+            }
+            //since the new 
+            // buffer start position 
+            // is 0
+            return 0;
+        }
 	}
 
-	private final void getArray(CharBuffer in) {
-		if (in.hasArray()) {
-			input = in.array();
-			inEnd = in.arrayOffset() + in.limit();
-			data[INPUT_CONSUMED] = (in.arrayOffset() + in.position());
-		} else {
-			inEnd = in.remaining();
-			if (input == null || (inEnd > input.length)) {
-				input = new char[inEnd];
-			}
-			int pos = in.position();
-			in.get(input, 0, inEnd);
-			in.position(pos);
-			// return 0 since the new 
-			// buffer start position 
-			// is 0
-			data[INPUT_CONSUMED] = 0;
-		}
+	private final int getArray(CharBuffer in) {
+        if(in.hasArray()){
+            input = in.array();
+            inEnd = in.limit();
+            return in.position()+savedInputHeldLen;/*exclude the number fo bytes held in previous conversion*/
+        }else{
+            inEnd = in.remaining();
+            if(input==null|| (inEnd > input.length)){ 
+                input = new char[inEnd];
+            }
+            // save the current position
+            int pos = in.position();
+            in.get(input,0,inEnd);
+            // reset the position
+            in.position(pos);
+            // the start position  
+            // of the new buffer  
+            // is whatever is savedInputLen
+            return savedInputHeldLen;
+        }
 
 	}
 	private final void setPosition(ByteBuffer out) {
+        
 		if (out.hasArray()) {
-			out.position(
-				out.position() + data[OUTPUT_WRITTEN] - out.arrayOffset());
+            // in getArray method we accessed the 
+            // array backing the buffer directly and wrote to 
+            // it, so just just set the position and return.
+            // This is done to avoid the creation of temp array.
+			out.position(out.position() + data[OUTPUT_OFFSET] );
 		} else {
-			out.put(output, 0, data[OUTPUT_WRITTEN]);
+			out.put(output, 0, data[OUTPUT_OFFSET]);
 		}
 	}
-	private final void setPosition(CharBuffer in) {
-		if (in.hasArray()) {
-			in.position(
-				in.position() + data[INPUT_CONSUMED] - in.arrayOffset());
-		} else {
-			in.position(in.position() + data[INPUT_CONSUMED]);
-		}
-	}
+    private final void setPosition(CharBuffer in){
+
+        // was there input held in the previous invocation of encodeLoop 
+        // that resulted in output in this invocation?
+        if(data[OUTPUT_OFFSET]>0 && savedInputHeldLen>0){
+            int len = in.position() + data[INPUT_OFFSET] + savedInputHeldLen;
+            in.position(len);   
+            savedInputHeldLen = data[INPUT_HELD];
+        }else{
+            in.position(in.position() + data[INPUT_OFFSET] + savedInputHeldLen);
+            savedInputHeldLen = data[INPUT_HELD];
+            in.position(in.position() - savedInputHeldLen);
+        }     
+    }
 }

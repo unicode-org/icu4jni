@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/charset/CharsetProviderICU.java,v $ 
-* $Date: 2004/12/30 21:17:39 $ 
-* $Revision: 1.13 $
+* $Date: 2005/01/28 02:51:30 $ 
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */ 
@@ -37,6 +37,7 @@ public final class CharsetProviderICU extends CharsetProvider{
     public final Charset charsetForName(String charsetName) {
 	    // get the canonical name	 
         String icuCanonicalName = NativeConverter.getICUCanonicalName(charsetName);	     
+
         // create the converter object and return it
         if(icuCanonicalName.length()==0){
         	// this would make the Charset API to throw 
@@ -87,13 +88,8 @@ public final class CharsetProviderICU extends CharsetProvider{
     	      throw new NoSuchElementException();
     	}
       }
-      public void remove(){
-        if(currentIndex==0){
-	       throw new IllegalStateException();
-        }else{
-	       names = null;
-	       currentIndex=0;
-        }
+      public void remove() {
+            throw new UnsupportedOperationException();
       }
     }
       

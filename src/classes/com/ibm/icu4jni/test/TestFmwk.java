@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/test/TestFmwk.java,v $ 
- * $Date: 2004/06/17 20:52:13 $ 
- * $Revision: 1.9 $
+ * $Date: 2005/01/28 02:53:43 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -250,6 +250,14 @@ public class TestFmwk implements TestLog {
         StringBuffer result = new StringBuffer();
         String foo = Integer.toString(ch,16).toUpperCase();
         for (int i = foo.length(); i < 4; ++i) {
+            result.append('0');
+        }
+        return result + foo;
+    }
+    public static String hex(byte ch) {
+        StringBuffer result = new StringBuffer();
+        String foo = Integer.toString(0xFF&ch,16).toUpperCase();
+        for (int i = foo.length(); i < 2; ++i) {
             result.append('0');
         }
         return result + foo;

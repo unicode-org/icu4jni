@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/converters/NativeConverter.java,v $ 
-* $Date: 2004/12/30 21:17:39 $ 
-* $Revision: 1.14 $
+* $Date: 2005/01/28 02:53:22 $ 
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */ 
@@ -301,6 +301,11 @@ public final class NativeConverter{
      */ 
     public static final native float getAveCharsPerByte(long converterHandle);
     
+    //CSDL: added by Jack
+    /**
+     * Determines whether charset1 contains charset2.
+     */
+    public static final native boolean contains(long converterHandle1, long converterHandle2);
     
     public static final native byte[] getSubstitutionBytes(long converterHandle);
     

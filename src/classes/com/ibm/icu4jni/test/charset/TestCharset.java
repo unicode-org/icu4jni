@@ -18,7 +18,7 @@ import java.nio.charset.spi.*;
 import java.nio.charset.*;
 import java.util.*;
 
-import sun.misc.ASCIICaseInsensitiveComparator;
+//import sun.misc.ASCIICaseInsensitiveComparator;
 
 import com.ibm.icu4jni.charset.*;
 import com.ibm.icu4jni.converters.NativeConverter;
@@ -85,7 +85,10 @@ public class TestCharset extends TestFmwk {
 				errln("ToChars encountered Error");
 				rc = 1;
 			}
-
+            if (result.isOverflow()) {
+                errln("ToChars encountered overflow exception");
+                rc = 1;
+            }
 			if (!equals(chars, unistr)) {
 				errln("ToChars does not match");
 				printchars(chars);
@@ -102,18 +105,20 @@ public class TestCharset extends TestFmwk {
 		/* Convert single bytes to Unicode */
 		try {
 			CharBuffer chars = CharBuffer.allocate(unistr.length());
-			ByteBuffer b = ByteBuffer.allocate(1);
+			ByteBuffer b = ByteBuffer.wrap(gb);
 			decoder.reset();
-			byte[] temp = new byte[1];
             CoderResult result=null;
-			for (int i = 0; i < gb.length; i++) {
-				b.rewind();
-				temp[0] = gb[i];
-				b.put(temp);
-				b.rewind();
+			for (int i = 1; i <= gb.length; i++) {
+			    b.limit(i);
 				result = decoder.decode(b, chars, false);
+                if(result.isOverflow()){
+                    errln("ToChars single threw an overflow exception");
+                }
+                if (result.isError()) {
+                    errln("ToChars single the reuslt is an error "+result.toString());
+                } 
 			}
-			if (result.isError() || unistr.length() != (chars.limit())) {
+			if (unistr.length() != (chars.limit())) {
 				errln("ToChars single len does not match");
 				rc = 3;
 			}
@@ -124,7 +129,7 @@ public class TestCharset extends TestFmwk {
 			}
 		} catch (Exception e) {
 			errln("ToChars - exception in single");
-			e.printStackTrace(System.err);
+			e.printStackTrace();
 			rc = 6;
 		}
 
@@ -132,12 +137,16 @@ public class TestCharset extends TestFmwk {
 		try {
 			CharBuffer chars = CharBuffer.allocate(unistr.length());
 			decoder.reset();
-			for (int i = 0; i <= gb.length; i++) {
+            gbval.rewind();
+			for (int i = 1; i <= gb.length; i++) {
 				gbval.limit(i);
 				CoderResult result = decoder.decode(gbval, chars, false);
 				if (result.isError()) {
-					errln("Error while decoding -- FAILED");
+					errln("Error while decoding: "+result.toString());
 				}
+                if(result.isOverflow()){
+                    errln("ToChars Simple threw an overflow exception");
+                }
 			}
 			if (chars.limit() != unistr.length()) {
 				errln("ToChars Simple buffer len does not match");
@@ -169,6 +178,9 @@ public class TestCharset extends TestFmwk {
 				errln("FromChars reported error: " + result.toString());
 				rc = 1;
 			}
+            if(result.isOverflow()){
+                errln("FromChars threw an overflow exception");
+            }
 			if (!bytes.equals(gbval)) {
 				errln("FromChars does not match");
 				printbytes(bytes);
@@ -183,18 +195,20 @@ public class TestCharset extends TestFmwk {
 		/* Convert the buffer one char at a time to unicode */
 		try {
 			ByteBuffer bytes = ByteBuffer.allocate(gb.length);
-			CharBuffer c = CharBuffer.allocate(1);
+			CharBuffer c = CharBuffer.wrap(unistr);
 			encoder.reset();
-			char[] temp = new char[1];
             CoderResult result= null;
-			for (int i = 0; i < unistr.length(); i++) {
-				temp[0] = unistr.charAt(i);
-				c.put(temp);
-				c.rewind();
-				result = encoder.encode(c, bytes, false);
-				c.rewind();
+			for (int i = 1; i <= unistr.length(); i++) {
+                c.limit(i);
+                result = encoder.encode(c, bytes, false);
+                if(result.isOverflow()){
+                    errln("FromChars single threw an overflow exception");
+                }
+                if(result.isError()){
+                    errln("FromChars single threw an error: "+ result.toString());
+                }
 			}
-			if (result.isError() || gb.length != bytes.limit()) {
+			if (gb.length != bytes.limit()) {
 				errln("FromChars single len does not match");
 				rc = 3;
 			}
@@ -219,8 +233,14 @@ public class TestCharset extends TestFmwk {
 			for (int i = 0; i <= temp.length; i++) {
 				uniVal.limit(i);
 				result = encoder.encode(uniVal, bytes, false);
+                if(result.isOverflow()){
+                    errln("FromChars simple threw an overflow exception");
+                }
+                if(result.isError()){
+                    errln("FromChars simple threw an error: "+ result.toString());
+                }
 			}
-			if (result.isError() || bytes.limit() != gb.length) {
+			if (bytes.limit() != gb.length) {
 				errln("FromChars Simple len does not match");
 				rc = 7;
 			}
@@ -235,7 +255,7 @@ public class TestCharset extends TestFmwk {
 			rc = 9;
 		}
 		if (rc != 0) {
-			errln("--Test Simple FromChars " + encoding + " --FAILED");
+			errln("Test Simple FromChars " + encoding + " --FAILED");
 		}
 	}
 
@@ -270,7 +290,7 @@ public class TestCharset extends TestFmwk {
 		//reset to old position
 		buf.position(pos);
 		for (i = 0; i < bytes.length; i++) {
-			System.out.print(hex((char) bytes[i]) + " ");
+			System.out.print(hex(bytes[i]) + " ");
 		}
 		errln("");
 	}
@@ -341,9 +361,9 @@ public class TestCharset extends TestFmwk {
 				if (chars[i] != compareTo[i]) {
 					errln(
 						"Got: "
-							+ hex((char) chars[i])
+							+ hex(chars[i])
 							+ " Expected: "
-							+ hex((char) compareTo[i])
+							+ hex(compareTo[i])
 							+ " At: "
 							+ i);
 					result = false;
@@ -692,18 +712,18 @@ public class TestCharset extends TestFmwk {
 		{
 			decoder.reset();
 			CharBuffer myCharTarget = CharBuffer.allocate(myUSource.length);
+            int inputLen = mygbSource.limit();
 			mygbSource.position(0);
-			while (true) {
-				int pos = mygbSource.position();
-				mygbSource.limit(++pos);
+			for(int i=1; i<=inputLen; i++) {
+				mygbSource.limit(i);
 				CoderResult result =
 					decoder.decode(mygbSource, myCharTarget, false);
 				if (result.isError()) {
-					errln("Test small output buffers while decoding -- FAILED");
+					errln("Test small input buffers while decoding failed. "+result.toString());
 				}
-				if (mygbSource.position() == myGBSource.length) {
-					break;
-				}
+                if (result.isOverflow()) {
+                    errln("Test small input buffers while decoding threw overflow exception");
+                }
 
 			}
 
@@ -734,9 +754,9 @@ public class TestCharset extends TestFmwk {
 
 			if (!equals(myCharTarget, myUSource)) {
 				errln(
-					"--Test small output buffers "
+					"Test small output buffers "
 						+ encoding
-						+ " TO Unicode --FAILED");
+						+ " TO Unicode failed");
 			}
 		}
 	}
@@ -769,8 +789,10 @@ public class TestCharset extends TestFmwk {
             logln("Charset name: "+iter.next().toString());
         }
         String[] charsets = NativeConverter.getAvailable();
-        if(map.size() < charsets.length){
-            errln("Charset.availableCharsets() returned a number less than the number returned by icu");
+        int mapSize = map.size();
+        if(mapSize < charsets.length){
+            errln("Charset.availableCharsets() returned a number less than the number returned by icu. ICU: " + charsets.length
+                    + " JDK: " + mapSize);
         }
         logln("Total Number of chasets = " + map.size());
 	}
@@ -815,7 +837,7 @@ public class TestCharset extends TestFmwk {
 
     public void TestEncoderCreation(){
         try{
-            Charset cs = Charset.forName("x-ibm-16684_P110-2003");
+            Charset cs = Charset.forName("GB_2312-80");
             CharsetEncoder enc = cs.newEncoder();
             if(enc!=null){
                 logln("Successfully created the encoder");
@@ -834,6 +856,78 @@ public class TestCharset extends TestFmwk {
             errln("Error creating charset encoder."+ e.toString());
         }
     }
+    
+    public  void TestUTF8Encode() {
+        CharsetEncoder encoderICU = new CharsetProviderICU().charsetForName(
+                "utf-8").newEncoder();
+        ByteBuffer out = ByteBuffer.allocate(30);
+        CoderResult result = encoderICU.encode(CharBuffer.wrap("\ud800"), out, true);
+       
+        if (result.isMalformed()) {
+            logln("\\ud800 is malformed for ICU4JNI utf-8 encoder");
+        } else if (result.isUnderflow()) {
+            errln("\\ud800 is OK for ICU4JNI utf-8 encoder");
+        }
+
+        CharsetEncoder encoderJDK = Charset.forName("utf-8").newEncoder();
+        result = encoderJDK.encode(CharBuffer.wrap("\ud800"), ByteBuffer
+                .allocate(10), true);
+        if (result.isUnderflow()) {
+            errln("\\ud800 is OK for JDK utf-8 encoder");
+        } else if (result.isMalformed()) {
+            logln("\\ud800 is malformed for JDK utf-8 encoder");
+        }
+    }
+
+    private void printCB(CharBuffer buf){
+        buf.rewind();
+        while(buf.hasRemaining()){
+            System.out.println(hex(buf.get()));
+        }
+        buf.rewind();
+    }
+    public void TestUTF8() throws CharacterCodingException{
+           try{
+               CharsetEncoder encoderICU = new CharsetProviderICU().charsetForName("utf-8").newEncoder();
+               encoderICU.encode(CharBuffer.wrap("\ud800"));
+               errln("\\ud800 is OK for ICU4JNI utf-8 encoder");
+           }catch (MalformedInputException e) {
+               logln("\\ud800 is malformed for JDK utf-8 encoder");
+              //e.printStackTrace();
+           }
+           
+           CharsetEncoder encoderJDK = Charset.forName("utf-8").newEncoder();
+           try {
+               encoderJDK.encode(CharBuffer.wrap("\ud800"));
+               errln("\\ud800 is OK for JDK utf-8 encoder");
+           } catch (MalformedInputException e) {
+               logln("\\ud800 is malformed for JDK utf-8 encoder");
+               //e.printStackTrace();
+           }         
+    }
+    public void TestUTF16Bom(){
+
+        Charset cs = (new CharsetProviderICU()).charsetForName("UTF-16");
+        char[] in = new char[] { 0x1122, 0x2211, 0x3344, 0x4433,
+                                0x5566, 0x6655, 0x7788, 0x8877, 0x9900 };
+        CharBuffer inBuf = CharBuffer.allocate(in.length);
+        inBuf.put(in);
+        CharsetEncoder encoder = cs.newEncoder();
+        ByteBuffer outBuf = ByteBuffer.allocate(in.length*2);
+        inBuf.rewind();
+        encoder.encode(inBuf, outBuf, true);
+        outBuf.rewind();
+        if(outBuf.remaining()> in.length*2){
+            errln("The UTF16 encoder appended bom. Length returned: " + outBuf.remaining());
+        }
+        while(outBuf.hasRemaining()){
+            logln("0x"+hex(outBuf.get()));
+        }
+        CharsetDecoder decoder = cs.newDecoder();
+        outBuf.rewind();
+        CharBuffer rt = CharBuffer.allocate(in.length);
+        decoder.decode(outBuf, rt, true);
+    }
 	private void smBufEncode(CharsetEncoder encoder, String encoding) {
 		CharBuffer mySource = CharBuffer.wrap(myUSource);
 		{
@@ -841,19 +935,20 @@ public class TestCharset extends TestFmwk {
 			ByteBuffer myTarget = ByteBuffer.allocate(myGBSource.length);
 			mySource.position(0);
             CoderResult result=null;
-			while (mySource.position() < myUSource.length) {
-				int pos = mySource.position();
-				mySource.limit(pos + 1);
-				result = encoder.encode(mySource, myTarget, false);
-			}
-			if (result.isError() || !equals(myTarget, myGBSource)) {
+            for(int i=1; i<=myUSource.length; i++) {
+                mySource.limit(i);
+                result = encoder.encode(mySource, myTarget, false);
+                if (result.isError()) {
+                    errln("Test small input buffers while encoding failed. "+result.toString());
+                }
+                if (result.isOverflow()) {
+                    errln("Test small input buffers while encoding threw overflow exception");
+                }
 
-				//System.out.println("Encode small output buffers passed");
+            }
+			if (!equals(myTarget, myGBSource)) {
 
-				errln(
-					"--Test small output buffers "
-						+ encoding
-						+ " From Unicode --FAILED");
+				errln("Test small input buffers "+ encoding+ " From Unicode failed");
 
 			}
 		}
@@ -869,6 +964,9 @@ public class TestCharset extends TestFmwk {
 				if (result.isOverflow()) {
 					continue;
 				}
+                if (result.isError()) {
+                    errln("Test small output buffers while encoding failed. "+result.toString());
+                }
 				if (mySource.position() == myUSource.length) {
 					myTarget.limit(myGBSource.length);
 					encoder.flush(myTarget);
@@ -878,11 +976,7 @@ public class TestCharset extends TestFmwk {
 			}
 
 			if (!equals(myTarget, myGBSource)) {
-
-				errln(
-					"--Test small output buffers "
-						+ encoding
-						+ " From Unicode --FAILED");
+				errln("Test small output buffers "+ encoding+ " From Unicode failed.");
 			}
 
 		}
