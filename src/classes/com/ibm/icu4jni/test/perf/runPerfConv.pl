@@ -4,8 +4,10 @@ use strict;
 
 # Assume we are running within the icu4jni root directory
 use lib 'c:/work/devicu4j/icu4jni/src/classes/com/ibm/icu4jni/test/perf';
-
 use Dataset;
+
+# Copyright (c) 2002-2004, International Business Machines Corporation
+# and others. All rights reserved.
 
 #---------------------------------------------------------------------
 # Test class

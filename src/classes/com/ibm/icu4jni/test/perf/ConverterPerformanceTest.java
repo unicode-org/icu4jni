@@ -8,6 +8,9 @@ import java.nio.charset.*;
 import java.nio.*;
 
 /**
+ * Copyright (c) 2002-2004, International Business Machines Corporation
+ * and others. All rights reserved.
+ * 
  * @author ram
  *
  * To change this generated comment edit the template variable "typecomment":
