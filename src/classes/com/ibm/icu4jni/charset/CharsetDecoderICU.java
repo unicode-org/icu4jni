@@ -1,3 +1,15 @@
+/**
+*******************************************************************************
+* Copyright (C) 1996-2001, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/charset/CharsetDecoderICU.java,v $ 
+* $Date: 2001/10/16 17:23:40 $ 
+* $Revision: 1.2 $
+*
+*******************************************************************************
+*/ 
  /** 
   * A JNI interface for ICU converters.
   *
@@ -10,6 +22,7 @@ import java.nio.charset.CharsetEncoder;
 import java.nio.*;
 import com.ibm.icu4jni.converters.NativeConverter;
 import com.ibm.icu4jni.common.*;
+import java.nio.charset.CodingErrorAction;
 
 public class CharsetDecoderICU extends CharsetDecoder{ 
         
@@ -21,7 +34,9 @@ public class CharsetDecoderICU extends CharsetDecoder{
     
     /* handle to the ICU converter that is opened */
     private final long converterHandle;
+    
     private String replacement;    
+    
     public CharsetDecoderICU(Charset cs,long cHandle){
          super(cs,(float)NativeConverter.getMaxBytesPerChar(cHandle),
                (float)NativeConverter.getMaxBytesPerChar(cHandle));      
@@ -36,8 +51,7 @@ public class CharsetDecoderICU extends CharsetDecoder{
             if( newReplacement.length() > NativeConverter.getMaxBytesPerChar(converterHandle)) {
                 System.out.println(newReplacement + " length: " +newReplacement.length());
                 throw new IllegalArgumentException();
-            }
-            
+            }           
             int ec =NativeConverter.setSubstitutionChars(converterHandle,
                                                     newReplacement.toCharArray(),
                                                     newReplacement.length()
@@ -52,10 +66,36 @@ public class CharsetDecoderICU extends CharsetDecoder{
     
 
     //TODO
-    protected void implOnMalformedInput(CodingErrorAction newAction) { }
+    protected void implOnMalformedInput(CodingErrorAction newAction) {
+        int icuAction = NativeConverter.STOP_CALLBACK;
+        if(newAction.equals(CodingErrorAction.IGNORE)){
+            icuAction = NativeConverter.SKIP_CALLBACK;
+        }else if(newAction.equals(CodingErrorAction.REPLACE)){
+            icuAction = NativeConverter.SUBSTITUTE_CALLBACK;
+        }
+        if(converterHandle!=0){   
+            if(NativeConverter.setCallbackDecode(converterHandle,icuAction,false)
+                    > ErrorCode.U_ZERO_ERROR){
+                throw new IllegalArgumentException();
+            } 
+        }
+    }
     
     //TODO
-    protected void implOnUnmappableCharacter(CodingErrorAction newAction) { }
+    protected void implOnUnmappableCharacter(CodingErrorAction newAction) {
+        int icuAction = NativeConverter.STOP_CALLBACK;
+        if(newAction.equals(CodingErrorAction.IGNORE)){
+            icuAction = NativeConverter.SKIP_CALLBACK;
+        }else if(newAction.equals(CodingErrorAction.REPLACE)){
+            icuAction = NativeConverter.SUBSTITUTE_CALLBACK;
+        }
+        if(converterHandle!=0){   
+            if(NativeConverter.setCallbackDecode(converterHandle,icuAction,true)
+                    > ErrorCode.U_ZERO_ERROR){
+                throw new IllegalArgumentException();
+            } 
+        }
+    }
 
     protected CoderResult implFlush(CharBuffer out) {
 	    /* argument check */

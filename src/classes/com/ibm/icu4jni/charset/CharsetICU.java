@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/charset/CharsetICU.java,v $ 
-* $Date: 2001/10/12 01:30:56 $ 
-* $Revision: 1.1 $
+* $Date: 2001/10/16 17:23:40 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */ 
@@ -35,13 +35,24 @@ public class CharsetICU extends Charset{
          //System.out.println("This is the canonicalName " +canonicalName);
          
          // open the converter and get the handle 
-         // if there is an error throw Unsupported encoding exception       
-         if(NativeConverter.openConverter(converterHandleArr,canonicalName)
-            > ErrorCode.U_ZERO_ERROR){
-            throw new UnsupportedCharsetException(canonicalName);
+         // if there is an error throw Unsupported encoding exception    
+         int errorCode = NativeConverter.openConverter(converterHandleArr,canonicalName);
+         if(errorCode > ErrorCode.U_ZERO_ERROR){
+            throw new UnsupportedCharsetException(canonicalName + " ErrorCode: " +ErrorCode.getErrorName(errorCode));
          }
+         
          // store the converter handle
          converterHandle=converterHandleArr[0];
+         
+         // The default callback action on unmappable input 
+         // or malformed input is to report so we set ICU converter
+         // callback to stop
+         errorCode = NativeConverter.setCallbackDecode(converterHandle,
+                                                       NativeConverter.STOP_CALLBACK,
+                                                       false);
+         errorCode = NativeConverter.setCallbackEncode(converterHandle,
+                                                       NativeConverter.STOP_CALLBACK,
+                                                       false);
     }
 
     private long converterHandle = 0;

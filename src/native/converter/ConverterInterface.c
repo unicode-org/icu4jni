@@ -11,12 +11,16 @@
 #include "unicode/ucnv.h"     /* C   Converter API    */
 #include "unicode/ustring.h"  /* some more string functions*/
 #include "unicode/ucnv_cb.h"  /* for callback functions */
+#include <stdlib.h>
 
 void  JNI_TO_U_CALLBACK_SUBSTITUTE
  (const void *,UConverterToUnicodeArgs *,const char* ,int32_t ,UConverterCallbackReason ,UErrorCode * );
 
-JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_openConverter (JNIEnv *env, jclass jClass, 
-                                                           jlongArray handle, jstring converterName){
+JNIEXPORT jint JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_openConverter (JNIEnv *env, 
+                                                               jclass jClass, 
+                                                               jlongArray handle, 
+                                                               jstring converterName){
     
     UConverter* conv=NULL;
     char cnvName[100];
@@ -53,7 +57,10 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_openConve
 }
 
 
-JNIEXPORT void JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_closeConverter (JNIEnv *env, jclass jClass, jlong handle){
+JNIEXPORT void JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_closeConverter (JNIEnv *env, 
+                                                                jclass jClass, 
+                                                                jlong handle){
      
     UConverter* cnv = (UConverter*)handle;
     if(cnv){
@@ -61,9 +68,11 @@ JNIEXPORT void JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_closeConv
     }
 }
 
-JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_setSubstitutionModeCharToByte (JNIEnv *env, jclass jClass, 
-                                                                  jlong handle, 
-                                                                  jboolean mode){
+JNIEXPORT jint JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_setSubstitutionModeCharToByte (JNIEnv *env, 
+                                                                               jclass jClass, 
+                                                                               jlong handle, 
+                                                                               jboolean mode){
     
     UConverter* conv = (UConverter*)handle;
     UErrorCode errorCode =U_ZERO_ERROR;
@@ -99,11 +108,16 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_setSubsti
     return errorCode;
 }
 
-JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_convertCharToByte(JNIEnv *env, jclass jClass, 
-                                                        jlong handle, 
-                                                        jcharArray source, jint sourceEnd, 
-                                                        jbyteArray target, jint targetEnd, 
-                                                        jintArray data, jboolean flush){
+JNIEXPORT jint JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_convertCharToByte(JNIEnv *env, 
+                                                                  jclass jClass, 
+                                                                  jlong handle, 
+                                                                  jcharArray source, 
+                                                                  jint sourceEnd, 
+                                                                  jbyteArray target, 
+                                                                  jint targetEnd, 
+                                                                  jintArray data, 
+                                                                  jboolean flush){
     
 
     UErrorCode errorCode =U_ZERO_ERROR;
@@ -147,11 +161,16 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_convertCh
 }
 
 
-JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_convertByteToChar(JNIEnv *env, jclass jClass, 
-                                                      jlong handle, 
-                                                      jbyteArray source, jint sourceEnd, 
-                                                      jcharArray target,jint targetEnd, 
-                                                      jintArray data,jboolean flush){
+JNIEXPORT jint JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_convertByteToChar(JNIEnv *env, 
+                                                                  jclass jClass, 
+                                                                  jlong handle, 
+                                                                  jbyteArray source, 
+                                                                  jint sourceEnd, 
+                                                                  jcharArray target,
+                                                                  jint targetEnd, 
+                                                                  jintArray data,
+                                                                  jboolean flush){
 
     UErrorCode errorCode =U_ZERO_ERROR;
     UConverter* cnv = (UConverter*)handle;
@@ -194,7 +213,10 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_convertBy
 }
 
 
-JNIEXPORT void JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_resetByteToChar(JNIEnv *env, jclass jClass, jlong handle){
+JNIEXPORT void JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_resetByteToChar(JNIEnv *env, 
+                                                                jclass jClass, 
+                                                                jlong handle){
 
     UConverter* cnv = (UConverter*)handle;
     if(cnv){
@@ -202,7 +224,10 @@ JNIEXPORT void JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_resetByte
     }
 }
 
-JNIEXPORT void JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_resetCharToByte(JNIEnv *env, jclass jClass, jlong handle){
+JNIEXPORT void JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_resetCharToByte(JNIEnv *env, 
+                                                                jclass jClass, 
+                                                                jlong handle){
 
     UConverter* cnv = (UConverter*)handle;
     if(cnv){
@@ -211,9 +236,11 @@ JNIEXPORT void JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_resetChar
 
 }
 
-JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_countInvalidBytes (JNIEnv *env, jclass jClass, 
-                                                               jlong handle, 
-                                                               jintArray length) {
+JNIEXPORT jint JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_countInvalidBytes (JNIEnv *env, 
+                                                                   jclass jClass, 
+                                                                   jlong handle, 
+                                                                   jintArray length) {
     UConverter* cnv = (UConverter*)handle;
     UErrorCode errorCode = U_ZERO_ERROR;
     if(cnv){
@@ -232,9 +259,11 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_countInva
 }
 
 
-JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_countInvalidChars(JNIEnv *env, jclass jClass, 
-                                                              jlong handle, 
-                                                              jintArray length) {
+JNIEXPORT jint JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_countInvalidChars(JNIEnv *env, 
+                                                                  jclass jClass, 
+                                                                  jlong handle, 
+                                                                  jintArray length) {
 
     UErrorCode errorCode =U_ZERO_ERROR;
     UConverter* cnv = (UConverter*)handle;
@@ -252,8 +281,10 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_countInva
 
 }
 
-JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getMaxBytesPerChar(JNIEnv *env, jclass jClass, 
-                                                               jlong handle){
+JNIEXPORT jint JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_getMaxBytesPerChar(JNIEnv *env, 
+                                                                   jclass jClass, 
+                                                                   jlong handle){
     UConverter* cnv = (UConverter*)handle;
     if(cnv){
         return (jint)ucnv_getMaxCharSize(cnv);
@@ -261,10 +292,13 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getMaxByt
     return -1;
 }
 
-JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_flushByteToChar(JNIEnv *env, jclass jClass, 
-                                                            jlong handle, 
-                                                            jcharArray target, jint targetEnd, 
-                                                            jintArray data){
+JNIEXPORT jint JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_flushByteToChar(JNIEnv *env, 
+                                                                jclass jClass, 
+                                                                jlong handle, 
+                                                                jcharArray target, 
+                                                                jint targetEnd, 
+                                                                jintArray data){
     UErrorCode errorCode =U_ZERO_ERROR;
     UConverter* cnv = (UConverter*)handle;
     if(cnv){
@@ -299,11 +333,13 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_flushByte
     return errorCode;
 }
 
-JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_flushCharToByte (JNIEnv *env, jclass jClass, 
-                                                             jlong handle, 
-                                                             jbyteArray target, 
-                                                             jint targetEnd, 
-                                                             jintArray data){
+JNIEXPORT jint JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_flushCharToByte (JNIEnv *env, 
+                                                                 jclass jClass, 
+                                                                 jlong handle, 
+                                                                 jbyteArray target, 
+                                                                 jint targetEnd, 
+                                                                 jintArray data){
           
     UErrorCode errorCode =U_ZERO_ERROR;
     UConverter* cnv = (UConverter*)handle;
@@ -340,10 +376,12 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_flushChar
 }
 
 
-JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_setSubstitutionBytes(JNIEnv *env, jclass jClass, 
-                                                                 jlong handle,
-                                                                 jbyteArray subChars, 
-                                                                 jint length){
+JNIEXPORT jint JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_setSubstitutionBytes(JNIEnv *env, 
+                                                                     jclass jClass, 
+                                                                     jlong handle,
+                                                                     jbyteArray subChars, 
+                                                                     jint length){
 
     UConverter* cnv = (UConverter*) handle;
     UErrorCode errorCode = U_ZERO_ERROR;
@@ -374,107 +412,109 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_setSubsti
 
 typedef struct{
     int length;
-    UChar* subChars;
+    UChar subChars[256];
+    UBool stopOnIllegal;
 }SubCharStruct;
 
 
-JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_setSubstitutionChars(JNIEnv *env, jclass jClass, 
-                                                                 jlong handle, 
-                                                                 jcharArray subChars, 
-                                                                 jint length){
-    UConverter* cnv = (UConverter*) handle;
+static UErrorCode 
+setToUCallbackSubs(UConverter* cnv,UChar* subChars, int32_t length,UBool stopOnIllegal ){
+    SubCharStruct* substitutionCharS = (SubCharStruct*) malloc(sizeof(SubCharStruct));
     UErrorCode errorCode = U_ZERO_ERROR;
+    if(substitutionCharS){
+       UConverterToUCallback toUOldAction;
+       void* toUOldContext=NULL;
+       void* toUNewContext=NULL ;
+       if(subChars){
+            u_strncpy(substitutionCharS->subChars,subChars,length);
+       }else{
+           substitutionCharS->subChars[0] =0xFFFD;
+       }
+       substitutionCharS->subChars[length]=0;
+       substitutionCharS->length = length;
+       substitutionCharS->stopOnIllegal = stopOnIllegal;
+       toUNewContext = substitutionCharS;
+
+       ucnv_setToUCallBack(cnv,
+           JNI_TO_U_CALLBACK_SUBSTITUTE,
+           toUNewContext,
+           &toUOldAction,
+           &toUOldContext,
+           &errorCode);
+
+       if(toUOldContext){
+           SubCharStruct* temp = (SubCharStruct*) toUOldContext;
+           free(temp);
+       }
+
+       return errorCode;
+    }
+    return U_MEMORY_ALLOCATION_ERROR;
+}
+JNIEXPORT jint JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_setSubstitutionChars(JNIEnv *env, 
+                                                                     jclass jClass, 
+                                                                     jlong handle, 
+                                                                     jcharArray subChars, 
+                                                                     jint length){
+    UErrorCode errorCode = U_ZERO_ERROR;
+    UConverter* cnv = (UConverter*) handle;
     jchar* u_subChars=NULL;
     if(cnv){
         if(subChars){
+            int len = (*env)->GetArrayLength(env,subChars);
             u_subChars = (*env)->GetPrimitiveArrayCritical(env,subChars,NULL);
             if(u_subChars){
-                SubCharStruct* substitutionCharS = (SubCharStruct*) malloc(sizeof(SubCharStruct));
-                if(substitutionCharS){
-                    substitutionCharS->subChars =(UChar*)malloc(sizeof(UChar)*(length+1));
-                    if(substitutionCharS->subChars){
-                       UConverterToUCallback toUOldAction;
-                       void* toUOldContext=NULL;
-                       void* toUNewContext=NULL ;
-                       u_strncpy(substitutionCharS->subChars,u_subChars,length);
-                       substitutionCharS->length = length;
-                       toUNewContext = substitutionCharS;
-
-                       ucnv_setToUCallBack(cnv,
-                           JNI_TO_U_CALLBACK_SUBSTITUTE,
-                           toUNewContext,
-                           &toUOldAction,
-                           &toUOldContext,
-                           &errorCode);
-
-                       if(toUOldContext){
-                           SubCharStruct* temp = (SubCharStruct*) toUOldContext;
-                           free(temp->subChars);
-                           free(temp);
-                       }
-
-              
-                       if(U_FAILURE(errorCode)){
-                          (*env)->ReleasePrimitiveArrayCritical(env,subChars,u_subChars,JNI_COMMIT);
-                          return errorCode;
-                       }
-
-                    }
-                   
-                }
+               errorCode =  setToUCallbackSubs(cnv,u_subChars,len,FALSE);
             }
             (*env)->ReleasePrimitiveArrayCritical(env,subChars,u_subChars,JNI_COMMIT);
+            return errorCode;
         }
-        else{
-
-            UConverterToUCallback toUOldAction;
-            void* toUOldContext;
-            void* toUNewContext=NULL ;
-
-            ucnv_setToUCallBack(cnv,
-               UCNV_TO_U_CALLBACK_STOP,
-               toUNewContext,
-               &toUOldAction,
-               &toUOldContext,
-               &errorCode);
-   
-            if(toUOldContext){
-                SubCharStruct* temp = (SubCharStruct*) toUOldContext;
-                free(temp);
-            }
-        }
-        return errorCode;
     }
     errorCode = U_ILLEGAL_ARGUMENT_ERROR;
     return errorCode;
 }
 
 
-void  JNI_TO_U_CALLBACK_SUBSTITUTE(void *context,
-                        UConverterToUnicodeArgs *toArgs,
-                        const char* codeUnits,
-                        int32_t length,
-                        UConverterCallbackReason reason,
-                        UErrorCode * err){
+void  JNI_TO_U_CALLBACK_SUBSTITUTE( void *context,
+                                    UConverterToUnicodeArgs *toArgs,
+                                    const char* codeUnits,
+                                    int32_t length,
+                                    UConverterCallbackReason reason,
+                                    UErrorCode * err){
 
-
-    SubCharStruct* temp = (SubCharStruct*)context;
-    if( temp){
-        if (reason > UCNV_IRREGULAR){
-          //  free(temp->subChars);
-          //  free(temp);
-            return;
+    if(context){
+        SubCharStruct* temp = (SubCharStruct*)context;
+        if( temp){
+            if(temp->stopOnIllegal==FALSE){
+                if (reason > UCNV_IRREGULAR){
+                    return;
+                }
+                /* reset the error */
+                *err = U_ZERO_ERROR;
+                ucnv_cbToUWriteUChars(toArgs,temp->subChars ,temp->length , 0, err);
+            }else{
+                if(reason != UCNV_UNASSIGNED){
+                    /* the caller must have set 
+                     * the error code accordingly
+                     */
+                    return;
+                }else{
+                    *err = U_ZERO_ERROR;
+                    ucnv_cbToUWriteUChars(toArgs,temp->subChars ,temp->length , 0, err);
+                    return;
+                }
+            }
         }
-
-        /* reset the error */
-        *err = U_ZERO_ERROR;
-        ucnv_cbToUWriteUChars(toArgs,temp->subChars ,temp->length , 0, err);
     }
     return;
 }
 
-JNIEXPORT jboolean JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_canEncode(JNIEnv *env, jclass jClass, 
-                                                           jlong handle, jint codeUnit){
+JNIEXPORT jboolean JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_canEncode(JNIEnv *env, 
+                                                          jclass jClass, 
+                                                          jlong handle, 
+                                                          jint codeUnit){
     
     UErrorCode errorCode =U_ZERO_ERROR;
     UConverter* cnv = (UConverter*)handle;
@@ -500,8 +540,11 @@ JNIEXPORT jboolean JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_canEn
 }
 
 
-JNIEXPORT jboolean JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_canDecode(JNIEnv *env, jclass jClass, 
-                                                           jlong handle, jbyteArray source){
+JNIEXPORT jboolean JNICALL
+Java_com_ibm_icu4jni_converters_NativeConverter_canDecode(JNIEnv *env, 
+                                                          jclass jClass, 
+                                                          jlong handle, 
+                                                          jbyteArray source){
     
     UErrorCode errorCode =U_ZERO_ERROR;
     UConverter* cnv = (UConverter*)handle;
@@ -532,11 +575,13 @@ JNIEXPORT jboolean JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_canDe
     return (jboolean)FALSE;
 }
 
-JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_countAvailable(JNIEnv *env, jclass jClass){
+JNIEXPORT jint JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_countAvailable(JNIEnv *env, jclass jClass){
     return ucnv_countAvailable();
 }
 
-JNIEXPORT jobjectArray JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getAvailable(JNIEnv *env, jclass jClass){
+JNIEXPORT jobjectArray JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_getAvailable(JNIEnv *env, jclass jClass){
    
     jobjectArray ret;
     int32_t i = ucnv_countAvailable();
@@ -554,8 +599,8 @@ JNIEXPORT jobjectArray JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_g
     return (ret);
 }
 
-JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_countAliases(JNIEnv *env, jclass jClass, 
-                                                                                    jstring enc){
+JNIEXPORT jint JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_countAliases(JNIEnv *env, jclass jClass,jstring enc){
     
     UErrorCode error = U_ZERO_ERROR;
     jint num =0;
@@ -570,8 +615,9 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_countAlia
     return num;
 }
 
-JNIEXPORT jobjectArray JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getAliases(JNIEnv *env, jclass jClass,
-                                                                                          jstring enc){
+
+JNIEXPORT jobjectArray JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_getAliases(JNIEnv *env, jclass jClass, jstring enc){
 
     jobjectArray ret=NULL;
     int32_t aliasNum = 0;
@@ -599,7 +645,8 @@ JNIEXPORT jobjectArray JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_g
     return (ret);
 }
 
-JNIEXPORT jstring JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getCanonicalName(JNIEnv *env, jclass jClass,jstring enc){
+JNIEXPORT jstring 
+JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getCanonicalName(JNIEnv *env, jclass jClass,jstring enc){
 
     UErrorCode error = U_ZERO_ERROR;
     const char* encName = (*env)->GetStringUTFChars(env,enc,NULL);
@@ -612,4 +659,117 @@ JNIEXPORT jstring JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getCan
     }
    (*env)->ReleaseStringUTFChars(env,enc,encName);
     return((*env)->NewStringUTF(env, canonicalName));
+}
+
+JNIEXPORT jint JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_setCallbackEncode(JNIEnv *env, 
+                                                                  jclass jClass, 
+                                                                  jlong handle, 
+                                                                  jint mode,
+                                                                  jboolean stopOnIllegal){
+    UConverter* conv = (UConverter*)handle;
+    UErrorCode errorCode =U_ZERO_ERROR;
+
+    if(conv){
+        
+        UConverterFromUCallback fromUOldAction ;
+        void* fromUOldContext;
+        void* fromUNewContext=NULL;
+        UConverterFromUCallback newAction;
+        switch(mode){
+        default: /* falls through */
+        case com_ibm_icu4jni_converters_NativeConverter_STOP_CALLBACK:
+           newAction  = UCNV_FROM_U_CALLBACK_STOP;
+           break;
+        case com_ibm_icu4jni_converters_NativeConverter_SKIP_CALLBACK:
+            newAction = UCNV_FROM_U_CALLBACK_SKIP;
+            if(stopOnIllegal==TRUE){
+                fromUNewContext = UCNV_SUB_STOP_ON_ILLEGAL;
+            }
+            break;
+        case com_ibm_icu4jni_converters_NativeConverter_SUBSTITUTE_CALLBACK:
+            newAction = UCNV_FROM_U_CALLBACK_SUBSTITUTE;
+            if(stopOnIllegal==TRUE){
+                fromUNewContext = UCNV_SUB_STOP_ON_ILLEGAL;
+            }
+            break;
+        }
+
+        ucnv_setFromUCallBack(conv,
+           newAction,
+           fromUNewContext,
+           &fromUOldAction,
+           &fromUOldContext,
+           &errorCode);
+
+
+        return errorCode;
+    }
+    errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+    return errorCode;
+}
+
+JNIEXPORT jint JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_setCallbackDecode(JNIEnv *env, 
+                                                                  jclass jClass, 
+                                                                  jlong handle, 
+                                                                  jint mode, 
+                                                                  jboolean stopOnIllegal){
+    UConverter* conv = (UConverter*)handle;
+    UErrorCode errorCode =U_ZERO_ERROR;
+    if(conv){
+        
+        UConverterToUCallback toUOldAction ;
+        void* toUOldContext;
+        void* toUNewContext=NULL;
+        UConverterToUCallback newAction;
+
+        switch(mode){
+        default: /* falls through */
+        case com_ibm_icu4jni_converters_NativeConverter_STOP_CALLBACK:
+           newAction  = UCNV_TO_U_CALLBACK_STOP;
+           break;
+        case com_ibm_icu4jni_converters_NativeConverter_SKIP_CALLBACK:
+            newAction = UCNV_TO_U_CALLBACK_SKIP ;
+            
+            if(stopOnIllegal==TRUE){
+                toUNewContext = UCNV_SUB_STOP_ON_ILLEGAL;
+            }
+            
+            break;
+        case com_ibm_icu4jni_converters_NativeConverter_SUBSTITUTE_CALLBACK:
+            return setToUCallbackSubs(conv,NULL,0,stopOnIllegal);
+            
+        }
+
+        ucnv_setToUCallBack(conv,
+           newAction,
+           toUNewContext,
+           &toUOldAction,
+           &toUOldContext,
+           &errorCode);
+
+        return errorCode;
+    }
+    errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+    return errorCode;
+}
+
+JNIEXPORT jlong 
+JNICALL Java_com_ibm_icu4jni_text_NativeConverter_safeClone(JNIEnv *env, 
+                                                            jclass obj, 
+                                                            jlong handle){
+
+    const UConverter *conv = (const UConverter *)handle;
+    UErrorCode status = U_ZERO_ERROR;
+    jlong result;
+    jint buffersize = U_CNV_SAFECLONE_BUFFERSIZE;
+
+    result = (jlong)ucnv_safeClone(conv, NULL, &buffersize, &status);
+
+    if ( error(env, status) != FALSE) {
+        return 0;
+    }
+ 
+    return result;
 }

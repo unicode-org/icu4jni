@@ -51,6 +51,7 @@ public class TestCharset extends TestFmwk{
         tcs.TestToUnicode();
         tcs.TestString();
         tcs.TestMultithreaded();
+        tcs.TestSynchronizedMultithreaded();
     }
     
     TestCharset(){
@@ -341,7 +342,7 @@ public class TestCharset extends TestFmwk{
         }
      }
      
-     public static boolean equals(ByteBuffer buf, byte[] compareTo){
+    public static boolean equals(ByteBuffer buf, byte[] compareTo){
         byte[] chars = new byte[buf.limit()];
         //save the current position
         int pos=buf.position();
@@ -555,8 +556,7 @@ public class TestCharset extends TestFmwk{
          }
       }
       private  void smBufEncode(CharsetEncoder encoder,String encoding){
-         CharBuffer mySource = CharBuffer.wrap(myUSource);
- 
+         CharBuffer mySource = CharBuffer.wrap(myUSource); 
          {
                 encoder.reset();
                 ByteBuffer myTarget = ByteBuffer.allocate(myGBSource.length);
@@ -655,7 +655,7 @@ public class TestCharset extends TestFmwk{
         }
     }
         
-      public  void TestFromUnicode(/*String encoding*/){
+    public  void TestFromUnicode(/*String encoding*/){
         ByteBuffer myTarget = ByteBuffer.allocate(gbSource.length);
         CharBuffer mySource = CharBuffer.wrap(uSource);
         encoder.reset();
@@ -690,8 +690,77 @@ public class TestCharset extends TestFmwk{
          }
          return target;
      }
-
-     private void TestMultithreaded(){
+     private void smBufCharset(Charset charset){
+        ByteBuffer gbTarget = charset.encode(CharBuffer.wrap(uSource));      
+        CharBuffer uTarget = charset.decode(ByteBuffer.wrap(getByteArray(gbSource)));
+        
+        if(!equals(uTarget,uSource)){
+            System.out.println("Test "+charset.toString()+" to Unicode :FAILED");
+        }
+        if(!equals(gbTarget,gbSource)){
+            System.out.println("Test "+charset.toString()+" from Unicode :FAILED");
+        }
+        System.out.println("Called smBufCharset");
+     }
+     
+     public void TestMultithreaded(){
+        final Charset cs = Charset.forName(encoding);
+        if(cs == charset){
+            System.out.println("The objects are equal");
+        }
+        smBufCharset(cs);
+        
+        final Thread t1 = new Thread(){
+                public void run(){
+                   // synchronized(charset){
+                        while(!interrupted()){
+                            try{
+                                smBufCharset(cs);
+                            }
+                            catch(UnsupportedCharsetException ueEx){
+                                System.out.println(ueEx.toString());
+                            }
+                        }
+                                    
+                   // }
+                }
+           };
+          final Thread t2 = new Thread(){
+                public void run(){
+                   // synchronized(charset){
+                        while(!interrupted()){
+                            try{
+                                smBufCharset(cs);
+                            }
+                            catch(UnsupportedCharsetException ueEx){
+                                System.out.println(ueEx.toString());
+                            }
+                        }
+                                    
+                    //}
+                }
+           };
+        t1.start();
+        t2.start();
+        int i=0;
+        for(;;){
+            if(i>1000000000){
+                try{
+                    t1.interrupt();
+                }catch(Exception e){
+                }
+                try{
+                    t2.interrupt();
+                }catch(Exception e){
+                }
+                System.out.println("--Threads Interrupted");
+                break;
+            }
+            i++;   
+        } 
+     }
+     
+     public void TestSynchronizedMultithreaded(){
         final Charset charset = Charset.forName(encoding);
              final Thread t1 = new Thread(){
                 public void run(){

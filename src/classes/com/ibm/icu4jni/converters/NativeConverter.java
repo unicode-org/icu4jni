@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/converters/NativeConverter.java,v $ 
-* $Date: 2001/10/12 01:32:53 $ 
-* $Revision: 1.2 $
+* $Date: 2001/10/16 17:23:05 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */ 
@@ -135,8 +135,8 @@ public final class NativeConverter{
 	public static final native void closeConverter(long converterHandle);
     
     /**
-     * Sets the substitution Unicode chars of the specified converter 
-     *
+     * Sets the substitution Unicode chars of the specified converter used
+     * by encoder
 	 * @param converterHandle Address of converter object created by the native code
      * @param subChars array of chars to used for substitution
      * @param length length of the array 
@@ -145,7 +145,7 @@ public final class NativeConverter{
     public static final native int setSubstitutionChars( long converterHandle,
                                    char[] subChars,int length); 
     /**
-     * Sets the substitution bytes of the specified converter 
+     * Sets the substitution bytes of the specified converter used by decoder
      *
 	 * @param converterHandle Address of converter object created by the native code
      * @param subChars array of bytes to used for substitution
@@ -215,4 +215,11 @@ public final class NativeConverter{
     public static final native int countAliases(String enc);
     public static final native Object[] getAliases(String enc);
     public static final native String getCanonicalName(String enc);
+    public static final native int setCallbackDecode(long converterHandle, int mode, boolean stopOnIllegal);
+    public static final native int setCallbackEncode(long converterHandle, int mode, boolean stopOnIllegal);
+    
+    public static final int STOP_CALLBACK = 0;
+    public static final int SKIP_CALLBACK = 1;
+    public static final int SUBSTITUTE_CALLBACK = 3;
+
 }
