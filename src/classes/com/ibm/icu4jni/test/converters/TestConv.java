@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/test/converters/Attic/TestConv.java,v $ 
-* $Date: 2001/03/24 02:59:10 $ 
-* $Revision: 1.4 $
+* $Date: 2001/04/16 22:00:38 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */ 
@@ -26,7 +26,7 @@ public class TestConv{
            gbConvTest.testShiftJis();
            gbConvTest.testLatin5();
       }
-    final int REPEAT = 100000;
+    final int REPEAT = 100;
     final int BUFSIZE = 5;
     private void testFromUnicode(CharToByteConverter  gbConv,char[] uSource, char[] gbSource){
 
