@@ -50,13 +50,15 @@ KanaCollatorTest.java \
 MonkeyCollatorTest.java \
 SpanishCollatorTest.java \
 ThaiCollatorTest.java \
-TurkishCollatorTest.java
+TurkishCollatorTest.java \
+BasicTest.java \
+ConformanceTest.java
 
-TESTCONVCLASS=TestConv.java
+TESTCONVCLASS=TestConverter.java
 
 COMCLASS=ErrorCode.java
 
-CONVCLASS=ICUConverterInterface.java \
+CONVCLASS=NativeConverter.java \
 ByteToCharConverterICU.java \
 CharToByteConverterICU.java \
 ByteToCharGB18030.java \
@@ -68,7 +70,9 @@ CollationElementIterator.java \
 CollationKey.java \
 Collator.java \
 NormalizationMode.java \
-RuleBasedCollator.java
+RuleBasedCollator.java \
+NativeNormalizer.java \
+Normalizer.java
 
 MAKE_CLASS =  $(CONVCLASS:%=$(SRCDIR)/$(CLASSDIR)/$(CONVDIR)/%)  \
            $(COMCLASS:%=$(SRCDIR)/$(CLASSDIR)/$(COMDIR)/%)  \
@@ -85,9 +89,9 @@ JNI_VERSION = 181
 TARGET = $(BUILD_DIR)/libICUInterface$(JNI_VERSION)d.$(SO)
 TARGETR = $(BUILD_DIR)/libICUInterface$(JNI_VERSION).$(SO)
 
-OBJECTS =  $(CSRC_DIR)/common/ErrorCode.o  $(CSRC_DIR)/collation/CollationInterface.o  $(CSRC_DIR)/converter/ConverterInterface.o
+OBJECTS =  $(CSRC_DIR)/common/ErrorCode.o  $(CSRC_DIR)/collation/CollationInterface.o  $(CSRC_DIR)/converter/ConverterInterface.o $(CSRC_DIR)/normalizer/NormalizationInterface.o
 
-HADERS =   $(CSRC_DIR)/common/ErrorCode.h  $(CSRC_DIR)/collation/CollationInterface.h  $(CSRC_DIR)/converter/ConverterInterface.h
+HADERS =   $(CSRC_DIR)/common/ErrorCode.h  $(CSRC_DIR)/collation/CollationInterface.h  $(CSRC_DIR)/converter/ConverterInterface.h $(CSRC_DIR)/normalizer/NormalizationInterface.h
 
 #donot produce dependency information
 #DEPS = $(OBJECTS:.o=.d) 
@@ -145,13 +149,10 @@ clean-local:
 distclean-local: clean-local
 	rm -f Makefile $(DEPS)
 
-check-local: all testconv testfmwk
+check-local: all testfmwk
 
 testfmwk:
 	LD_LIBRARY_PATH=$(prefix)/lib ICU_DATA=$(prefix)/lib/icu/$(VERSION) $(JAVA_EXEC) -classpath :./build/classes: -Djava.library.path=$(prefix)/lib:$(PATHWD)/build/lib: com.ibm.icu4jni.test.TestAll -nothrow
-
-testconv:
-	LD_LIBRARY_PATH=$(prefix)/lib ICU_DATA=$(prefix)/lib/icu/$(VERSION) $(JAVA_EXEC) -classpath :./build/classes: -Djava.library.path=$(prefix)/lib:$(PATHWD)/build/lib: com.ibm.icu4jni.test.converters.TestConv
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \

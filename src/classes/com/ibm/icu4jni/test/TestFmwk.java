@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/test/TestFmwk.java,v $ 
- * $Date: 2001/03/23 19:42:46 $ 
- * $Revision: 1.4 $
+ * $Date: 2001/09/18 00:33:49 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -181,6 +181,22 @@ public class TestFmwk implements TestLog {
         }
     }
 
+    /**
+     * Look up a given string in a string array.  Returns the index at
+     * which the first occurrence of the string was found in the
+     * array, or -1 if it was not found.
+     * @param source the string to search for
+     * @param target the array of zero or more strings in which to
+     * look for source
+     * @return the index of target at which source first occurs, or -1
+     * if not found
+     */
+    public static int lookup(String source, String[] target) {
+        for (int i = 0; i < target.length; ++i) {
+            if (source.equals(target[i])) return i;
+        }
+        return -1;
+    }
     public void errln( String message ) {
         err(message + System.getProperty("line.separator"));
     }
@@ -263,6 +279,52 @@ public class TestFmwk implements TestLog {
     	public int         indentLevel = 0;
     	public boolean     needLineFeed = false;
     	public int         errorCount = 0;
+    }
+
+    /**
+     * Convert characters outside the range U+0020 to U+007F to
+     * Unicode escapes, and convert backslash to a double backslash.
+     */
+    public static final String escape(String s) {
+        StringBuffer buf = new StringBuffer();
+        for (int i=0; i<s.length(); ++i) {
+            char c = s.charAt(i);
+            if (c >= ' ' && c <= 0x007F) {
+                if (c == '\\') {
+                    buf.append("\\\\"); // That is, "\\"
+                } else {
+                    buf.append(c);
+                }
+            } else {
+                buf.append("\\u");
+                if (c < 0x1000) {
+                    buf.append('0');
+                    if (c < 0x100) {
+                        buf.append('0');
+                        if (c < 0x10) {
+                            buf.append('0');
+                        }
+                    }
+                }
+                buf.append(Integer.toHexString(c));
+            }
+        }
+        return buf.toString();
+    }
+    public static void split(String s, char divider, String[] output) {
+        int last = 0;
+        int current = 0;
+        int i;
+        for (i = 0; i < s.length(); ++i) {
+            if (s.charAt(i) == divider) {
+                output[current++] = s.substring(last,i);
+                last = i+1;
+            }
+        }
+        output[current++] = s.substring(last,i);
+        while (current < output.length) {
+            output[current++] = "";
+        }
     }
 
 	private TestParams params = null;

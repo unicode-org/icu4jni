@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/DummyCollatorTest.java,v $ 
-* $Date: 2001/03/23 19:43:17 $ 
-* $Revision: 1.5 $
+* $Date: 2001/09/18 00:33:49 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -18,7 +18,7 @@ import java.util.Locale;
 import com.ibm.icu4jni.text.Collator;
 import com.ibm.icu4jni.text.RuleBasedCollator;
 import com.ibm.icu4jni.text.CollationAttribute;
-import com.ibm.icu4jni.text.NormalizationMode;
+import com.ibm.icu4jni.text.Normalizer;
 import com.ibm.icu4jni.test.TestFmwk;
 
 /**
@@ -52,7 +52,7 @@ public final class DummyCollatorTest extends TestFmwk
                                          "Ampersand; '&' & Two, 2 ";
     
     Collator coll = new RuleBasedCollator(rules, 
-                                          NormalizationMode.NO_NORMALIZATION, 
+                                          Normalizer.UNORM_NONE, 
                                           CollationAttribute.VALUE_PRIMARY);
     /* problem in strcollinc for unfinshed contractions */
     coll.setAttribute(CollationAttribute.NORMALIZATION_MODE, 
@@ -74,7 +74,7 @@ public final class DummyCollatorTest extends TestFmwk
                               "one, 1 & Ampersand; '&' & Two, 2 ";
     m_collator_.setStrength(CollationAttribute.VALUE_SECONDARY);
     Collator coll = new RuleBasedCollator(rules, 
-                                          NormalizationMode.NO_NORMALIZATION, 
+                                          Normalizer.UNORM_NONE, 
                                           CollationAttribute.VALUE_SECONDARY);
     for (int i = 26; i < 34 ; i ++) {
       CollatorTest.doTest(this, coll, SOURCE_TEST_CASE_[i], 
@@ -91,7 +91,7 @@ public final class DummyCollatorTest extends TestFmwk
     String rules = "& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one," +
                           " 1 & Ampersand; '&' & Two, 2 ";
     Collator coll = new RuleBasedCollator(rules, 
-                                  NormalizationMode.NO_NORMALIZATION, 
+                                  Normalizer.UNORM_NONE, 
                                   CollationAttribute.VALUE_TERTIARY);
     for (int i = 0; i < 17 ; i ++) {
       CollatorTest.doTest(this, coll, SOURCE_TEST_CASE_[i], 

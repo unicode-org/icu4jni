@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/test/TestAll.java,v $ 
- * $Date: 2001/03/23 19:42:46 $ 
- * $Revision: 1.4 $
+ * $Date: 2001/09/18 00:33:49 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -41,6 +41,20 @@ public class TestAll extends TestFmwk {
             new com.ibm.icu4jni.test.text.KanaCollatorTest(),
             new com.ibm.icu4jni.test.text.MonkeyCollatorTest()
             }
-            );
+      );
     }
+    public void TestNormalization() throws Exception{
+        run(new TestFmwk[]{
+                new com.ibm.icu4jni.test.text.BasicTest(),
+                new com.ibm.icu4jni.test.text.ConformanceTest()
+            }
+       );
+    }
+    public void TestConversion() throws Exception{
+        run( new TestFmwk[]{
+                new com.ibm.icu4jni.test.converters.TestConverter()
+            }
+        );
+    }
+               
 }

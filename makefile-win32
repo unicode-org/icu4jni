@@ -1,7 +1,11 @@
 # Microsoft Developer Studio Generated NMAKE File, Based on ICUInterface.dsp
 !IF "$(CFG)" == ""
 CFG="Debug"
-!MESSAGE No configuration specified. Defaulting to nmake /f "makefile-win32" CFG="Debug".
+!MESSAGE No configuration specified. Defaulting to nmake /f "makefile-win32" CFG="Debug" ICUBIN="..\icu\bin".
+!ENDIF 
+
+!IF "$(ICUBIN)" == ""
+!ERROR Could not set ICUBIN
 !ENDIF 
 
 !IF "$(CFG)" != "Release" && "$(CFG)" != "Debug"
@@ -31,6 +35,7 @@ RSC=rc.exe
 BUILDDIR=.\build
 CLASSDIR=classes\com\ibm\icu4jni
 CONVDIR=$(CLASSDIR)\converters
+NORMDIR=$(CLASSDIR)\text
 COMDIR=$(CLASSDIR)\common
 TESTDIR=$(CLASSDIR)\test
 COLDIR=$(CLASSDIR)\text
@@ -43,10 +48,11 @@ NATIVE=$(SRCDIR)\native
 BDIR=$(BUILDDIR)\classes
 JAVAC_EXE=javac.exe
 JAVA_FLAGS=-d $(BUILDDIR)\classes -classpath $(BUILDDIR)\classes;.
-VERSION=181 
+VERSION=131 
 DEBUG_TARGET=$(OUTDIR)/ICUInterface$(VERSION)d.dll
 RELEASE_TARGET=$(OUTDIR)/ICUInterface$(VERSION).dll
-
+ICU_INCLUDE = $(ICUBIN)\..\include
+ICULIB  = $(ICUBIN)\..\lib
 !IF  "$(CFG)" == "Release"
 
 !MESSAGE "Release"
@@ -61,6 +67,7 @@ CLEAN :
 	-@erase "$(INTDIR)\ConverterInterface.obj"
 	-@erase "$(INTDIR)\ErrorCode.obj"
 	-@erase "$(INTDIR)\vc60.idb"
+	-@erase "$(INTDIR)\NormalizationInterface.obj"
 	-@erase "$(INTDIR)\ICUInterface1d.exp"
 	-@erase "$(INTDIR)\ICUInterface1d.lib"
 	-@erase "$(INTDIR)\ICUInterface1d.pdb"
@@ -78,17 +85,18 @@ CLEAN :
 
 
 
-CPP_PROJ=/nologo /MT /W4 /GX /O2 /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_DATA)\..\..\include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fp"$(INTDIR)\ICUInterface.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+CPP_PROJ=/nologo /MT /W4 /GX /O2 /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_INCLUDE)" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fp"$(INTDIR)\ICUInterface.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 BSC32_SBRS= \
 	
 LINK32=link.exe
-LINK32_FLAGS=icuin.lib icuuc.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:no /pdb:"$(INTDIR)\ICUInterface1d.pdb" /debug /machine:I386 /out:"$(RELEASE_TARGET)" /implib:"$(INTDIR)\ICUInterface.lib" /pdbtype:sept /libpath:"$(ICU_DATA)\..\..\lib" /libpath:"$(JAVA_HOME)\lib" 
+LINK32_FLAGS=icuin.lib icuuc.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:no /pdb:"$(INTDIR)\ICUInterface1d.pdb" /debug /machine:I386 /out:"$(RELEASE_TARGET)" /implib:"$(INTDIR)\ICUInterface.lib" /pdbtype:sept /libpath:"$(ICULIB)" /libpath:"$(JAVA_HOME)\lib" 
 LINK32_OBJS= \
 	"$(INTDIR)\CollationInterface.obj" \
 	"$(INTDIR)\ConverterInterface.obj" \
+	"$(INTDIR)\NormalizationInterface.obj" \
 	"$(INTDIR)\ErrorCode.obj"
 
-"$(OUTDIR)\ICUInterface1.dll" : "$(OUTDIR)" "$(BDIR)" "$(INTDIR)" $(DEF_FILE) "$(BUILDDIR)\java" $(LINK32_OBJS)
+"$(OUTDIR)\ICUInterface1.dll" : "$(BUILDDIR)\java" "$(OUTDIR)" "$(BDIR)" "$(INTDIR)" $(DEF_FILE) $(LINK32_OBJS)
 	$(LINK32) @<<
   $(LINK32_FLAGS) $(LINK32_OBJS)
 <<
@@ -108,6 +116,7 @@ CLEAN :
 	-@erase "$(INTDIR)\ErrorCode.obj"
 	-@erase "$(INTDIR)\vc60.idb"
 	-@erase "$(INTDIR)\vc60.pdb"
+	-@erase "$(INTDIR)\NormalizationInterface.obj"
 	-@erase "$(INTDIR)\ICUInterface1d.exp"
 	-@erase "$(INTDIR)\ICUInterface1d.pdb"
 	-@erase "$(OUTDIR)\ICUInterface1d.dll"
@@ -123,14 +132,15 @@ CLEAN :
 "$(BDIR)" :
 	if not exist "$(BDIR)\$(NULL)" mkdir "$(BDIR)"
 
-CPP_PROJ=/nologo /G6 /MTd /W4 /Gm /GX /ZI /Od /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_DATA)\..\..\include" /I "$(NATIVE)\common" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+CPP_PROJ=/nologo /G6 /MTd /W4 /Gm /GX /ZI /Od /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_INCLUDE)" /I "$(NATIVE)\common" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
 BSC32_SBRS= \
 	
 LINK32=link.exe
-LINK32_FLAGS=icuind.lib icuucd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:yes /pdb:"$(INTDIR)\ICUInterface1d.pdb" /debug /machine:I386 /out:"$(DEBUG_TARGET)" /implib:"$(INTDIR)\ICUInterface.lib" /pdbtype:sept /libpath:"$(ICU_DATA)\..\..\lib" 
+LINK32_FLAGS=icuind.lib icuucd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:yes /pdb:"$(INTDIR)\ICUInterface1d.pdb" /debug /machine:I386 /out:"$(DEBUG_TARGET)" /implib:"$(INTDIR)\ICUInterface.lib" /pdbtype:sept /libpath:"$(ICULIB)" 
 LINK32_OBJS= \
 	"$(INTDIR)\CollationInterface.obj" \
 	"$(INTDIR)\ConverterInterface.obj" \
+	"$(INTDIR)\NormalizationInterface.obj" \
 	"$(INTDIR)\ErrorCode.obj"
 
 "..\..\build\lib\ICUInterface1d.dll" : "$(OUTDIR)" "$(BDIR)" $(DEF_FILE) $(LINK32_OBJS) "$(BUILDDIR)\java"
@@ -151,15 +161,18 @@ LINK32_OBJS= \
 
 <<
 
-"$(BUILDDIR)\java" : "BUILDCOMMON" "BUILDCONV" "BUILDCOLL" "BUILDTEST"
+"$(BUILDDIR)\java" : "BUILDCOMMON" "BUILDCONV" "BUILDNORM" "BUILDCOLL" "BUILDTEST"
 
 "BUILDCOMMON" :
     $(JAVAC_EXE) $(JAVA_FLAGS) $(SRCDIR)\$(COMDIR)\ErrorCode.java
 "BUILDCONV" :
-	$(JAVAC_EXE) $(JAVA_FLAGS) $(SRCDIR)\$(CONVDIR)\ICUConverterInterface.java  $(SRCDIR)\$(CONVDIR)\ByteToCharConverterICU.java $(SRCDIR)\$(CONVDIR)\CharToByteConverterICU.java $(SRCDIR)\$(CONVDIR)\ByteToCharGB18030.java $(SRCDIR)\$(CONVDIR)\CharToByteGB18030.java $(SRCDIR)\$(TCDIR)\TestConv.java 
+	$(JAVAC_EXE) $(JAVA_FLAGS) $(SRCDIR)\$(CONVDIR)\NativeConverter.java  $(SRCDIR)\$(CONVDIR)\ByteToCharConverterICU.java $(SRCDIR)\$(CONVDIR)\CharToByteConverterICU.java $(SRCDIR)\$(CONVDIR)\ByteToCharGB18030.java $(SRCDIR)\$(CONVDIR)\CharToByteGB18030.java  
 "BUILDCOLL" :
-	$(JAVAC_EXE) $(JAVA_FLAGS) $(SRCDIR)\$(COLDIR)\NativeCollation.java $(SRCDIR)\$(COLDIR)\CollationAttribute.java $(SRCDIR)\$(COLDIR)\CollationElementIterator.java $(SRCDIR)\$(COLDIR)\CollationKey.java $(SRCDIR)\$(COLDIR)\Collator.java $(SRCDIR)\$(COLDIR)\NormalizationMode.java $(SRCDIR)\$(COLDIR)\RuleBasedCollator.java 
-"BUILDTEST" : "BUILDT1" "BUILDT2"
+	$(JAVAC_EXE) $(JAVA_FLAGS) $(SRCDIR)\$(COLDIR)\NativeCollation.java $(SRCDIR)\$(COLDIR)\CollationAttribute.java $(SRCDIR)\$(COLDIR)\CollationElementIterator.java $(SRCDIR)\$(COLDIR)\CollationKey.java $(SRCDIR)\$(COLDIR)\Collator.java $(SRCDIR)\$(COLDIR)\RuleBasedCollator.java 
+"BUILDNORM":
+	$(JAVAC_EXE) $(JAVA_FLAGS) $(SRCDIR)\$(NORMDIR)\NativeNormalizer.java  $(SRCDIR)\$(NORMDIR)\Normalizer.java
+
+"BUILDTEST" : "BUILDT1" "BUILDT2" "BUILDT3"
 
 "BUILDT1" :
 	$(JAVAC_EXE) $(JAVA_FLAGS) 	 $(SRCDIR)\$(TESTDIR)\TestFmwk.java $(SRCDIR)\$(TESTDIR)\TestLog.java \
@@ -171,8 +184,9 @@ LINK32_OBJS= \
     $(JAVAC_EXE) $(JAVA_FLAGS) $(SRCDIR)\$(TTDIR)\FinnishCollatorTest.java $(SRCDIR)\$(TTDIR)\FrenchCollatorTest.java $(SRCDIR)\$(TTDIR)\G7CollatorTest.java \
     $(SRCDIR)\$(TTDIR)\GermanCollatorTest.java $(SRCDIR)\$(TTDIR)\KanaCollatorTest.java $(SRCDIR)\$(TTDIR)\MonkeyCollatorTest.java \
     $(SRCDIR)\$(TTDIR)\SpanishCollatorTest.java $(SRCDIR)\$(TTDIR)\ThaiCollatorTest.java $(SRCDIR)\$(TTDIR)\TurkishCollatorTest.java \
-    $(SRCDIR)\$(TESTDIR)\TestAll.java
 
+"BUILDT3":
+	$(JAVAC_EXE) $(JAVA_FLAGS) $(SRCDIR)\$(TTDIR)\BasicTest.java $(SRCDIR)\$(TTDIR)\ConformanceTest.java $(SRCDIR)\$(TCDIR)\TestConverter.java $(SRCDIR)\$(TESTDIR)\TestAll.java
 
 
 !IF "$(CFG)" == "Release" || "$(CFG)" == "Debug"
@@ -180,7 +194,7 @@ SOURCE=$(NATIVE)\collation\CollationInterface.c
 
 !IF  "$(CFG)" == "Release"
 
-CPP_SWITCHES=/nologo /MT /W4 /GX /O2 /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_DATA)\..\..\include"  /I "$(NATIVE)\common"  /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fp"$(INTDIR)\ICUInterface.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+CPP_SWITCHES=/nologo /MT /W4 /GX /O2 /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_INCLUDE)"  /I "$(NATIVE)\common"  /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fp"$(INTDIR)\ICUInterface.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 
 "$(INTDIR)\CollationInterface.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) @<<
@@ -190,7 +204,7 @@ CPP_SWITCHES=/nologo /MT /W4 /GX /O2 /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\
 
 !ELSEIF  "$(CFG)" == "Debug"
 
-CPP_SWITCHES=/nologo /G6 /MTd /W4 /Gm /GX /ZI /Od /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_DATA)\..\..\include" /I "$(NATIVE)\common" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+CPP_SWITCHES=/nologo /G6 /MTd /W4 /Gm /GX /ZI /Od /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_INCLUDE)" /I "$(NATIVE)\common" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
 
 "$(INTDIR)\CollationInterface.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) @<<
@@ -204,7 +218,7 @@ SOURCE=$(NATIVE)\converter\ConverterInterface.c
 
 !IF  "$(CFG)" == "Release"
 
-CPP_SWITCHES=/nologo /MT /W4 /GX /O2 /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_DATA)\..\..\include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fp"$(INTDIR)\ICUInterface.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+CPP_SWITCHES=/nologo /MT /W4 /GX /O2 /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_INCLUDE)" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fp"$(INTDIR)\ICUInterface.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 
 "$(INTDIR)\ConverterInterface.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) @<<
@@ -214,9 +228,34 @@ CPP_SWITCHES=/nologo /MT /W4 /GX /O2 /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\
 
 !ELSEIF  "$(CFG)" == "Debug"
 
-CPP_SWITCHES=/nologo /G6 /MTd /W4 /Gm /GX /ZI /Od /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_DATA)\..\..\include" /I "$(NATIVE)\common" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+CPP_SWITCHES=/nologo /G6 /MTd /W4 /Gm /GX /ZI /Od /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_INCLUDE)" /I "$(NATIVE)\common" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
 
 "$(INTDIR)\ConverterInterface.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ENDIF 
+
+
+SOURCE=$(NATIVE)\normalizer\NormalizationInterface.c
+
+!IF  "$(CFG)" == "Release"
+
+CPP_SWITCHES=/nologo /MT /W4 /GX /O2 /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_INCLUDE)" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fp"$(INTDIR)\ICUInterface.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+
+"$(INTDIR)\NormalizationInterface.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ELSEIF  "$(CFG)" == "Debug"
+
+CPP_SWITCHES=/nologo /G6 /MTd /W4 /Gm /GX /ZI /Od /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_INCLUDE)" /I "$(NATIVE)\common" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+
+"$(INTDIR)\NormalizationInterface.obj" : $(SOURCE) "$(INTDIR)"
 	$(CPP) @<<
   $(CPP_SWITCHES) $(SOURCE)
 <<

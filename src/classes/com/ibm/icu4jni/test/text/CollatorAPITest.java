@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/CollatorAPITest.java,v $ 
-* $Date: 2001/06/06 17:30:19 $ 
-* $Revision: 1.9 $
+* $Date: 2001/09/18 00:33:49 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -21,7 +21,7 @@ import com.ibm.icu4jni.text.RuleBasedCollator;
 import com.ibm.icu4jni.text.CollationKey;
 import com.ibm.icu4jni.text.CollationAttribute;
 import com.ibm.icu4jni.text.CollationElementIterator;
-import com.ibm.icu4jni.text.NormalizationMode;
+import com.ibm.icu4jni.text.Normalizer;
 
 /**
 * Collator API testing class
@@ -74,8 +74,8 @@ public final class CollatorAPITest extends TestFmwk
     if (collator.getStrength() != CollationAttribute.VALUE_SECONDARY)
       errln("Failed : Collation strength set to secondary");
    
-    collator.setDecomposition(NormalizationMode.NO_NORMALIZATION);
-    if (collator.getDecomposition() != NormalizationMode.NO_NORMALIZATION)
+    collator.setDecomposition(Normalizer.UNORM_NONE);
+    if (collator.getDecomposition() != Normalizer.UNORM_NONE)
       errln("Failed : Collation strength set to no normalization");
 
     collator =  Collator.getInstance(Locale.FRENCH);
@@ -156,17 +156,17 @@ public final class CollatorAPITest extends TestFmwk
 
     // there is no reason to have canonical decomposition in en_US OR default 
     // locale
-    if (vi_VN.getDecomposition() != NormalizationMode.DECOMP_CAN) {
+    if (vi_VN.getDecomposition() != Normalizer.UNORM_NFD) {
       errln("Failed : vi_VN collation did not have cannonical " +
             "decomposition for normalization!");
     }
 
-    if (el_GR.getDecomposition() != NormalizationMode.DECOMP_CAN) {
+    if (el_GR.getDecomposition() != Normalizer.UNORM_NFD) {
       errln("Failed : el_GR collation did not have cannonical " +
             "decomposition for normalization!");
     }
 
-    if (en_US.getDecomposition() != NormalizationMode.NO_NORMALIZATION) {
+    if (en_US.getDecomposition() != Normalizer.UNORM_NONE) {
       errln("Failed : en_US collation had cannonical decomposition for " +
             "normalization!");
     }
@@ -433,9 +433,9 @@ public final class CollatorAPITest extends TestFmwk
     RuleBasedCollator col7 = new RuleBasedCollator(ruleset2, 
                                            CollationAttribute.VALUE_TERTIARY);
     RuleBasedCollator col8 = new RuleBasedCollator(ruleset2, 
-                                  NormalizationMode.NO_NORMALIZATION);
+                                  Normalizer.UNORM_NONE);
     RuleBasedCollator col9 = new RuleBasedCollator(ruleset2, 
-        NormalizationMode.DECOMP_COMPAT, CollationAttribute.VALUE_PRIMARY);
+        Normalizer.UNORM_NFKD, CollationAttribute.VALUE_PRIMARY);
     
     if (col7.equals(col9))
       errln("Failed : Two different rule collations should compare " +

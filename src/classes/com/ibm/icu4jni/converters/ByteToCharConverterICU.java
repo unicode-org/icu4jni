@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/converters/ByteToCharConverterICU.java,v $ 
-* $Date: 2001/03/24 02:59:20 $ 
-* $Revision: 1.5 $
+* $Date: 2001/09/18 00:33:49 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */ 
@@ -56,7 +56,7 @@
          /* open the converter and get the handle 
           * if there is an error throw Unsupported encoding exception 
           */
-         if(ICUConverterInterface.openConverter(converterHandleArr,enc) >
+         if(NativeConverter.openConverter(converterHandleArr,enc) >
                 ErrorCode.U_ZERO_ERROR){
             throw new UnsupportedEncodingException();
          }
@@ -110,7 +110,7 @@
         data[1] = outOff; // output offset  
          
         /* do the conversion */
-        int err=ICUConverterInterface.convertByteToChar(
+        int err=NativeConverter.convertByteToChar(
                             converterHandle,  /* Handle to ICU Converter */
                             input,            /* input array of bytes */
                             inEnd,            /* last index+1 to be converted */
@@ -179,7 +179,7 @@
         data[1] = outStart;
         
         /* assume that output buffer is big enough since error is not handled*/
-        int err=ICUConverterInterface.flushByteToChar(
+        int err=NativeConverter.flushByteToChar(
                                         converterHandle,  /* Handle to ICU Converter */
                                         output,           /* output array of chars */
                                         outEnd,           /* output index+1 to be written */
@@ -222,7 +222,7 @@
         }
         subChars= c;
         
-        if( ICUConverterInterface.setSubstitutionChars(converterHandle,subChars,subChars.length)
+        if( NativeConverter.setSubstitutionChars(converterHandle,subChars,subChars.length)
                 > ErrorCode.U_ZERO_ERROR){
             throw new IllegalArgumentException();
         }
@@ -233,7 +233,7 @@
      */
     public final void reset() {
 	    byteOff = charOff = 0;
-	    ICUConverterInterface.resetByteToChar(converterHandle);
+	    NativeConverter.resetByteToChar(converterHandle);
     }
     
     /**
@@ -259,9 +259,9 @@
      */
     public final void setSubstitutionMode(boolean doSub) {
         if(doSub){
-            ICUConverterInterface.setSubstitutionChars(converterHandle,subChars,subChars.length);
+            NativeConverter.setSubstitutionChars(converterHandle,subChars,subChars.length);
         }else{
-            ICUConverterInterface.setSubstitutionChars(converterHandle,null,0);
+            NativeConverter.setSubstitutionChars(converterHandle,null,0);
         }
     }
     
@@ -273,7 +273,7 @@
      */
     public final int getBadInputLength(){
         int[] length = new int[1];
-        ICUConverterInterface.countInvalidBytes(converterHandle,length);
+        NativeConverter.countInvalidBytes(converterHandle,length);
         return length[0];
     }
     
@@ -291,7 +291,7 @@
      */
     protected void finalize() throws Throwable{
         try{
-            ICUConverterInterface.closeConverter(converterHandle);
+            NativeConverter.closeConverter(converterHandle);
         }
         finally{
             super.finalize();

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/RuleBasedCollator.java,v $ 
-* $Date: 2001/06/06 19:52:13 $ 
-* $Revision: 1.10 $
+* $Date: 2001/09/18 00:33:50 $ 
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -268,7 +268,7 @@ public final class RuleBasedCollator extends Collator
     if (rules.length() == 0)
       throw new ParseException("Build rules empty.", 0);
     m_collator_ = NativeCollation.openCollatorFromRules(rules,
-                              NormalizationMode.DEFAULT_NORMALIZATION,
+                              Normalizer.UNORM_NONE,
                               CollationAttribute.VALUE_DEFAULT_STRENGTH);
   }
 
@@ -289,7 +289,7 @@ public final class RuleBasedCollator extends Collator
       throw ErrorCode.getException(ErrorCode.U_ILLEGAL_ARGUMENT_ERROR);
       
     m_collator_ = NativeCollation.openCollatorFromRules(rules,
-                                NormalizationMode.DEFAULT_NORMALIZATION,
+                                Normalizer.UNORM_NONE,
                                 strength);
   }
 
@@ -305,7 +305,7 @@ public final class RuleBasedCollator extends Collator
   public RuleBasedCollator(String rules, int normalizationmode, int strength)
   {
     if (!CollationAttribute.checkStrength(strength) || 
-        !NormalizationMode.check(normalizationmode)) {
+        !Normalizer.check(normalizationmode)) {
       throw ErrorCode.getException(ErrorCode.U_ILLEGAL_ARGUMENT_ERROR);
     }
       
@@ -356,7 +356,7 @@ public final class RuleBasedCollator extends Collator
   /**
   * Get the normalization mode for this object.
   * The normalization mode influences how strings are compared.
-  * @return normalization mode; one of the values from NormalizationMode
+  * @return normalization mode; one of the values from Normalizer
   */
   public int getDecomposition()
   {
@@ -367,12 +367,12 @@ public final class RuleBasedCollator extends Collator
   * Set the normalization mode used int this object
   * The normalization mode influences how strings are compared.
   * @param normalizationmode desired normalization mode; one of the values 
-  *        from NormalizationMode
+  *        from Normalizer
   * @exception thrown when argument does not belong to any normalization mode
   */
   public void setDecomposition(int decompositionmode)
   {
-    if (!NormalizationMode.check(decompositionmode)) 
+    if (!Normalizer.check(decompositionmode)) 
       throw ErrorCode.getException(ErrorCode.U_ILLEGAL_ARGUMENT_ERROR);
     NativeCollation.setNormalization(m_collator_, decompositionmode);
   }

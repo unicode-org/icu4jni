@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/CollationElementIteratorTest.java,v $ 
-* $Date: 2001/04/19 18:38:59 $ 
-* $Revision: 1.9 $
+* $Date: 2001/09/18 00:33:49 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -23,7 +23,7 @@ import com.ibm.icu4jni.text.RuleBasedCollator;
 import com.ibm.icu4jni.text.CollationKey;
 import com.ibm.icu4jni.text.CollationElementIterator;
 import com.ibm.icu4jni.text.CollationAttribute;
-import com.ibm.icu4jni.text.NormalizationMode;
+import com.ibm.icu4jni.text.Normalizer;
 
 /**
 * Testing class for Finnish collator
@@ -95,7 +95,7 @@ public final class CollationElementIteratorTest extends TestFmwk
       // Test with a contracting character sequence
       RuleBasedCollator collator = new RuleBasedCollator(
                              "&a,A < b,B < c,C, d,D < z,Z < ch,cH,Ch,CH",
-                             NormalizationMode.NO_NORMALIZATION,
+                             Normalizer.UNORM_NONE,
                              CollationAttribute.VALUE_DEFAULT_STRENGTH);
 
       iterator = collator.getCollationElementIterator("abchdcba");
@@ -103,7 +103,7 @@ public final class CollationElementIteratorTest extends TestFmwk
       
       // Test with an expanding character sequence
       collator = new RuleBasedCollator("&a < b < c/abd < d",
-                             NormalizationMode.NO_NORMALIZATION,
+                             Normalizer.UNORM_NONE,
                              CollationAttribute.VALUE_DEFAULT_STRENGTH);
 
       iterator = collator.getCollationElementIterator("abcd");

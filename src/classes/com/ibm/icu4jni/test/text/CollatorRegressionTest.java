@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/CollatorRegressionTest.java,v $ 
-* $Date: 2001/04/18 19:20:17 $ 
-* $Revision: 1.7 $
+* $Date: 2001/09/18 00:33:49 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -20,7 +20,7 @@ import com.ibm.icu4jni.text.Collator;
 import com.ibm.icu4jni.text.RuleBasedCollator;
 import com.ibm.icu4jni.text.CollationKey;
 import com.ibm.icu4jni.text.CollationElementIterator;
-import com.ibm.icu4jni.text.NormalizationMode;
+import com.ibm.icu4jni.text.Normalizer;
 import com.ibm.icu4jni.text.CollationAttribute;
 import java.util.Locale;
 
@@ -124,7 +124,7 @@ public final class CollatorRegressionTest extends TestFmwk
     {
     RuleBasedCollator c = (RuleBasedCollator)m_collator_.clone();
 
-    c.setDecomposition(NormalizationMode.DECOMP_CAN);
+    c.setDecomposition(Normalizer.UNORM_NFD);
     c.getCollationElementIterator(TEST_STRING_3_);
     }
     catch(Exception e)
@@ -150,7 +150,7 @@ public final class CollatorRegressionTest extends TestFmwk
 
     c.setStrength(CollationAttribute.VALUE_IDENTICAL);
 
-    c.setDecomposition(NormalizationMode.DECOMP_CAN);
+    c.setDecomposition(Normalizer.UNORM_NFD);
     compareStrings(c, decomp, result);
   }
   
@@ -162,7 +162,7 @@ public final class CollatorRegressionTest extends TestFmwk
   {
     RuleBasedCollator c = (RuleBasedCollator)m_collator_.clone();
 
-    c.setDecomposition(NormalizationMode.DECOMP_COMPAT);
+    c.setDecomposition(Normalizer.UNORM_NFKD);
     // synwee : changed
     c.setStrength(CollationAttribute.VALUE_SECONDARY);
 
@@ -192,7 +192,7 @@ public final class CollatorRegressionTest extends TestFmwk
       errln("Failed : Decomposition is not set to NO_DECOMPOSITION " +
                     "for Korean collator");
     */
-    if (c.getDecomposition() != NormalizationMode.NO_NORMALIZATION)    
+    if (c.getDecomposition() != Normalizer.UNORM_NONE)    
       errln("Failed : Decomposition is not set to NO_DECOMPOSITION " +
                     "for Korean collator");
 
@@ -222,7 +222,7 @@ public final class CollatorRegressionTest extends TestFmwk
     String rules = "< g, G < h, H < i, I < j, J & H < \u0131, \u0130, i, I";
     RuleBasedCollator c = new RuleBasedCollator(rules);
 
-    c.setDecomposition(NormalizationMode.DECOMP_CAN);
+    c.setDecomposition(Normalizer.UNORM_NFD);
 
     final String tertiary[] = {"\u0041", "\u0042", "\u0048", "\u0131", 
                                "\u0048", "\u0049", "\u0131", "\u0130", 
@@ -281,11 +281,11 @@ public final class CollatorRegressionTest extends TestFmwk
     String test2 = chars2;
 
     RuleBasedCollator c1 = (RuleBasedCollator)m_collator_.clone();
-    c1.setDecomposition(NormalizationMode.DECOMP_COMPAT);
+    c1.setDecomposition(Normalizer.UNORM_NFKD);
     CollationElementIterator i1 = c1.getCollationElementIterator(test1);
 
     RuleBasedCollator c2 = (RuleBasedCollator)m_collator_.clone();
-    c2.setDecomposition(NormalizationMode.NO_NORMALIZATION);
+    c2.setDecomposition(Normalizer.UNORM_NONE);
     CollationElementIterator i2 = c2.getCollationElementIterator(test2);
 
     int ce1 = 1,
@@ -370,7 +370,7 @@ public final class CollatorRegressionTest extends TestFmwk
     // Now that the default collators are set to NO_DECOMPOSITION
     // (as a result of fixing bug 4114077), we must set it explicitly
     // when we're testing reordering behavior.
-    c.setDecomposition(NormalizationMode.DECOMP_CAN);
+    c.setDecomposition(Normalizer.UNORM_NFD);
 
     if (!c.equals(s1, s2))
       errln("Failed : \u0041\u0300\u0316\u0327\u0315 = " +
@@ -491,7 +491,7 @@ public final class CollatorRegressionTest extends TestFmwk
     final String tests[] = { "\ud4db", "\u1111\u1171\u11b6"};
     final int result[] = {Collator.RESULT_EQUAL};
 
-    c.setDecomposition(NormalizationMode.DECOMP_CAN);
+    c.setDecomposition(Normalizer.UNORM_NFD);
     compareStrings(c, tests, result);
   }
   
@@ -557,7 +557,7 @@ public final class CollatorRegressionTest extends TestFmwk
                       // Reordering --> equal                  
     final int result[] = {Collator.RESULT_EQUAL};
 
-    c.setDecomposition(NormalizationMode.DECOMP_CAN);
+    c.setDecomposition(Normalizer.UNORM_NFD);
     compareStrings(c, test2, result);
   }
   

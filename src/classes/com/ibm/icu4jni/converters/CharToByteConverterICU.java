@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/converters/CharToByteConverterICU.java,v $ 
-* $Date: 2001/03/24 02:59:20 $ 
-* $Revision: 1.5 $
+* $Date: 2001/09/18 00:33:49 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */ 
@@ -59,12 +59,12 @@
          /* open the converter and get the handle 
           * if there is an error throw Unsupported encoding exception 
           */
-         if(ICUConverterInterface.openConverter(converterHandleArr,encoding)
+         if(NativeConverter.openConverter(converterHandleArr,encoding)
             > ErrorCode.U_ZERO_ERROR){
             throw new UnsupportedEncodingException();
          }
          converterHandle=converterHandleArr[0];
-         maxBytes = ICUConverterInterface.getMaxBytesPerChar(converterHandle);
+         maxBytes = NativeConverter.getMaxBytesPerChar(converterHandle);
     }
     /** 
      * Conversion through the JNI interface for ICU.
@@ -112,7 +112,7 @@
         data[1] = outOff; // output offset 
 
         /* do the conversion */
-        int err=ICUConverterInterface.convertCharToByte(
+        int err=NativeConverter.convertCharToByte(
                             converterHandle,  /* Handle to ICU Converter */
                             input,            /* input array of bytes */
                             inEnd,            /* last index+1 to be converted */
@@ -174,7 +174,7 @@
         
         
         /* assume that output buffer is big enough since error is not handled*/
-        int err= ICUConverterInterface.flushCharToByte(
+        int err= NativeConverter.flushCharToByte(
                                             converterHandle,  /* Handle to ICU Converter */
                                             output,           /* output array of chars */
                                             outEnd,           /* output index+1 to be written */
@@ -215,7 +215,7 @@
             throw new IllegalArgumentException();
         }
         
-        if(ICUConverterInterface.setSubstitutionBytes(converterHandle,c,c.length)
+        if(NativeConverter.setSubstitutionBytes(converterHandle,c,c.length)
                 > ErrorCode.U_ZERO_ERROR){
             throw new IllegalArgumentException();
         }
@@ -226,7 +226,7 @@
      */
     public final void reset() {
 	    byteOff = charOff = 0;
-	    ICUConverterInterface.resetCharToByte(converterHandle);
+	    NativeConverter.resetCharToByte(converterHandle);
     }
     /** 
      * Returns the max number of bytes needed for converting
@@ -274,7 +274,7 @@
      * 
      */
     public boolean canConvert(int codeUnit){
-        return ICUConverterInterface.canConvert(converterHandle, codeUnit);
+        return NativeConverter.canConvert(converterHandle, codeUnit);
     }
     
     /**
@@ -285,7 +285,7 @@
      */
     public final int getBadInputLength(){
         int[] length = new int[1];
-        ICUConverterInterface.countInvalidChars(converterHandle,length);
+        NativeConverter.countInvalidChars(converterHandle,length);
         return length[0];
     }
     
@@ -301,7 +301,7 @@
      */
     public final void setSubstitutionMode(boolean doSub) {
         /* set the substitution mode in ICU */ 
-        ICUConverterInterface.setSubstitutionModeCharToByte(converterHandle, doSub);
+        NativeConverter.setSubstitutionModeCharToByte(converterHandle, doSub);
         /* save the mode*/
         subMode = doSub;
     }
@@ -313,7 +313,7 @@
     protected void finalize() throws Throwable{
         try{
             
-            ICUConverterInterface.closeConverter(converterHandle);
+            NativeConverter.closeConverter(converterHandle);
         }
         finally{
             super.finalize();
