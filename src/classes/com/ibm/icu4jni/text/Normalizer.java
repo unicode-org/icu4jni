@@ -5,7 +5,7 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/Normalizer.java,v $ 
-* $Date: 2002/12/18 22:54:29 $ 
+* $Date: 2002/12/19 22:00:28 $ 
 * $Revision: 
 *
 *******************************************************************************
@@ -259,7 +259,7 @@ public final class Normalizer{
     * Conveinience method.
     *
     * @param source       string for determining if it is in a normalized format
-    * @paran mode         normalization format (Normalizer.UNORM_NFC,Normalizer.UNORM_NFD,  
+    * @param mode         normalization format (Normalizer.UNORM_NFC,Normalizer.UNORM_NFD,  
     *                     Normalizer.UNORM_NFKC,Normalizer.UNORM_NFKD)
     * @return             Return code to specify if the text is normalized or not 
     *                     (Normalizer.UNORM_YES, Normalizer.UNORM_NO or
@@ -294,7 +294,7 @@ public final class Normalizer{
     * put the string in its normalized form and compare the results.
     *
     * @param source       string for determining if it is in a normalized format
-    * @paran mode         normalization format (Normalizer.UNORM_NFC,Normalizer.UNORM_NFD,  
+    * @param mode         normalization format (Normalizer.UNORM_NFC,Normalizer.UNORM_NFD,  
     *                     Normalizer.UNORM_NFKC,Normalizer.UNORM_NFKD)
     * @return             Return code to specify if the text is normalized or not 
     *                     (Normalizer.UNORM_YES, Normalizer.UNORM_NO or

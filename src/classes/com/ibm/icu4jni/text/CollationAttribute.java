@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/CollationAttribute.java,v $ 
-* $Date: 2002/12/18 22:54:29 $ 
-* $Revision: 1.7 $
+* $Date: 2002/12/19 22:00:27 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -66,7 +66,7 @@ public final class CollationAttribute
    * @stable ICU 2.4
    */
   public static final int VALUE_OFF = 16;
-  /** @statble ICU 2.4 */
+  /** @stable ICU 2.4 */
   public static final int VALUE_ON = 17;
   
   /** 
@@ -74,7 +74,7 @@ public final class CollationAttribute
    * @stable ICU 2.4
    */
   public static final int VALUE_SHIFTED = 20;
-  /** @statble ICU 2.4 */
+  /** @stable ICU 2.4 */
   public static final int VALUE_NON_IGNORABLE = 21;
 
   /** 
@@ -82,7 +82,7 @@ public final class CollationAttribute
    * @stable ICU 2.4
    */
   public static final int VALUE_LOWER_FIRST = 24;
-  /** @statble ICU 2.4 */
+  /** @stable ICU 2.4 */
   public static final int VALUE_UPPER_FIRST = 25;
 
   /** 
