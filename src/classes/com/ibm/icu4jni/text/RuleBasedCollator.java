@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/RuleBasedCollator.java,v $ 
-* $Date: 2004/06/17 20:52:13 $ 
-* $Revision: 1.15 $
+* $Date: 2004/06/18 22:35:08 $ 
+* $Revision: 1.16 $
 *
 *******************************************************************************
 */
@@ -283,7 +283,7 @@ public final class RuleBasedCollator extends Collator
   * @see #TERTIARY
   * @see #QUATERNARY
   * @see #IDENTICAL
-  * @draft ICU 2.4
+  * @stable ICU 2.4
   */
   public RuleBasedCollator(String rules, int strength) throws ParseException
   {
@@ -318,7 +318,7 @@ public final class RuleBasedCollator extends Collator
   * @see #IDENTICAL
   * @see #CANONICAL_DECOMPOSITION
   * @see #NO_DECOMPOSITION
-  * @draft ICU 2.4
+  * @stable ICU 2.4
   */
   public RuleBasedCollator(String rules, int normalizationmode, int strength)
   {
@@ -378,7 +378,7 @@ public final class RuleBasedCollator extends Collator
   * The normalization mode influences how strings are compared.
   * @see #CANONICAL_DECOMPOSITION
   * @see #NO_DECOMPOSITION
-  * @draft ICU 2.4
+  * @stable ICU 2.4
   */
   public int getDecomposition()
   {
@@ -393,7 +393,7 @@ public final class RuleBasedCollator extends Collator
   * @param decompositionmode the new decomposition mode
   * @see #CANONICAL_DECOMPOSITION
   * @see #NO_DECOMPOSITION
-  * @draft ICU 2.4
+  * @stable ICU 2.4
   */
   public void setDecomposition(int decompositionmode)
   {
@@ -421,7 +421,7 @@ public final class RuleBasedCollator extends Collator
   * @see #TERTIARY
   * @see #QUATERNARY
   * @see #IDENTICAL
-  * @draft ICU 2.4
+  * @stable ICU 2.4
   */
   public int getStrength()
   {
@@ -447,7 +447,7 @@ public final class RuleBasedCollator extends Collator
   * @see #TERTIARY
   * @see #QUATERNARY
   * @see #IDENTICAL
-  * @draft ICU 2.4
+  * @stable ICU 2.4
   */
   public void setStrength(int strength)
   {
@@ -470,7 +470,7 @@ public final class RuleBasedCollator extends Collator
   * </pre>
   * @param type the attribute to be set from CollationAttribute
   * @param value attribute value from CollationAttribute
-  * @draft ICU 2.4
+  * @stable ICU 2.4
   */
   public void setAttribute(int type, int value)
   {

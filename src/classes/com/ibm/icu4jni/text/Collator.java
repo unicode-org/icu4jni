@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/Collator.java,v $ 
-* $Date: 2002/12/18 22:54:29 $ 
-* $Revision: 1.10 $
+* $Date: 2004/06/18 22:35:08 $ 
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -83,7 +83,7 @@ public abstract class Collator implements Cloneable
      * between base characters. See class documentation for more explanation.
      * @see #setStrength
      * @see #getStrength
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public final static int PRIMARY = CollationAttribute.VALUE_PRIMARY;
 
@@ -95,7 +95,7 @@ public abstract class Collator implements Cloneable
      * See class documentation for more explanation.
      * @see #setStrength
      * @see #getStrength
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public final static int SECONDARY = CollationAttribute.VALUE_SECONDARY;
 
@@ -107,7 +107,7 @@ public abstract class Collator implements Cloneable
      * See class documentation for more explanation.
      * @see #setStrength
      * @see #getStrength
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public final static int TERTIARY = CollationAttribute.VALUE_TERTIARY;                            
 
@@ -121,7 +121,7 @@ public abstract class Collator implements Cloneable
      * See class documentation for more explanation.
      * @see #setStrength
      * @see #getStrength
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public final static int QUATERNARY = CollationAttribute.VALUE_QUATERNARY;
 
@@ -136,7 +136,7 @@ public abstract class Collator implements Cloneable
      * <p>
      * Note this value is different from JDK's
      * </p>
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public final static int IDENTICAL = CollationAttribute.VALUE_IDENTICAL;
 
@@ -150,7 +150,7 @@ public abstract class Collator implements Cloneable
      * @see #CANONICAL_DECOMPOSITION
      * @see #getDecomposition
      * @see #setDecomposition
-     * @draft ICU 2.4 
+     * @stable ICU 2.4 
      */
     public final static int NO_DECOMPOSITION = CollationAttribute.VALUE_OFF;
 
@@ -166,7 +166,7 @@ public abstract class Collator implements Cloneable
      * @see #NO_DECOMPOSITION
      * @see #getDecomposition
      * @see #setDecomposition
-     * @draft ICU 2.4 
+     * @stable ICU 2.4 
      */
     public final static int CANONICAL_DECOMPOSITION 
 												= CollationAttribute.VALUE_ON;
@@ -295,7 +295,7 @@ public abstract class Collator implements Cloneable
      * @return the decomposition mode
      * @see #CANONICAL_DECOMPOSITION
 	 * @see #NO_DECOMPOSITION
-	 * @draft ICU 2.4
+	 * @stable ICU 2.4
      */
     public abstract int getDecomposition();
 
@@ -305,7 +305,7 @@ public abstract class Collator implements Cloneable
      * @param mode desired normalization mode
 	 * @see #CANONICAL_DECOMPOSITION
 	 * @see #NO_DECOMPOSITION
-	 * @draft ICU 2.4
+	 * @stable ICU 2.4
      */
     public abstract void setDecomposition(int mode);
 
@@ -325,7 +325,7 @@ public abstract class Collator implements Cloneable
 	 * @see #TERTIARY
 	 * @see #QUATERNARY
 	 * @see #IDENTICAL
-	 * @draft ICU 2.4
+	 * @stable ICU 2.4
 	 */
 	public abstract int getStrength();
   
@@ -353,7 +353,7 @@ public abstract class Collator implements Cloneable
 	 * @see #TERTIARY
 	 * @see #QUATERNARY 
 	 * @see #IDENTICAL
-	 * @draft ICU 2.4
+	 * @stable ICU 2.4
 	 */
 	 public abstract void setStrength(int strength);
   
