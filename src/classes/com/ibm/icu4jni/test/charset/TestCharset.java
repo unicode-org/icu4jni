@@ -21,6 +21,7 @@ import java.util.*;
 import sun.misc.ASCIICaseInsensitiveComparator;
 
 import com.ibm.icu4jni.charset.*;
+import com.ibm.icu4jni.converters.NativeConverter;
 import com.ibm.icu4jni.test.TestFmwk;
 
 public class TestCharset extends TestFmwk {
@@ -767,9 +768,20 @@ public class TestCharset extends TestFmwk {
         while(iter.hasNext()){
             logln("Charset name: "+iter.next().toString());
         }
+        String[] charsets = NativeConverter.getAvailable();
+        if(map.size() < charsets.length){
+            errln("Charset.availableCharsets() returned a number less than the number returned by icu");
+        }
         logln("Total Number of chasets = " + map.size());
 	}
-
+    /* jitterbug 4312 */
+    public void TestUnsupportedCharset(){
+        CharsetProvider icu = new CharsetProviderICU();
+        Charset icuChar = icu.charsetForName("impossible");
+        if(icuChar != null){
+            errln("ICU does not conform to the spec");
+        }
+    }
 	private void smBufEncode(CharsetEncoder encoder, String encoding) {
 		CharBuffer mySource = CharBuffer.wrap(myUSource);
 		{
