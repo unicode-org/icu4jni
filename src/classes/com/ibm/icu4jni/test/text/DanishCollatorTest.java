@@ -1,13 +1,13 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2000, International Business Machines Corporation and    *
+* Copyright (C) 1996-2001, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/DanishCollatorTest.java,v $ 
-* $Date: 2001/03/20 23:02:36 $ 
-* $Revision: 1.4 $
+* $Date: 2001/03/23 19:43:17 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */

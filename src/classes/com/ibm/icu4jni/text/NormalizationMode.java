@@ -1,12 +1,12 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2000, International Business Machines Corporation and    *
+* Copyright (C) 1996-2001, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/Attic/NormalizationMode.java,v $ 
-* $Date: 2001/03/20 23:05:16 $ 
-* $Revision: 1.4 $
+* $Date: 2001/03/23 19:42:16 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */

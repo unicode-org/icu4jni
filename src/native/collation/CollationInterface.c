@@ -1,12 +1,12 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2000, International Business Machines Corporation and    *
+* Copyright (C) 1996-2001, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/native/collation/CollationInterface.c,v $ 
-* $Date: 2001/03/16 05:52:27 $ 
-* $Revision: 1.3 $
+* $Date: 2001/03/23 19:44:55 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
