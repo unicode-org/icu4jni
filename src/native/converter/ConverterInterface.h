@@ -275,6 +275,14 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_setCallba
 JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_safeClone
   (JNIEnv *, jclass, jlong, jlongArray);
 
+/*
+ * Class:     com_ibm_icu4jni_converters_NativeConverter
+ * Method:    contains
+ * Signature: (JJ)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_contains
+  (JNIEnv *, jclass, jlong, jlong);
+
 #ifdef __cplusplus
 }
 #endif

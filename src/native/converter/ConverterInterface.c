@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/native/converter/ConverterInterface.c,v $ 
-* $Date: 2004/12/30 21:17:39 $ 
-* $Revision: 1.23 $
+* $Date: 2005/01/28 02:53:03 $ 
+* $Revision: 1.24 $
 *
 *******************************************************************************
 */
@@ -23,6 +23,7 @@
 #include "unicode/ucnv.h"     /* C   Converter API    */
 #include "unicode/ustring.h"  /* some more string functions*/
 #include "unicode/ucnv_cb.h"  /* for callback functions */
+#include "unicode/uset.h"     /* for contains function */
 #include "ErrorCode.h"
 #include <stdlib.h>
 #include <string.h>
@@ -232,16 +233,25 @@ Java_com_ibm_icu4jni_converters_NativeConverter_encode(JNIEnv *env,
     UErrorCode ec = Java_com_ibm_icu4jni_converters_NativeConverter_convertCharToByte(env,
                                                     jClass,handle,source,sourceEnd, 
                                                     target,targetEnd,data,flush);
+    UConverter* cnv = (UConverter*)handle;
+    jint* myData = (jint*) (*env)->GetPrimitiveArrayCritical(env,data,NULL);
 
-    if(ec == U_ILLEGAL_CHAR_FOUND || ec == U_INVALID_CHAR_FOUND){
-        jint* myData = (jint*) (*env)->GetPrimitiveArrayCritical(env,data,NULL);
-        UConverter* cnv = (UConverter*)handle;
-        jint count =0;
-        UChar invalidUChars[32];
-        ucnv_getInvalidUChars(cnv,invalidUChars,(int8_t*)&count,&ec);
-        myData[2] = count;
-        (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,JNI_COMMIT);
+    if(cnv && myData){
+        
+       UErrorCode errorCode = U_ZERO_ERROR;
+        myData[3] = ucnv_fromUInputHeld(cnv, &errorCode);
+
+        if(ec == U_ILLEGAL_CHAR_FOUND || ec == U_INVALID_CHAR_FOUND){
+            jint count =0;
+            UChar invalidUChars[32];
+            ucnv_getInvalidUChars(cnv,invalidUChars,(int8_t*)&count,&errorCode);
+
+            if(U_SUCCESS(errorCode)){
+                myData[2] = count;
+            }	  
+        }
     }
+    (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,JNI_COMMIT);
     return ec;
 }
 
@@ -328,21 +338,25 @@ Java_com_ibm_icu4jni_converters_NativeConverter_decode(JNIEnv *env,
     jint ec = Java_com_ibm_icu4jni_converters_NativeConverter_convertByteToChar(env,
                                                     jClass,handle,source,sourceEnd, 
                                                     target,targetEnd,data,flush);
+    
+    jint* myData = (jint*) (*env)->GetPrimitiveArrayCritical(env,data,NULL);
+    UConverter* cnv = (UConverter*)handle;
 
-    if(ec == U_ILLEGAL_CHAR_FOUND || ec == U_INVALID_CHAR_FOUND){
-        UConverter* cnv = (UConverter*)handle;
+    if(myData && cnv){
         UErrorCode errorCode = U_ZERO_ERROR;
-        if(cnv){
-            jint* myData = (jint*) (*env)->GetPrimitiveArrayCritical(env,data,NULL);
+        myData[3] = ucnv_toUInputHeld(cnv, &errorCode);
+
+        if(ec == U_ILLEGAL_CHAR_FOUND || ec == U_INVALID_CHAR_FOUND ){
             char invalidChars[32] = {'\0'};
             int8_t len = 32;
             ucnv_getInvalidChars(cnv,invalidChars,&len,&errorCode);
-            myData[2] = len;
-            (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,JNI_COMMIT);
-        }else{
-            errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+            
+            if(U_SUCCESS(errorCode)){
+                myData[2] = len;
+            }	  
         }
     }
+    (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,JNI_COMMIT);
     return ec;
 }
 JNIEXPORT void JNICALL 
@@ -1171,4 +1185,36 @@ Java_com_ibm_icu4jni_converters_NativeConverter_getSubstitutionBytes(JNIEnv *env
         }
     }
     return ((*env)->NewByteArray(env, 0));
+}
+//CSDL: this method is added by Jack
+JNIEXPORT jboolean 
+JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_contains( JNIEnv *env, jclass jClass, 
+                                                                 jlong handle1, jlong handle2){
+    UErrorCode status = U_ZERO_ERROR;
+    const UConverter * cnv1 = (const UConverter *) handle1;
+    const UConverter * cnv2 = (const UConverter *) handle2;
+    USet* set1;
+    USet* set2;
+    UBool bRet = 0;
+    
+    if(cnv1 != NULL && cnv2 != NULL){
+	    /* open charset 1 */
+        set1 = uset_open(1, 2);
+        ucnv_getUnicodeSet(cnv1, set1, UCNV_ROUNDTRIP_SET, &status);
+
+        if(U_SUCCESS(status)) {
+            /* open charset 2 */
+            status = U_ZERO_ERROR;
+            set2 = uset_open(1, 2);
+            ucnv_getUnicodeSet(cnv2, set2, UCNV_ROUNDTRIP_SET, &status);
+
+            /* contains?      */
+            if(U_SUCCESS(status)) {
+                bRet = uset_containsAll(set1, set2);
+	            uset_close(set2);
+            }
+            uset_close(set1);
+        }
+    }
+	return bRet;
 }
