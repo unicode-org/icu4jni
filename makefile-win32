@@ -64,7 +64,7 @@ CLEAN :
 	-@erase "$(OUTDIR)\ICUInterface1d.dll"
 
 "$(OUTDIR)" :
-	if not exist "$(BUILDIDR)\$(NULL)" mkdir "$(BUILDIR)"
+	if not exist "$(BUILDDIR)\$(NULL)" mkdir "$(BUILDDIR)"
 	if not exist "$(OUTDIR)\$(NULL)" mkdir "$(OUTDIR)"
 
 "$(INTDIR)" :
@@ -111,7 +111,7 @@ CLEAN :
 	-@erase "$(OUTDIR)\ICUInterface1d.ilk"
 
 "$(OUTDIR)" :
-	if not exist "$(BUILDIDR)\$(NULL)" mkdir "$(BUILDIR)"
+	if not exist "$(BUILDDIR)\$(NULL)" mkdir "$(BUILDDIR)"
 	if not exist "$(OUTDIR)\$(NULL)" mkdir "$(OUTDIR)"
 
 "$(INTDIR)" :
