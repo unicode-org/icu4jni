@@ -8,6 +8,7 @@
 srcdir=@srcdir@
 top_srcdir=@top_srcdir@
 CANON=@CANON@
+JDK14=@JDK14@
 # srcdir must be set before this is included
 include @ICU_MAKEFILE@
 
@@ -29,7 +30,7 @@ COMDIR=common
 TESTDIR=test
 COLDIR=text
 SRCDIR=src
-PATHWD=`pwd`
+PATHWD=$(shell pwd)
 
 TESTCLASS=TestAll.java \
 TestFmwk.java \
@@ -81,35 +82,36 @@ NativeNormalizer.java \
 Normalizer.java
 
 TESTCSCLASS=TestCharset.java
-if test $JDK14 = true; then \
-MAKE_CLASS =  $(CONVCLASS:%=$(SRCDIR)/$(CLASSDIR)/$(CONVDIR)/%)  \
+
+ifeq ($(JDK14) , true) 
+MAKE_CLASS :=  $(CONVCLASS:%=$(SRCDIR)/$(CLASSDIR)/$(CONVDIR)/%)  \
            $(COMCLASS:%=$(SRCDIR)/$(CLASSDIR)/$(COMDIR)/%)	\
            $(COLCLASS:%=$(SRCDIR)/$(CLASSDIR)/$(COLDIR)/%) \
            $(CSCLASS:%=$(SRCDIR)/$(CLASSDIR)/$(CSDIR)/%) \
            $(TESTCLASS:%=$(SRCDIR)/$(CLASSDIR)/$(TESTDIR)/%) \
            $(TESTTEXTCLASS:%=$(SRCDIR)/$(CLASSDIR)/$(TESTDIR)/$(COLDIR)/%) \
            $(TESTCONVCLASS:%=$(SRCDIR)/$(CLASSDIR)/$(TESTDIR)/$(CONVDIR)/%) \
-           $(TESTCSCLASS:%=$(SRCDIR)/$(CLASSDIR)/$(TESTDIR)/$(CSDIR)/%) \
-else \
-MAKE_CLASS =  $(CONVCLASS:%=$(SRCDIR)/$(CLASSDIR)/$(CONVDIR)/%)  \
+           $(TESTCSCLASS:%=$(SRCDIR)/$(CLASSDIR)/$(TESTDIR)/$(CSDIR)/%) 
+CSTEST:= LD_LIBRARY_PATH=$(prefix)/lib ICU_DATA=$(prefix)/lib/icu/$(VERSION) $(JAVA_EXEC) -classpath :./build/classes: -Djava.library.path=$(prefix)/lib:$(PATHWD)/build/lib: com.ibm.icu4jni.test.charset.TestCharset -nothrow
+SERVICESTR="#icu4jni converters\n# Please place this file in dir\ncom.ibm.icu4jni.charset.CharsetProviderICU"
+MKSERVICE = $(shell mdir $(BUILDDIR)/META-INF)
+else 
+MAKE_CLASS :=  $(CONVCLASS:%=$(SRCDIR)/$(CLASSDIR)/$(CONVDIR)/%)  \
            $(COMCLASS:%=$(SRCDIR)/$(CLASSDIR)/$(COMDIR)/%)	\
            $(COLCLASS:%=$(SRCDIR)/$(CLASSDIR)/$(COLDIR)/%) \
            $(TESTCLASS:%=$(SRCDIR)/$(CLASSDIR)/$(TESTDIR)/%) \
            $(TESTTEXTCLASS:%=$(SRCDIR)/$(CLASSDIR)/$(TESTDIR)/$(COLDIR)/%) \
-           $(TESTCONVCLASS:%=$(SRCDIR)/$(CLASSDIR)/$(TESTDIR)/$(CONVDIR)/%) \
-fi
+           $(TESTCONVCLASS:%=$(SRCDIR)/$(CLASSDIR)/$(TESTDIR)/$(CONVDIR)/%) 
+CSTEST :=
+MKSERVICE = $(shell mkdir $(BUILDDIR)/META-INF)
+endif
 
-if test $JDK14 = true; then \
-CSTEST= LD_LIBRARY_PATH=$(prefix)/lib ICU_DATA=$(prefix)/lib/icu/$(VERSION) $(JAVA_EXEC) -classpath :./build/classes: -Djava.library.path=$(prefix)/lib:$(PATHWD)/build/lib: com.ibm.icu4jni.test.charset.TestCharset -nothrow
-else \
-CSTEST=
-fi
 
 ## Extra files to remove for 'make clean'
 CLEANFILES = *~
 
 ## Target information
-JNI_VERSION = 181
+JNI_VERSION = 131
 TARGET = $(BUILD_DIR)/libICUInterface$(JNI_VERSION)d.$(SO)
 TARGETR = $(BUILD_DIR)/libICUInterface$(JNI_VERSION).$(SO)
 
@@ -144,7 +146,9 @@ check: check-local
 debug: all-local java
 release:all-release javar
 
-all-local: $(TARGET) 
+all-local: $(TARGET)
+## For printing use @echo
+##	@echo This is JDK14 $(JDK14) 
 
 install-local: all-local install-headers install-library
 
@@ -179,7 +183,7 @@ testfmwk:
 	LD_LIBRARY_PATH=$(prefix)/lib ICU_DATA=$(prefix)/lib/icu/$(VERSION) $(JAVA_EXEC) -classpath :./build/classes: -Djava.library.path=$(prefix)/lib:$(PATHWD)/build/lib: com.ibm.icu4jni.test.TestAll -nothrow
 
 testcs:
-	$(TESTCSCMD)
+	$(CSTEST)
 	
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
@@ -190,10 +194,9 @@ all-release: $(TARGETR)
 # Make the class file
 java : 
 	$(JAVAC_EXEC) -g -d $(BUILDDIR)/classes $(MAKE_CLASS)
-
 javar :
 	$(JAVAC_EXEC) -g:none -O -d $(BUILDDIR)/classes $(MAKE_CLASS)
-
+	
 # ICULIBS includes all standard ICU libraries.
 # if we wanted only part of the ICU, we could use (for example) just
 #         '$(LIBS) -licu-uc -lusort' ...

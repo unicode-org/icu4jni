@@ -46,24 +46,36 @@ case "${host}" in
         *)              CANON="unknown" ;;
 esac
 AC_SUBST(CANON)
-
+#AC_MSG_RESULT( [The canonical name ${CANON} ])
 AC_CHECK_FILE($JAVA_HOME/include/jni.h,,AC_MSG_ERROR([Could not find jni include file please check JAVA_HOME enviroment variable.]))
 AC_CHECK_FILE($JAVA_HOME/include/$CANON/jni_md.h,,AC_CHECK_FILE($JAVA_HOME/include/jni_md.h,,AC_MSG_ERROR([Could not find jni_md.h include file please check its existence.])))
 
-AC_OUTPUT([Makefile])
-AC_CHECK_FILE(build,,AC_OUTPUT_COMMANDS([echo creating build directory.],mkdir build))
-AC_CHECK_FILE(build/lib,,AC_OUTPUT_COMMANDS([echo creating build/lib directory.],mkdir build/lib))
-AC_CHECK_FILE(build/classes,,AC_OUTPUT_COMMANDS([echo creating build/classes directory.], mkdir build/classes))
+JDK14="helo"
+AC_ARG_ENABLE(jdk14,
+        [  --enable-jdk14        build ICU4JNI with JDK1.4 [default=no]],
+        [case "${enableval}" in
+             yes) JDK14="true";;
+             no)  JDK14="false";;
+                *) AC_MSG_ERROR(bad value ${enableval} for --enable-jdk14) ;;
+         esac]
+        )
+AC_SUBST(JDK14)
+#AC_MSG_RESULT([JDK14 has been set to $JDK14])
 
-if test $JDK14 = false;then
-  AC_ARG_ENABLE(JDK14,
-            [--use-jkd14            build ICU4JNI with JDK1.4 [default=no]],
-            [case "$enableval}" in
-                   yes) JDK14=true;;
-                   no) JDK14=false;;
-                   *) AC_MSG_ERROR(bad value ${enableval} for --use-jdk14 ;;
-                   esac],
-            )
+AC_OUTPUT([Makefile])
+
+AC_CHECK_FILE(build,,[echo creating build directory;mkdir build])
+AC_CHECK_FILE(build/lib,,[echo creating build/lib directory.;mkdir build/lib])
+AC_CHECK_FILE(build/classes,,[echo creating build/classes directory.; mkdir build/classes])
+
+if test ${JDK14} = true; then
+MSG1="# icu4jni converters"
+MSG2="# Please place this file in dir ${JAVA_HOME}/classes/META-INF directory"
+MSG3="# or append the following line to ${JAVA_HOME}/classes/META-INF/java.nio.charset.spi.CharsetProvider file"
+MSG4="com.ibm.icu4jni.charset.CharsetProviderICU"
+FNAME=./build/META-INF/java.nio.charset.spi.CharsetProvider
+AC_CHECK_FILE(build/META-INF,,[echo creating build/META-INF directory.;mkdir build/META-INF])
+AC_CHECK_FILE(build/META-INF/java.nio.charset.spi.CharsetProvider,,[echo Creating java.nio.charset.spi.CharsetProvider in build/META-INF directory; echo ${MSG1} >> ${FNAME}; echo ${MSG2} >> ${FNAME}; echo ${MSG3}>> ${FNAME}; echo ${MSG4}>> ${FNAME}] )
 fi
 
 dnl # Makefile

@@ -88,7 +88,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_setSubstitutionModeCharToByte (J
                UCNV_FROM_U_CALLBACK_SUBSTITUTE,
                fromUNewContext,
                &fromUOldAction,
-               &fromUOldContext,
+               (const void**)&fromUOldContext,
                &errorCode);
 
         }
@@ -98,7 +98,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_setSubstitutionModeCharToByte (J
                UCNV_FROM_U_CALLBACK_STOP,
                fromUNewContext,
                &fromUOldAction,
-               &fromUOldContext,
+               (const void**)&fromUOldContext,
                &errorCode);
          
         }
@@ -399,10 +399,10 @@ Java_com_ibm_icu4jni_converters_NativeConverter_setSubstitutionBytes(JNIEnv *env
     UConverter* cnv = (UConverter*) handle;
     UErrorCode errorCode = U_ZERO_ERROR;
     if(cnv){
-        jchar* u_subChars = (*env)->GetPrimitiveArrayCritical(env,subChars,NULL);
+        jbyte* u_subChars = (*env)->GetPrimitiveArrayCritical(env,subChars,NULL);
         if(u_subChars){
              char* mySubChars= (char*)malloc(sizeof(char)*length);
-             u_UCharsToChars(u_subChars,&mySubChars[0],length);
+             u_UCharsToChars((UChar*)u_subChars,&mySubChars[0],length);
              ucnv_setSubstChars(cnv,mySubChars, (char)length,&errorCode);
              if(U_FAILURE(errorCode)){
                 (*env)->ReleasePrimitiveArrayCritical(env,subChars,mySubChars,JNI_COMMIT);
@@ -452,7 +452,7 @@ setToUCallbackSubs(UConverter* cnv,UChar* subChars, int32_t length,UBool stopOnI
            JNI_TO_U_CALLBACK_SUBSTITUTE,
            toUNewContext,
            &toUOldAction,
-           &toUOldContext,
+           (const void**)&toUOldContext,
            &errorCode);
 
        if(toUOldContext){
@@ -489,7 +489,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_setSubstitutionChars(JNIEnv *env
 }
 
 
-void  JNI_TO_U_CALLBACK_SUBSTITUTE( void *context,
+void  JNI_TO_U_CALLBACK_SUBSTITUTE( const void *context,
                                     UConverterToUnicodeArgs *toArgs,
                                     const char* codeUnits,
                                     int32_t length,
@@ -712,7 +712,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_setCallbackEncode(JNIEnv *env,
            newAction,
            fromUNewContext,
            &fromUOldAction,
-           &fromUOldContext,
+           (const void**)&fromUOldContext,
            &errorCode);
 
 
@@ -759,7 +759,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_setCallbackDecode(JNIEnv *env,
            newAction,
            toUNewContext,
            &toUOldAction,
-           &toUOldContext,
+           (const void**)&toUOldContext,
            &errorCode);
 
         return errorCode;
