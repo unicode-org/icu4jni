@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/CollatorRegressionTest.java,v $ 
-* $Date: 2001/03/23 19:43:17 $ 
-* $Revision: 1.6 $
+* $Date: 2001/04/18 19:20:17 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -422,7 +422,8 @@ public final class CollatorRegressionTest extends TestFmwk
   {
     Locale el = new Locale("el", "");
     Collator c = Collator.getInstance(el);
-
+    c.setStrength(CollationAttribute.VALUE_SECONDARY);
+  
     final String tests[] = {"\u00B5", "\u03BC"};
     final int result[] = {Collator.RESULT_EQUAL};
 
@@ -437,8 +438,8 @@ public final class CollatorRegressionTest extends TestFmwk
   {
     Locale el = new Locale("el", "GR");
     Collator c = Collator.getInstance(el);
-    c.setStrength(CollationAttribute.VALUE_TERTIARY);
-
+    c.setStrength(CollationAttribute.VALUE_SECONDARY);
+  
     final String tests[] = {"\u03D4", "\u03AB"};
     final int result[] = {Collator.RESULT_EQUAL};
 

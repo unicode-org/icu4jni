@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/CollationElementIteratorTest.java,v $ 
-* $Date: 2001/03/23 19:43:17 $ 
-* $Revision: 1.7 $
+* $Date: 2001/04/18 19:20:17 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -22,6 +22,8 @@ import com.ibm.icu4jni.text.Collator;
 import com.ibm.icu4jni.text.RuleBasedCollator;
 import com.ibm.icu4jni.text.CollationKey;
 import com.ibm.icu4jni.text.CollationElementIterator;
+import com.ibm.icu4jni.text.CollationAttribute;
+import com.ibm.icu4jni.text.NormalizationMode;
 
 /**
 * Testing class for Finnish collator
@@ -92,13 +94,17 @@ public final class CollationElementIteratorTest extends TestFmwk
     {
       // Test with a contracting character sequence
       RuleBasedCollator collator = new RuleBasedCollator(
-                                "&a,A < b,B < c,C, d,D < z,Z < ch,cH,Ch,CH");
+                             "&a,A < b,B < c,C, d,D < z,Z < ch,cH,Ch,CH",
+                             NormalizationMode.NO_NORMALIZATION,
+                             CollationAttribute.VALUE_DEFAULT_STRENGTH);
 
       iterator = collator.getCollationElementIterator("abchdcba");
       previousNext(iterator);
       
       // Test with an expanding character sequence
-      collator = new RuleBasedCollator("&a < b < c/abd < d");
+      collator = new RuleBasedCollator("&a < b < c/abd < d",
+                             NormalizationMode.NO_NORMALIZATION,
+                             CollationAttribute.VALUE_DEFAULT_STRENGTH);
 
       iterator = collator.getCollationElementIterator("abcd");
       previousNext(iterator);
@@ -288,7 +294,7 @@ public final class CollationElementIteratorTest extends TestFmwk
                       + "expected to be " + 
                       Integer.toHexString(orders[index]) + " not " +
                       Integer.toHexString(order));
-            break;
+            return;
           }
         }
       }
