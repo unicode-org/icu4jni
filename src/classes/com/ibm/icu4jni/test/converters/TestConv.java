@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/test/converters/Attic/TestConv.java,v $ 
-* $Date: 2001/06/12 23:03:15 $ 
-* $Revision: 1.9 $
+* $Date: 2001/06/12 23:15:24 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */ 
@@ -45,7 +45,7 @@ public class TestConv{
             testConvertAll(encoding[0]);
             testCallback(encoding[0]);
             testCanConvert(encoding[0]);
-            multiThreadedTest(encoding[0]);
+         //   multiThreadedTest(encoding[0]);
             javaTest(encoding[0]);
     }
     private final static void javaTest(String encoding){
