@@ -9,7 +9,7 @@
 					   
 				README
 			
-			ICU4JNI Version 1.8.1
+			ICU4JNI Version 2.0
 Contents
 
 	* Introduction
