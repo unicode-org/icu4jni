@@ -239,7 +239,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_encode(JNIEnv *env,
         myData[3] = ucnv_fromUCountPending(cnv, &errorCode);
 
         if(ec == U_ILLEGAL_CHAR_FOUND || ec == U_INVALID_CHAR_FOUND){
-            jint count =0;
+            jint count =32;
             UChar invalidUChars[32];
             ucnv_getInvalidUChars(cnv,invalidUChars,(int8_t*)&count,&errorCode);
 
@@ -611,7 +611,7 @@ setToUCallbackSubs(UConverter* cnv,UChar* subChars, int32_t length,UBool stopOnI
        if(subChars){
             u_strncpy(substitutionCharS->subChars,subChars,length);
        }else{
-           substitutionCharS->subChars[0] =0xFFFD;
+           substitutionCharS->subChars[length++] =0xFFFD;
        }
        substitutionCharS->subChars[length]=0;
        substitutionCharS->length = length;

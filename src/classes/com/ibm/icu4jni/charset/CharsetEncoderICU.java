@@ -171,10 +171,10 @@ public final class CharsetEncoderICU extends CharsetEncoder {
                     ErrorCode.getException(ec);
                 }
 			}
-			implReset();
 			return CoderResult.UNDERFLOW;
 		} finally {
 			setPosition(out);
+            implReset();
 		}
 	}
 

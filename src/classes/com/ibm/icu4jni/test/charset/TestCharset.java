@@ -4,10 +4,6 @@
 * others. All Rights Reserved.												  *
 *******************************************************************************
 *
-* $Source: 
-* $Date: 
-* $Revision: 
-*
 *******************************************************************************
 */
 
@@ -873,6 +869,54 @@ public class TestCharset extends TestFmwk {
             errln("Error creating charset encoder."+ e.toString());
         }
     }
+    public void TestSubBytes(){
+        try{
+            //create utf-8 decoder
+            CharsetDecoder decoder = new CharsetProviderICU().charsetForName("utf-8").newDecoder();
+    
+            //create a valid byte array, which can be decoded to " buffer"
+            byte[] unibytes = new byte[] { 0x0020, 0x0062, 0x0075, 0x0066, 0x0066, 0x0065, 0x0072 };
+    
+            ByteBuffer buffer = ByteBuffer.allocate(20);
+    
+            //add a evil byte to make the byte buffer be malformed input
+            buffer.put((byte)0xd8);
+    
+            //put the valid byte array
+            buffer.put(unibytes);
+    
+            //reset postion
+            buffer.flip();  
+            
+            decoder.onMalformedInput(CodingErrorAction.REPLACE);
+            CharBuffer out = decoder.decode(buffer);
+            String expected = "\ufffd buffer";
+            if(!expected.equals(new String(out.array()))){
+                errln("Did not get the expected result for substitution chars. Got: "+
+                       new String(out.array()) + "("+ hex(out.array())+")");
+            }
+            logln("Output: "+  new String(out.array()) + "("+ hex(out.array())+")");
+        }catch (CharacterCodingException ex){
+            errln("Unexpected exception: "+ex.toString());
+        }
+    }
+    public void TestImplFlushFailure(){
+   
+       try{
+           CharBuffer in = CharBuffer.wrap("\u3005\u3006\u3007\u30FC\u2015\u2010\uFF0F");
+           CharsetEncoder encoder = new CharsetProviderICU().charsetForName("iso-2022-jp").newEncoder();
+           ByteBuffer out = ByteBuffer.allocate(30);
+           encoder.encode(in, out, true);
+           encoder.flush(out);
+           if(out.position()!= 20){
+               errln("Did not get the expected position from flush");
+           }
+           
+       }catch (Exception ex){
+           errln("Unexpected exception: "+ex.toString());
+       } 
+    }
+
     public void TestISO88591() {
         CharsetEncoder encoder = new CharsetProviderICU().charsetForName("iso-8859-1").newEncoder();
         encoder.canEncode("\uc2a3");

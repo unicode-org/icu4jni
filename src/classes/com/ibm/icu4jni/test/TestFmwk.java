@@ -267,7 +267,22 @@ public class TestFmwk implements TestLog {
         }
         return result.toString();
     }
-
+    public static String hex(char[] s){
+        StringBuffer result = new StringBuffer();
+        for (int i = 0; i < s.length; ++i) {
+            if (i != 0) result.append(',');
+            result.append(hex(s[i]));
+        }
+        return result.toString();
+    }
+    public static String hex(byte[] s){
+        StringBuffer result = new StringBuffer();
+        for (int i = 0; i < s.length; ++i) {
+            if (i != 0) result.append(',');
+            result.append(hex(s[i]));
+        }
+        return result.toString();
+    }
     public static String hex(StringBuffer s) {
         return hex(s.toString());
     }

@@ -177,11 +177,11 @@ public final class CharsetDecoderICU extends CharsetDecoder{
                     ErrorCode.getException(ec);
                 }
             }
-	        implReset();
 	        return CoderResult.UNDERFLOW;
 	   }finally{
             /* save the flushed data */
             setPosition(out);
+            implReset();
 	   }
     }
     
