@@ -42,8 +42,7 @@ SRCDIR=.\src
 NATIVE=$(SRCDIR)\native
 BDIR=$(BUILDDIR)\classes
 JAVAC_EXE=javac.exe
-JAVA_FLAGS=-d $(BUILDDIR)\classes -sourcepath $SRCDIR
-JAVA_T_FLAGS=-d $(BUILDDIR)\classes -classpath $(BUILDDIR)\classes;. 
+JAVA_FLAGS=-d $(BUILDDIR)\classes -classpath $(BUILDDIR)\classes;. 
 
 !IF  "$(CFG)" == "Release"
 
@@ -147,13 +146,26 @@ LINK32_OBJS= \
 
 <<
 
-"$(BUILDDIR)\java" :
-	$(JAVAC_EXE) $(JAVA_FLAGS) $(SRCDIR)\$(CONVDIR)\ICUConverterInterface.java $(SRCDIR)\$(COMDIR)\ErrorCode.java $(SRCDIR)\$(CONVDIR)\ByteToCharConverterICU.java $(SRCDIR)\$(CONVDIR)\CharToByteConverterICU.java $(SRCDIR)\$(CONVDIR)\ByteToCharGB18030.java $(SRCDIR)\$(CONVDIR)\CharToByteGB18030.java $(SRCDIR)\$(TCDIR)\TestConv.java \
-	$(SRCDIR)\$(COLDIR)\NativeCollation.java $(SRCDIR)\$(COLDIR)\CollationAttribute.java $(SRCDIR)\$(COLDIR)\CollationElementIterator.java $(SRCDIR)\$(COLDIR)\CollationKey.java $(SRCDIR)\$(COLDIR)\Collator.java $(SRCDIR)\$(COLDIR)\NormalizationMode.java $(SRCDIR)\$(COLDIR)\RuleBasedCollator.java \
-	$(SRCDIR)\$(TESTDIR)\TestAll.java $(SRCDIR)\$(TESTDIR)\TestFmwk.java $(SRCDIR)\$(TESTDIR)\TestLog.java \
-	$(SRCDIR)\$(TTDIR)\CollationElementIteratorTest.java $(SRCDIR)\$(TTDIR)\CollatorAPITest.java $(SRCDIR)\$(TTDIR)\CollatorPerformanceTest.java $(SRCDIR)\$(TTDIR)\CollatorRegressionTest.java $(SRCDIR)\$(TTDIR)\CollatorTest.java $(SRCDIR)\$(TTDIR)\CurrencyCollatorTest.java \
-	$(SRCDIR)\$(TTDIR)\DanishCollatorTest.java $(SRCDIR)\$(TTDIR)\DummyCollatorTest.java $(SRCDIR)\$(TTDIR)\EnglishCollatorTest.java $(SRCDIR)\$(TTDIR)\FinnishCollatorTest.java $(SRCDIR)\$(TTDIR)\FrenchCollatorTest.java $(SRCDIR)\$(TTDIR)\G7CollatorTest.java $(SRCDIR)\$(TTDIR)\GermanCollatorTest.java \
-	$(SRCDIR)\$(TTDIR)\KanaCollatorTest.java $(SRCDIR)\$(TTDIR)\MonkeyCollatorTest.java $(SRCDIR)\$(TTDIR)\SpanishCollatorTest.java $(SRCDIR)\$(TTDIR)\ThaiCollatorTest.java $(SRCDIR)\$(TTDIR)\TurkishCollatorTest.java 
+"$(BUILDDIR)\java" : "BUILDCOMMON" "BUILDCONV" "BUILDCOLL" "BUILDTEST"
+
+"BUILDCOMMON" :
+    $(JAVAC_EXE) $(JAVA_FLAGS) $(SRCDIR)\$(COMDIR)\ErrorCode.java
+"BUILDCONV" :
+	$(JAVAC_EXE) $(JAVA_FLAGS) $(SRCDIR)\$(CONVDIR)\ICUConverterInterface.java  $(SRCDIR)\$(CONVDIR)\ByteToCharConverterICU.java $(SRCDIR)\$(CONVDIR)\CharToByteConverterICU.java $(SRCDIR)\$(CONVDIR)\ByteToCharGB18030.java $(SRCDIR)\$(CONVDIR)\CharToByteGB18030.java $(SRCDIR)\$(TCDIR)\TestConv.java 
+"BUILDCOLL" :
+	$(JAVAC_EXE) $(JAVA_FLAGS) $(SRCDIR)\$(COLDIR)\NativeCollation.java $(SRCDIR)\$(COLDIR)\CollationAttribute.java $(SRCDIR)\$(COLDIR)\CollationElementIterator.java $(SRCDIR)\$(COLDIR)\CollationKey.java $(SRCDIR)\$(COLDIR)\Collator.java $(SRCDIR)\$(COLDIR)\NormalizationMode.java $(SRCDIR)\$(COLDIR)\RuleBasedCollator.java 
+"BUILDTEST" : "BUILDT1" "BUILDT2"
+
+"BUILDT1" :
+	$(JAVAC_EXE) $(JAVA_FLAGS) 	$(SRCDIR)\$(TESTDIR)\TestAll.java $(SRCDIR)\$(TESTDIR)\TestFmwk.java $(SRCDIR)\$(TESTDIR)\TestLog.java \
+	$(SRCDIR)\$(TTDIR)\CollationElementIteratorTest.java $(SRCDIR)\$(TTDIR)\CollatorAPITest.java $(SRCDIR)\$(TTDIR)\CollatorPerformanceTest.java \
+    $(SRCDIR)\$(TTDIR)\CollatorRegressionTest.java $(SRCDIR)\$(TTDIR)\CollatorTest.java $(SRCDIR)\$(TTDIR)\CurrencyCollatorTest.java \
+	$(SRCDIR)\$(TTDIR)\DanishCollatorTest.java $(SRCDIR)\$(TTDIR)\DummyCollatorTest.java $(SRCDIR)\$(TTDIR)\EnglishCollatorTest.java \
+
+"BUILDT2":    
+    $(JAVAC_EXE) $(JAVA_FLAGS) $(SRCDIR)\$(TTDIR)\FinnishCollatorTest.java $(SRCDIR)\$(TTDIR)\FrenchCollatorTest.java $(SRCDIR)\$(TTDIR)\G7CollatorTest.java \
+    $(SRCDIR)\$(TTDIR)\GermanCollatorTest.java $(SRCDIR)\$(TTDIR)\KanaCollatorTest.java $(SRCDIR)\$(TTDIR)\MonkeyCollatorTest.java \
+    $(SRCDIR)\$(TTDIR)\SpanishCollatorTest.java $(SRCDIR)\$(TTDIR)\ThaiCollatorTest.java $(SRCDIR)\$(TTDIR)\TurkishCollatorTest.java 
 
 
 
