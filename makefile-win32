@@ -68,7 +68,7 @@ BDIR=$(BUILDDIR)\classes
 JAVAC_EXE=$(JAVABIN)javac.exe
 JAVA_EXE=$(JAVABIN)java.exe
 JAVA_FLAGS=-d $(BUILDDIR)\classes -classpath $(BUILDDIR)\classes;.
-VERSION=20
+VERSION=21
 DEBUG_TARGET=$(OUTDIR)/ICUInterface$(VERSION)d.dll
 RELEASE_TARGET=$(OUTDIR)/ICUInterface$(VERSION).dll
 OUTDIR=.\build\lib
@@ -81,7 +81,7 @@ ICULIB  = $(ICUBIN)\..\lib
 
 !MESSAGE "Release"
 
-ALL : "$(OUTDIR)\ICUInterface1.dll"
+ALL : "$(OUTDIR)\ICUInterface1.dll" "(CP_TEST_FILE)"
 
 CLEAN :
 	-@rd /S /Q "$(INTDIR)"
@@ -98,8 +98,8 @@ CLEAN :
 	if not exist "$(BDIR)\$(NULL)" mkdir "$(BDIR)"
 
 "(CP_TEST_FILE)" :
-	-@echo Copying $(SRCDIR)\$(TTDIR)\NormalizationTest.txt to $(OUTDIR)\$(TTDIR)
-	-@cp $(SRCDIR)\$(TTDIR)\NormalizationTest.txt $(OUTDIR)\$(TTDIR)
+	-@echo Copying $(SRCDIR)\$(TTDIR)\NormalizationTest.txt to $(BUILDDIR)\$(TTDIR)
+	-@cp $(SRCDIR)\$(TTDIR)\NormalizationTest.txt $(BUILDDIR)\$(TTDIR)
 
 CHECK:
     @$(JAVA_EXE) -classpath ;.\build\classes; -Djava.library.path=$(ICULIB);.\build\lib; com.ibm.icu4jni.test.TestAll -nothrow
@@ -115,7 +115,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\NormalizationInterface.obj" \
 	"$(INTDIR)\ErrorCode.obj"
 
-"$(OUTDIR)\ICUInterface1.dll" : "$(OUTDIR)" "$(BDIR)" "(CP_TEST_FILE)" $(DEF_FILE) $(LINK32_OBJS) "$(BUILDDIR)\java"
+"$(OUTDIR)\ICUInterface1.dll" : "$(OUTDIR)" "$(BDIR)" $(DEF_FILE) $(LINK32_OBJS) "$(BUILDDIR)\java"
 	$(LINK32) @<<
   $(LINK32_FLAGS) $(LINK32_OBJS)
 <<
@@ -124,7 +124,7 @@ LINK32_OBJS= \
 !ELSEIF  "$(CFG)" == "Debug"
 
 
-ALL : "$(OUTDIR)\ICUInterface1d.dll"
+ALL : "$(OUTDIR)\ICUInterface1d.dll" "(CP_TEST_FILE)"
 
 CHECK:
     @$(JAVA_EXE) -classpath ;.\build\classes; -Djava.library.path=$(ICULIB);.\build\lib; com.ibm.icu4jni.test.TestAll -nothrow
@@ -144,8 +144,8 @@ CLEAN :
 	if not exist "$(BDIR)\$(NULL)" mkdir "$(BDIR)"
 
 "(CP_TEST_FILE)" :
-	-@echo Copying $(SRCDIR)\$(TTDIR)\NormalizationTest.txt to $(OUTDIR)\$(TTDIR)
-	-@cp $(SRCDIR)\$(TTDIR)\NormalizationTest.txt $(OUTDIR)\$(TTDIR)
+	-@echo Copying $(SRCDIR)\$(TTDIR)\NormalizationTest.txt to $(BUILDDIR)\$(TTDIR)
+	-@cp $(SRCDIR)\$(TTDIR)\NormalizationTest.txt $(BUILDDIR)\$(TTDIR)
 
 CHECK:
     @$(JAVA_EXE) -classpath ;.\build\classes; -Djava.library.path=$(ICULIB);.\build\lib; com.ibm.icu4jni.test.TestAll -nothrow
@@ -161,7 +161,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\NormalizationInterface.obj" \
 	"$(INTDIR)\ErrorCode.obj"
 
-"$(OUTDIR)\ICUInterface1d.dll" : "$(OUTDIR)" "$(BDIR)" "(CP_TEST_FILE)" $(DEF_FILE) $(LINK32_OBJS) "$(BUILDDIR)\java"
+"$(OUTDIR)\ICUInterface1d.dll" : "$(OUTDIR)" "$(BDIR)" $(DEF_FILE) $(LINK32_OBJS) "$(BUILDDIR)\java"
 	$(LINK32) @<<
   $(LINK32_FLAGS) $(LINK32_OBJS)
 <<
