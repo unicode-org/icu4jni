@@ -61,19 +61,21 @@ Installation
 	* Set the JAVA_HOME environment variabale.
    	  eg: export JAVA_HOME=/java/jdk1.3
 	* Run configure with the following command
-	  ./configure -prefix=<path to the directory where ICU is installed>
-	  eg: ./cofigure --prefix=/usr/local/
+	  ./configure --prefix=<path to the directory where ICU is installed>  --<enable/disable>-jdk14 
+
+	  eg: ./cofigure --prefix=/usr/local/ --enable-jdk14
+
 	* Run 'make check' to build and run tests
 
      Win32
 	* Downloaded and install ICU4C from http://oss.software.ibm.com/icu 
-	* Set the ICU_DATA environment variable. 
+	* Either set the ICU_DATA environment variable or pass ICUBIN on the command line 
    	  eg: set ICU_DATA=<icu_dir>\source\data
-	* Set the JAVA_HOME environment variabale.
+	* Either set the JAVA_HOME environment variabale or pass JAVAPATH on the command line.
    	  eg: set JAVA_HOME=c:\jdk1.3
 	* Make sure <icu_dir>\bin directory is in you path
 	* Make is configured to build with or without JDK 1.4 and with the ICU_DATA environment variable being phased out
-from ICU the make need to find out the location of ICU libraries.
+from ICU the make needs to find out the location of ICU libraries.
 
 	  For building with JDK 1.4 type the following command
    	  	nmake /f makefile-win32 CFG="Debug" ICUBIN="<location of ICU>\icu\bin" JDK14="TRUE" JAVAPATH="<location of JDK>\bin"
@@ -82,10 +84,12 @@ from ICU the make need to find out the location of ICU libraries.
 	  	nmake /f makefile-win32 CFG="Debug" ICUBIN="<location of ICU>\bin" JDK14="FALSE" JAVAPATH="<location of JDK>\bin"
 
 	* The files are built in <jniroot>/build directory	
-	* cd to <jniroot>/build directory
 	* run the test with the following command
-   	  java -Djava.library.path=<source directory from root>/com/ibm/icu4jni/test/converters/TestConv. 
-   	  Eg:java -Djava.library.path=c:\work\icu4jni\build\lib com/ibm/icu4jni/test/converters/TestConv
+   	  java -Djava.library.path=<source directory from root>\build\lib -classpath ;<source directory from root>/build/classes com.ibm.icu4jni.test.TestAll. 
+   	  Eg:java -Djava.library.path=c:\work\icu4jni\build\lib -classpath=c:\work\icu4jni\build\classes com.ibm.icu4jni.test.TestAll
+
+	  Alternatively you can also run the test by doing
+	  	<full nmake command as described above> check
 
 For Integrating into JVM only:
 	* Place the java source files in $(TARGETDIR)/com,i.e, <jdksource>/com 
