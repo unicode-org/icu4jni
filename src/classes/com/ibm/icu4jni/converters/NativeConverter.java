@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/converters/NativeConverter.java,v $ 
-* $Date: 2001/11/02 02:28:25 $ 
-* $Revision: 1.6 $
+* $Date: 2002/10/29 01:58:40 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */ 
@@ -307,7 +307,9 @@ public final class NativeConverter{
      * @return int error code returned by ICU
      */
     public static final native int setCallbackEncode(long converterHandle, int mode, boolean stopOnIllegal);
-
+    
+    public static final native int safeClone(long converterHandle,long[] handleArr);
+    
     public static final int STOP_CALLBACK = 0;
     public static final int SKIP_CALLBACK = 1;
     public static final int SUBSTITUTE_CALLBACK = 3;

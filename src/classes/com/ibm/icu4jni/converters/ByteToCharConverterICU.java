@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/converters/ByteToCharConverterICU.java,v $ 
-* $Date: 2001/10/27 00:34:55 $ 
-* $Revision: 1.7 $
+* $Date: 2002/10/29 01:58:41 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */ 
@@ -63,8 +63,10 @@
          converterHandle = converterHandleArr[0];
     }
     
-    
-
+    private ByteToCharConverterICU(long convHandle, String enc){
+        converterHandle = convHandle;
+        encoding = enc;
+    }
     /**
      * Conversion through the JNI interface for ICU.
      *
@@ -308,4 +310,19 @@
             return (ByteToCharConverter)(new ByteToCharConverterICU(enc));
     }
 
+  
+    /**
+     * Makes a complete copy of the current object.
+     * @return a copy of this object if data clone is a success, otherwise null
+     */
+    public Object clone(){
+        ByteToCharConverter result = null;
+        long[] handleArr = new long[1];
+        int ec = NativeConverter.safeClone(converterHandle,handleArr);
+        if(ec > ErrorCode.U_ZERO_ERROR){
+            throw new RuntimeException("Cloning failed"+ErrorCode.getErrorName(ec));
+        };
+        result = new ByteToCharConverterICU(handleArr[0],encoding);
+        return (ByteToCharConverter)result;
+    }
   }

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/native/converter/ConverterInterface.h,v $ 
-* $Date: 2001/12/04 18:24:48 $ 
-* $Revision: 1.9 $
+* $Date: 2002/10/29 01:58:23 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -256,6 +256,14 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_setCallba
  */
 JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_setCallbackEncode
   (JNIEnv *, jclass, jlong, jint, jboolean);
+
+/*
+ * Class:     com_ibm_icu4jni_converters_NativeConverter
+ * Method:    safeClone
+ * Signature: (JIZ)I
+ */
+JNIEXPORT jlong JNICALL Java_com_ibm_icu4jni_text_NativeConverter_safeClone
+  (JNIEnv *, jclass, jlong, jlongArray);
 
 #ifdef __cplusplus
 }

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/converters/CharToByteConverterICU.java,v $ 
-* $Date: 2001/10/27 00:34:55 $ 
-* $Revision: 1.8 $
+* $Date: 2002/10/29 01:58:40 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */ 
@@ -65,6 +65,12 @@
          }
          converterHandle=converterHandleArr[0];
          maxBytes = NativeConverter.getMaxBytesPerChar(converterHandle);
+    }
+    
+    private CharToByteConverterICU(long conv, String enc){
+        converterHandle = conv;
+        encoding = enc;
+        maxBytes = NativeConverter.getMaxBytesPerChar(converterHandle);
     }
     /** 
      * Conversion through the JNI interface for ICU.
@@ -327,5 +333,18 @@
             return (CharToByteConverter)(new CharToByteConverterICU(enc));
     }
 
-
+    /** 
+     * Makes a complete copy of the current object.
+     * @return a copy of this object if data clone is a success, otherwise null
+     */
+    public Object clone(){
+        CharToByteConverter result = null;
+        long[] handleArr = new long[1];
+        int ec = NativeConverter.safeClone(converterHandle,handleArr);
+        if(ec > ErrorCode.U_ZERO_ERROR){
+            throw new RuntimeException("Cloning failed"+ErrorCode.getErrorName(ec));
+        };
+        result = new CharToByteConverterICU(handleArr[0],encoding);
+        return (CharToByteConverter)result;
+    }
 }

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/native/converter/ConverterInterface.c,v $ 
-* $Date: 2001/12/04 18:24:48 $ 
-* $Revision: 1.17 $
+* $Date: 2002/10/29 01:58:21 $ 
+* $Revision: 1.18 $
 *
 *******************************************************************************
 */
@@ -821,10 +821,14 @@ JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getCanonicalName(JNIEnv 
     jstring ret;
     if(encName){
         canonicalName = ucnv_getAlias(encName,0,&error);
-        if(strstr(canonicalName,",")!=0){
-           canonicalName = ucnv_getAlias(canonicalName,1,&error);
+        if(canonicalName !=NULL){
+            if(strstr(canonicalName,",")!=0){
+               canonicalName = ucnv_getAlias(canonicalName,1,&error);
+            }
+            ret = ((*env)->NewStringUTF(env, canonicalName));
+        }else{
+           ret = ((*env)->NewStringUTF(env, ""));
         }
-        ret = ((*env)->NewStringUTF(env, canonicalName));
     }
     (*env)->ReleaseStringUTFChars(env,enc,encName);
     return ret;
@@ -926,21 +930,39 @@ Java_com_ibm_icu4jni_converters_NativeConverter_setCallbackDecode(JNIEnv *env,
 
 JNIEXPORT jlong 
 JNICALL Java_com_ibm_icu4jni_text_NativeConverter_safeClone(JNIEnv *env, 
-                                                            jclass obj, 
-                                                            jlong handle){
+                                                            jclass jClass, 
+                                                            jlong src,
+                                                            jlongArray handle){
 
-    const UConverter *conv = (const UConverter *)handle;
     UErrorCode status = U_ZERO_ERROR;
-    jlong result;
+
     jint buffersize = U_CNV_SAFECLONE_BUFFERSIZE;
 
-    result = (jlong)ucnv_safeClone(conv, NULL, &buffersize, &status);
+    UConverter* conv=NULL;
+    UErrorCode errorCode = U_ZERO_ERROR;
+    UConverter* source = (UConverter*) src;
 
-    if ( error(env, status) != FALSE) {
-        return 0;
+    jlong* myHandle = (jlong*) (*env)->GetPrimitiveArrayCritical(env,handle, NULL);
+    if(source){
+        if(myHandle){
+
+            conv = ucnv_safeClone(source, NULL, &buffersize, &errorCode);
+
+            if(U_FAILURE(errorCode)){
+                (*env)->ReleasePrimitiveArrayCritical(env,handle,(jlong*)myHandle,JNI_COMMIT);
+                conv=NULL;
+                return errorCode;
+            }
+
+            *myHandle =(jlong) conv;
+        }else{
+            errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        }
+        (*env)->ReleasePrimitiveArrayCritical(env,handle,(jlong*)myHandle,JNI_COMMIT);
+    }else{
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
     }
- 
-    return result;
+    return errorCode;
 }
 
 JNIEXPORT jint JNICALL 
