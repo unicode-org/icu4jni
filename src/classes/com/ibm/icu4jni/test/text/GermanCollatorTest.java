@@ -6,8 +6,8 @@
 *
 * $Source: 
 * /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/GermanCollatorTest.java,v $ 
-* $Date: 2001/03/16 05:52:26 $ 
-* $Revision: 1.3 $
+* $Date: 2001/03/20 23:02:36 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -17,6 +17,7 @@ package com.ibm.icu4jni.test.text;
 import java.util.Locale;
 import com.ibm.icu4jni.text.Collator;
 import com.ibm.icu4jni.text.CollationAttribute;
+import com.ibm.icu4jni.test.TestFmwk;
 
 /**
 * Testing class for german collator
@@ -24,7 +25,7 @@ import com.ibm.icu4jni.text.CollationAttribute;
 * @author Syn Wee Quek
 * @since jan 25 2001
 */
-public final class GermanCollatorTest 
+public final class GermanCollatorTest extends TestFmwk
 { 
   
   // constructor ===================================================
@@ -32,9 +33,8 @@ public final class GermanCollatorTest
   /**
   * Constructor
   */
-  public GermanCollatorTest(CollatorTest testprogram) throws Exception
+  public GermanCollatorTest() throws Exception
   {
-    m_test_ = testprogram;
     m_collator_ = Collator.getInstance(Locale.GERMAN);
   }
   
@@ -47,9 +47,10 @@ public final class GermanCollatorTest
   public void TestPrimary() throws Exception
   {
     m_collator_.setStrength(CollationAttribute.VALUE_PRIMARY);
-    for (int i = 0; i < SOURCE_TEST_CASE_.length ; i++)
-      m_test_.doTest(m_collator_, SOURCE_TEST_CASE_[i], TARGET_TEST_CASE_[i], 
-                     EXPECTED_TEST_RESULT_[i][0]);
+    for (int i = 0; i < SOURCE_TEST_CASE_.length ; i++) {
+      CollatorTest.doTest(this, m_collator_, SOURCE_TEST_CASE_[i], 
+                          TARGET_TEST_CASE_[i], EXPECTED_TEST_RESULT_[i][0]);
+    }
   }
   
   /**
@@ -59,9 +60,10 @@ public final class GermanCollatorTest
   public void TestTertiary() throws Exception
   { 
     m_collator_.setStrength(CollationAttribute.VALUE_TERTIARY);
-    for (int i = 0; i < 12 ; i++)
-      m_test_.doTest(m_collator_, SOURCE_TEST_CASE_[i], TARGET_TEST_CASE_[i], 
-                     EXPECTED_TEST_RESULT_[i][1]);
+    for (int i = 0; i < 12 ; i++) {
+      CollatorTest.doTest(this, m_collator_, SOURCE_TEST_CASE_[i], 
+                          TARGET_TEST_CASE_[i], EXPECTED_TEST_RESULT_[i][1]);
+    }
   }
   
   // private variables =============================================
@@ -70,11 +72,6 @@ public final class GermanCollatorTest
   * RuleBasedCollator for testing
   */
   private Collator m_collator_;
-  
-  /**
-  * Main Collation test program
-  */
-  private CollatorTest m_test_;
   
   /**
   * Source strings for testing
@@ -101,7 +98,7 @@ public final class GermanCollatorTest
   private final String TARGET_TEST_CASE_[] = 
   {
     "\u0047\u0072\u006f\u0073\u0073\u0069\u0073\u0074",
-    "\u0061\u000308\u0062\u0063",
+    "\u0061\u0308\u0062\u0063",
     "\u0054\u006f\u006e",
     "\u0054\u006f\u0064",
     "\u0054\u006f\u0066\u0075",

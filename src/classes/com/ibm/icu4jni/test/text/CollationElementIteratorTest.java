@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/CollationElementIteratorTest.java,v $ 
-* $Date: 2001/03/16 05:52:25 $ 
-* $Revision: 1.3 $
+* $Date: 2001/03/20 23:02:36 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -73,7 +73,8 @@ public final class CollationElementIteratorTest extends TestFmwk
       // A basic test to see if it's working at all
       previousNext(iter);
     }
-  }*/
+  }
+  */
   
   /**
   * Testing previous method

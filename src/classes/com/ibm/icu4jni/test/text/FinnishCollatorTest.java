@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/FinnishCollatorTest.java,v $ 
-* $Date: 2001/03/16 05:52:26 $ 
-* $Revision: 1.3 $
+* $Date: 2001/03/20 23:02:36 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -17,6 +17,7 @@ package com.ibm.icu4jni.test.text;
 import java.util.Locale;
 import com.ibm.icu4jni.text.Collator;
 import com.ibm.icu4jni.text.CollationAttribute;
+import com.ibm.icu4jni.test.TestFmwk;
 
 /**
 * Testing class for Finnish collator
@@ -24,7 +25,7 @@ import com.ibm.icu4jni.text.CollationAttribute;
 * @author Syn Wee Quek
 * @since jan 23 2001
 */
-public final class FinnishCollatorTest 
+public final class FinnishCollatorTest extends TestFmwk
 { 
   
   // constructor ===================================================
@@ -32,9 +33,8 @@ public final class FinnishCollatorTest
   /**
   * Constructor
   */
-  public FinnishCollatorTest(CollatorTest testprogram) throws Exception
+  public FinnishCollatorTest() throws Exception
   {
-    m_test_ = testprogram;
     m_collator_ = Collator.getInstance(new Locale("fi", "FI"));
   }
   
@@ -48,8 +48,8 @@ public final class FinnishCollatorTest
   {
     m_collator_.setStrength(CollationAttribute.VALUE_PRIMARY);
     for (int i = 4; i < 5; i ++)
-      m_test_.doTest(m_collator_, SOURCE_TEST_CASE_[i], TARGET_TEST_CASE_[i], 
-                     EXPECTED_TEST_RESULT_[i]);
+      CollatorTest.doTest(this, m_collator_, SOURCE_TEST_CASE_[i], 
+                          TARGET_TEST_CASE_[i], EXPECTED_TEST_RESULT_[i]);
   }
 
   /**
@@ -60,8 +60,8 @@ public final class FinnishCollatorTest
   {
     m_collator_.setStrength(CollationAttribute.VALUE_TERTIARY);
     for (int i = 0; i < 4 ; i ++)
-      m_test_.doTest(m_collator_, SOURCE_TEST_CASE_[i], TARGET_TEST_CASE_[i], 
-                     EXPECTED_TEST_RESULT_[i]);
+      CollatorTest.doTest(this, m_collator_, SOURCE_TEST_CASE_[i], 
+                          TARGET_TEST_CASE_[i], EXPECTED_TEST_RESULT_[i]);
   }
   
   // private variables =============================================
@@ -70,11 +70,6 @@ public final class FinnishCollatorTest
   * RuleBasedCollator for testing
   */
   private Collator m_collator_;
-  
-  /**
-  * Main Collation test program
-  */
-  private CollatorTest m_test_;
   
   /**
   * Source strings for testing

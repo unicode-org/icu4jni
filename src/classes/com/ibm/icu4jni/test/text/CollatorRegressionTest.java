@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/CollatorRegressionTest.java,v $ 
-* $Date: 2001/03/16 05:52:26 $ 
-* $Revision: 1.3 $
+* $Date: 2001/03/20 23:02:36 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -59,7 +59,7 @@ public final class CollatorRegressionTest extends TestFmwk
                                                             TEST_STRING_1_);
     if (i1 == null || i2 == null)
     {
-      m_test_.errln("Failed : Creation of the collation element iterator");
+      errln("Failed : Creation of the collation element iterator");
       return;
     }
 
@@ -189,7 +189,7 @@ public final class CollatorRegressionTest extends TestFmwk
     // collators, ensure that's what we got
     // synwee : changed
     /*
-    if (c.getDecomposition() != NormalizationMode.NO_NORMALIZATION)    
+    if (c.getDecomposition() != Normalizer.NO_NORMALIZATION)    
       errln("Failed : Decomposition is not set to NO_DECOMPOSITION " +
                     "for Korean collator");
     */
@@ -579,11 +579,6 @@ public final class CollatorRegressionTest extends TestFmwk
   }
   
   // private variables =============================================
-  
-  /**
-  * Main Collation test program
-  */
-  private CollatorTest m_test_;
   
   /**
   * Test collator

@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/MonkeyCollatorTest.java,v $ 
-* $Date: 2001/03/16 05:52:26 $ 
-* $Revision: 1.3 $
+* $Date: 2001/03/20 23:02:36 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -19,6 +19,7 @@ import com.ibm.icu4jni.text.Collator;
 import com.ibm.icu4jni.text.RuleBasedCollator;
 import com.ibm.icu4jni.text.CollationKey;
 import com.ibm.icu4jni.text.CollationAttribute;
+import com.ibm.icu4jni.test.TestFmwk;
 
 /**
 * Testing class for collation keys, comparison methods
@@ -26,7 +27,7 @@ import com.ibm.icu4jni.text.CollationAttribute;
 * @author Syn Wee Quek
 * @since jan 29 2001
 */
-public final class MonkeyCollatorTest 
+public final class MonkeyCollatorTest extends TestFmwk 
 { 
   
   // constructor ===================================================
@@ -34,9 +35,8 @@ public final class MonkeyCollatorTest
   /**
   * Constructor
   */
-  public MonkeyCollatorTest(CollatorTest testprogram) throws Exception
+  public MonkeyCollatorTest() throws Exception
   {
-    m_test_ = testprogram;
     m_collator_ = Collator.getInstance();
   }
   
@@ -66,7 +66,7 @@ public final class MonkeyCollatorTest
     int revresult = ck2.compareTo(ck1) ;  // Tertiary
     if (result != -revresult)
     {
-      m_test_.errln("Failed : Round trip collation key comparison");
+      errln("Failed : Round trip collation key comparison");
       return;
     }
 
@@ -77,7 +77,7 @@ public final class MonkeyCollatorTest
     revresult = ck2.compareTo(ck1) ;  // Secondary
     if (result != -revresult)
     {
-      m_test_.errln("Failed : Round trip collation key comparison");
+      errln("Failed : Round trip collation key comparison");
       return;
     }
 
@@ -90,7 +90,7 @@ public final class MonkeyCollatorTest
     
     if (result != -revresult)
     {
-      m_test_.errln("Failed : Round trip collation key comparison");
+      errln("Failed : Round trip collation key comparison");
       return;
     }
 
@@ -99,7 +99,7 @@ public final class MonkeyCollatorTest
     ck2 = m_collator_.getCollationKey(news);
     if (ck1.compareTo(ck2) != Collator.RESULT_LESS)
     {
-      m_test_.errln("Failed : Collation key comparison of a string and " +
+      errln("Failed : Collation key comparison of a string and " +
                     "a similar string with an extra character is expected " +
                     "to return a LESS");
       return;
@@ -107,7 +107,7 @@ public final class MonkeyCollatorTest
 
     if (ck2.compareTo(ck1) != Collator.RESULT_GREATER)
     {
-      m_test_.errln("Failed : Collation key comparison of a string and " +
+      errln("Failed : Collation key comparison of a string and " +
                     "a similar string with one less character is expected " +
                     "to return a GREATER");
       return;
@@ -135,7 +135,7 @@ public final class MonkeyCollatorTest
     int revresult = m_collator_.compare(subt, subs);   // Tertiary
     if (result != -revresult)
     {
-      m_test_.errln("Failed : Round trip collation key comparison");
+      errln("Failed : Round trip collation key comparison");
       return;
     }
 
@@ -144,7 +144,7 @@ public final class MonkeyCollatorTest
     revresult = m_collator_.compare(subt, subs);   // Tertiary
     if (result != -revresult)
     {
-      m_test_.errln("Failed : Round trip collation key comparison");
+      errln("Failed : Round trip collation key comparison");
       return;
     }
 
@@ -153,14 +153,14 @@ public final class MonkeyCollatorTest
     revresult = m_collator_.compare(subt, subs);   // Tertiary
     if (result != -revresult)
     {
-      m_test_.errln("Failed : Round trip collation key comparison");
+      errln("Failed : Round trip collation key comparison");
       return;
     }
 
     String news = subs + "\uE000";
     if (m_collator_.compare(subs, news) != Collator.RESULT_LESS)
     {
-      m_test_.errln("Failed : Collation key comparison of a string and " +
+      errln("Failed : Collation key comparison of a string and " +
                     "a similar string with an extra character is expected " +
                     "to return a LESS");
       return;
@@ -168,7 +168,7 @@ public final class MonkeyCollatorTest
 
     if (m_collator_.compare(news, subs) != Collator.RESULT_GREATER)
     {
-      m_test_.errln("Failed : Collation key comparison of a string and " +
+      errln("Failed : Collation key comparison of a string and " +
                     "a similar string with one less character is expected " +
                     "to return a GREATER");
       return;
@@ -190,24 +190,22 @@ public final class MonkeyCollatorTest
     RuleBasedCollator collator = new RuleBasedCollator(newrules);
     
     for (int i = 0; i < 2; i ++)
-      m_test_.doTest(collator, source[i], target[i], 
+      CollatorTest.doTest(this, collator, source[i], target[i], 
                      Collator.RESULT_LESS);
     
     newrules = rules + " & z < a" + "\u0308";
     
-    collator = new RuleBasedCollator(rules);
-    
-    for (int i = 0; i < 2; i ++)
-      m_test_.doTest(collator, source[i], target[i], 
-                     Collator.RESULT_LESS);
+    if (rules != null && rules.length() > 0)
+    {
+      collator = new RuleBasedCollator(rules);
+      
+      for (int i = 0; i < 2; i ++)
+        CollatorTest.doTest(this, collator, source[i], target[i], 
+                      Collator.RESULT_LESS);
+    }
   }
   
   // private variables =============================================
-  
-  /**
-  * Main Collation test program
-  */
-  private CollatorTest m_test_;
   
   /**
   * Test collator

@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/FrenchCollatorTest.java,v $ 
-* $Date: 2001/03/16 05:52:26 $ 
-* $Revision: 1.3 $
+* $Date: 2001/03/20 23:02:36 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -17,6 +17,7 @@ package com.ibm.icu4jni.test.text;
 import java.util.Locale;
 import com.ibm.icu4jni.text.Collator;
 import com.ibm.icu4jni.text.CollationAttribute;
+import com.ibm.icu4jni.test.TestFmwk;
 
 /**
 * Testing class for french collator
@@ -24,7 +25,7 @@ import com.ibm.icu4jni.text.CollationAttribute;
 * @author Syn Wee Quek
 * @since jan 25 2001
 */
-public final class FrenchCollatorTest 
+public final class FrenchCollatorTest extends TestFmwk 
 { 
   
   // constructor ===================================================
@@ -32,9 +33,8 @@ public final class FrenchCollatorTest
   /**
   * Constructor
   */
-  public FrenchCollatorTest(CollatorTest testprogram) throws Exception
+  public FrenchCollatorTest() throws Exception
   {
-    m_test_ = testprogram;
     m_collator_ = Collator.getInstance(Locale.FRENCH);
   }
   
@@ -51,8 +51,8 @@ public final class FrenchCollatorTest
     m_collator_.setStrength(CollationAttribute.VALUE_TERTIARY);
     for (int i = 0; i < isize; i ++)
       for (int j = i + 1; j < jsize; j ++)
-        m_test_.doTest(m_collator_, BUGS_TEST_CASE_[i], BUGS_TEST_CASE_[j], 
-                       Collator.RESULT_LESS);
+        CollatorTest.doTest(this, m_collator_, BUGS_TEST_CASE_[i], 
+                            BUGS_TEST_CASE_[j], Collator.RESULT_LESS);
   }
 
   /**
@@ -75,8 +75,8 @@ public final class FrenchCollatorTest
            expected = Collator.RESULT_EQUAL;
           else 
             expected = Collator.RESULT_GREATER;
-        m_test_.doTest(m_collator_, ACUTE_TEST_CASE_[i], ACUTE_TEST_CASE_[j], 
-                       expected);
+        CollatorTest.doTest(this, m_collator_, ACUTE_TEST_CASE_[i], 
+                            ACUTE_TEST_CASE_[j], expected);
       }
   }
   
@@ -87,23 +87,22 @@ public final class FrenchCollatorTest
   public void TestTertiary() throws Exception
   { 
     m_collator_.setStrength(CollationAttribute.VALUE_TERTIARY);
+    m_collator_.setAttribute(CollationAttribute.FRENCH_COLLATION, 
+                             CollationAttribute.VALUE_ON);
+    m_collator_.setAttribute(CollationAttribute.ALTERNATE_HANDLING, 
+                             CollationAttribute.VALUE_SHIFTED);
     int size = SOURCE_TEST_CASE_.length;
     for (int i = 0; i < size; i ++)
-      m_test_.doTest(m_collator_, SOURCE_TEST_CASE_[i], TARGET_TEST_CASE_[i], 
-                     EXPECTED_TEST_RESULT_[i]);
+      CollatorTest.doTest(this, m_collator_, SOURCE_TEST_CASE_[i], 
+                          TARGET_TEST_CASE_[i], EXPECTED_TEST_RESULT_[i]);
   }
   
   // private variables =============================================
-  
+
   /**
-  * RuleBasedCollator for testing
+  * collator
   */
   private Collator m_collator_;
-  
-  /**
-  * Main Collation test program
-  */
-  private CollatorTest m_test_;
   
   /**
   * Source strings for testing
@@ -150,13 +149,13 @@ public final class FrenchCollatorTest
   {
     Collator.RESULT_LESS,
     Collator.RESULT_LESS,
-    Collator.RESULT_GREATER,
+    Collator.RESULT_LESS,
     Collator.RESULT_LESS,
     Collator.RESULT_GREATER,
     Collator.RESULT_GREATER,
     Collator.RESULT_LESS,
     Collator.RESULT_GREATER,
-    Collator.RESULT_GREATER,
+    Collator.RESULT_LESS,
     Collator.RESULT_GREATER,
     Collator.RESULT_LESS,
     Collator.RESULT_LESS  
@@ -187,7 +186,7 @@ public final class FrenchCollatorTest
   */
   private final String ACUTE_TEST_CASE_[] = 
   {
-    "\u0065\u0065", 
+    "\u0065\u0065",
     "\u0065\u0301\u0065",
     "\u0065\u0300\u0301\u0065",
     "\u0065\u0300\u0065",

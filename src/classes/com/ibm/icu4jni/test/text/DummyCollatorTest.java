@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/DummyCollatorTest.java,v $ 
-* $Date: 2001/03/16 05:52:26 $ 
-* $Revision: 1.3 $
+* $Date: 2001/03/20 23:02:36 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -16,15 +16,18 @@ package com.ibm.icu4jni.test.text;
 
 import java.util.Locale;
 import com.ibm.icu4jni.text.Collator;
+import com.ibm.icu4jni.text.RuleBasedCollator;
 import com.ibm.icu4jni.text.CollationAttribute;
+import com.ibm.icu4jni.text.NormalizationMode;
+import com.ibm.icu4jni.test.TestFmwk;
 
 /**
 * Testing class for Dummy collator
 * Mostly following the test cases for ICU
 * @author Syn Wee Quek
 * @since jan 23 2001
-*/
-public final class DummyCollatorTest 
+*/ 
+public final class DummyCollatorTest extends TestFmwk
 { 
   
   // constructor ===================================================
@@ -32,9 +35,8 @@ public final class DummyCollatorTest
   /**
   * Constructor
   */
-  public DummyCollatorTest(CollatorTest testprogram) throws Exception
+  public DummyCollatorTest() throws Exception
   {
-    m_test_ = testprogram;
     m_collator_ = Collator.getInstance(Locale.ENGLISH);
   }
   
@@ -46,10 +48,20 @@ public final class DummyCollatorTest
   */
   public void TestPrimary() throws Exception
   {
-    m_collator_.setStrength(CollationAttribute.VALUE_PRIMARY);
-    for (int i = 17; i < 26 ; i ++)
-      m_test_.doTest(m_collator_, SOURCE_TEST_CASE_[i], 
-                     TARGET_TEST_CASE_[i], EXPECTED_TEST_RESULT_[i]);
+    String rules = "& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one, 1 & " +
+                                         "Ampersand; '&' & Two, 2 ";
+    
+    Collator coll = new RuleBasedCollator(rules, 
+                                          NormalizationMode.NO_NORMALIZATION, 
+                                          CollationAttribute.VALUE_PRIMARY);
+    /* problem in strcollinc for unfinshed contractions */
+    coll.setAttribute(CollationAttribute.NORMALIZATION_MODE, 
+                      CollationAttribute.VALUE_ON);
+    
+    for (int i = 17; i < 26 ; i ++) {
+      CollatorTest.doTest(this, coll, SOURCE_TEST_CASE_[i], 
+                          TARGET_TEST_CASE_[i], EXPECTED_TEST_RESULT_[i]);
+    }
   }
 
   /**
@@ -58,10 +70,16 @@ public final class DummyCollatorTest
   */
   public void TestSecondary() throws Exception
   {
+    String rules = "& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & " +
+                              "one, 1 & Ampersand; '&' & Two, 2 ";
     m_collator_.setStrength(CollationAttribute.VALUE_SECONDARY);
-    for (int i = 26; i < 34 ; i ++)
-      m_test_.doTest(m_collator_, SOURCE_TEST_CASE_[i], TARGET_TEST_CASE_[i], 
-                     EXPECTED_TEST_RESULT_[i]);
+    Collator coll = new RuleBasedCollator(rules, 
+                                          NormalizationMode.NO_NORMALIZATION, 
+                                          CollationAttribute.VALUE_SECONDARY);
+    for (int i = 26; i < 34 ; i ++) {
+      CollatorTest.doTest(this, coll, SOURCE_TEST_CASE_[i], 
+                          TARGET_TEST_CASE_[i], EXPECTED_TEST_RESULT_[i]);
+    }
   }
   
   /**
@@ -70,10 +88,15 @@ public final class DummyCollatorTest
   */
   public void TestTertiary() throws Exception
   {
-    m_collator_.setStrength(CollationAttribute.VALUE_TERTIARY);
-    for (int i = 0; i < 17 ; i ++)
-      m_test_.doTest(m_collator_, SOURCE_TEST_CASE_[i], TARGET_TEST_CASE_[i], 
-                     EXPECTED_TEST_RESULT_[i]);
+    String rules = "& C < ch, cH, Ch, CH & Five, 5 & Four, 4 & one," +
+                          " 1 & Ampersand; '&' & Two, 2 ";
+    Collator coll = new RuleBasedCollator(rules, 
+                                  NormalizationMode.NO_NORMALIZATION, 
+                                  CollationAttribute.VALUE_TERTIARY);
+    for (int i = 0; i < 17 ; i ++) {
+      CollatorTest.doTest(this, coll, SOURCE_TEST_CASE_[i], 
+                          TARGET_TEST_CASE_[i], EXPECTED_TEST_RESULT_[i]);
+    }
   }
   
   /**
@@ -84,11 +107,13 @@ public final class DummyCollatorTest
   {
     m_collator_.setStrength(CollationAttribute.VALUE_TERTIARY);
     int size = MISCELLANEOUS_TEST_CASE_.length - 1;
-    for (int i = 0; i < size; i ++)
-      for (int j = i + 1; j < MISCELLANEOUS_TEST_CASE_.length; j ++)
-        m_test_.doTest(m_collator_, MISCELLANEOUS_TEST_CASE_[i], 
-                       MISCELLANEOUS_TEST_CASE_[j], 
-                       Collator.RESULT_LESS);
+    for (int i = 0; i < size; i ++) {
+      for (int j = i + 1; j < MISCELLANEOUS_TEST_CASE_.length; j ++) {
+        CollatorTest.doTest(this, m_collator_, MISCELLANEOUS_TEST_CASE_[i], 
+                            MISCELLANEOUS_TEST_CASE_[j], 
+                            Collator.RESULT_LESS);
+      }
+    }
   }
   
   // private variables =============================================
@@ -97,11 +122,6 @@ public final class DummyCollatorTest
   * RuleBasedCollator for testing
   */
   private Collator m_collator_;
-  
-  /**
-  * Main Collation test program
-  */
-  private CollatorTest m_test_;
   
   /**
   * Source test cases
@@ -117,34 +137,34 @@ public final class DummyCollatorTest
     "\u0066\u0069\u0076\u0065",
     "\u0031",
     "\u0031",
-    "\u0031",                                            
+    "\u0031",                                            /*  10 */
     "\u0032",
     "\u0032",
     "\u0048\u0065\u006c\u006c\u006f",
     "\u0061\u003c\u0062",
     "\u0061\u003c\u0062",
     "\u0061\u0063\u0063",
-    "\u0061\u0063\u0048\u0063",  //  simple test
+    "\u0061\u0063\u0048\u0063",  /*  simple test */
     "\u0070\u00EA\u0063\u0068\u0065",
     "\u0061\u0062\u0063",
-    "\u0061\u0062\u0063",                                  
+    "\u0061\u0062\u0063",                                  /*  20 */
     "\u0061\u0062\u0063",
     "\u0061\u0062\u0063",
     "\u0061\u0062\u0063",
     "\u0061\u00E6\u0063",
-    "\u0061\u0063\u0048\u0063",  //  primary test 
+    "\u0061\u0063\u0048\u0063",  /*  primary test */
     "\u0062\u006c\u0061\u0063\u006b",
     "\u0066\u006f\u0075\u0072",
     "\u0066\u0069\u0076\u0065",
     "\u0031",
-    "\u0061\u0062\u0063",                                        
+    "\u0061\u0062\u0063",                                        /*  30 */
     "\u0061\u0062\u0063",                                  
     "\u0061\u0062\u0063\u0048",
     "\u0061\u0062\u0063",
-    "\u0061\u0063\u0048\u0063",                              
+    "\u0061\u0063\u0048\u0063",                              /*  34 */
     "\u0061\u0063\u0065\u0030",
     "\u0031\u0030",
-    "\u0070\u00EA\u0030"
+    "\u0070\u00EA\u0030"                                    /* 37     */
 };
 
   /**
@@ -161,34 +181,34 @@ public final class DummyCollatorTest
     "\u0035",
     "\u006f\u006e\u0065",
     "\u006e\u006e\u0065",
-    "\u0070\u006e\u0065",                                  
+    "\u0070\u006e\u0065",                                  /*  10 */
     "\u0074\u0077\u006f",
     "\u0075\u0077\u006f",
     "\u0068\u0065\u006c\u006c\u004f",
     "\u0061\u003c\u003d\u0062",
     "\u0061\u0062\u0063",
     "\u0061\u0043\u0048\u0063",
-    "\u0061\u0043\u0048\u0063",  //  simple test
+    "\u0061\u0043\u0048\u0063",  /*  simple test */
     "\u0070\u00E9\u0063\u0068\u00E9",
     "\u0061\u0062\u0063",
-    "\u0061\u0042\u0043",                                  
+    "\u0061\u0042\u0043",                                  /*  20 */
     "\u0061\u0062\u0063\u0068",
     "\u0061\u0062\u0064",
     "\u00E4\u0062\u0063",
     "\u0061\u00C6\u0063",
-    "\u0061\u0043\u0048\u0063",  //  primary test 
+    "\u0061\u0043\u0048\u0063",  /*  primary test */
     "\u0062\u006c\u0061\u0063\u006b\u002d\u0062\u0069\u0072\u0064",
     "\u0034",
     "\u0035",
     "\u006f\u006e\u0065",
     "\u0061\u0062\u0063",
-    "\u0061\u0042\u0063",                                  
+    "\u0061\u0042\u0063",                                  /*  30 */
     "\u0061\u0062\u0063\u0068",
     "\u0061\u0062\u0064",
-    "\u0061\u0043\u0048\u0063",                                
+    "\u0061\u0043\u0048\u0063",                                /*  34 */
     "\u0061\u0063\u0065\u0030",
     "\u0031\u0030",
-    "\u0070\u00EB\u0030"
+    "\u0070\u00EB\u0030"                                    /* 37 */
 };
 
   /**
@@ -217,7 +237,7 @@ public final class DummyCollatorTest
   private final static int EXPECTED_TEST_RESULT_[] = 
   {
     Collator.RESULT_LESS,
-    Collator.RESULT_GREATER,
+    Collator.RESULT_LESS, /*Collator.RESULT_GREATER,*/
     Collator.RESULT_LESS,
     Collator.RESULT_LESS,
     Collator.RESULT_LESS,
@@ -225,7 +245,7 @@ public final class DummyCollatorTest
     Collator.RESULT_LESS,
     Collator.RESULT_GREATER,
     Collator.RESULT_GREATER,
-    Collator.RESULT_LESS,              
+    Collator.RESULT_LESS,                                     /*  10 */
     Collator.RESULT_GREATER,
     Collator.RESULT_LESS,
     Collator.RESULT_GREATER,
@@ -233,26 +253,28 @@ public final class DummyCollatorTest
     Collator.RESULT_LESS,
     Collator.RESULT_LESS,
     Collator.RESULT_LESS,
+    /*  test primary > 17 */
     Collator.RESULT_EQUAL,
     Collator.RESULT_EQUAL,
-    Collator.RESULT_EQUAL,             
+    Collator.RESULT_EQUAL,                                    /*  20 */
     Collator.RESULT_LESS,
     Collator.RESULT_LESS,
     Collator.RESULT_EQUAL,
     Collator.RESULT_EQUAL,
     Collator.RESULT_EQUAL,
     Collator.RESULT_LESS,
+    /*  test secondary > 26 */
     Collator.RESULT_EQUAL,
     Collator.RESULT_EQUAL,
     Collator.RESULT_EQUAL,
     Collator.RESULT_EQUAL,
-    Collator.RESULT_EQUAL,             
+    Collator.RESULT_EQUAL,                                    /*  30 */
     Collator.RESULT_EQUAL,
     Collator.RESULT_LESS,
-    Collator.RESULT_EQUAL,             
+    Collator.RESULT_EQUAL,                                     /*  34 */
     Collator.RESULT_EQUAL,
     Collator.RESULT_EQUAL,
-    Collator.RESULT_LESS   
+    Collator.RESULT_LESS    
   };
 }
 

@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/G7CollatorTest.java,v $ 
-* $Date: 2001/03/16 05:52:26 $ 
-* $Revision: 1.3 $
+* $Date: 2001/03/20 23:02:36 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -17,6 +17,7 @@ package com.ibm.icu4jni.test.text;
 import java.util.Locale;
 import com.ibm.icu4jni.text.Collator;
 import com.ibm.icu4jni.text.RuleBasedCollator;
+import com.ibm.icu4jni.test.TestFmwk;
 
 /**
 * Testing class for collation with 7 different locales
@@ -24,7 +25,7 @@ import com.ibm.icu4jni.text.RuleBasedCollator;
 * @author Syn Wee Quek
 * @since jan 23 2001
 */
-public final class G7CollatorTest 
+public final class G7CollatorTest extends TestFmwk
 { 
   
   // constructor ===================================================
@@ -32,9 +33,8 @@ public final class G7CollatorTest
   /**
   * Constructor
   */
-  public G7CollatorTest(CollatorTest testprogram) throws Exception
+  public G7CollatorTest() throws Exception
   {
-    m_test_ = testprogram;
     //m_collator_ = Collator.getInstance(new Locale("tr", ""));
   }
   
@@ -48,19 +48,21 @@ public final class G7CollatorTest
   {
     RuleBasedCollator collator,
                          testcollator;
-    String rules;
-    
     for (int i = 0; i < LOCALES_.length; i ++)
     {
       collator = (RuleBasedCollator)Collator.getInstance(LOCALES_[i]);
-      testcollator = new RuleBasedCollator(collator.getRules());
+      String rules = collator.getRules();
+      if (rules != null && rules.length() != 0)
+      {
+        testcollator = new RuleBasedCollator(rules);
         
-      for (int j = 0; j < FIXED_TEST_COUNT_; j ++)
-        for (int k = j + 1; j < FIXED_TEST_COUNT_; k ++)
-          m_test_.doTest(testcollator, 
-                 SOURCE_TEST_CASE_[EXPECTED_TEST_RESULT_[i][j]], 
-                 SOURCE_TEST_CASE_[EXPECTED_TEST_RESULT_[i][k]], 
-                 Collator.RESULT_LESS);
+        for (int j = 0; j < FIXED_TEST_COUNT_; j ++)
+          for (int k = j + 1; k < FIXED_TEST_COUNT_; k ++)
+            CollatorTest.doTest(this, testcollator, 
+                  SOURCE_TEST_CASE_[EXPECTED_TEST_RESULT_[i][j]], 
+                  SOURCE_TEST_CASE_[EXPECTED_TEST_RESULT_[i][k]], 
+                  Collator.RESULT_LESS);
+      }
     }
   }
 
@@ -77,7 +79,7 @@ public final class G7CollatorTest
 
     for (int j = 0; j < FIXED_TEST_COUNT_; j ++)
       for (int k = j + 1; k < FIXED_TEST_COUNT_; k ++)
-        m_test_.doTest(newcollator, 
+        CollatorTest.doTest(this, newcollator, 
                        SOURCE_TEST_CASE_[EXPECTED_TEST_RESULT_[8][j]], 
                        SOURCE_TEST_CASE_[EXPECTED_TEST_RESULT_[8][k]], 
                        Collator.RESULT_LESS);
@@ -97,7 +99,7 @@ public final class G7CollatorTest
 
     for (int i = 0; i < TOTAL_TEST_COUNT_; i ++)
       for (int j = i + 1; j < TOTAL_TEST_COUNT_; j++)
-        m_test_.doTest(newcollator, 
+        CollatorTest.doTest(this, newcollator, 
                        SOURCE_TEST_CASE_[EXPECTED_TEST_RESULT_[9][i]], 
                        SOURCE_TEST_CASE_[EXPECTED_TEST_RESULT_[9][j]], 
                        Collator.RESULT_LESS);
@@ -118,7 +120,7 @@ public final class G7CollatorTest
 
     for (int i = 0; i < TOTAL_TEST_COUNT_; i ++)
       for (int j = i + 1; j < TOTAL_TEST_COUNT_; j++)
-        m_test_.doTest(newcollator, 
+        CollatorTest.doTest(this, newcollator, 
                        SOURCE_TEST_CASE_[EXPECTED_TEST_RESULT_[10][i]], 
                        SOURCE_TEST_CASE_[EXPECTED_TEST_RESULT_[10][j]], 
                        Collator.RESULT_LESS);
@@ -139,18 +141,13 @@ public final class G7CollatorTest
 
     for (int i = 0; i < TOTAL_TEST_COUNT_; i ++)
       for (int j = i + 1; j < TOTAL_TEST_COUNT_; j++)
-        m_test_.doTest(newcollator, 
+        CollatorTest.doTest(this, newcollator, 
                        SOURCE_TEST_CASE_[EXPECTED_TEST_RESULT_[11][i]], 
                        SOURCE_TEST_CASE_[EXPECTED_TEST_RESULT_[11][j]], 
                        Collator.RESULT_LESS);
   }
   
   // private variables =============================================
-  
-  /**
-  * Main Collation test program
-  */
-  private CollatorTest m_test_;
   
   /**
   * Constant test number
@@ -175,36 +172,36 @@ public final class G7CollatorTest
   */
   private static final String SOURCE_TEST_CASE_[] = 
   {
-    "\u0062\u006c\u0061\u0063\u006b\u002d\u0062\u0069\u0072\u0064\u0073",   
-    "\u0050\u0061\u0074",                                           
-    "\u0070\u00E9\u0063\u0068\u0000E9",                           
-    "\u0070\u00EA\u0063\u0068\u0065",                                 
-    "\u0070\u00E9\u0063\u0068\u0065\u0072",                         
-    "\u0070\u00EA\u0063\u0068\u0065\u0072",                         
-    "\u0054\u006f\u0064",                                           
-    "\u0054\u00F6\u006e\u0065",                                   
-    "\u0054\u006f\u0066\u0075",                                      
-    "\u0062\u006c\u0061\u0063\u006b\u0062\u0069\u0072\u0064\u0073",        
-    "\u0054\u006f\u006e",                                           
-    "\u0050\u0041\u0054",                                           
-    "\u0062\u006c\u0061\u0063\u006b\u0062\u0069\u0072\u0064",             
-    "\u0062\u006c\u0061\u0063\u006b\u002d\u0062\u0069\u0072\u0064",        
-    "\u0070\u0061\u0074",                                           
-    "\u0063\u007a\u0061\u0072",                                     
-    "\u0063\u0068\u0075\u0072\u006f",                                
-    "\u0063\u0061\u0074",                                          
-    "\u0064\u0061\u0072\u006e",                                     
-    "\u003f",                                                    
-    "\u0071\u0075\u0069\u0063\u006b",                                
-    "\u0023",                                                    
-    "\u0026",                                                    
-    "\u0061\u0061\u0072\u0064\u0076\u0061\u0072\u006b",                  
-    "\u0061\u002d\u0072\u0064\u0076\u0061\u0072\u006b",                  
-    "\u0061\u0062\u0062\u006f\u0074",                                 
-    "\u0063\u006f\u006f\u0070",                                     
-    "\u0063\u006f\u002d\u0070",                                      
-    "\u0063\u006f\u0070",                                           
-    "\u007a\u0065\u0062\u0072\u0061"
+    "\u0062\u006c\u0061\u0062\u006b\u0062\u0069\u0072\u0064\u0073",                    /* 9 */
+    "\u0050\u0061\u0074",                                                    /* 1 */
+    "\u0070\u00E9\u0063\u0068\u00E9",                                    /* 2 */
+    "\u0070\u00EA\u0063\u0068\u0065",                           /* 3 */
+    "\u0070\u00E9\u0063\u0068\u0065\u0072",            /* 4 */
+    "\u0070\u00EA\u0063\u0068\u0065\u0072",            /* 5 */
+    "\u0054\u006f\u0064",                                                    /* 6 */
+    "\u0054\u00F6\u006e\u0065",                                            /* 7 */
+    "\u0054\u006f\u0066\u0075",                                   /* 8 */
+    "\u0062\u006c\u0061\u0062\u006b\u0062\u0069\u0072\u0064",                                    /* 12 */
+    "\u0054\u006f\u006e",                                                    /* 10 */
+    "\u0050\u0041\u0054",                                                    /* 11 */
+    "\u0062\u006c\u0061\u0062\u006b\u002d\u0062\u0069\u0072\u0064",                /* 13 */
+    "\u0062\u006c\u0061\u0062\u006b\u002d\u0062\u0069\u0072\u0064\u0073",  /* 0 */
+    "\u0070\u0061\u0074",                                                    /* 14 */
+    "\u0063\u007a\u0061\u0072",                                 /* 15 */
+    "\u0063\u0068\u0075\u0072\u006f" ,                  /* 16 */
+    "\u0063\u0061\u0074",                                                    /* 17 */ 
+    "\u0064\u0061\u0072\u006e" ,                                 /* 18 */
+    "\u003f",                                                                                /* 19 */
+    "\u0071\u0075\u0069\u0063\u006b" ,                  /* 20 */
+    "\u0023" ,                                                  /* 21 */
+    "\u0026" ,                                                  /* 22 */
+    "\u0061\u002d\u0072\u0064\u0076\u0061\u0072\u006b",                                                        /* 24 */
+    "\u0061\u0061\u0072\u0064\u0076\u0061\u0072\u006b",                                                        /* 23 */
+    "\u0061\u0062\u0062\u006f\u0074",                   /* 25 */
+    "\u0063\u006f\u002d\u0070",                                 /* 27 */
+    "\u0063\u006f\u0070",                                                /* 28 */
+    "\u0063\u006f\u006f\u0070",                                 /* 26 */
+    "\u007a\u0065\u0062\u0072\u0061"                    /* 29 */
   };
 
   /**
@@ -212,30 +209,34 @@ public final class G7CollatorTest
   */
   private final int EXPECTED_TEST_RESULT_[][] = 
   {
-    {12, 13, 9, 0, 14, 1, 11, 2, 3, 4, 5, 6, 8, 10, 7, 31, 31, 31, 31, 31, 
-     31, 31, 31, 31, 31, 31, 31, 31, 31, 31}, // en_US
-    {12, 13, 9, 0, 14, 1, 11, 2, 3, 4, 5, 6, 8, 10, 7, 31, 31, 31, 31, 31, 
-     31, 31, 31, 31, 31, 31, 31, 31, 31, 31}, // en_GB
-    {12, 13, 9, 0, 14, 1, 11, 2, 3, 4, 5, 6, 8, 10, 7, 31, 31, 31, 31, 31, 
-     31, 31, 31, 31, 31, 31, 31, 31, 31, 31}, // en_CA
-    {12, 13, 9, 0, 14, 1, 11, 3, 2, 4, 5, 6, 8, 10, 7, 31, 31, 31, 31, 31, 
-     31, 31, 31, 31, 31, 31, 31, 31, 31, 31}, // fr_FR
-    {12, 13, 9, 0, 14, 1, 11, 3, 2, 4, 5, 6, 8, 10, 7, 31, 31, 31, 31, 31, 
-     31, 31, 31, 31, 31, 31, 31, 31, 31, 31}, // fr_CA
-    {12, 13, 9, 0, 14, 1, 11, 2, 3, 4, 5, 6, 8, 10, 7, 31, 31, 31, 31, 31, 
-     31, 31, 31, 31, 31, 31, 31, 31, 31, 31}, // de_DE
-    {12, 13, 9, 0, 14, 1, 11, 2, 3, 4, 5, 6, 8, 10, 7, 31, 31, 31, 31, 31, 
-     31, 31, 31, 31, 31, 31, 31, 31, 31, 31}, // it_IT
-    {12, 13, 9, 0, 14, 1, 11, 2, 3, 4, 5, 6, 8, 10, 7, 31, 31, 31, 31, 31, 
-     31, 31, 31, 31, 31, 31, 31, 31, 31, 31}, // ja_JP
-    {12, 13, 9, 0, 6, 8, 10, 7, 14, 1, 11, 2, 3, 4, 5, 31, 31, 31, 31, 31, 
-     31, 31, 31, 31, 31, 31, 31, 31, 31, 31},
-    {19, 22, 21, 23, 25, 24, 12, 13, 9, 0, 17, 26, 28, 27, 15, 16, 18, 14, 
-     1, 11, 2, 3, 4, 5, 20, 6, 8, 10, 7, 29},
-    {23, 25, 22, 24, 12, 13, 9, 0, 17, 16, 26, 28, 27, 15, 18, 21, 14, 1, 
-     11, 2, 3, 4, 5, 19, 20, 6, 8, 10, 7, 29},
-    {19, 22, 21, 23, 24, 25, 12, 13, 9, 0, 17, 16, 26, 27, 28, 15, 18, 14, 
-     1, 11, 2, 3, 4, 5, 20, 6, 8, 10, 7, 29}                                          
+    { 12, 13, 9, 0, 14, 1, 11, 2, 3, 4, 5, 6, 8, 10, 7, 31, 31, 31, 31, 31, 
+      31, 31, 31, 31, 31, 31, 31, 31, 31, 31 }, /* en_US */
+    { 12, 13, 9, 0, 14, 1, 11, 2, 3, 4, 5, 6, 8, 10, 7, 31, 31, 31, 31, 31, 
+      31, 31, 31, 31, 31, 31, 31, 31, 31, 31 }, /* en_GB */
+    { 12, 13, 9, 0, 14, 1, 11, 2, 3, 4, 5, 6, 8, 10, 7, 31, 31, 31, 31, 31, 
+      31, 31, 31, 31, 31, 31, 31, 31, 31, 31 }, /* en_CA */
+    { 12, 13, 9, 0, 14, 1, 11, 3, 2, 4, 5, 6, 8, 10, 7, 31, 31, 31, 31, 31, 
+      31, 31, 31, 31, 31, 31, 31, 31, 31, 31 }, /* fr_FR */
+    { 12, 13, 9, 0, 14, 1, 11, 3, 2, 4, 5, 6, 8, 10, 7, 31, 31, 31, 31, 31, 
+      31, 31, 31, 31, 31, 31, 31, 31, 31, 31 }, /* fr_CA */
+    { 12, 13, 9, 0, 14, 1, 11, 2, 3, 4, 5, 6, 8, 10, 7, 31, 31, 31, 31, 31, 
+      31, 31, 31, 31, 31, 31, 31, 31, 31, 31 }, /* de_DE */
+    { 12, 13, 9, 0, 14, 1, 11, 2, 3, 4, 5, 6, 8, 10, 7, 31, 31, 31, 31, 31, 
+      31, 31, 31, 31, 31, 31, 31, 31, 31, 31 }, /* it_IT */
+    { 12, 13, 9, 0, 14, 1, 11, 2, 3, 4, 5, 6, 8, 10, 7, 31, 31, 31, 31, 31, 
+      31, 31, 31, 31, 31, 31, 31, 31, 31, 31 }, /* ja_JP */
+    /* new table collation with rules "& Z < p, P"  loop to FIXEDTESTSET */
+    { 12, 13, 9, 0, 6, 8, 10, 7, 14, 1, 11, 2, 3, 4, 5, 31, 31, 31, 31, 31, 
+      31, 31, 31, 31, 31, 31, 31, 31, 31, 31 }, 
+    /* new table collation with rules "& C < ch , cH, Ch, CH " loop to TOTALTESTSET */
+    { 19, 22, 21, 23, 24, 25, 12, 13, 9, 0, 17, 26, 28, 27, 15, 16, 18, 14, 
+      1, 11, 2, 3, 4, 5, 20, 6, 8, 10, 7, 29 },
+    /* new table collation with rules "& Question-mark ; ? & Hash-mark ; # & Ampersand ; '&'  " loop to TOTALTESTSET */
+    { 23, 24, 25, 22, 12, 13, 9, 0, 17, 16, 26, 28, 27, 15, 18, 21, 14, 1, 
+      11, 2, 3, 4, 5, 19, 20, 6, 8, 10, 7, 29 },
+    /* analogous to Japanese rules " & aa ; a- & ee ; e- & ii ; i- & oo ; o- & uu ; u- " */  /* loop to TOTALTESTSET */
+    { 19, 22, 21, 24, 23, 25, 12, 13, 9, 0, 17, 16, 28, 26, 27, 15, 18, 14, 
+      1, 11, 2, 3, 4, 5, 20, 6, 8, 10, 7, 29 }                                      
   };
 }
 

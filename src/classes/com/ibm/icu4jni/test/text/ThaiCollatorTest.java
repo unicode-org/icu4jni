@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/ThaiCollatorTest.java,v $ 
-* $Date: 2001/03/16 05:52:26 $ 
-* $Revision: 1.3 $
+* $Date: 2001/03/20 23:02:36 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -17,6 +17,7 @@ package com.ibm.icu4jni.test.text;
 import java.util.Locale;
 import com.ibm.icu4jni.text.Collator;
 import com.ibm.icu4jni.text.CollationKey;
+import com.ibm.icu4jni.test.TestFmwk;
 
 /**
 * Testing class for Thai collator
@@ -24,7 +25,7 @@ import com.ibm.icu4jni.text.CollationKey;
 * @author Syn Wee Quek
 * @since jan 29 2001
 */
-public final class ThaiCollatorTest 
+public final class ThaiCollatorTest extends TestFmwk
 { 
   
   // constructor ===================================================
@@ -32,9 +33,8 @@ public final class ThaiCollatorTest
   /**
   * Constructor
   */
-  public ThaiCollatorTest(CollatorTest testprogram) throws Exception
+  public ThaiCollatorTest() throws Exception
   {
-    m_test_ = testprogram;
     m_collator_ = Collator.getInstance(new Locale("th", "TH"));
   }
   
@@ -56,7 +56,7 @@ public final class ThaiCollatorTest
       s = SOURCE_TEST_CASE_[i - 1];
       t = SOURCE_TEST_CASE_[i];
       if (m_collator_.compare(s, t) != Collator.RESULT_LESS)
-        m_test_.errln("Failed : Thai strings are in sorted increasing order "
+        errln("Failed : Thai strings are in sorted increasing order "
                       + s + " < " + t);
     }
   }
@@ -114,7 +114,7 @@ public final class ThaiCollatorTest
           else 
           {
             // expect = Integer.decode(tests[i+1]).intValue();
-            m_test_.errln("Failed : unknown operator " + tests[i + 1]);
+            errln("Failed : unknown operator " + tests[i + 1]);
             return;
           }
 
@@ -122,7 +122,7 @@ public final class ThaiCollatorTest
              s2 = tests[i + 2];
       int result = m_collator_.compare(s1, s2);
       if (result != expect)
-        m_test_.errln("Failed : " + s1 + tests[i + 1] + s2);
+        errln("Failed : " + s1 + tests[i + 1] + s2);
       else
       {
         // Collator.compare worked OK; now try the collation keys
@@ -130,7 +130,7 @@ public final class ThaiCollatorTest
                      k2 = m_collator_.getCollationKey(s2);
         result = k1.compareTo(k2);
         if (result != expect) 
-          m_test_.errln("Failed : Collation key comparison of " + s1 + 
+          errln("Failed : Collation key comparison of " + s1 + 
                         tests[i + 1] + s2);
       }   
     }
@@ -142,11 +142,6 @@ public final class ThaiCollatorTest
   * RuleBasedCollator for testing
   */
   private Collator m_collator_;
-  
-  /**
-  * Main Collation test program
-  */
-  private CollatorTest m_test_;
   
   /**
   * Source strings for testing
