@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/native/collation/CollationInterface.c,v $ 
-* $Date: 2001/09/18 00:36:02 $ 
-* $Revision: 1.8 $
+* $Date: 2001/09/19 02:47:18 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -15,6 +15,10 @@
 #include "ErrorCode.h"
 #include "unicode/ucol.h"
 #include "unicode/ucoleitr.h"
+
+#ifdef DEBUG
+#include <stdio.h>
+#endif
 
 /**
 * ICU constant values and methods
@@ -131,7 +135,6 @@ JNIEXPORT jlong JNICALL Java_com_ibm_icu4jni_text_NativeCollation_getCollationEl
   result = (jlong)(ucol_openElements(collator, srcstr, srclength, &status));
 
   (*env)->ReleaseStringCritical(env, source, srcstr);
-
    error(env, status);
     
   return result;
@@ -295,11 +298,10 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_text_NativeCollation_next
 JNIEXPORT jlong JNICALL Java_com_ibm_icu4jni_text_NativeCollation_openCollator__
   (JNIEnv *env, jclass obj)
 {
-  jint result;
+  jlong result;
   UErrorCode status = U_ZERO_ERROR;
 
-  result = (jint)ucol_open(NULL, &status);
-  
+  result = (jlong)ucol_open(NULL, &status);
   if ( error(env, status) != FALSE)
     return 0;
  
@@ -324,10 +326,10 @@ JNIEXPORT jlong JNICALL Java_com_ibm_icu4jni_text_NativeCollation_openCollator__
   /* this will be null terminated */
   const char *localestr = (*env)->GetStringUTFChars(env, locale, 0);
   
-  jint result;
+  jlong result;
   UErrorCode status = U_ZERO_ERROR;
 
-  result = (jint)ucol_open(localestr, &status);
+  result = (jlong)ucol_open(localestr, &status);
   (*env)->ReleaseStringUTFChars(env, locale, localestr);
   
   if ( error(env, status) != FALSE)
@@ -357,9 +359,9 @@ JNIEXPORT jlong JNICALL Java_com_ibm_icu4jni_text_NativeCollation_openCollatorFr
   const UChar *rulestr     = (const UChar *)(*env)->GetStringCritical(env, 
                                                                     rules, 0);
         UErrorCode status = U_ZERO_ERROR;
-        jint   result;
+        jlong   result;
   
-  result = (jint)ucol_openRules(rulestr, ruleslength, 
+  result = (jlong)ucol_openRules(rulestr, ruleslength, 
                                (UNormalizationMode)normalizationmode,
                                (UCollationStrength)strength, NULL, &status);
 
@@ -420,10 +422,10 @@ JNIEXPORT jlong JNICALL Java_com_ibm_icu4jni_text_NativeCollation_safeClone
 {
   const UCollator *collator = (const UCollator *)address;
   UErrorCode status = U_ZERO_ERROR;
-  jint result;
+  jlong result;
   jint buffersize = U_COL_SAFECLONE_BUFFERSIZE;
 
-  result = (jint)ucol_safeClone(collator, NULL, &buffersize, &status);
+  result = (jlong)ucol_safeClone(collator, NULL, &buffersize, &status);
 
   if ( error(env, status) != FALSE) {
     return 0;
@@ -464,7 +466,10 @@ JNIEXPORT void JNICALL Java_com_ibm_icu4jni_text_NativeCollation_setNormalizatio
   (JNIEnv *env, jclass obj, jlong address, jint normalizationmode)
 {
   UCollator *collator = (UCollator *)address;
-  ucol_setNormalization(collator, (UNormalizationMode)normalizationmode);
+  
+  if(collator){
+  	ucol_setNormalization(collator, (UNormalizationMode)normalizationmode);
+  }
 }
 
 /**
@@ -499,8 +504,8 @@ JNIEXPORT void JNICALL Java_com_ibm_icu4jni_text_NativeCollation_setText
 {
   UCollationElements *iterator = (UCollationElements *)address;
   UErrorCode status = U_ZERO_ERROR;
-  const UChar *str = (const UChar *)(*env)->GetStringCritical(env, source, 0);
   int strlength = (*env)->GetStringLength(env, source);
+  const UChar *str = (const UChar *)(*env)->GetStringCritical(env, source, 0);
   
   ucol_setText(iterator, str, strlength, &status);
   (*env)->ReleaseStringCritical(env, source, str);
