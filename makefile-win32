@@ -1,12 +1,18 @@
 # Microsoft Developer Studio Generated NMAKE File, Based on ICUInterface.dsp
 !IF "$(CFG)" == ""
 CFG="Debug"
-!MESSAGE No configuration specified. Defaulting to nmake /f "makefile-win32" CFG="Debug" ICUBIN="..\icu\bin".
+!MESSAGE No configuration specified. Defaulting to nmake /f "makefile-win32" CFG="Debug" ICUBIN="..\icu\bin" JDK14="TRUE".
 !ENDIF 
 
 !IF "$(ICUBIN)" == ""
 !ERROR Could not set ICUBIN
 !ENDIF 
+
+!IF "$(JDK14)" == "TRUE"
+BUILDCS = "BUILDCS"
+!ELSE
+BUILDCS = 
+!ENDIF
 
 !IF "$(CFG)" != "Release" && "$(CFG)" != "Debug"
 !MESSAGE Invalid configuration "$(CFG)" specified.
@@ -35,6 +41,7 @@ RSC=rc.exe
 BUILDDIR=.\build
 CLASSDIR=classes\com\ibm\icu4jni
 CONVDIR=$(CLASSDIR)\converters
+CSDIR=$(CLASSDIR)\charset
 NORMDIR=$(CLASSDIR)\text
 COMDIR=$(CLASSDIR)\common
 TESTDIR=$(CLASSDIR)\test
@@ -161,7 +168,7 @@ LINK32_OBJS= \
 
 <<
 
-"$(BUILDDIR)\java" : "BUILDCOMMON" "BUILDCONV" "BUILDNORM" "BUILDCOLL" "BUILDTEST"
+"$(BUILDDIR)\java" : "BUILDCOMMON" "BUILDCONV" "BUILDNORM" "BUILDCOLL" "BUILDTEST" $(BUILDCS)
 
 "BUILDCOMMON" :
     $(JAVAC_EXE) $(JAVA_FLAGS) $(SRCDIR)\$(COMDIR)\ErrorCode.java
@@ -172,7 +179,7 @@ LINK32_OBJS= \
 "BUILDNORM":
 	$(JAVAC_EXE) $(JAVA_FLAGS) $(SRCDIR)\$(NORMDIR)\NativeNormalizer.java  $(SRCDIR)\$(NORMDIR)\Normalizer.java
 
-"BUILDTEST" : "BUILDT1" "BUILDT2" "BUILDT3"
+"BUILDTEST" : "BUILDT1" "BUILDT2" "BUILDT3" 
 
 "BUILDT1" :
 	$(JAVAC_EXE) $(JAVA_FLAGS) 	 $(SRCDIR)\$(TESTDIR)\TestFmwk.java $(SRCDIR)\$(TESTDIR)\TestLog.java \
@@ -187,6 +194,9 @@ LINK32_OBJS= \
 
 "BUILDT3":
 	$(JAVAC_EXE) $(JAVA_FLAGS) $(SRCDIR)\$(TTDIR)\BasicTest.java $(SRCDIR)\$(TTDIR)\ConformanceTest.java $(SRCDIR)\$(TCDIR)\TestConverter.java $(SRCDIR)\$(TESTDIR)\TestAll.java
+
+"BUILDCS":
+	$(JAVAC_EXE) $(JAVA_FLAGS) $(SRCDIR)\$(CSDIR)\CharsetICU.java $(SRCDIR)\$(CSDIR)\CharsetDecoderICU.java $(SRCDIR)\$(CSDIR)\CharsetEncoderICU.java $(SRCDIR)\$(CSDIR)\CharsetProviderICU.java $(SRCDIR)\$(TESTDIR)\charset\TestCharset.java
 
 
 !IF "$(CFG)" == "Release" || "$(CFG)" == "Debug"
