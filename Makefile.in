@@ -69,7 +69,6 @@ CollationAttribute.java \
 CollationElementIterator.java \
 CollationKey.java \
 Collator.java \
-NormalizationMode.java \
 RuleBasedCollator.java \
 NativeNormalizer.java \
 Normalizer.java
