@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/RuleBasedCollator.java,v $ 
-* $Date: 2001/09/18 00:33:50 $ 
-* $Revision: 1.11 $
+* $Date: 2002/11/07 22:38:22 $ 
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -116,13 +116,10 @@ import com.ibm.icu4jni.common.ErrorCode;
 * string will be entered in the table.
 * <p>
 * This allows you to use a RuleBasedCollator to compare accented strings even 
-* when the collator is set to NO_DECOMPOSITION. There are two caveats, however.
-* First, if the strings to be collated contain combining sequences that may not 
-* be in canonical order, you should set the collator to 
-* CANONICAL_DECOMPOSITION or FULL_DECOMPOSITION to enable sorting of combining 
-* sequences.  Second, if the strings contain characters with compatibility 
-* decompositions (such as full-width and half-width forms), you must use 
-* FULL_DECOMPOSITION, since the rule tables only include canonical mappings.
+* when the collator is set to NO_DECOMPOSITION. However, if the strings to be 
+* collated contain combining sequences that may not be in canonical order, you 
+* should set the collator to CANONICAL_DECOMPOSITION to enable sorting of 
+* combining sequences.
 * For more information, see
 * <A HREF="http://www.aw.com/devpress">The Unicode Standard, Version 3.0</A>.)
 *
@@ -261,6 +258,7 @@ public final class RuleBasedCollator extends Collator
   * @param rules the collation rules to build the collation table from.
   * @exception ParseException thrown if rules are empty or a Runtime error
   *            if collator can not be created.
+  * @stable
   */
   public RuleBasedCollator(String rules) throws ParseException
   {
@@ -268,7 +266,7 @@ public final class RuleBasedCollator extends Collator
     if (rules.length() == 0)
       throw new ParseException("Build rules empty.", 0);
     m_collator_ = NativeCollation.openCollatorFromRules(rules,
-                              Normalizer.UNORM_NONE,
+                              CollationAttribute.VALUE_OFF,
                               CollationAttribute.VALUE_DEFAULT_STRENGTH);
   }
 
@@ -280,6 +278,12 @@ public final class RuleBasedCollator extends Collator
   * @param strength collation strength
   * @exception ParseException thrown if rules are empty or a Runtime error
   *            if collator can not be created.
+  * @see #PRIMARY
+  * @see #SECONDARY
+  * @see #TERTIARY
+  * @see #QUATERNARY
+  * @see #IDENTICAL
+  * @draft 2.4
   */
   public RuleBasedCollator(String rules, int strength) throws ParseException
   {
@@ -289,7 +293,7 @@ public final class RuleBasedCollator extends Collator
       throw ErrorCode.getException(ErrorCode.U_ILLEGAL_ARGUMENT_ERROR);
       
     m_collator_ = NativeCollation.openCollatorFromRules(rules,
-                                Normalizer.UNORM_NONE,
+                                CollationAttribute.VALUE_OFF,
                                 strength);
   }
 
@@ -297,15 +301,29 @@ public final class RuleBasedCollator extends Collator
   * RuleBasedCollator constructor. This takes the table rules and builds a 
   * collation table out of them. Please see RuleBasedCollator class
   * description for more details on the collation rule syntax.
+  * <p>Note API change starting from release 2.4. Prior to release 2.4, the 
+  * normalizationmode argument values are from the class 
+  * com.ibm.icu4jni.text.Normalization. In 2.4, 
+  * the valid normalizationmode arguments for this API are 
+  * CollationAttribute.VALUE_ON and CollationAttribute.VALUE_OFF.
+  * </p>
   * @param rules the collation rules to build the collation table from.
   * @param strength collation strength
   * @param normalizationmode normalization mode
   * @exception thrown when constructor error occurs
+  * @see #PRIMARY
+  * @see #SECONDARY
+  * @see #TERTIARY
+  * @see #QUATERNARY
+  * @see #IDENTICAL
+  * @see #CANONICAL_DECOMPOSITION
+  * @see #NO_DECOMPOSITION
+  * @draft 2.4
   */
   public RuleBasedCollator(String rules, int normalizationmode, int strength)
   {
     if (!CollationAttribute.checkStrength(strength) || 
-        !Normalizer.check(normalizationmode)) {
+        !CollationAttribute.checkNormalization(normalizationmode)) {
       throw ErrorCode.getException(ErrorCode.U_ILLEGAL_ARGUMENT_ERROR);
     }
       
@@ -318,6 +336,7 @@ public final class RuleBasedCollator extends Collator
   /**
   * Makes a complete copy of the current object.
   * @return a copy of this object if data clone is a success, otherwise null
+  * @stable
   */
   public Object clone() 
   {
@@ -347,6 +366,7 @@ public final class RuleBasedCollator extends Collator
   * @param target The target string.
   * @return result of the comparison, Collator.RESULT_EQUAL, 
   *         Collator.RESULT_GREATER or Collator.RESULT_LESS
+  * @stable
   */
   public int compare(String source, String target)
   {
@@ -356,7 +376,9 @@ public final class RuleBasedCollator extends Collator
   /**
   * Get the normalization mode for this object.
   * The normalization mode influences how strings are compared.
-  * @return normalization mode; one of the values from Normalizer
+  * @see #CANONICAL_DECOMPOSITION
+  * @see #NO_DECOMPOSITION
+  * @drafte 2.4
   */
   public int getDecomposition()
   {
@@ -364,17 +386,22 @@ public final class RuleBasedCollator extends Collator
   }
 
   /**
-  * Set the normalization mode used int this object
-  * The normalization mode influences how strings are compared.
-  * @param normalizationmode desired normalization mode; one of the values 
-  *        from Normalizer
-  * @exception thrown when argument does not belong to any normalization mode
+  * <p>Sets the decomposition mode of the Collator object on or off.
+  * If the decomposition mode is set to on, string would be decomposed into
+  * NFD format where necessary before sorting.</p>
+  * </p>
+  * @param decompositionmode the new decomposition mode
+  * @see #CANONICAL_DECOMPOSITION
+  * @see #NO_DECOMPOSITION
+  * @draft 2.4
   */
   public void setDecomposition(int decompositionmode)
   {
-    if (!Normalizer.check(decompositionmode)) 
+    if (!CollationAttribute.checkNormalization(decompositionmode)) 
       throw ErrorCode.getException(ErrorCode.U_ILLEGAL_ARGUMENT_ERROR);
-    NativeCollation.setNormalization(m_collator_, decompositionmode);
+    NativeCollation.setAttribute(m_collator_, 
+	                             CollationAttribute.NORMALIZATION_MODE,
+	                             decompositionmode);
   }
 
   /**
@@ -389,6 +416,12 @@ public final class RuleBasedCollator extends Collator
   * ignored.
   * </p>
   * @return the current comparison level.
+  * @see #PRIMARY
+  * @see #SECONDARY
+  * @see #TERTIARY
+  * @see #QUATERNARY
+  * @see #IDENTICAL
+  * @draft 2.4
   */
   public int getStrength()
   {
@@ -401,7 +434,7 @@ public final class RuleBasedCollator extends Collator
   * <p>Example of use:
   * <pre>
   * . Collator myCollation = Collator.createInstance(Locale::US);
-  * . myCollation.setStrength(CollationAttribute.VALUE_PRIMARY);
+  * . myCollation.setStrength(PRIMARY);
   * . // result will be "abc" == "ABC"
   * . // tertiary differences will be ignored
   * . int result = myCollation->compare("abc", "ABC");
@@ -409,6 +442,12 @@ public final class RuleBasedCollator extends Collator
   * @param strength the new comparison level.
   * @exception thrown when argument does not belong to any collation strength 
   *            mode or error occurs while setting data.
+  * @see #PRIMARY
+  * @see #SECONDARY
+  * @see #TERTIARY
+  * @see #QUATERNARY
+  * @see #IDENTICAL
+  * @draft 2.4
   */
   public void setStrength(int strength)
   {
@@ -431,6 +470,7 @@ public final class RuleBasedCollator extends Collator
   * </pre>
   * @param type the attribute to be set from CollationAttribute
   * @param value attribute value from CollationAttribute
+  * @draft 2.4
   */
   public void setAttribute(int type, int value)
   {
@@ -443,6 +483,7 @@ public final class RuleBasedCollator extends Collator
   * Gets the attribute to be used in comparison or transformation.
   * @param type the attribute to be set from CollationAttribute
   * @return value attribute value from CollationAttribute
+  * @stable
   */
   public int getAttribute(int type)
   {
@@ -462,6 +503,7 @@ public final class RuleBasedCollator extends Collator
   * java.util.Arrays.equals();
   * @param source string to be processed.
   * @return the sort key
+  * @stable
   */
   public CollationKey getCollationKey(String source)
   {
@@ -474,6 +516,7 @@ public final class RuleBasedCollator extends Collator
   * @param collatoraddress address of the C collator
   * @param source string for key to be generated
   * @return sort key
+  * @stable
   */
   public byte[] getSortKey(String source)
   {
@@ -484,6 +527,7 @@ public final class RuleBasedCollator extends Collator
   * Get the collation rules of this Collation object
   * The rules will follow the rule syntax.
   * @return collation rules.
+  * @stable
   */
   public String getRules()
   {
@@ -498,6 +542,7 @@ public final class RuleBasedCollator extends Collator
   * @param source string to iterate over
   * @return address of C collationelement
   * @exception thrown when error occurs
+  * @stable
   */
   public CollationElementIterator getCollationElementIterator(String source)
   {
@@ -511,6 +556,7 @@ public final class RuleBasedCollator extends Collator
   * Returns a hash of this collation object
   * Note this method is not complete, it only returns 0 at the moment.
   * @return hash of this collation object
+  * @stable
   */
   public int hashCode()
   {
@@ -527,6 +573,7 @@ public final class RuleBasedCollator extends Collator
   * Checks if argument object is equals to this object.
   * @param target object
   * @return true if source is equivalent to target, false otherwise 
+  * @stable
   */
   public boolean equals(Object target)
   {

@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/CollatorRegressionTest.java,v $ 
-* $Date: 2001/09/18 00:33:49 $ 
-* $Revision: 1.8 $
+* $Date: 2002/11/07 22:38:22 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -124,7 +124,7 @@ public final class CollatorRegressionTest extends TestFmwk
     {
     RuleBasedCollator c = (RuleBasedCollator)m_collator_.clone();
 
-    c.setDecomposition(Normalizer.UNORM_NFD);
+    c.setDecomposition(CollationAttribute.VALUE_ON);
     c.getCollationElementIterator(TEST_STRING_3_);
     }
     catch(Exception e)
@@ -150,7 +150,7 @@ public final class CollatorRegressionTest extends TestFmwk
 
     c.setStrength(CollationAttribute.VALUE_IDENTICAL);
 
-    c.setDecomposition(Normalizer.UNORM_NFD);
+    c.setDecomposition(CollationAttribute.VALUE_ON);
     compareStrings(c, decomp, result);
   }
   
@@ -162,7 +162,7 @@ public final class CollatorRegressionTest extends TestFmwk
   {
     RuleBasedCollator c = (RuleBasedCollator)m_collator_.clone();
 
-    c.setDecomposition(Normalizer.UNORM_NFKD);
+    c.setDecomposition(CollationAttribute.VALUE_ON);
     // synwee : changed
     c.setStrength(CollationAttribute.VALUE_SECONDARY);
 
@@ -186,15 +186,9 @@ public final class CollatorRegressionTest extends TestFmwk
 
     // Since the fix to this bug was to turn off decomposition for Korean 
     // collators, ensure that's what we got
-    // synwee : changed
-    /*
-    if (c.getDecomposition() != Normalizer.NO_NORMALIZATION)    
-      errln("Failed : Decomposition is not set to NO_DECOMPOSITION " +
-                    "for Korean collator");
-    */
-    if (c.getDecomposition() != Normalizer.UNORM_NONE)    
-      errln("Failed : Decomposition is not set to NO_DECOMPOSITION " +
-                    "for Korean collator");
+    if (c.getDecomposition() != CollationAttribute.VALUE_OFF)    
+      errln("Failed : Decomposition is not set to " + 
+	        "CollationAttribute.VALUE_OFF for Korean collator");
 
     Locale.setDefault(oldDefault);
   }
@@ -205,7 +199,7 @@ public final class CollatorRegressionTest extends TestFmwk
   */
   public void Test4059820() throws Exception
   {
-    String rules = "< a < b , c/a < d < z";
+    String rules = "& a < b , c/a < d < z";
     
     RuleBasedCollator c = new RuleBasedCollator(rules);
 
@@ -219,10 +213,10 @@ public final class CollatorRegressionTest extends TestFmwk
   */
   public void Test4060154() throws Exception
   {
-    String rules = "< g, G < h, H < i, I < j, J & H < \u0131, \u0130, i, I";
+    String rules = "& g, G < h, H < i, I < j, J & H < \u0131, \u0130, i, I";
     RuleBasedCollator c = new RuleBasedCollator(rules);
 
-    c.setDecomposition(Normalizer.UNORM_NFD);
+    c.setDecomposition(CollationAttribute.VALUE_ON);
 
     final String tertiary[] = {"\u0041", "\u0042", "\u0048", "\u0131", 
                                "\u0048", "\u0049", "\u0131", "\u0130", 
@@ -281,11 +275,11 @@ public final class CollatorRegressionTest extends TestFmwk
     String test2 = chars2;
 
     RuleBasedCollator c1 = (RuleBasedCollator)m_collator_.clone();
-    c1.setDecomposition(Normalizer.UNORM_NFKD);
+    c1.setDecomposition(CollationAttribute.VALUE_ON);
     CollationElementIterator i1 = c1.getCollationElementIterator(test1);
 
     RuleBasedCollator c2 = (RuleBasedCollator)m_collator_.clone();
-    c2.setDecomposition(Normalizer.UNORM_NONE);
+    c2.setDecomposition(CollationAttribute.VALUE_OFF);
     CollationElementIterator i2 = c2.getCollationElementIterator(test2);
 
     int ce1 = 1,
@@ -345,7 +339,7 @@ public final class CollatorRegressionTest extends TestFmwk
   */
   public void Test4078588() throws Exception
   {
-    RuleBasedCollator rbc = new RuleBasedCollator("< a < bb");
+    RuleBasedCollator rbc = new RuleBasedCollator("& a < bb");
 
     int result = rbc.compare("a", "bb");
 
@@ -370,7 +364,7 @@ public final class CollatorRegressionTest extends TestFmwk
     // Now that the default collators are set to NO_DECOMPOSITION
     // (as a result of fixing bug 4114077), we must set it explicitly
     // when we're testing reordering behavior.
-    c.setDecomposition(Normalizer.UNORM_NFD);
+    c.setDecomposition(CollationAttribute.VALUE_ON);
 
     if (!c.equals(s1, s2))
       errln("Failed : \u0041\u0300\u0316\u0327\u0315 = " +
@@ -452,7 +446,7 @@ public final class CollatorRegressionTest extends TestFmwk
   */
   public void Test4101940() throws Exception
   {
-    RuleBasedCollator c = new RuleBasedCollator("< a < b");
+    RuleBasedCollator c = new RuleBasedCollator("& a < b");
    
     CollationElementIterator i = c.getCollationElementIterator("");
     i.reset();
@@ -491,7 +485,7 @@ public final class CollatorRegressionTest extends TestFmwk
     final String tests[] = { "\ud4db", "\u1111\u1171\u11b6"};
     final int result[] = {Collator.RESULT_EQUAL};
 
-    c.setDecomposition(Normalizer.UNORM_NFD);
+    c.setDecomposition(CollationAttribute.VALUE_ON);
     compareStrings(c, tests, result);
   }
   
@@ -557,7 +551,7 @@ public final class CollatorRegressionTest extends TestFmwk
                       // Reordering --> equal                  
     final int result[] = {Collator.RESULT_EQUAL};
 
-    c.setDecomposition(Normalizer.UNORM_NFD);
+    c.setDecomposition(CollationAttribute.VALUE_ON);
     compareStrings(c, test2, result);
   }
   

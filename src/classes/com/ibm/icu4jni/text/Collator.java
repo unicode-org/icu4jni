@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/Collator.java,v $ 
-* $Date: 2001/06/06 19:49:16 $ 
-* $Revision: 1.7 $
+* $Date: 2002/11/07 22:38:22 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -76,28 +76,125 @@ import com.ibm.icu4jni.text.RuleBasedCollator;
 
 public abstract class Collator implements Cloneable
 { 
-  // public data member -------------------------------------------
+	// public data members ---------------------------------------------------
+        
+    /**
+     * Strongest collator strength value. Typically used to denote differences 
+     * between base characters. See class documentation for more explanation.
+     * @see #setStrength
+     * @see #getStrength
+     * @draft 2.4
+     */
+    public final static int PRIMARY = CollationAttribute.VALUE_PRIMARY;
+
+    /**
+     * Second level collator strength value. 
+     * Accents in the characters are considered secondary differences.
+     * Other differences between letters can also be considered secondary 
+     * differences, depending on the language. 
+     * See class documentation for more explanation.
+     * @see #setStrength
+     * @see #getStrength
+     * @draft 2.4
+     */
+    public final static int SECONDARY = CollationAttribute.VALUE_SECONDARY;
+
+    /**
+     * Third level collator strength value. 
+     * Upper and lower case differences in characters are distinguished at this
+     * strength level. In addition, a variant of a letter differs from the base 
+     * form on the tertiary level.
+     * See class documentation for more explanation.
+     * @see #setStrength
+     * @see #getStrength
+     * @draft 2.4
+     */
+    public final static int TERTIARY = CollationAttribute.VALUE_TERTIARY;                            
+
+    /**
+     * Fourth level collator strength value. 
+     * When punctuation is ignored 
+     * <a href="http://www-124.ibm.com/icu/userguide/Collate_Concepts.html#Ignoring_Punctuation">
+     * (see Ignoring Punctuations in the user guide)</a> at PRIMARY to TERTIARY 
+     * strength, an additional strength level can 
+     * be used to distinguish words with and without punctuation.
+     * See class documentation for more explanation.
+     * @see #setStrength
+     * @see #getStrength
+     * @draft 2.4
+     */
+    public final static int QUATERNARY = CollationAttribute.VALUE_QUATERNARY;
+
+    /**
+     * <p>
+     * Smallest Collator strength value. When all other strengths are equal, 
+     * the IDENTICAL strength is used as a tiebreaker. The Unicode code point 
+     * values of the NFD form of each string are compared, just in case there 
+     * is no difference. 
+     * See class documentation for more explanation.
+     * </p>
+     * <p>
+     * Note this value is different from JDK's
+     * </p>
+     * @draft 2.4
+     */
+    public final static int IDENTICAL = CollationAttribute.VALUE_IDENTICAL;
+
+    /**
+     * <p>Decomposition mode value. With NO_DECOMPOSITION set, Strings
+     * will not be decomposed for collation. This is the default
+     * decomposition setting unless otherwise specified by the locale
+     * used to create the Collator.</p>
+     *
+     * <p><strong>Note</strong> this value is different from the JDK's.</p>
+     * @see #CANONICAL_DECOMPOSITION
+     * @see #getDecomposition
+     * @see #setDecomposition
+     * @draft 2.4 
+     */
+    public final static int NO_DECOMPOSITION = CollationAttribute.VALUE_OFF;
+
+    /**
+     * <p>Decomposition mode value. With CANONICAL_DECOMPOSITION set,
+     * characters that are canonical variants according to the Unicode standard
+     * will be decomposed for collation.</p>
+     *
+     * <p>CANONICAL_DECOMPOSITION corresponds to Normalization Form D as
+     * described in <a href="http://www.unicode.org/unicode/reports/tr15/">
+     * Unicode Technical Report #15</a>.
+     * </p>
+     * @see #NO_DECOMPOSITION
+     * @see #getDecomposition
+     * @see #setDecomposition
+     * @draft 2.4 
+     */
+    public final static int CANONICAL_DECOMPOSITION 
+												= CollationAttribute.VALUE_ON;
   
-  // Collation result constants -----------------------------------
-  // corresponds to ICU's UCollationResult enum balues
-  /** 
-  * string a == string b 
-  */
-  public static final int RESULT_EQUAL = 0;
-  /** 
-  * string a > string b 
-  */
-  public static final int RESULT_GREATER = 1;
-  /** 
-  * string a < string b 
-  */
-  public static final int RESULT_LESS = -1;
-  /** 
-  * accepted by most attributes 
-  */
-  public static final int RESULT_DEFAULT = -1;
+	// Collation result constants -----------------------------------
+	// corresponds to ICU's UCollationResult enum balues
+	/** 
+	 * string a == string b 
+	 * @stable
+	 */
+    public static final int RESULT_EQUAL = 0;
+    /** 
+     * string a > string b 
+	 * @stable
+	 */
+	public static final int RESULT_GREATER = 1;
+	/** 
+	 * string a < string b 
+	 * @stable
+	 */
+	public static final int RESULT_LESS = -1;
+	/** 
+	 * accepted by most attributes 
+	 * @stable
+	 */
+	public static final int RESULT_DEFAULT = -1;
   
-  // public methods -----------------------------------------------
+	// public methods -----------------------------------------------
   
   /**
   * Factory method to create an appropriate Collator which uses the default
@@ -112,6 +209,7 @@ public abstract class Collator implements Cloneable
   * <li> null is returned
   * </ul>
   * @return an instance of Collator
+  * @stable
   */
   public static Collator getInstance()
   {
@@ -132,6 +230,7 @@ public abstract class Collator implements Cloneable
   * </ul>
   * @param locale to be used for collation
   * @return an instance of Collator
+  * @stable
   */
   public static Collator getInstance(Locale locale)
   {
@@ -144,6 +243,7 @@ public abstract class Collator implements Cloneable
   * @param source string
   * @param target string
   * @return true if source is equivalent to target, false otherwise 
+  * @stable
   */
   public boolean equals(String source, String target)
   {
@@ -154,12 +254,14 @@ public abstract class Collator implements Cloneable
   * Checks if argument object is equals to this object.
   * @param target object
   * @return true if source is equivalent to target, false otherwise 
+  * @stable
   */
   public abstract boolean equals(Object target);
   
   /**
   * Makes a copy of the current object.
   * @return a copy of this object
+  * @stable
   */
   public abstract Object clone() throws CloneNotSupportedException;
   
@@ -184,59 +286,76 @@ public abstract class Collator implements Cloneable
   * @param target target string.
   * @return result of the comparison, Collator.RESULT_EQUAL, 
   *         Collator.RESULT_GREATER or Collator.RESULT_LESS
+  * @stable
   */
   public abstract int compare(String source, String target);
                                                
-  /**
-  * Get the decomposition mode of this Collator
-  * Return values from com.ibm.icu4jni.text.Normalization.
-  * @return the decomposition mode
-  */
-  public abstract int getDecomposition();
+    /**
+     * Get the decomposition mode of this Collator. 
+     * @return the decomposition mode
+     * @see #CANONICAL_DECOMPOSITION
+	 * @see #NO_DECOMPOSITION
+	 * @draft 2.4
+     */
+    public abstract int getDecomposition();
 
-  /**
-  * Set the decomposition mode of the Collator object. 
-  * Argument values from com.ibm.icu4jni.text.Normalization.
-  * @param decompositionmode the new decomposition mode
-  */
-  public abstract void setDecomposition(int mode);
+    /**
+     * Set the normalization mode used int this object
+     * The normalization mode influences how strings are compared.
+     * @param mode desired normalization mode
+	 * @see #CANONICAL_DECOMPOSITION
+	 * @see #NO_DECOMPOSITION
+	 * @draft 2.4
+     */
+    public abstract void setDecomposition(int mode);
 
-  /**
-  * Determines the minimum strength that will be use in comparison or
-  * transformation.
-  * <p>
-  * E.g. with strength == CollationAttribute.VALUE_SECONDARY, the 
-  * tertiary difference 
-  * is ignored
-  * </p>
-  * <p>
-  * E.g. with strength == CollationAttribute.VALUE_PRIMARY, the 
-  * secondary and tertiary difference are ignored.
-  * </p>
-  * @return the current comparison level.
-  */
-  public abstract int getStrength();
+    /**
+	 * Determines the minimum strength that will be use in comparison or
+	 * transformation.
+	 * <p>
+	 * E.g. with strength == SECONDARY, the tertiary difference is ignored
+	 * </p>
+	 * <p>
+	 * E.g. with strength == PRIMARY, the secondary and tertiary difference 
+	 * are ignored.
+	 * </p>
+	 * @return the current comparison level.
+	 * @see #PRIMARY
+	 * @see #SECONDARY
+	 * @see #TERTIARY
+	 * @see #QUATERNARY
+	 * @see #IDENTICAL
+	 * @draft 2.4
+	 */
+	public abstract int getStrength();
   
   /**
   * Gets the attribute to be used in comparison or transformation.
   * @param type the attribute to be set from CollationAttribute
   * @return value attribute value from CollationAttribute
+  * @stable
   */
   public abstract int getAttribute(int type);
   
-  /**
-  * Sets the minimum strength to be used in comparison or transformation.
-  * <p>Example of use:
-  * <pre>
-  * . Collator myCollation = Collator.createInstance(Locale::US);
-  * . myCollation.setStrength(CollationAttribute.VALUE_PRIMARY);
-  * . // result will be "abc" == "ABC"
-  * . // tertiary differences will be ignored
-  * . int result = myCollation->compare("abc", "ABC");
-  * </pre>
-  * @param strength the new comparison level.
-  */
-  public abstract void setStrength(int strength);
+	/**
+	 * Sets the minimum strength to be used in comparison or transformation.
+	 * <p>Example of use:
+	 * <pre>
+	 * . Collator myCollation = Collator.createInstance(Locale::US);
+	 * . myCollation.setStrength(PRIMARY);
+	 * . // result will be "abc" == "ABC"
+	 * . // tertiary differences will be ignored
+	 * . int result = myCollation->compare("abc", "ABC");
+	 * </pre>
+	 * @param strength the new comparison level.
+	 * @see #PRIMARY
+	 * @see #SECONDARY
+	 * @see #TERTIARY
+	 * @see #QUATERNARY
+	 * @see #IDENTICAL
+	 * @draft 2.4
+	 */
+	 public abstract void setStrength(int strength);
   
   /**
   * Sets the attribute to be used in comparison or transformation.
@@ -251,6 +370,7 @@ public abstract class Collator implements Cloneable
   * </pre>
   * @param type the attribute to be set from CollationAttribute
   * @param value attribute value from CollationAttribute
+  * @stable
   */
   public abstract void setAttribute(int type, int value);
   
@@ -266,12 +386,14 @@ public abstract class Collator implements Cloneable
   * java.util.Arrays.equals();
   * @param source string to be processed.
   * @return the sort key
+  * @stable
   */
   public abstract CollationKey getCollationKey(String source);
   
   /**
   * Returns a hash of this collation object
   * @return hash of this collation object
+  * @stable
   */
   public abstract int hashCode();
 }

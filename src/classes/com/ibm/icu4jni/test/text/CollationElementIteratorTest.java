@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/CollationElementIteratorTest.java,v $ 
-* $Date: 2001/09/18 00:33:49 $ 
-* $Revision: 1.10 $
+* $Date: 2002/11/07 22:41:41 $ 
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -95,16 +95,16 @@ public final class CollationElementIteratorTest extends TestFmwk
       // Test with a contracting character sequence
       RuleBasedCollator collator = new RuleBasedCollator(
                              "&a,A < b,B < c,C, d,D < z,Z < ch,cH,Ch,CH",
-                             Normalizer.UNORM_NONE,
-                             CollationAttribute.VALUE_DEFAULT_STRENGTH);
+                             Collator.NO_DECOMPOSITION,
+                             Collator.TERTIARY);
 
       iterator = collator.getCollationElementIterator("abchdcba");
       previousNext(iterator);
       
       // Test with an expanding character sequence
       collator = new RuleBasedCollator("&a < b < c/abd < d",
-                             Normalizer.UNORM_NONE,
-                             CollationAttribute.VALUE_DEFAULT_STRENGTH);
+                             Collator.NO_DECOMPOSITION,
+                             Collator.TERTIARY);
 
       iterator = collator.getCollationElementIterator("abcd");
       previousNext(iterator);

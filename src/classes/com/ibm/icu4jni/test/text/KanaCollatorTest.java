@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/KanaCollatorTest.java,v $ 
-* $Date: 2001/11/02 17:56:44 $ 
-* $Revision: 1.7 $
+* $Date: 2002/11/07 22:38:22 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -37,7 +37,7 @@ public final class KanaCollatorTest extends TestFmwk
   public KanaCollatorTest() throws Exception
   {
     m_collator_ = Collator.getInstance(Locale.JAPAN);
-    m_collator_.setDecomposition(Normalizer.UNORM_NFD);
+    m_collator_.setDecomposition(CollationAttribute.VALUE_ON);
   }
   
   // public methods ================================================
@@ -110,7 +110,7 @@ public final class KanaCollatorTest extends TestFmwk
   */
   public void TestKatakanaHiragana()
   {
-    m_collator_.setDecomposition(Normalizer.UNORM_NFKD);
+    m_collator_.setDecomposition(CollationAttribute.VALUE_ON);
     m_collator_.setStrength(CollationAttribute.VALUE_QUATERNARY);
     m_collator_.setAttribute(CollationAttribute.CASE_LEVEL, 
                          CollationAttribute.VALUE_ON);
@@ -128,7 +128,7 @@ public final class KanaCollatorTest extends TestFmwk
   */
   public void TestChooonKigoo()
   {
-    m_collator_.setDecomposition(Normalizer.UNORM_NFKD);
+    m_collator_.setDecomposition(CollationAttribute.VALUE_ON);
     m_collator_.setStrength(CollationAttribute.VALUE_QUATERNARY);
     m_collator_.setAttribute(CollationAttribute.CASE_LEVEL, 
                          CollationAttribute.VALUE_ON);

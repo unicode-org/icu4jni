@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/CollationAttribute.java,v $ 
-* $Date: 2001/03/23 19:42:16 $ 
-* $Revision: 1.5 $
+* $Date: 2002/11/07 22:38:22 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -26,77 +26,120 @@ public final class CollationAttribute
   // Collation strength constants ----------------------------------
   /**
   * Default value, accepted by most attributes
+  * @stable
   */
   public static final int VALUE_DEFAULT = -1;
   /** 
   * Primary collation strength 
+  * @stable
   */
   public static final int VALUE_PRIMARY = 0;
   /** 
   * Secondary collation strength 
+  * @stable
   */
   public static final int VALUE_SECONDARY = 1;
   /** 
   * Tertiary collation strength 
+  * @stable
   */
   public static final int VALUE_TERTIARY = 2;
   /** 
   * Default collation strength 
+  * @stable
   */
   public static final int VALUE_DEFAULT_STRENGTH = VALUE_TERTIARY;
   /** 
   * Quaternary collation strength 
+  * @stable
   */
   public static final int VALUE_QUATERNARY = 3;
   /** 
   * Identical collation strength 
+  * @stable
   */
   public static final int VALUE_IDENTICAL = 15;
 
-  // French collation mode constants ---------------------------------
-  // FRENCH_COLLATION; CASE_LEVEL & DECOMPOSITION_MODE
+  /** 
+   * Turn the feature off - works for FRENCH_COLLATION, CASE_LEVEL, 
+   * HIRAGANA_QUATERNARY_MODE and DECOMPOSITION_MODE
+   * @stable
+   */
   public static final int VALUE_OFF = 16;
   public static final int VALUE_ON = 17;
   
-  // ALTERNATE_HANDLING mode constants --------------------------
+  /** 
+   * ALTERNATE_HANDLING mode constants
+   * @stable
+   */
   public static final int VALUE_SHIFTED = 20;
   public static final int VALUE_NON_IGNORABLE = 21;
 
-  // CASE_FIRST mode constants ----------------------------------
+  /** 
+   * CASE_FIRST mode constants
+   * @stable
+   */
   public static final int VALUE_LOWER_FIRST = 24;
   public static final int VALUE_UPPER_FIRST = 25;
 
-  // NORMALIZATION_MODE mode constants --------------------------
+  /** 
+   * NORMALIZATION_MODE mode constants
+   * @deprecated since 2.4, users advised to use VALUE_ON instead.
+   */
   public static final int VALUE_ON_WITHOUT_HANGUL = 28;
 
-  // Number of attribute value constants -----------------------------
+  /** 
+   * Number of attribute value constants
+   * @stable
+   */
   public static final int VALUE_ATTRIBUTE_VALUE_COUNT = 29;
 
   // Collation attribute constants -----------------------------------
   
-  // attribute for direction of secondary weights
+  /** 
+   * Attribute for direction of secondary weights
+   * @stable
+   */
   public static final int FRENCH_COLLATION = 0;
-  // attribute for handling variable elements
+  /** 
+   * Attribute for handling variable elements
+   * @stable
+   */
   public static final int ALTERNATE_HANDLING = 1;
-  // who goes first, lower case or uppercase
+  /** 
+   * Who goes first, lower case or uppercase.
+   * @stable
+   */
   public static final int CASE_FIRST = 2;
-  // do we have an extra case level
+  /** 
+   * Do we have an extra case level
+   * @stable
+   */
   public static final int CASE_LEVEL = 3;
-  // attribute for normalization
+  /** 
+   * Attribute for normalization
+   * @stable
+   */
   public static final int NORMALIZATION_MODE = 4; 
-  // attribute for strength 
+  /** 
+   * Attribute for strength 
+   * @stable
+   */
   public static final int STRENGTH = 5;
-  // attribute count
+  /** 
+   * Attribute count
+   * @stable
+   */
   public static final int ATTRIBUTE_COUNT = 6;
   
-  // public methods --------------------------------------------------
+  // package methods --------------------------------------------------
   
   /**
   * Checks if argument is a valid collation strength
   * @param strength potential collation strength
   * @return true if strength is a valid collation strength, false otherwise
   */
-  protected static boolean checkStrength(int strength)
+  static boolean checkStrength(int strength)
   {
     if (strength < VALUE_PRIMARY || 
         (strength > VALUE_QUATERNARY && strength != VALUE_IDENTICAL))
@@ -109,10 +152,24 @@ public final class CollationAttribute
   * @param type collation type to be checked
   * @return true if type is a valid collation type, false otherwise
   */
-  protected static boolean checkType(int type)
+  static boolean checkType(int type)
   {
     if (type < FRENCH_COLLATION || type > STRENGTH)
       return false;
+    return true;
+  }
+
+  /**
+  * Checks if argument is a valid normalization type
+  * @param type normalization type to be checked
+  * @return true if type is a valid normalization type, false otherwise
+  */
+  static boolean checkNormalization(int type)
+  {
+    if (type != VALUE_ON && type != VALUE_OFF 
+	    && type != VALUE_ON_WITHOUT_HANGUL) {
+        return false;
+	}
     return true;
   }
   
@@ -122,7 +179,7 @@ public final class CollationAttribute
   * @param value attribute value
   * @return true if the pair is valid, false otherwise
   */
-  protected static boolean checkAttribute(int type, int value)
+  static boolean checkAttribute(int type, int value)
   {
     if (value == VALUE_DEFAULT) {
       return true;

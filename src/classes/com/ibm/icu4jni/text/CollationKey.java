@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/CollationKey.java,v $ 
-* $Date: 2001/03/23 19:42:16 $ 
-* $Revision: 1.5 $
+* $Date: 2002/11/07 22:38:22 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -28,6 +28,7 @@ public final class CollationKey implements Comparable
   * @param target CollationKey to be compared
   * @return comparison result from Collator, RESULT_LESS, RESULT_EQUAL, 
   *         RESULT_GREATER
+  * @stable
   */
   public int compareTo(CollationKey target)
   {
@@ -82,6 +83,7 @@ public final class CollationKey implements Comparable
   * @param target CollationKey to be compared
   * @return comparison result from Collator, RESULT_LESS, RESULT_EQUAL, 
   * RESULT_GREATER
+  * @stable
   */
   public int compareTo(Object target)
   {
@@ -93,6 +95,7 @@ public final class CollationKey implements Comparable
   * Target is first casted to CollationKey and bitwise compared.
   * @param target comparison object
   * @return true if both objects are equal, false otherwise
+  * @stable
   */
   public boolean equals(Object target)
   {
@@ -116,6 +119,7 @@ public final class CollationKey implements Comparable
   * congruential random number generator, producing a pseudorandom 
   * deterministic value well distributed over the output range.
   * @return hash value of collation key. Hash value is never 0.
+  * @stable
   */
   public int hashCode()
   {
@@ -140,6 +144,7 @@ public final class CollationKey implements Comparable
   /**
   * Create the value of the Collation key in term of bytes
   * @return value of Collation key in bytes
+  * @stable
   */
   public byte[] toByteArray()
   {

@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/CollatorAPITest.java,v $ 
-* $Date: 2002/07/13 00:01:29 $ 
-* $Revision: 1.11 $
+* $Date: 2002/11/07 22:38:22 $ 
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -67,25 +67,25 @@ public final class CollatorAPITest extends TestFmwk
     if (collator.compare("Hello", "hello") != Collator.RESULT_GREATER)
       errln("Failed : Hello > hello comparison");
 
-    if (collator.getStrength() != CollationAttribute.VALUE_TERTIARY)
+    if (collator.getStrength() != Collator.TERTIARY)
       errln("Failed : Default collation have tertiary strength");
         
-    collator.setStrength(CollationAttribute.VALUE_SECONDARY);
-    if (collator.getStrength() != CollationAttribute.VALUE_SECONDARY)
+    collator.setStrength(Collator.SECONDARY);
+    if (collator.getStrength() != Collator.SECONDARY)
       errln("Failed : Collation strength set to secondary");
    
-    collator.setDecomposition(Normalizer.UNORM_NONE);
-    if (collator.getDecomposition() != Normalizer.UNORM_NONE)
+    collator.setDecomposition(Collator.NO_DECOMPOSITION);
+    if (collator.getDecomposition() != Collator.NO_DECOMPOSITION)
       errln("Failed : Collation strength set to no normalization");
 
     collator =  Collator.getInstance(Locale.FRENCH);
     
-    collator.setStrength(CollationAttribute.VALUE_PRIMARY);
-    if (collator.getStrength() != CollationAttribute.VALUE_PRIMARY)
+    collator.setStrength(Collator.PRIMARY);
+    if (collator.getStrength() != Collator.PRIMARY)
       errln("Failed : Collation strength set to primary");
       
-    collator.setStrength(CollationAttribute.VALUE_TERTIARY);
-    if (collator.getStrength() != CollationAttribute.VALUE_TERTIARY)
+    collator.setStrength(Collator.TERTIARY);
+    if (collator.getStrength() != Collator.TERTIARY)
       errln("Failed : Collation strength set to tertiary");
 
     // testing rubbish collator
@@ -156,17 +156,17 @@ public final class CollatorAPITest extends TestFmwk
 
     // there is no reason to have canonical decomposition in en_US OR default 
     // locale
-    if (vi_VN.getDecomposition() != Normalizer.UNORM_NFD) {
+    if (vi_VN.getDecomposition() != Collator.CANONICAL_DECOMPOSITION) {
       errln("Failed : vi_VN collation did not have cannonical " +
             "decomposition for normalization!");
     }
 
-    if (el_GR.getDecomposition() != Normalizer.UNORM_NFD) {
+    if (el_GR.getDecomposition() != Collator.CANONICAL_DECOMPOSITION) {
       errln("Failed : el_GR collation did not have cannonical " +
             "decomposition for normalization!");
     }
 
-    if (en_US.getDecomposition() != Normalizer.UNORM_NONE) {
+    if (en_US.getDecomposition() != Collator.NO_DECOMPOSITION) {
       errln("Failed : en_US collation had cannonical decomposition for " +
             "normalization!");
     }
@@ -185,8 +185,8 @@ public final class CollatorAPITest extends TestFmwk
     for (int i = 0; i < 3; i ++) {
       col = Collator.getInstance(loc[i]);
       clone = (Collator)col.clone();
-      clone.setStrength(CollationAttribute.VALUE_TERTIARY);
-      col.setStrength(CollationAttribute.VALUE_PRIMARY);
+      clone.setStrength(Collator.TERTIARY);
+      col.setStrength(Collator.PRIMARY);
       clone.setAttribute(CollationAttribute.CASE_LEVEL, 
                         CollationAttribute.VALUE_OFF);
       col.setAttribute(CollationAttribute.CASE_LEVEL, 
@@ -234,7 +234,7 @@ public final class CollatorAPITest extends TestFmwk
            test2 = "abcda";
     
     Collator defaultcollator = Collator.getInstance(Locale.ENGLISH);
-    defaultcollator.setStrength(CollationAttribute.VALUE_TERTIARY);
+    defaultcollator.setStrength(Collator.TERTIARY);
     CollationKey sortk1 = defaultcollator.getCollationKey(test1), 
                  sortk2 = defaultcollator.getCollationKey(test2);
     if (sortk1.compareTo(sortk2) != Collator.RESULT_GREATER)
@@ -247,7 +247,7 @@ public final class CollatorAPITest extends TestFmwk
       errln("Failed : sort key hashCode() for different strings " +
                     "should be different");
                     
-    defaultcollator.setStrength(CollationAttribute.VALUE_SECONDARY);
+    defaultcollator.setStrength(Collator.SECONDARY);
     if (defaultcollator.getCollationKey(test1).compareTo(
                                      defaultcollator.getCollationKey(test2)) 
                                      != Collator.RESULT_EQUAL) {
@@ -472,18 +472,18 @@ public final class CollatorAPITest extends TestFmwk
     }
 
     RuleBasedCollator col7 = new RuleBasedCollator(ruleset2, 
-                                           CollationAttribute.VALUE_TERTIARY);
+                                           Collator.TERTIARY);
     RuleBasedCollator col8 = new RuleBasedCollator(ruleset2, 
-                                  Normalizer.UNORM_NONE);
+                                  Collator.PRIMARY);
     RuleBasedCollator col9 = new RuleBasedCollator(ruleset2, 
-        Normalizer.UNORM_NFKD, CollationAttribute.VALUE_PRIMARY);
+        Collator.CANONICAL_DECOMPOSITION, Collator.PRIMARY);
     
     if (col7.equals(col9))
       errln("Failed : Two different rule collations should compare " +
                     "different");
     if (col8.equals(col9))
       errln("Failed : Two different rule collations should compare " +
-                    "equal");
+                    "different");
   }
 
   /**
@@ -524,12 +524,12 @@ public final class CollatorAPITest extends TestFmwk
     if (defaultcollator.compare(test1, test2) != Collator.RESULT_GREATER)
       errln("Failed : Result should be Abcda >>> abcda");
     
-    defaultcollator.setStrength(CollationAttribute.VALUE_SECONDARY);
+    defaultcollator.setStrength(Collator.SECONDARY);
     
     if (defaultcollator.compare(test1, test2) != Collator.RESULT_EQUAL)
       errln("Failed : Result should be Abcda == abcda");
     
-    defaultcollator.setStrength(CollationAttribute.VALUE_PRIMARY);
+    defaultcollator.setStrength(Collator.PRIMARY);
     
     if (!defaultcollator.equals(test1, test2))
       errln("Failed : Result should be Abcda == abcda");

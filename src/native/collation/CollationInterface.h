@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/native/collation/CollationInterface.h,v $ 
-* $Date: 2001/12/04 18:24:48 $ 
-* $Revision: 1.5 $
+* $Date: 2002/11/07 22:41:42 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -187,14 +187,6 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_text_NativeCollation_secondaryOrder
  */
 JNIEXPORT void JNICALL Java_com_ibm_icu4jni_text_NativeCollation_setAttribute
   (JNIEnv *, jclass, jlong, jint, jint);
-
-/*
- * Class:     com_ibm_icu4jni_text_NativeCollation
- * Method:    setNormalization
- * Signature: (JI)V
- */
-JNIEXPORT void JNICALL Java_com_ibm_icu4jni_text_NativeCollation_setNormalization
-  (JNIEnv *, jclass, jlong, jint);
 
 /*
  * Class:     com_ibm_icu4jni_text_NativeCollation

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/native/collation/CollationInterface.c,v $ 
-* $Date: 2002/10/29 01:19:35 $ 
-* $Revision: 1.10 $
+* $Date: 2002/11/07 22:41:42 $ 
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -384,7 +384,7 @@ JNIEXPORT jlong JNICALL Java_com_ibm_icu4jni_text_NativeCollation_openCollatorFr
   jlong   result        = 0;
   if(rulestr){
       result = (jlong)ucol_openRules(rulestr, ruleslength, 
-                                   (UNormalizationMode)normalizationmode,
+                                   (UColAttributeValue)normalizationmode,
                                    (UCollationStrength)strength, NULL, &status);
 
       (*env)->ReleaseStringCritical(env, rules, rulestr);
@@ -474,39 +474,6 @@ JNIEXPORT void JNICALL Java_com_ibm_icu4jni_text_NativeCollation_setAttribute
   ucol_setAttribute(collator, (UColAttribute)type, (UColAttributeValue)value, 
                     &status);
    error(env, status);
-}
-
-/**
-* Set the normalization mode used int this object
-* The normalization mode influences how strings are compared.
-* @param env JNI environment
-* @param obj RuleBasedCollatorJNI object
-* @param address the address of the C collator
-* @param normalizationmode desired normalization mode; one of the values 
-*        from NormalizerEnum
-*/
-JNIEXPORT void JNICALL Java_com_ibm_icu4jni_text_NativeCollation_setNormalization
-  (JNIEnv *env, jclass obj, jlong address, jint normalizationmode)
-{
-    UCollator *collator = (UCollator *)address;
-
-    if(collator){
-      UErrorCode status = U_ZERO_ERROR;
-      UNormalizationMode mode = (UNormalizationMode) normalizationmode;
-      switch(mode) {
-      case UNORM_NONE:
-        ucol_setAttribute(collator, UCOL_NORMALIZATION_MODE, UCOL_OFF, &status);
-        break;
-      case UNORM_NFD:
-        ucol_setAttribute(collator, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
-        break;
-      default:
-        /* Shouldn't get here. */
-        /* This is quite a bad API */
-        /* *status = U_ILLEGAL_ARGUMENT_ERROR; */
-        return;
-      }
-    }
 }
 
 /**
