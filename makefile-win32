@@ -1,13 +1,18 @@
 # Microsoft Developer Studio Generated NMAKE File, Based on ICUInterface.dsp
 !IF "$(CFG)" == ""
-CFG="Debug"
+CFG=Debug
 !MESSAGE No configuration specified. Defaulting to nmake /f "makefile-win32" CFG="Debug".
+!MESSAGE
+!MESSAGE You can specify a configuration when running NMAKE
+!MESSAGE by defining the macro CFG on the command line. For example:
+!MESSAGE 
+!MESSAGE NMAKE /f  "makefile-win32" CFG="Debug" ICUBIN="..\icu\bin"
+!MESSAGE 
 !ENDIF 
-
 
 !IF "$(ICUBIN)" == ""
 !IF "$(ICU_DATA)" == ""
-!ERROR Could not set ICUBIN please use command: NMAKE /f  "makefile-win32" CFG="Debug" ICUBIN="..\icu\bin" JDK14="TRUE" JAVAPATH="c:\jdk1.4\win32\bin"
+!ERROR Could not set ICUBIN. Please set ICUBIN to the path to the ICU bin directory, e.g. NMAKE /f  "makefile-win32" ICUBIN="c:\icu\bin"
 !ELSE
 ICUBIN = $(ICU_DATA)\..\..\bin
 !ENDIF
@@ -16,27 +21,19 @@ ICUBIN = $(ICU_DATA)\..\..\bin
 !IF "$(JDK14)" == "TRUE"
 BUILDCS = "BUILDCS"
 !ELSE
+!MESSAGE JDK14 set to FALSE
 BUILDCS = 
 !ENDIF
 
-!IF "$(JAVAPATH)" == ""
 !IF "$(JAVA_HOME)" == ""
-!ERROR Could not set JAVAPATH please use command:  NMAKE /f  "makefile-win32" CFG="Debug" ICUBIN="..\icu\bin" JDK14="TRUE" JAVAPATH="c:\jdk1.4\win32\bin"
+!ERROR JAVA_HOME is not set.  Please set it to the home of your java installation, e.g. "c:\jdk1.3"
 !ELSE
-JAVABIN=$(JAVA_HOME)\win32\bin\\
-!ENDIF
-!ELSE
-JAVABIN=$(JAVAPATH)\\
+JAVABIN=$(JAVA_HOME)\bin\\
 !ENDIF
 
 !IF "$(CFG)" != "Release" && "$(CFG)" != "Debug"
 !MESSAGE Invalid configuration "$(CFG)" specified.
-!MESSAGE You can specify a configuration when running NMAKE
-!MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE 
-!MESSAGE NMAKE /f  "makefile-win32" CFG="Debug" ICUBIN="..\icu\bin" JDK14="TRUE" JAVAPATH="c:\jdk1.4\win32\bin"
-!MESSAGE 
-!MESSAGE Possible choices for configuration are:
+!MESSAGE Possible choices for CFG are:
 !MESSAGE 
 !MESSAGE "Release" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE "Debug" (based on "Win32 (x86) Dynamic-Link Library")
