@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/KanaCollatorTest.java,v $ 
-* $Date: 2001/09/18 00:33:49 $ 
-* $Revision: 1.6 $
+* $Date: 2001/11/02 17:56:44 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -111,15 +111,14 @@ public final class KanaCollatorTest extends TestFmwk
   public void TestKatakanaHiragana()
   {
     m_collator_.setDecomposition(Normalizer.UNORM_NFKD);
-    m_collator_.setAttribute(CollationAttribute.CASE_LEVEL, 
-                         CollationAttribute.VALUE_ON);    
-    m_collator_.setStrength(CollationAttribute.VALUE_TERTIARY);
+    m_collator_.setStrength(CollationAttribute.VALUE_QUATERNARY);
     m_collator_.setAttribute(CollationAttribute.CASE_LEVEL, 
                          CollationAttribute.VALUE_ON);
-    for (int i = 0; i < 3 ; i ++)
+    for (int i = 0; i < 3 ; i ++) {
       CollatorTest.doTest(this, m_collator_, KATAKANA_HIRAGANA_CASE_[i], 
                           KATAKANA_HIRAGANA_CASE_[i + 1], 
                           Collator.RESULT_LESS);
+    }
   }
 
   /**
@@ -130,14 +129,13 @@ public final class KanaCollatorTest extends TestFmwk
   public void TestChooonKigoo()
   {
     m_collator_.setDecomposition(Normalizer.UNORM_NFKD);
+    m_collator_.setStrength(CollationAttribute.VALUE_QUATERNARY);
     m_collator_.setAttribute(CollationAttribute.CASE_LEVEL, 
                          CollationAttribute.VALUE_ON);
-    m_collator_.setStrength(CollationAttribute.VALUE_TERTIARY);
-    m_collator_.setAttribute(CollationAttribute.CASE_LEVEL, 
-                         CollationAttribute.VALUE_ON);
-    for (int i = 0; i < 6 ; i ++)
+    for (int i = 0; i < 6 ; i ++) {
       CollatorTest.doTest(this, m_collator_, CHOOON_KIGOO_CASE_[i], 
                           CHOOON_KIGOO_CASE_[i + 1], Collator.RESULT_LESS);
+    }
   }
   
   // private variables =============================================
@@ -179,11 +177,11 @@ public final class KanaCollatorTest extends TestFmwk
   private final int EXPECTED_TEST_RESULT_[] = 
   {
     Collator.RESULT_LESS,
-    Collator.RESULT_LESS,
+    Collator.RESULT_EQUAL,
     Collator.RESULT_LESS, 
+    Collator.RESULT_GREATER,
     Collator.RESULT_LESS,
-    Collator.RESULT_LESS,
-    Collator.RESULT_GREATER                                                     
+    Collator.RESULT_LESS                                                     
   };
  
   /* *
@@ -214,14 +212,14 @@ public final class KanaCollatorTest extends TestFmwk
   private final String KATAKANA_HIRAGANA_CASE_[] = {
     "\u3042\u30C3", "\u30A2\u30C3", "\u3042\u30C4", "\u30A2\u30C4"
   };
-
+  
   /**
   * Test data for Choo-on Kigoo comparison 
   */
   private final String CHOOON_KIGOO_CASE_[] = {
     "\u30AB\u30FC\u3042", "\u30AB\u30FC\u30A2", "\u30AB\u30A4\u3042", 
-    "\u30AB\u30A4\u30A2", "\u30AD\u30A4\u3042", "\u30AD\u30A4\u30A2", 
-    "\u30AD\u30FC\u3042", "\u30AD\u30FC\u30A2"
+    "\u30AB\u30A4\u30A2", "\u30AD\u30FC\u3042", "\u30AD\u30FC\u30A2",
+    "\u30AD\u30A4\u3042", "\u30AD\u30A4\u30A2"
   };
 }
 
