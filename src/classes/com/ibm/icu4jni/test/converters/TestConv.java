@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/test/converters/Attic/TestConv.java,v $ 
-* $Date: 2001/04/17 01:35:15 $ 
-* $Revision: 1.6 $
+* $Date: 2001/06/07 22:32:39 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */ 
@@ -24,7 +24,6 @@ public class TestConv{
 		   gbConvTest.testISO2022JP();
 		   gbConvTest.testISO2022CN();
 		   gbConvTest.testShiftJis();
-		   gbConvTest.testLatin5();
 	  }
 	final int REPEAT = 100;
 	final int BUFSIZE = 5;
