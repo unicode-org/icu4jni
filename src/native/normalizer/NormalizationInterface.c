@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/native/normalizer/NormalizationInterface.c,v $ 
-* $Date: 2001/12/04 18:24:48 $ 
-* $Revision: 1.6 $
+* $Date: 2004/06/07 22:24:19 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -116,7 +116,7 @@ Java_com_ibm_icu4jni_text_NativeNormalizer_normalize__Ljava_lang_String_2I_3Ljav
     jint sourceLength = (*env)->GetStringLength(env,source);
     UChar* target = NULL;    
     int32_t targetLength =0;
-    UChar dst[MAX_LENGTH];
+    UChar dst[MAX_LENGTH]={0};
     jstring retString;
     int retVal =0;
 
@@ -137,7 +137,7 @@ Java_com_ibm_icu4jni_text_NativeNormalizer_normalize__Ljava_lang_String_2I_3Ljav
            retString = (*env)->NewString(env,target,retVal);
            free(target);
        }else{
-           target[targetLength]=0;
+           target[retVal]=0;
            retString = (*env)->NewString(env,target,retVal);
        }
        

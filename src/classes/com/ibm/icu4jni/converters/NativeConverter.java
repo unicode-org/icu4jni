@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/converters/NativeConverter.java,v $ 
-* $Date: 2003/06/11 17:51:50 $ 
-* $Revision: 1.10 $
+* $Date: 2004/06/07 22:24:19 $ 
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */ 
@@ -298,7 +298,7 @@ public final class NativeConverter{
      * Ascertains if a given Unicode code unit can 
      * be converted to the target encoding
 	 * @param converterHandle Address of converter object created by the native code
-     * @param  the character to be converted
+     * @param  codeUnit the character to be converted
      * @return true if a character can be converted
      * @internal ICU 2.4
      * 
@@ -308,7 +308,7 @@ public final class NativeConverter{
     /**
      * Ascertains if a given a byte sequence can be converted to Unicode
 	 * @param converterHandle Address of converter object created by the native code
-     * @param  the bytes to be converted
+     * @param  bytes the bytes to be converted
      * @return true if a character can be converted
      * @internal ICU 2.4
      * 
@@ -331,7 +331,7 @@ public final class NativeConverter{
     
     /**
      * Gets the number of aliases for a converter name
-     * @param encoding name
+     * @param enc encoding name
      * @return number of aliases for the converter
      * @internal ICU 2.4
      */
@@ -339,7 +339,7 @@ public final class NativeConverter{
     
     /** 
      * Gets the aliases associated with the converter name
-     * @param converter name
+     * @param enc converter name
      * @return converter names as elements in an object array
      * @internal ICU 2.4
      */
@@ -347,7 +347,7 @@ public final class NativeConverter{
     
     /**
      * Gets the canonical name of the converter
-     * @param converter name
+     * @param enc converter name
      * @return canonical name of the converter
      * @internal ICU 2.4
      */

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/charset/CharsetProviderICU.java,v $ 
-* $Date: 2003/06/11 17:51:51 $ 
-* $Revision: 1.8 $
+* $Date: 2004/06/07 22:24:19 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */ 
@@ -30,7 +30,7 @@ public final class CharsetProviderICU extends CharsetProvider{
     
     /**
      * Constructs a charset for the given charset name
-     * @param charset name
+     * @param charsetName charset name
      * @return charset objet for the given charset name
      * @stable ICU 2.4
      */

@@ -5,7 +5,7 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/Normalizer.java,v $ 
-* $Date: 2002/12/19 22:00:28 $ 
+* $Date: 2004/06/07 22:24:19 $ 
 * $Revision: 
 *
 *******************************************************************************
@@ -131,7 +131,7 @@ public final class Normalizer{
    /**
     * Compose a string.
     * The string will be composed to according the the specified mode.
-    * @param source     The string to compose.
+    * @param str     The string to compose.
     * @param compat     If true the char array will be composed accoding to NFKC rules
     *                   and if false will be composed according to NFC rules.
     * @return String    The composed string   
@@ -146,7 +146,7 @@ public final class Normalizer{
     * Compose a string.
     * The string will be composed to according the the specified mode.
     * @param source The char array to compose.
-    * @param result A char buffer to receive the normalized text.
+    * @param target A char buffer to receive the normalized text.
     * @param compat If true the char array will be composed accoding to NFKC rules
     *               and if false will be composed according to NFC rules.
     * @return int   The total buffer size needed;if greater than length of result,
@@ -162,7 +162,7 @@ public final class Normalizer{
    /**
     * Decompose a string.
     * The string will be decomposed to according the the specified mode.
-    * @param source     The string to decompose.
+    * @param str     The string to decompose.
     * @param compat     If true the char array will be decomposed accoding to NFKD rules
     *                   and if false will be decomposed according to NFD rules.
     * @return String    The decomposed string  
@@ -177,7 +177,7 @@ public final class Normalizer{
     * Decompose a string.
     * The string will be decomposed to according the the specified mode.
     * @param source The char array to decompose.
-    * @param result A char buffer to receive the normalized text.
+    * @param target A char buffer to receive the normalized text.
     * @param compat If true the char array will be decomposed accoding to NFKD rules
     *               and if false will be decomposed according to NFD rules.
     * @return int   The total buffer size needed;if greater than length of result,
@@ -194,8 +194,8 @@ public final class Normalizer{
     * Normalize a string.
     * The string will be normalized according the the specified normalization mode
     * and options.
-    * @param source     The string to normalize.
-    * @param mode       The normalization mode; one of Normalizer.UNORM_NONE, 
+    * @param str     The string to normalize.
+    * @param normalizationMode       The normalization mode; one of Normalizer.UNORM_NONE, 
     *                   Normalizer.UNORM_NFD, Normalizer.UNORM_NFC, Normalizer.UNORM_NFKC, 
     *                   Normalizer.UNORM_NFKD, Normalizer.UNORM_DEFAULT
     * @return String    The normalized string
@@ -224,8 +224,8 @@ public final class Normalizer{
     * The string will be normalized according the the specified normalization mode
     * and options.
     * @param source The char array to normalize.
-    * @param result A char buffer to receive the normalized text.
-    * @param mode   The normalization mode; one of Normalizer.UNORM_NONE, 
+    * @param target A char buffer to receive the normalized text.
+    * @param normalizationMode   The normalization mode; one of Normalizer.UNORM_NONE, 
     *               Normalizer.UNORM_NFD, Normalizer.UNORM_NFC, Normalizer.UNORM_NFKC, 
     *               Normalizer.UNORM_NFKD, Normalizer.UNORM_DEFAULT
     * @return int   The total buffer size needed;if greater than length of result,

@@ -5,7 +5,7 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/NativeNormalizer.java,v $ 
-* $Date: 2003/06/11 17:51:50 $ 
+* $Date: 2004/06/07 22:24:19 $ 
 * $Revision: 
 *
 *******************************************************************************
@@ -43,7 +43,7 @@ final class NativeNormalizer {
     * @param sourceLength The length of source.
     * @param result A buffer to receive the normalized text.
     * @param resultLength The maximum size of result.
-    * @param mode The normalization mode; one of Normalizer.UNORM_NONE, 
+    * @param normalizationMode The normalization mode; one of Normalizer.UNORM_NONE, 
     * Normalizer.UNORM_NFD, Normalizer.UNORM_NFC, Normalizer.UNORM_NFKC, 
     * Normalizer.UNORM_NFKD, Normalizer.UNORM_DEFAULT
     * @param requiredLength A array to receive the total buffer size needed; 
@@ -62,12 +62,11 @@ final class NativeNormalizer {
     * The string will be normalized according the the specified normalization mode
     * and options.
     * @param source The string to normalize.
-    * @param mode The normalization mode; one of Normalizer.UNORM_NONE, 
+    * @param normalizationMode The normalization mode; one of Normalizer.UNORM_NONE, 
     * Normalizer.UNORM_NFD, Normalizer.UNORM_NFC, Normalizer.UNORM_NFKC, 
     * Normalizer.UNORM_NFKD, Normalizer.UNORM_DEFAULT
-    * @param requiredLength A array to receive the total buffer size needed; 
+    * @param target A array to receive the total buffer size needed; 
     *                       if greater than resultLength,the output was truncated.
-    * @param errorCode an array to receive the error code returned by ICU  
     * @return int error code returned by ICU
     * @internal ICU 2.4
     */
@@ -85,7 +84,7 @@ final class NativeNormalizer {
     * put the string in its normalized form and compare the results.
     *
     * @param source       string for determining if it is in a normalized format
-    * @param sourcelength length of source to test
+    * @param sourceLength length of source to test
     * @paran mode         normalization format from the enum UNormalizationMode
     * @param qcReturn     An array to receive quick check output which is  
     *                     Normalizer.UNORM_YES, Normalizer.UNORM_NO or
@@ -108,7 +107,6 @@ final class NativeNormalizer {
     * put the string in its normalized form and compare the results.
     *
     * @param source       string for determining if it is in a normalized format
-    * @param sourcelength length of source to test
     * @paran mode         normalization format from the enum UNormalizationMode
     * @param qcReturn     An array to receive quick check output which is  
     *                     Normalizer.UNORM_YES, Normalizer.UNORM_NO or

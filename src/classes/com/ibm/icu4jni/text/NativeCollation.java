@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/NativeCollation.java,v $ 
-* $Date: 2003/06/11 17:51:50 $ 
-* $Revision: 1.10 $
+* $Date: 2004/06/07 22:24:19 $ 
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -61,7 +61,7 @@ final class NativeCollation
   /** 
   * Close a C collator
   * Once closed, a UCollatorOld should not be used.
-  * @param coll The UCollatorOld to close
+  * @param collatoraddress The UCollatorOld to close
   * @internal ICU 2.4
   */
   static native void closeCollator(long collatoraddress);
@@ -132,7 +132,7 @@ final class NativeCollation
   * @param collatoraddress address of the C collator
   * @param type type of attribute to be set
   * @param value attribute value
-  * @exception thrown when error occurs while setting attribute value
+  * @exception RuntimeException when error occurs while setting attribute value
   * @internal ICU 2.4
   */
   static native void setAttribute(long collatoraddress, int type, int value);
@@ -142,7 +142,7 @@ final class NativeCollation
   * @param collatoraddress address of the C collator
   * @param type type of attribute to be set
   * @return attribute value
-  * @exception thrown when error occurs while getting attribute value
+  * @exception RuntimeException thrown when error occurs while getting attribute value
   * @internal ICU 2.4
   */
   static native int getAttribute(long collatoraddress, int type);
@@ -151,7 +151,7 @@ final class NativeCollation
   * Thread safe cloning operation
   * @param collatoraddress address of C collator to be cloned
   * @return address of the new clone
-  * @exception thrown when error occurs while cloning
+  * @exception RuntimeException thrown when error occurs while cloning
   * @internal ICU 2.4
   */
   static native long safeClone(long collatoraddress);
@@ -237,7 +237,7 @@ final class NativeCollation
   * Get the offset of the current source character.
   * This is an offset into the text of the character containing the current
   * collation elements.
-  * @param addresss of the C collation elements iterator to query.
+  * @param address of the C collation elements iterator to query.
   * @return offset of the current source character.
   * @internal ICU 2.4
   */

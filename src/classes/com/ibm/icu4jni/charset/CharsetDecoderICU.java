@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/charset/CharsetDecoderICU.java,v $ 
-* $Date: 2003/06/11 17:51:51 $ 
-* $Revision: 1.9 $
+* $Date: 2004/06/07 22:24:18 $ 
+* $Revision: 1.10 $
 *
 *
 *******************************************************************************
@@ -63,9 +63,9 @@ public final class CharsetDecoderICU extends CharsetDecoder{
     
     /** 
      * Construcs a new decoder for the given charset
-     * @param charset for which the decoder is created
+     * @param cs for which the decoder is created
      * @param cHandle the address of ICU converter
-     * @exception UnsupportedCharsetException
+     * @exception RuntimeException
      * @stable ICU 2.4
      */
     public CharsetDecoderICU(Charset cs,long cHandle){
@@ -91,7 +91,7 @@ public final class CharsetDecoderICU extends CharsetDecoder{
     /**
      * Sets this decoders replacement string. Substitutes the string in input if an
      * umappable or illegal sequence is encountered
-     * @param string to replace the error bytes with
+     * @param newReplacement to replace the error bytes with
      * @stable ICU 2.4
      */    
     protected void implReplaceWith(String newReplacement) {
@@ -111,7 +111,7 @@ public final class CharsetDecoderICU extends CharsetDecoder{
     
     /**
      * Sets the action to be taken if an illegal sequence is encountered
-     * @param new action to be taken
+     * @param newAction action to be taken
      * @exception IllegalArgumentException
      * @stable ICU 2.4
      */
@@ -131,7 +131,7 @@ public final class CharsetDecoderICU extends CharsetDecoder{
     
     /**
      * Sets the action to be taken if an illegal sequence is encountered
-     * @param new action to be taken
+     * @param newAction action to be taken
      * @exception IllegalArgumentException
      * @stable ICU 2.4
      */
@@ -151,7 +151,7 @@ public final class CharsetDecoderICU extends CharsetDecoder{
     /**
      * Flushes any characters saved in the converter's internal buffer and
      * resets the converter.
-     * @param new action to be taken
+     * @param out action to be taken
      * @return result of flushing action and completes the decoding all input. 
      *         Returns CoderResult.UNDERFLOW if the action succeeds.
      * @stable ICU 2.4
@@ -199,8 +199,8 @@ public final class CharsetDecoderICU extends CharsetDecoder{
      * conversion may be continued by calling convert again with suitably 
      * modified parameters.All conversions should be finished with a call to 
      * the flush method.
-     * @param input buffer to decode
-     * @param input buffer to populate with decoded result
+     * @param in buffer to decode
+     * @param out buffer to populate with decoded result
      * @return result of decoding action. Returns CoderResult.UNDERFLOW if the decoding
      *         action succeeds or more input is needed for completing the decoding action.
      * @stable ICU 2.4

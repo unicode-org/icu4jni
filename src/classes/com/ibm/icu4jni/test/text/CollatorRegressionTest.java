@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/CollatorRegressionTest.java,v $ 
-* $Date: 2003/06/11 17:51:50 $ 
-* $Revision: 1.11 $
+* $Date: 2004/06/07 22:24:19 $ 
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -46,7 +46,7 @@ public final class CollatorRegressionTest extends TestFmwk
 
   /**
   * Testing bug 4048446
-  * @exception thrown when error occurs while setting strength
+
   */
   public void Test4048446() throws Exception
   {
@@ -85,7 +85,7 @@ public final class CollatorRegressionTest extends TestFmwk
 
   /**
   * Testing bug 4051866
-  * @exception thrown when error occurs while setting strength
+
   */
   public void Test4051866() throws Exception
   {
@@ -105,7 +105,7 @@ public final class CollatorRegressionTest extends TestFmwk
   
   /**
   * Testing bug 4053636
-  * @exception thrown when error occurs while setting strength
+
   */
   public void Test4053636() throws Exception
   {
@@ -115,7 +115,7 @@ public final class CollatorRegressionTest extends TestFmwk
   
   /**
   * Testing bug 4054238
-  * @exception thrown when error occurs while setting strength
+
   */
   public void Test4054238() throws Exception
   {
@@ -134,7 +134,7 @@ public final class CollatorRegressionTest extends TestFmwk
   
   /**
   * Testing bug 4054734
-  * @exception thrown when error occurs while setting strength
+
   */
   public void Test4054734() throws Exception
   {
@@ -155,7 +155,7 @@ public final class CollatorRegressionTest extends TestFmwk
   
   /**
   * Testing bug 4054734
-  * @exception thrown when error occurs while setting strength
+
   */
   public void Test4054736() throws Exception
   {
@@ -174,7 +174,7 @@ public final class CollatorRegressionTest extends TestFmwk
   
   /**
   * Testing bug 4058613
-  * @exception thrown when error occurs while setting strength
+
   */
   public void Test4058613() throws Exception
   {
@@ -194,7 +194,7 @@ public final class CollatorRegressionTest extends TestFmwk
   
   /**
   * Testing bug 4059820
-  * @exception thrown when error occurs while setting strength
+
   */
   public void Test4059820() throws Exception
   {
@@ -208,7 +208,7 @@ public final class CollatorRegressionTest extends TestFmwk
   
   /**
   * Testing bug 4060154
-  * @exception thrown when error occurs while setting strength
+
   */
   public void Test4060154() throws Exception
   {
@@ -236,7 +236,7 @@ public final class CollatorRegressionTest extends TestFmwk
   
   /**
   * Testing bug 4062418
-  * @exception thrown when error occurs while setting strength
+
   */
   public void Test4062418() throws Exception
   {
@@ -254,7 +254,7 @@ public final class CollatorRegressionTest extends TestFmwk
   
   /**
   * Testing bug 4065540
-  * @exception thrown when error occurs while setting strength
+
   */
   public void Test4065540() throws Exception
   {
@@ -264,7 +264,7 @@ public final class CollatorRegressionTest extends TestFmwk
   
   /**
   * Testing bug 4066189
-  * @exception thrown when error occurs while setting strength
+
   */
   public void Test4066189() throws Exception
   {
@@ -298,7 +298,7 @@ public final class CollatorRegressionTest extends TestFmwk
   
   /**
   * Testing bug 4066696
-  * @exception thrown when error occurs while setting strength
+
   */
   public void Test4066696() throws Exception
   {
@@ -315,7 +315,7 @@ public final class CollatorRegressionTest extends TestFmwk
   
   /**
   * Testing bug 4076676
-  * @exception thrown when error occurs while setting strength
+
   */
   public void Test4076676() throws Exception
   {
@@ -334,7 +334,7 @@ public final class CollatorRegressionTest extends TestFmwk
   
   /**
   * Testing bug 4078588
-  * @exception thrown when error occurs while setting strength
+
   */
   public void Test4078588() throws Exception
   {
@@ -348,7 +348,7 @@ public final class CollatorRegressionTest extends TestFmwk
   
   /**
   * Testing bug 4081866
-  * @exception thrown when error occurs while setting strength
+
   */
   public void Test4081866() throws Exception
   {
@@ -372,7 +372,7 @@ public final class CollatorRegressionTest extends TestFmwk
   
   /**
   * Testing bug 4087241
-  * @exception thrown when error occurs while setting strength
+
   */
   public void Test4087241() throws Exception
   {
@@ -393,7 +393,7 @@ public final class CollatorRegressionTest extends TestFmwk
   
   /**
   * Testing bug 4087243
-  * @exception thrown when error occurs while setting strength
+
   */
   public void Test4087243() throws Exception
   {
@@ -409,7 +409,7 @@ public final class CollatorRegressionTest extends TestFmwk
   
   /**
   * Testing bug 4092260
-  * @exception thrown when error occurs while setting strength
+
   */
   public void Test4092260() throws Exception
   {
@@ -425,7 +425,7 @@ public final class CollatorRegressionTest extends TestFmwk
   
   /**
   * Testing bug 4095316
-  * @exception thrown when error occurs while setting strength
+
   */
   public void Test4095316() throws Exception
   {
@@ -441,7 +441,7 @@ public final class CollatorRegressionTest extends TestFmwk
   
   /**
   * Testing bug 4101940
-  * @exception thrown when error occurs while setting strength
+
   */
   public void Test4101940() throws Exception
   {
@@ -456,7 +456,7 @@ public final class CollatorRegressionTest extends TestFmwk
   
   /**
   * Testing bug 4103436
-  * @exception thrown when error occurs while setting strength
+
   */
   public void Test4103436() throws Exception
   {
@@ -474,7 +474,7 @@ public final class CollatorRegressionTest extends TestFmwk
   
   /**
   * Testing bug 4114076
-  * @exception thrown when error occurs while setting strength
+
   */
   public void Test4114076() throws Exception
   {
@@ -490,7 +490,7 @@ public final class CollatorRegressionTest extends TestFmwk
   
   /**
   * Testing bug 4124632
-  * @exception thrown when error occurs while setting strength
+
   */
   public void Test4124632() throws Exception
   {
@@ -501,7 +501,7 @@ public final class CollatorRegressionTest extends TestFmwk
   
   /**
   * Testing bug 4132736
-  * @exception thrown when error occurs while setting strength
+
   */
   public void Test4132736() throws Exception
   {
@@ -516,7 +516,7 @@ public final class CollatorRegressionTest extends TestFmwk
   
   /**
   * Testing bug 4133509
-  * @exception thrown when error occurs while setting strength
+
   */
   public void Test4133509() throws Exception
   {
@@ -536,7 +536,7 @@ public final class CollatorRegressionTest extends TestFmwk
   
   /**
   * Testing bug 4114077
-  * @exception thrown when error occurs while setting strength
+
   */
   public void Test4114077() throws Exception
   {
@@ -556,7 +556,7 @@ public final class CollatorRegressionTest extends TestFmwk
   
   /**
   * Testing bug 4139572
-  * @exception thrown when error occurs while setting strength
+
   */
   public void Test4139572() throws Exception
   {

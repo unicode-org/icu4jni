@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/G7CollatorTest.java,v $ 
-* $Date: 2001/03/23 19:43:17 $ 
-* $Revision: 1.6 $
+* $Date: 2004/06/07 22:24:19 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -42,7 +42,6 @@ public final class G7CollatorTest extends TestFmwk
 
   /**
   * Test with all 7 locales
-  * @exception thrown when error occurs while setting strength
   */
   public void TestLocales() throws Exception
   {
@@ -68,7 +67,6 @@ public final class G7CollatorTest extends TestFmwk
 
   /**
   * Test default rules + addition rules.
-  * @exception thrown when error occurs while setting strength
   */
   public void TestRules1() throws Exception
   {
@@ -87,7 +85,6 @@ public final class G7CollatorTest extends TestFmwk
   
   /**
   * Test default rules + addition rules.
-  * @exception thrown when error occurs while setting strength
   */
   public void TestRules2() throws Exception
   {
@@ -107,7 +104,6 @@ public final class G7CollatorTest extends TestFmwk
   
   /**
   * Test default rules + addition rules.
-  * @exception thrown when error occurs while setting strength
   */
   public void TestRules3() throws Exception
   {
@@ -128,7 +124,6 @@ public final class G7CollatorTest extends TestFmwk
   
   /**
   * Test default rules + addition rules.
-  * @exception thrown when error occurs while setting strength
   */
   public void TestRules4() throws Exception
   {

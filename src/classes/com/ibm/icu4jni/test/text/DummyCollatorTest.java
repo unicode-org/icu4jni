@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/DummyCollatorTest.java,v $ 
-* $Date: 2003/06/11 17:51:50 $ 
-* $Revision: 1.9 $
+* $Date: 2004/06/07 22:24:19 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -43,7 +43,6 @@ public final class DummyCollatorTest extends TestFmwk
 
   /**
   * Test with primary collation strength
-  * @exception thrown when error occurs while setting strength
   */
   public void TestPrimary() throws Exception
   {
@@ -65,7 +64,6 @@ public final class DummyCollatorTest extends TestFmwk
 
   /**
   * Test with secondary collation strength
-  * @exception thrown when error occurs while setting strength
   */
   public void TestSecondary() throws Exception
   {
@@ -83,7 +81,6 @@ public final class DummyCollatorTest extends TestFmwk
   
   /**
   * Test with tertiary collation strength
-  * @exception thrown when error occurs while setting strength
   */
   public void TestTertiary() throws Exception
   {
@@ -100,7 +97,6 @@ public final class DummyCollatorTest extends TestFmwk
   
   /**
   * Miscellaneous test
-  * @exception thrown when error occurs while setting strength
   */
   public void TestMiscellaneous() throws Exception
   {

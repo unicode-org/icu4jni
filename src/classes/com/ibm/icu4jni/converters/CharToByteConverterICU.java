@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/converters/CharToByteConverterICU.java,v $ 
-* $Date: 2002/12/18 22:54:29 $ 
-* $Revision: 1.10 $
+* $Date: 2004/06/07 22:24:19 $ 
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */ 
@@ -41,7 +41,7 @@
     /**
      * Create an instance of CharToByteConverterICU with the specified encoding.
      *
-     * @param string representing encoding
+     * @param enc representing encoding
      * @exception UnsupportedEncodingException if the converter could not be opened
      */
     public CharToByteConverterICU(String enc)
@@ -85,10 +85,10 @@
      * 
      * @return the number of bytes written to output.
      * @param input array containing Unicode characters to be converted.
-     * @param inStart begin conversion at this offset in input array.
+     * @param inOff begin conversion at this offset in input array.
      * @param inEnd stop conversion at this offset in input array (exclusive).
      * @param output byte array to receive conversion result.
-     * @param outStart start writing to output array at this offset.
+     * @param outOff start writing to output array at this offset.
      * @param outEnd stop writing to output array at this offset (exclusive).
      * @exception MalformedInputException if the input buffer contains any
      * sequence of chars that is illegal in Unicode (principally unpaired
@@ -211,7 +211,7 @@
     /**
      * Sets the substitution bytes 
      *
-     * @param array of bytes to used for substitution
+     * @param c array of bytes to used for substitution
      * @stable ICU 2.4
      */
     public final void setSubstitutionBytes(byte[] c) 
@@ -250,7 +250,7 @@
      * Ascertains if a given Unicode character can 
      * be converted to the target encoding
      *
-     * @param  the character to be converted
+     * @param  c the character to be converted
      * @return true if a character can be converted
      * 
      */
@@ -277,7 +277,7 @@
      *               }
      * }
      * 
-     * @param Unicode codeunit as int value
+     * @param codeUnit the Unicode codeunit as int value
      * @return true if a character can be converted
      * 
      */
@@ -334,7 +334,7 @@
     /**
      * Creates an ICU Converter of the specified encoding
      *
-     * @param  encoding string
+     * @param  enc string
      * @return CharToByteConverter object
      * @stable ICU 2.4
      */

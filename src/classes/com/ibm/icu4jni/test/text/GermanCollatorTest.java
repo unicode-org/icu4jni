@@ -6,8 +6,8 @@
 *
 * $Source: 
 * /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/GermanCollatorTest.java,v $ 
-* $Date: 2001/03/23 19:43:17 $ 
-* $Revision: 1.5 $
+* $Date: 2004/06/07 22:24:19 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -42,7 +42,6 @@ public final class GermanCollatorTest extends TestFmwk
 
   /**
   * Test with primary collation strength
-  * @exception thrown when error occurs while setting strength
   */
   public void TestPrimary() throws Exception
   {
@@ -55,7 +54,6 @@ public final class GermanCollatorTest extends TestFmwk
   
   /**
   * Test with tertiary collation strength
-  * @exception thrown when error occurs while setting strength
   */
   public void TestTertiary() throws Exception
   { 

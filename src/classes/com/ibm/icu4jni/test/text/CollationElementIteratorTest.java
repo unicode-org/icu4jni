@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/CollationElementIteratorTest.java,v $ 
-* $Date: 2003/06/11 17:51:50 $ 
-* $Revision: 1.13 $
+* $Date: 2004/06/07 22:24:19 $ 
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -78,7 +78,6 @@ public final class CollationElementIteratorTest extends TestFmwk
   
   /**
   * Testing previous method
-  * @exception thrown when error occurs while setting strength
   */
   public void TestPrevious()
   {
@@ -135,7 +134,6 @@ public final class CollationElementIteratorTest extends TestFmwk
   
   /**
   * Test for getOffset() and setOffset()
-  * @exception thrown when error occurs
   */
   public void TestOffset()
   {
@@ -167,7 +165,6 @@ public final class CollationElementIteratorTest extends TestFmwk
   
   /**
   * Text setting test
-  * @exception thrown when error occurs
   */
   public void TestSetText()
   {
@@ -202,7 +199,6 @@ public final class CollationElementIteratorTest extends TestFmwk
 
   /**  
   * Test for getMaxExpansion() @bug 4108762
-  * @exception thrown when error occurs
   */
   public void TestMaxExpansion()
   {

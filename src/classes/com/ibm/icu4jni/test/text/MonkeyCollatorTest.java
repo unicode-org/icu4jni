@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/MonkeyCollatorTest.java,v $ 
-* $Date: 2004/01/07 01:57:05 $ 
-* $Revision: 1.7 $
+* $Date: 2004/06/07 22:24:19 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -33,7 +33,6 @@ public final class MonkeyCollatorTest extends TestFmwk
   
   /**
   * Testing collation keys
-  * @exception thrown when error occurs while setting strength
   */
   private String source = "-abcdefghijklmnopqrstuvwxyz#&^$@";
     

@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/ThaiCollatorTest.java,v $ 
-* $Date: 2001/03/23 19:43:17 $ 
-* $Revision: 1.5 $
+* $Date: 2004/06/07 22:24:19 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -45,7 +45,6 @@ public final class ThaiCollatorTest extends TestFmwk
   * Selective strings are taken out of th18057.txt from ICU for testing.
   * Every interval of a 1000 strings 5 consecutive ones are tested.
   * Strings are in sorted increasing order.
-  * @exception thrown when error occurs 
   */
   public void TestStrings() throws Exception
   {
@@ -64,7 +63,6 @@ public final class ThaiCollatorTest extends TestFmwk
   /**
   * Test odd corner conditions taken from "How to Sort Thai Without 
   * Rewriting Sort", by Doug Cooper, http://seasrc.th.net/paper/thaisort.zip
-  * @exception thrown when error occurs 
   */
   public void TestOddCase() throws Exception
   {

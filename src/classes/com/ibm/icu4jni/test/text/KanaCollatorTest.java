@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/KanaCollatorTest.java,v $ 
-* $Date: 2003/06/11 17:51:50 $ 
-* $Revision: 1.10 $
+* $Date: 2004/06/07 22:24:19 $ 
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -43,7 +43,6 @@ public final class KanaCollatorTest extends TestFmwk
 
   /**
   * Test with tertiary collation strength
-  * @exception thrown when error occurs while setting strength
   */
   public void TestTertiary() throws Exception
   {
@@ -59,8 +58,6 @@ public final class KanaCollatorTest extends TestFmwk
   
   /**
   * Testing base letters 
-  * @exception thrown when error occurs while setting strength or 
-  *            normalization mode
   */
   public void TestBase()
   {
@@ -72,8 +69,6 @@ public final class KanaCollatorTest extends TestFmwk
 
   /** 
   * Testing plain, Daku-ten, Handaku-ten letters 
-  * @exception thrown when error occurs while setting strength or 
-  *            normalization mode
   */
   public void TestPlainDakutenHandakuten()
   {
@@ -122,8 +117,6 @@ public final class KanaCollatorTest extends TestFmwk
 
   /**
   * Test Choo-on kigoo
-  * @exception thrown when error occurs while setting strength or 
-  *            normalization mode or caselevel
   */
   public void TestChooonKigoo()
   {

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/RuleBasedCollator.java,v $ 
-* $Date: 2002/12/18 22:54:29 $ 
-* $Revision: 1.13 $
+* $Date: 2004/06/07 22:24:19 $ 
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -310,7 +310,7 @@ public final class RuleBasedCollator extends Collator
   * @param rules the collation rules to build the collation table from.
   * @param strength collation strength
   * @param normalizationmode normalization mode
-  * @exception thrown when constructor error occurs
+  * @exception IllegalArgumentException thrown when constructor error occurs
   * @see #PRIMARY
   * @see #SECONDARY
   * @see #TERTIARY
@@ -440,7 +440,7 @@ public final class RuleBasedCollator extends Collator
   * . int result = myCollation->compare("abc", "ABC");
   * </pre>
   * @param strength the new comparison level.
-  * @exception thrown when argument does not belong to any collation strength 
+  * @exception IllegalArgumentException when argument does not belong to any collation strength 
   *            mode or error occurs while setting data.
   * @see #PRIMARY
   * @see #SECONDARY
@@ -513,7 +513,6 @@ public final class RuleBasedCollator extends Collator
   /**
   * Get a sort key for the argument string
   * Sort keys may be compared using java.util.Arrays.equals
-  * @param collatoraddress address of the C collator
   * @param source string for key to be generated
   * @return sort key
   * @stable ICU 2.4 
@@ -538,10 +537,9 @@ public final class RuleBasedCollator extends Collator
   * Create a CollationElementIterator object that will iterator over the 
   * elements in a string, using the collation rules defined in this 
   * RuleBasedCollator
-  * @param collatoraddress address of C collator
   * @param source string to iterate over
   * @return address of C collationelement
-  * @exception thrown when error occurs
+  * @exception IllegalArgumentException thrown when error occurs
   * @stable ICU 2.4 
   */
   public CollationElementIterator getCollationElementIterator(String source)
@@ -604,8 +602,6 @@ public final class RuleBasedCollator extends Collator
   * <li> Data from built-in default collation rules if found, other
   * <li> null is returned
   * </ul>
-  * @param desiredLocale locale used
-  * @param status error code status
   */
   RuleBasedCollator()
   {
@@ -624,8 +620,7 @@ public final class RuleBasedCollator extends Collator
   * <li> Data from built-in default collation rules if found, other
   * <li> null is returned
   * </ul>
-  * @param desiredLocale locale used
-  * @param status error code status
+  * @param locale locale used
   */
   RuleBasedCollator(Locale locale)
   {

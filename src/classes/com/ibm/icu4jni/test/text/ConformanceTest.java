@@ -201,7 +201,7 @@ public class ConformanceTest extends TestFmwk {
      * @param got value received
      * @param exp expected value
      * @param msg description of this test
-     * @param return true if got == exp
+     * @return true if got == exp
      */
     private boolean assertEqual(String op, String s, String got,
                                 String exp, String msg) {

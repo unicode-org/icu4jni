@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/charset/CharsetICU.java,v $ 
-* $Date: 2003/06/11 17:51:51 $ 
-* $Revision: 1.7 $
+* $Date: 2004/06/07 22:24:19 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */ 
@@ -25,8 +25,8 @@ import com.ibm.icu4jni.converters.NativeConverter;
 public final class CharsetICU extends Charset{
     /**
      * Constructor to create a the CharsetICU object
-     * @param the canonical name as a string
-     * @param the alias set as an array of strings
+     * @param canonicalName the canonical name as a string
+     * @param aliases the alias set as an array of strings
      * @stable ICU 2.4
      */
     protected CharsetICU(String canonicalName, String[] aliases) {
@@ -73,7 +73,7 @@ public final class CharsetICU extends Charset{
     
     /**
      * Ascertains if a charset is a sub set of this charset
-     * @param charset to test
+     * @param cs charset to test
      * @return true if the given charset is a subset of this charset
      * @stable ICU 2.4
      */

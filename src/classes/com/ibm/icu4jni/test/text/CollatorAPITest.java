@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/CollatorAPITest.java,v $ 
-* $Date: 2003/06/11 17:51:50 $ 
-* $Revision: 1.14 $
+* $Date: 2004/06/07 22:24:19 $ 
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -46,7 +46,6 @@ public final class CollatorAPITest extends TestFmwk
   * Testing collator class properties.
   * Constructor, compare, strength retrieval/set, decomposition 
   * retrievale/set
-  * @exception thrown when error occurs while setting strength
   */
   public void TestProperties() throws Exception
   {
@@ -201,7 +200,6 @@ public final class CollatorAPITest extends TestFmwk
 
   /**
   * Testing hash code method
-  * @exception thrown when error occurs while setting strength
   */
   public void TestHashCode() throws Exception
   {
@@ -223,7 +221,6 @@ public final class CollatorAPITest extends TestFmwk
   
   /**
   * Test collation key
-  * @exception thrown when error occurs while setting strength
   */
   public void TestCollationKey() throws Exception
   {
@@ -256,7 +253,6 @@ public final class CollatorAPITest extends TestFmwk
   
   /**
   * Testing the functionality of the collation element iterator
-  * @exception thrown when error occurs while setting strength
   */
   public void TestElementIterator() throws Exception
   {       
@@ -428,7 +424,6 @@ public final class CollatorAPITest extends TestFmwk
 
   /** 
   * Test RuleBasedCollator constructor, clone, copy, and getRules
-  * @exception thrown when error occurs while setting strength
   */
   public void TestOperators() throws Exception
   {
@@ -487,7 +482,6 @@ public final class CollatorAPITest extends TestFmwk
 
   /**
   * Test clone and copy
-  * @exception thrown when error occurs while setting strength
   */
   public void TestDuplicate() throws Exception
   {
@@ -509,7 +503,6 @@ public final class CollatorAPITest extends TestFmwk
 
   /**
   * Testing compare methods
-  * @exception thrown when error occurs while setting strength
   */
   public void TestCompare() throws Exception
   {

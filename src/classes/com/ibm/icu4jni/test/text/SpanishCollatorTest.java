@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/SpanishCollatorTest.java,v $ 
-* $Date: 2003/06/11 17:51:50 $ 
-* $Revision: 1.7 $
+* $Date: 2004/06/07 22:24:19 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -42,7 +42,6 @@ public final class SpanishCollatorTest extends TestFmwk
 
   /**
   * Test with primary collation strength
-  * @exception thrown when error occurs while setting strength
   */
   public void TestPrimary() throws Exception
   {
@@ -54,7 +53,6 @@ public final class SpanishCollatorTest extends TestFmwk
 
   /**
   * Test with tertiary collation strength
-  * @exception thrown when error occurs while setting strength
   */
   public void TestTertiary() throws Exception
   {

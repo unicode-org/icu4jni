@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/converters/ByteToCharConverterICU.java,v $ 
-* $Date: 2003/06/11 17:51:50 $ 
-* $Revision: 1.11 $
+* $Date: 2004/06/07 22:24:19 $ 
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */ 
@@ -39,7 +39,7 @@
     /**
      * Create an instance of ByteToCharConverterICU with the specified encoding.
      *
-     * @param string representing encoding
+     * @param enc representing encoding
      * @exception UnsupportedEncodingException if the converter could not be opened
      * @stable ICU 2.4
      */
@@ -83,10 +83,10 @@
      *
      * @return the number of bytes written to output.
      * @param input byte array containing text to be converted.
-     * @param inStart begin conversion at this offset in input array.
+     * @param inOff begin conversion at this offset in input array.
      * @param inEnd stop conversion at this offset in input array (exclusive).
      * @param output character array to receive conversion result.
-     * @param outStart start writing to output array at this offset.
+     * @param outOff start writing to output array at this offset.
      * @param outEnd stop writing to output array at this offset (exclusive).
      * @exception MalformedInputException if the input buffer contains any
      * sequence of bytes that is illegal for the input character set.
@@ -211,7 +211,7 @@
      * longer than the value returned by getMaxCharsPerByte for this
      * converter.
      *
-     * @param newSubBytes the substitution bytes
+     * @param c the substitution bytes
      * @exception IllegalArgumentException if given byte array is longer than
      *    the value returned by the method getMaxBytesPerChar or if the 
      *    JNI interface has returned an error code
@@ -311,7 +311,7 @@
     /**
      * Creates an ICU Converter of the specified encoding
      *
-     * @param  encoding string
+     * @param  enc string
      * @return ByteToCharConverter object
      * @stable ICU 2.4
      */
