@@ -1,1 +1,4 @@
 * text=auto !eol
+src/JNI.ve2 -text
+src/JNI.vep -text
+src/JNI.vpj -text
