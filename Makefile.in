@@ -128,7 +128,7 @@ HADERS =   $(CSRC_DIR)/common/ErrorCode.h  $(CSRC_DIR)/collation/CollationInterf
 LFLAGS += -L/usr/lib -lc 
 
 # get the hostname the code is built on
-CPPFLAGS := -I$(JAVA_HOME)/include	-I$(JAVA_HOME)/include/$(CANON) -I $(CSRC_DIR)/common -I $(CSRC_DIR)/collation -I $(CSRC_DIR)/converter $(CPPFLAGS)
+CPPFLAGS := -I$(JAVA_HOME)/include	-I$(JAVA_HOME)/include/$(CANON) -I $(CSRC_DIR)/common -I $(CSRC_DIR)/collation -I $(CSRC_DIR)/converter $(CPPFLAGS) -L/usr/lib -lC -lc
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local \
