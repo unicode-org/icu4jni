@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/native/collation/CollationInterface.c,v $ 
-* $Date: 2001/09/19 02:47:18 $ 
-* $Revision: 1.9 $
+* $Date: 2002/10/29 01:19:35 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -69,24 +69,30 @@ JNIEXPORT void JNICALL Java_com_ibm_icu4jni_text_NativeCollation_closeElements
 * @return result of the comparison, UCOL_EQUAL, UCOL_GREATER or UCOL_LESS
 */
 JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_text_NativeCollation_compare
-  (JNIEnv *env, jclass obj, jlong address, jstring source, jstring target)
-{
-  const UCollator *collator  = (const UCollator *)address;
-        jsize      srclength = (*env)->GetStringLength(env, source);
-        jsize      tgtlength = (*env)->GetStringLength(env, target);
-  const UChar     *srcstr    = (const UChar *)(*env)->GetStringCritical(env, 
-                                                                       source, 
-                                                                       0);
-  const UChar     *tgtstr    = (const UChar *)(*env)->GetStringCritical(env, 
-                                                                       target, 
-                                                                       0);
-  
-  jint result = -2; 
-  
-  result = ucol_strcoll(collator, srcstr, srclength, tgtstr, tgtlength);
-  (*env)->ReleaseStringCritical(env, source, srcstr);
-  (*env)->ReleaseStringCritical(env, target, tgtstr);
-  return result;
+  (JNIEnv *env, jclass obj, jlong address, jstring source, jstring target){
+    const UCollator *collator  = (const UCollator *)address;
+    jint result = -2;
+    if(collator){
+        jsize       srclength = (*env)->GetStringLength(env, source);
+        const UChar *srcstr   = (const UChar *)(*env)->GetStringCritical(env,source,0);
+        if(srcstr){
+            jsize       tgtlength = (*env)->GetStringLength(env, target);
+            const UChar *tgtstr    = (const UChar *)(*env)->GetStringCritical(env,target,0);
+            if(tgtstr){ 
+                  result = ucol_strcoll(collator, srcstr, srclength, tgtstr, tgtlength);
+                  (*env)->ReleaseStringCritical(env, source, srcstr);
+                  (*env)->ReleaseStringCritical(env, target, tgtstr);
+                  return result;
+            }else{
+                error(env,U_ILLEGAL_ARGUMENT_ERROR);
+            }
+        }else{
+            error(env,U_ILLEGAL_ARGUMENT_ERROR);
+        }
+    }else{
+        error(env,U_ILLEGAL_ARGUMENT_ERROR);
+    }
+    return result;
 }
 
 /**
@@ -99,16 +105,21 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_text_NativeCollation_compare
 * @exception thrown when error occurs while getting attribute value
 */
 JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_text_NativeCollation_getAttribute
-  (JNIEnv *env, jclass obj, jlong address, jint type)
-{
-  const UCollator *collator = (const UCollator *)address;
-  UErrorCode status = U_ZERO_ERROR;
-  jint result = (jint)ucol_getAttribute(collator, (UColAttribute)type, 
-                                        &status);
-  if ( error(env, status) != FALSE) {
+(JNIEnv *env, jclass obj, jlong address, jint type){
+
+    const UCollator *collator = (const UCollator *)address;
+    UErrorCode status = U_ZERO_ERROR;
+    if(collator){
+        jint result = (jint)ucol_getAttribute(collator, (UColAttribute)type, 
+                                            &status);
+        if (error(env, status) != FALSE){
+            return (jint)UCOL_DEFAULT;
+        }
+        return result;
+    }else{
+        error(env,U_ILLEGAL_ARGUMENT_ERROR);
+    }
     return (jint)UCOL_DEFAULT;
-  }
-  return result;
 }
 
 /** 
@@ -121,23 +132,26 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_text_NativeCollation_getAttribute
 * @return address of C collationelement
 */
 JNIEXPORT jlong JNICALL Java_com_ibm_icu4jni_text_NativeCollation_getCollationElementIterator
-  (JNIEnv *env, jclass obj, jlong address, jstring source)
-{
-        UErrorCode status    = U_ZERO_ERROR;
-        UCollator *collator  = (UCollator *)address;
-        jlong       result;
-        jsize      srclength = (*env)->GetStringLength(env, source);
+  (JNIEnv *env, jclass obj, jlong address, jstring source){
 
-  const UChar     *srcstr    = (const UChar *)(*env)->GetStringCritical(env, 
-                                                                       source, 
-                                                                       0);
+    UErrorCode status    = U_ZERO_ERROR;
+    UCollator *collator  = (UCollator *)address;
+    jlong       result=0;
+    if(collator){
+        jsize srclength     = (*env)->GetStringLength(env, source);
+        const UChar *srcstr = (const UChar *)(*env)->GetStringCritical(env,source,0);
+        if(srcstr){
+            result = (jlong)(ucol_openElements(collator, srcstr, srclength, &status));
 
-  result = (jlong)(ucol_openElements(collator, srcstr, srclength, &status));
-
-  (*env)->ReleaseStringCritical(env, source, srcstr);
-   error(env, status);
-    
-  return result;
+            (*env)->ReleaseStringCritical(env, source, srcstr);
+            error(env, status);
+        }else{
+            error(env, U_ILLEGAL_ARGUMENT_ERROR);
+        }
+    }else{
+        error(env, U_ILLEGAL_ARGUMENT_ERROR);
+    }
+    return result;
 }
 
 /**
@@ -169,8 +183,13 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_text_NativeCollation_getMaxExpansion
 JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_text_NativeCollation_getNormalization
   (JNIEnv *env, jclass obj, jlong address)
 {
+  UErrorCode status = U_ZERO_ERROR;
   const UCollator *collator = (const UCollator *)address;
-  return (jint)ucol_getNormalization(collator);
+  if(U_FAILURE(status)){
+       error(env, status);
+  }
+  return (jint)ucol_getAttribute(collator,UCOL_NORMALIZATION_MODE,&status);
+
 }
 
 /**
@@ -219,29 +238,33 @@ JNIEXPORT jbyteArray JNICALL Java_com_ibm_icu4jni_text_NativeCollation_getSortKe
   (JNIEnv *env, jclass obj, jlong address, jstring source)
 {
   const UCollator *collator  = (const UCollator *)address;
-        jsize      srclength = (*env)->GetStringLength(env, source);
-  const UChar     *srcstr    = (const UChar *)(*env)->GetStringCritical(env, 
-                                                                   source, 0);
-
-  uint8_t bytearray[UCOL_MAX_BUFFER];
-  
-  jint bytearraysize = ucol_getSortKey(collator, srcstr, srclength, bytearray, 
-                                       UCOL_MAX_BUFFER);
-
   jbyteArray result;
+  if(collator && source){
+      jsize srclength            = (*env)->GetStringLength(env, source);
+      const UChar *srcstr        = (const UChar *)(*env)->GetStringCritical(env,source, 0);
+      if(srcstr){
+          uint8_t bytearray[UCOL_MAX_BUFFER];
   
-  (*env)->ReleaseStringCritical(env, source, srcstr);
+          jint bytearraysize = ucol_getSortKey(collator, srcstr, srclength, bytearray, 
+                                               UCOL_MAX_BUFFER);
+  
+          (*env)->ReleaseStringCritical(env, source, srcstr);
 
-  if (bytearraysize == 0) {
-    return NULL;
+          if (bytearraysize == 0) {
+            return NULL;
+          }
+  
+          /* no problem converting uint8_t to int8_t, gives back the correct value
+           * tried and tested
+           */
+          result = (*env)->NewByteArray(env, bytearraysize);
+          (*env)->SetByteArrayRegion(env, result, 0, bytearraysize, bytearray);
+      }else{
+          error(env,U_ILLEGAL_ARGUMENT_ERROR);
+      }
+  }else{
+    error(env,U_ILLEGAL_ARGUMENT_ERROR);
   }
-  
-  /* no problem converting uint8_t to int8_t, gives back the correct value
-   * tried and tested
-   */
-  result = (*env)->NewByteArray(env, bytearraysize);
-  (*env)->SetByteArrayRegion(env, result, 0, bytearraysize, bytearray);
-
   return result;
 }
 
@@ -325,16 +348,16 @@ JNIEXPORT jlong JNICALL Java_com_ibm_icu4jni_text_NativeCollation_openCollator__
 {
   /* this will be null terminated */
   const char *localestr = (*env)->GetStringUTFChars(env, locale, 0);
-  
-  jlong result;
+  jlong result=0;
   UErrorCode status = U_ZERO_ERROR;
 
-  result = (jlong)ucol_open(localestr, &status);
-  (*env)->ReleaseStringUTFChars(env, locale, localestr);
-  
-  if ( error(env, status) != FALSE)
-    return 0;
- 
+  if(localestr){
+      result = (jlong)ucol_open(localestr, &status);
+      (*env)->ReleaseStringUTFChars(env, locale, localestr);
+      error(env, status);
+  }else{
+      error(env,U_ILLEGAL_ARGUMENT_ERROR);
+  }
   return result;
 }
 
@@ -355,19 +378,19 @@ JNIEXPORT jlong JNICALL Java_com_ibm_icu4jni_text_NativeCollation_openCollatorFr
   (JNIEnv *env, jclass obj, jstring rules, jint normalizationmode, 
    jint strength)
 {
-        jsize  ruleslength = (*env)->GetStringLength(env, rules);
-  const UChar *rulestr     = (const UChar *)(*env)->GetStringCritical(env, 
-                                                                    rules, 0);
-        UErrorCode status = U_ZERO_ERROR;
-        jlong   result;
-  
-  result = (jlong)ucol_openRules(rulestr, ruleslength, 
-                               (UNormalizationMode)normalizationmode,
-                               (UCollationStrength)strength, NULL, &status);
+  jsize  ruleslength    = (*env)->GetStringLength(env, rules);
+  const UChar *rulestr  = (const UChar *)(*env)->GetStringCritical(env,rules, 0);
+  UErrorCode status     = U_ZERO_ERROR;
+  jlong   result        = 0;
+  if(rulestr){
+      result = (jlong)ucol_openRules(rulestr, ruleslength, 
+                                   (UNormalizationMode)normalizationmode,
+                                   (UCollationStrength)strength, NULL, &status);
 
-  (*env)->ReleaseStringCritical(env, rules, rulestr);
-  if ( error(env, status) != FALSE) {
-    return 0;
+      (*env)->ReleaseStringCritical(env, rules, rulestr);
+      error(env, status);
+  }else{
+      error(env,U_ILLEGAL_ARGUMENT_ERROR);
   }
 
   return result;
@@ -465,11 +488,25 @@ JNIEXPORT void JNICALL Java_com_ibm_icu4jni_text_NativeCollation_setAttribute
 JNIEXPORT void JNICALL Java_com_ibm_icu4jni_text_NativeCollation_setNormalization
   (JNIEnv *env, jclass obj, jlong address, jint normalizationmode)
 {
-  UCollator *collator = (UCollator *)address;
-  
-  if(collator){
-  	ucol_setNormalization(collator, (UNormalizationMode)normalizationmode);
-  }
+    UCollator *collator = (UCollator *)address;
+
+    if(collator){
+      UErrorCode status = U_ZERO_ERROR;
+      UNormalizationMode mode = (UNormalizationMode) normalizationmode;
+      switch(mode) {
+      case UNORM_NONE:
+        ucol_setAttribute(collator, UCOL_NORMALIZATION_MODE, UCOL_OFF, &status);
+        break;
+      case UNORM_NFD:
+        ucol_setAttribute(collator, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
+        break;
+      default:
+        /* Shouldn't get here. */
+        /* This is quite a bad API */
+        /* *status = U_ILLEGAL_ARGUMENT_ERROR; */
+        return;
+      }
+    }
 }
 
 /**
