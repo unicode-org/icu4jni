@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/CollatorAPITest.java,v $ 
-* $Date: 2001/09/18 00:33:49 $ 
-* $Revision: 1.10 $
+* $Date: 2002/07/13 00:01:29 $ 
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -270,120 +270,161 @@ public final class CollatorAPITest extends TestFmwk
     Collator defaultcollator = Collator.getInstance(Locale.ENGLISH);
     
     CollationElementIterator iterator1 = 
-      ((RuleBasedCollator)defaultcollator).getCollationElementIterator(
-                                                                       test1);
+      ((RuleBasedCollator)defaultcollator).getCollationElementIterator(test1);
     iterator1.setOffset(6);
     iterator1.setOffset(0);
     
     // copy ctor
-    CollationElementIterator iterator2 = 
-      ((RuleBasedCollator)defaultcollator).getCollationElementIterator(
-                                                                       test1);
-    CollationElementIterator iterator3 =                                      
-      ((RuleBasedCollator)defaultcollator).getCollationElementIterator(
-                                                                       test2);
-    /* equals not implemented 
-    if (iterator1.equals(iterator2))
-      errln("Failed : Two iterators with different strings should " +
-                    "be different");
-    */
+    CollationElementIterator iterator2 = ((RuleBasedCollator)defaultcollator).getCollationElementIterator(test1);
+    CollationElementIterator iterator3 = ((RuleBasedCollator)defaultcollator).getCollationElementIterator(test2);
     
-    int order1 = iterator1.next();
-    int order2 = iterator2.getOffset();
-    if (order1 == order2) {
-      errln("Failed : Order result should not be the same");
+    int offset = 0;
+    offset = iterator1.getOffset();
+    if (offset != 0) {
+        errln("Error in getOffset for collation element iterator\n");
+        return;
     }
+    iterator1.setOffset(6);
+    iterator1.setOffset(0);
+
+    int order1, order2, order3;
+    
+	order1 = iterator1.next();
+    /* equals not implemented
+	if (iterator1.equals(iterator2)) {
+		errln("The first iterator advance failed");
+		return;
+	}
+	*/
     order2 = iterator2.next();
-    if (order1 != order2) {
-      errln("Failed : Order result should be the same");
-    }
-    int order3 = iterator3.next();
-    if (CollationElementIterator.primaryOrder(order1) != 
-        CollationElementIterator.primaryOrder(order3))
-      errln("Failed : The primary orders should be the same");
-    if (CollationElementIterator.secondaryOrder(order1) != 
-        CollationElementIterator.secondaryOrder(order3))
-      errln("Failed : The secondary orders should be the same");
-    if (CollationElementIterator.tertiaryOrder(order1) != 
-        CollationElementIterator.tertiaryOrder(order3))
-      errln("Failed : The tertiary orders should be the same");
-
-    order1 = iterator1.next(); 
-    order3 = iterator3.next();
-    
-    if (CollationElementIterator.primaryOrder(order1) != 
-        CollationElementIterator.primaryOrder(order3))
-      errln("Failed : The primary orders should be identical");
-    if (CollationElementIterator.tertiaryOrder(order1) == 
-        CollationElementIterator.tertiaryOrder(order3))
-      errln("Failed : The tertiary orders should be different");
-
-    order1 = iterator1.next(); 
-    order3 = iterator3.next();
-    if (CollationElementIterator.secondaryOrder(order1) == 
-        CollationElementIterator.secondaryOrder(order3))
-      errln("Failed : The secondary orders should not be same");
       
-    if (order1 == CollationElementIterator.NULLORDER)
-      errln("Failed : Unexpected end of iterator reached");
-
+	/* equals not implemented  
+    if (!iterator1.equals(iterator2)) {
+		errln("The second iterator advance failed");
+		return;
+	} 
+	*/
+    if (order1 != order2) {
+	    errln("The order result should be the same");
+		return;
+	}
+    order3 = iterator3.next();
+       
+    if (CollationElementIterator.primaryOrder(order1) != 
+        CollationElementIterator.primaryOrder(order3)) { 
+		errln("The primary orders should be the same");
+		return;
+	}
+    if (CollationElementIterator.secondaryOrder(order1) != 
+        CollationElementIterator.secondaryOrder(order3)) {
+		errln("The secondary orders should be the same");
+		return;
+	}
+    if (CollationElementIterator.tertiaryOrder(order1) != 
+        CollationElementIterator.tertiaryOrder(order3)) {
+		errln("The tertiary orders should be the same");
+		return;
+	}
+    
+    order1 = iterator1.next(); 
+    order3 = iterator3.next();
+        
+    if (CollationElementIterator.primaryOrder(order1) != 
+        CollationElementIterator.primaryOrder(order3)) {
+		errln("The primary orders should be identical");
+	}
+    if (CollationElementIterator.tertiaryOrder(order1) == 
+        CollationElementIterator.tertiaryOrder(order3)) {
+		errln("The tertiary orders should be different");
+		return;
+	}
+    
+    order1 = iterator1.next(); 
+    order3 = iterator3.next();
+    // invalid test wrong in UCA
+    // doAssert((CollationElementIterator.secondaryOrder(order1) != 
+    //    CollationElementIterator.secondaryOrder(order3)), "The secondary orders should not be the same");
+            
+    if (order1 == CollationElementIterator.NULLORDER) {
+		errln("Unexpected end of iterator reached");
+		return;
+	}
+    
     iterator1.reset(); 
-    iterator2.reset();
+    iterator2.reset(); 
     iterator3.reset();
     order1 = iterator1.next();
+        
+    /* equals not implemented
+	if (iterator1.equals(iterator2)) {
+		errln("The first iterator advance failed");
+		return;
+	}
+	*/
+        
     order2 = iterator2.next();
-    
-    order3 = iterator3.next();
-    
-    if (CollationElementIterator.primaryOrder(order1) != 
-        CollationElementIterator.primaryOrder(order3))
-      errln("Failed : The primary orders should be identical");
-    if (CollationElementIterator.secondaryOrder(order1) != 
-        CollationElementIterator.secondaryOrder(order3))
-      errln("Failed : The secondary orders should be identical");
-    if (CollationElementIterator.tertiaryOrder(order1) != 
-        CollationElementIterator.tertiaryOrder(order3))
-      errln("Failed : The tertiary orders should be identical");
-    
-    if (CollationElementIterator.primaryOrder(order1) != 
-        CollationElementIterator.primaryOrder(order2))
-      errln("Failed : The primary orders should be the same");
-    if (CollationElementIterator.secondaryOrder(order1) != 
-        CollationElementIterator.secondaryOrder(order2))
-      errln("Failed : The secondary orders should be the same");
-    if (CollationElementIterator.tertiaryOrder(order1) != 
-        CollationElementIterator.tertiaryOrder(order2))
-      errln("Failed : The tertiary orders should be the same");
-
-    order1 = iterator1.next(); 
-    order2 = iterator2.next();
-    order3 = iterator3.next();
+       
+    /* equals not implemented
+	if (!iterator1.equals(iterator2)) {
+		errln("The second iterator advance failed");
+		return;
+	}
+	*/
     if (order1 != order2) {
-      errln("Failed : The order result should be the same");
-    }
-    if (CollationElementIterator.primaryOrder(order1) != 
-        CollationElementIterator.primaryOrder(order3))
-      errln("Failed : The primary orders should be the same");
-    if (CollationElementIterator.tertiaryOrder(order1) == 
-        CollationElementIterator.tertiaryOrder(order3))
-      errln("Failed : The tertiary orders should be different");
-      
-    order1 = iterator1.next();
-    order3 = iterator3.next();
+		errln("The order result should be the same");
+		return;
+	}
     
-    if (CollationElementIterator.secondaryOrder(order1) == 
+    order3 = iterator3.next();
+        
+    if (CollationElementIterator.primaryOrder(order1) != 
+        CollationElementIterator.primaryOrder(order3)) {
+		errln("The primary orders should be the same");
+		return;
+	}
+    if (CollationElementIterator.secondaryOrder(order1) != 
         CollationElementIterator.secondaryOrder(order3)) {
-      errln("Failed : The secondary orders should not be the same");
-    }
+		errln("The secondary orders should be the same");
+		return;
+	}
+    if (CollationElementIterator.tertiaryOrder(order1) != 
+        CollationElementIterator.tertiaryOrder(order3)) {
+		errln("The tertiary orders should be the same");
+		return;
+	}
+    
+    order1 = iterator1.next(); 
+    order2 = iterator2.next(); 
+    order3 = iterator3.next();
+        
+    if (CollationElementIterator.primaryOrder(order1) != 
+        CollationElementIterator.primaryOrder(order3)) {
+		errln("The primary orders should be identical");
+		return;
+	}
+    if (CollationElementIterator.tertiaryOrder(order1) == 
+        CollationElementIterator.tertiaryOrder(order3)) {
+		errln("The tertiary orders should be different");
+		return;
+	}
+    
+    order1 = iterator1.next(); 
+    order3 = iterator3.next();
+        
+    // obsolete invalid test, removed
+    // doAssert((CollationElementIterator.secondaryOrder(order1) != 
+    //    CollationElementIterator.secondaryOrder(order3)), "The secondary orders should not be the same");
     if (order1 == CollationElementIterator.NULLORDER) {
-      errln("Failed : Unexpected end of iterator reached");
-    }
-
-    //test error values
-    iterator1.setText("hello there");
-    if (iterator1.previous() == CollationElementIterator.NULLORDER)
-      errln("Failed : Retrieval of previous value in a new iterator "
-                    + "has to return a NULLORDER");
+		errln("Unexpected end of iterator reached");
+		return;
+	}
+    /* equals not implemented
+	if (iterator2.equals(iterator3)) {
+		errln("The iterators should be different");
+		return;
+	}
+	*/
+    logln("testing CollationElementIterator ends...");
   }
 
   /** 
