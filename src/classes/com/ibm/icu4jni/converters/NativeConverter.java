@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/converters/NativeConverter.java,v $ 
-* $Date: 2001/10/16 17:23:05 $ 
-* $Revision: 1.3 $
+* $Date: 2001/10/18 01:15:53 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */ 
@@ -184,12 +184,36 @@ public final class NativeConverter{
     public static final native int countInvalidChars(long converterHandle, int[] length);
     
     /**
-     * Gets the numnber of bytes need for converting a char
+     * Gets the number of bytes needed for converting a char
      *
 	 * @param converterHandle Address of converter object created by the native code
      * @return number of bytes needed
      */ 
     public static final native int getMaxBytesPerChar(long converterHandle);
+   
+    /**
+     * Gets the average numnber of bytes needed for converting a char
+     *
+	 * @param converterHandle Address of converter object created by the native code
+     * @return number of bytes needed
+     */ 
+    public static final native float getAveBytesPerChar(long converterHandle);
+   
+    /**
+     * Gets the number of bytes needed for converting a char
+     *
+	 * @param converter name
+     * @return number of bytes needed
+     */ 
+    public static final native float aveBytesPerChar(String cnvName);
+    
+    /**
+     * Gets the number of bytes needed for converting a char
+     *
+	 * @param converter name
+     * @return number of bytes needed
+     */ 
+    public static final native float maxBytesPerChar(String cnvName);
     
     /**
      * Ascertains if a given Unicode code unit can 
@@ -210,14 +234,61 @@ public final class NativeConverter{
      */
     public static final native boolean canDecode(long converterHandle,byte[] bytes);
     
+    /**
+     * Gets the number of converters installed in the current installation of ICU
+     * @return int number of converters installed
+     */
     public static final native int countAvailable();
-    public static final native Object[] getAvailable();
-    public static final native int countAliases(String enc);
-    public static final native Object[] getAliases(String enc);
-    public static final native String getCanonicalName(String enc);
-    public static final native int setCallbackDecode(long converterHandle, int mode, boolean stopOnIllegal);
-    public static final native int setCallbackEncode(long converterHandle, int mode, boolean stopOnIllegal);
     
+    /**
+     * Gets the canonical names of available converters 
+     * @return Object[] names as an object array
+     */
+    public static final native Object[] getAvailable();
+    
+    /**
+     * Gets the number of aliases for a converter name
+     * @param encoding name
+     * @return number of aliases for the converter
+     */
+    public static final native int countAliases(String enc);
+    
+    /** 
+     * Gets the aliases associated with the converter name
+     * @param converter name
+     * @return converter names as elements in an object array
+     */
+    public static final native Object[] getAliases(String enc);
+    
+    /**
+     * Gets the canonical name of the converter
+     * @param converter name
+     * @return canonical name of the converter
+     */
+    public static final native String getCanonicalName(String enc);
+    
+    /**
+     * Sets the callback to Unicode for ICU conveter. The default behaviour of ICU callback
+     * is to call the specified callback function for both illegal and unmapped sequences.
+     * @param converterHandle Adress of the converter object created by native code
+     * @param mode call back mode to set. This is either STOP_CALLBACK, SKIP_CALLBACK or SUBSTITUE_CALLBACK
+     *        The converter performs the specified callback when an error occurs
+     * @param stopOnIllegal If true sets the alerts the converter callback to stop on an illegal sequence
+     * @return int error code returned by ICU
+     */
+    public static final native int setCallbackDecode(long converterHandle, int mode, boolean stopOnIllegal);
+   
+    /**
+     * Sets the callback from Unicode for ICU conveter. The default behaviour of ICU callback
+     * is to call the specified callback function for both illegal and unmapped sequences.
+     * @param converterHandle Adress of the converter object created by native code
+     * @param mode call back mode to set. This is either STOP_CALLBACK, SKIP_CALLBACK or SUBSTITUE_CALLBACK
+     *        The converter performs the specified callback when an error occurs
+     * @param stopOnIllegal If true sets the alerts the converter callback to stop on an illegal sequence
+     * @return int error code returned by ICU
+     */
+    public static final native int setCallbackEncode(long converterHandle, int mode, boolean stopOnIllegal);
+
     public static final int STOP_CALLBACK = 0;
     public static final int SKIP_CALLBACK = 1;
     public static final int SUBSTITUTE_CALLBACK = 3;
