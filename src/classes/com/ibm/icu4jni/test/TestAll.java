@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/test/TestAll.java,v $ 
- * $Date: 2001/09/18 00:33:49 $ 
- * $Revision: 1.5 $
+ * $Date: 2004/01/07 01:57:01 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -33,7 +33,6 @@ public class TestAll extends TestFmwk {
             new com.ibm.icu4jni.test.text.TurkishCollatorTest(),
             new com.ibm.icu4jni.test.text.FinnishCollatorTest(),
             new com.ibm.icu4jni.test.text.CurrencyCollatorTest(),
-            new com.ibm.icu4jni.test.text.DanishCollatorTest(),
             new com.ibm.icu4jni.test.text.DummyCollatorTest(),
             new com.ibm.icu4jni.test.text.FrenchCollatorTest(),
             new com.ibm.icu4jni.test.text.G7CollatorTest(),

@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/MonkeyCollatorTest.java,v $ 
-* $Date: 2001/03/23 19:43:17 $ 
-* $Revision: 1.6 $
+* $Date: 2004/01/07 01:57:05 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -15,10 +15,11 @@
 package com.ibm.icu4jni.test.text;
 
 import java.util.Locale;
+import java.util.Random;
+
 import com.ibm.icu4jni.text.Collator;
 import com.ibm.icu4jni.text.RuleBasedCollator;
 import com.ibm.icu4jni.text.CollationKey;
-import com.ibm.icu4jni.text.CollationAttribute;
 import com.ibm.icu4jni.test.TestFmwk;
 
 /**
@@ -30,192 +31,297 @@ import com.ibm.icu4jni.test.TestFmwk;
 public final class MonkeyCollatorTest extends TestFmwk 
 { 
   
-  // constructor ===================================================
-  
-  /**
-  * Constructor
-  */
-  public MonkeyCollatorTest() throws Exception
-  {
-    m_collator_ = Collator.getInstance(Locale.ENGLISH);
-  }
-  
-  // public methods ================================================
-
   /**
   * Testing collation keys
   * @exception thrown when error occurs while setting strength
   */
-  public void TestCollationKey() throws Exception
-  {
-    int s1 = (int)(Math.random() * SOURCE_TEST_CASE_.length());
-    int t1 = (int)(Math.random() * SOURCE_TEST_CASE_.length());
-    int s2 = (int)(Math.random() * SOURCE_TEST_CASE_.length());
-    int t2 = (int)(Math.random() * SOURCE_TEST_CASE_.length());
+  private String source = "-abcdefghijklmnopqrstuvwxyz#&^$@";
     
-    String subs = SOURCE_TEST_CASE_.substring(Math.min(s1, s2),
-                                              Math.max(s1, s2)),
-           subt = SOURCE_TEST_CASE_.substring(Math.min(t1, 2),
-                                              Math.max(t1, t2));
-
-    CollationKey ck1, ck2;
-    m_collator_.setStrength(CollationAttribute.VALUE_TERTIARY);
-    ck1 = m_collator_.getCollationKey(subs);
-    ck2 = m_collator_.getCollationKey(subt);
-    int result = ck1.compareTo(ck2);      // Tertiary
-    int revresult = ck2.compareTo(ck1) ;  // Tertiary
-    if (result != -revresult)
-    {
-      errln("Failed : Round trip collation key comparison");
-      return;
-    }
-
-    m_collator_.setStrength(CollationAttribute.VALUE_SECONDARY);
-    ck1 = m_collator_.getCollationKey(subs);
-    ck2 = m_collator_.getCollationKey(subt);
-    result = ck1.compareTo(ck2);      // Secondary
-    revresult = ck2.compareTo(ck1) ;  // Secondary
-    if (result != -revresult)
-    {
-      errln("Failed : Round trip collation key comparison");
-      return;
-    }
-
-    m_collator_.setStrength(CollationAttribute.VALUE_PRIMARY);
-    ck1 = m_collator_.getCollationKey(subs);
-    ck2 = m_collator_.getCollationKey(subt);
-    
-    result = ck1.compareTo(ck2);  // Tertiary
-    revresult = ck2.compareTo(ck1) ;  // Tertiary
-    
-    if (result != -revresult)
-    {
-      errln("Failed : Round trip collation key comparison");
-      return;
-    }
-
-    String news = subs + "\uE000";
-    ck1 = m_collator_.getCollationKey(subs);
-    ck2 = m_collator_.getCollationKey(news);
-    if (ck1.compareTo(ck2) != Collator.RESULT_LESS)
-    {
-      errln("Failed : Collation key comparison of a string and " +
-                    "a similar string with an extra character is expected " +
-                    "to return a LESS");
-      return;
-    }
-
-    if (ck2.compareTo(ck1) != Collator.RESULT_GREATER)
-    {
-      errln("Failed : Collation key comparison of a string and " +
-                    "a similar string with one less character is expected " +
-                    "to return a GREATER");
-      return;
-    }  
+  public static void main(String[] args) throws Exception {
+      new MonkeyCollatorTest().run(args);
   }
-
-  /**
-  * Test comparison methods
-  * @exception thrown when error occurs while setting strength
-  */
-  public void TestCompare() throws Exception
-  {
-    int s1 = (int)(Math.random() * SOURCE_TEST_CASE_.length());
-    int t1 = (int)(Math.random() * SOURCE_TEST_CASE_.length());
-    int s2 = (int)(Math.random() * SOURCE_TEST_CASE_.length());
-    int t2 = (int)(Math.random() * SOURCE_TEST_CASE_.length());
     
-    String subs = SOURCE_TEST_CASE_.substring(Math.min(s1, s2),
-                                              Math.max(s1, s2)),
-           subt = SOURCE_TEST_CASE_.substring(Math.min(t1, 2),
-                                              Math.max(t1, t2));
-
-    m_collator_.setStrength(CollationAttribute.VALUE_TERTIARY);
-    int result = m_collator_.compare(subs, subt);      // Tertiary
-    int revresult = m_collator_.compare(subt, subs);   // Tertiary
-    if (result != -revresult)
-    {
-      errln("Failed : Round trip collation key comparison");
-      return;
-    }
-
-    m_collator_.setStrength(CollationAttribute.VALUE_SECONDARY);
-    result = m_collator_.compare(subs, subt);      // Tertiary
-    revresult = m_collator_.compare(subt, subs);   // Tertiary
-    if (result != -revresult)
-    {
-      errln("Failed : Round trip collation key comparison");
-      return;
-    }
-
-    m_collator_.setStrength(CollationAttribute.VALUE_PRIMARY);
-    result = m_collator_.compare(subs, subt);      // Tertiary
-    revresult = m_collator_.compare(subt, subs);   // Tertiary
-    if (result != -revresult)
-    {
-      errln("Failed : Round trip collation key comparison");
-      return;
-    }
-
-    String news = subs + "\uE000";
-    if (m_collator_.compare(subs, news) != Collator.RESULT_LESS)
-    {
-      errln("Failed : Collation key comparison of a string and " +
-                    "a similar string with an extra character is expected " +
-                    "to return a LESS");
-      return;
-    }
-
-    if (m_collator_.compare(news, subs) != Collator.RESULT_GREATER)
-    {
-      errln("Failed : Collation key comparison of a string and " +
-                    "a similar string with one less character is expected " +
-                    "to return a GREATER");
-      return;
-    }  
+  public void TestCollationKey() {
+      if(source.length() == 0) {
+          errln("CollationMonkeyTest.TestCollationKey(): source is empty - ICU_DATA not set or data missing?");
+          return;
+      }
+      Collator myCollator;
+      try {
+           myCollator = Collator.getInstance(new Locale("en", "US"));
+      } catch (Exception e) {
+          errln("ERROR: in creation of collator of ENGLISH locale");
+          return;
+      }
+        
+      Random rand = createRandom(); // use test framework's random seed
+      int s = rand.nextInt(0x7fff) % source.length();
+      int t = rand.nextInt(0x7fff) % source.length();
+      int slen = Math.abs(rand.nextInt(0x7fff) % source.length() - source.length()) % source.length();
+      int tlen = Math.abs(rand.nextInt(0x7fff) % source.length() - source.length()) % source.length();
+      String subs = source.substring(Math.min(s, slen), Math.min(s + slen, source.length()));
+      String subt = source.substring(Math.min(t, tlen), Math.min(t + tlen, source.length()));
+    
+      CollationKey collationKey1, collationKey2;
+    
+      myCollator.setStrength(Collator.TERTIARY);
+      collationKey1 = myCollator.getCollationKey(subs);
+      collationKey2 = myCollator.getCollationKey(subt);
+      int result = collationKey1.compareTo(collationKey2);  // Tertiary
+      int revResult = collationKey2.compareTo(collationKey1);  // Tertiary
+      report( subs, subt, result, revResult);
+    
+      myCollator.setStrength(Collator.SECONDARY);
+      collationKey1 = myCollator.getCollationKey(subs);
+      collationKey2 = myCollator.getCollationKey(subt);
+      result = collationKey1.compareTo(collationKey2);  // Secondary
+      revResult = collationKey2.compareTo(collationKey1);   // Secondary
+      report( subs, subt, result, revResult);
+    
+      myCollator.setStrength(Collator.PRIMARY);
+      collationKey1 = myCollator.getCollationKey(subs);
+      collationKey2 = myCollator.getCollationKey(subt);
+      result = collationKey1.compareTo(collationKey2);  // Primary
+      revResult = collationKey2.compareTo(collationKey1);   // Primary
+      report(subs, subt, result, revResult);
+    
+      String msg = "";
+      String addOne = subs + String.valueOf(0xE000);
+    
+      collationKey1 = myCollator.getCollationKey(subs);
+      collationKey2 = myCollator.getCollationKey(addOne);
+      result = collationKey1.compareTo(collationKey2);
+      if (result != -1) {
+          msg += "CollationKey(";
+          msg += subs;
+          msg += ") .LT. CollationKey(";
+          msg += addOne;
+          msg += ") Failed.";
+          errln(msg);
+      }
+    
+      msg = "";
+      result = collationKey2.compareTo(collationKey1);
+      if (result != 1) {
+          msg += "CollationKey(";
+          msg += addOne;
+          msg += ") .GT. CollationKey(";
+          msg += subs;
+          msg += ") Failed.";
+          errln(msg);
+      }
   }
-  
-  /**
-  * Test rules
-  * @exception thrown when error occurs while setting strength
-  */
-  public void TestRules() throws Exception
-  {
-    String source[] = {"\u0061\u0062\u007a", "\u0061\u0062\u007a"};
-    String target[] = {"\u0061\u0062\u00e4", "\u0061\u0062\u0061\u0308"};
     
-    String rules = ((RuleBasedCollator)m_collator_).getRules();
-    String newrules = rules + " & z < " + "\u00e4";
+  // perform monkey tests using Collator.compare
+  public void TestCompare() {
+      if(source.length() == 0) {
+          errln("CollationMonkeyTest.TestCompare(): source is empty - ICU_DATA not set or data missing?");
+          return;
+      }
+        
+      Collator myCollator;
+      try {
+           myCollator = Collator.getInstance(new Locale("en", "US"));
+      } catch (Exception e) {
+          errln("ERROR: in creation of collator of ENGLISH locale");
+          return;
+      }
+        
+      /* Seed the random-number generator with current time so that
+       * the numbers will be different every time we run.
+       */
+        
+      Random rand = createRandom(); // use test framework's random seed
+      int s = rand.nextInt(0x7fff) % source.length();
+      int t = rand.nextInt(0x7fff) % source.length();
+      int slen = Math.abs(rand.nextInt(0x7fff) % source.length() - source.length()) % source.length();
+      int tlen = Math.abs(rand.nextInt(0x7fff) % source.length() - source.length()) % source.length();
+      String subs = source.substring(Math.min(s, slen), Math.min(s + slen, source.length()));
+      String subt = source.substring(Math.min(t, tlen), Math.min(t + tlen, source.length()));
     
-    RuleBasedCollator collator = new RuleBasedCollator(newrules);
+      myCollator.setStrength(Collator.TERTIARY);
+      int result = myCollator.compare(subs, subt);  // Tertiary
+      int revResult = myCollator.compare(subt, subs);  // Tertiary
+      report(subs, subt, result, revResult);
     
-    for (int i = 0; i < 2; i ++)
-      CollatorTest.doTest(this, collator, source[i], target[i], 
-                     Collator.RESULT_LESS);
+      myCollator.setStrength(Collator.SECONDARY);
+      result = myCollator.compare(subs, subt);  // Secondary
+      revResult = myCollator.compare(subt, subs);  // Secondary
+      report(subs, subt, result, revResult);
     
-    newrules = rules + " & z < a" + "\u0308";
+      myCollator.setStrength(Collator.PRIMARY);
+      result = myCollator.compare(subs, subt);  // Primary
+      revResult = myCollator.compare(subt, subs);  // Primary
+      report(subs, subt, result, revResult);
     
-    if (rules != null && rules.length() > 0)
-    {
-      collator = new RuleBasedCollator(rules);
-      
-      for (int i = 0; i < 2; i ++)
-        CollatorTest.doTest(this, collator, source[i], target[i], 
-                      Collator.RESULT_LESS);
-    }
+      String msg = "";
+      String addOne = subs + String.valueOf(0xE000);
+    
+      result = myCollator.compare(subs, addOne);
+      if (result != -1) {
+          msg += "Test : ";
+          msg += subs;
+          msg += " .LT. ";
+          msg += addOne;
+          msg += " Failed.";
+          errln(msg);
+      }
+    
+      msg = "";
+      result = myCollator.compare(addOne, subs);
+      if (result != 1) {
+          msg += "Test : ";
+          msg += addOne;
+          msg += " .GT. ";
+          msg += subs;
+          msg += " Failed.";
+          errln(msg);
+      }
   }
-  
-  // private variables =============================================
-  
-  /**
-  * Test collator
-  */
-  private Collator m_collator_;
-  
-  /**
-  * Source string for testing
-  */
-  private static final String SOURCE_TEST_CASE_ = 
-                                           "-abcdefghijklmnopqrstuvwxyz#&^$@";
+    
+  void report(String s, String t, int result, int revResult) {
+      if (revResult != -result) {
+          String msg = "";
+          msg += s; 
+          msg += " and ";
+          msg += t;
+          msg += " round trip comparison failed";
+          msg += " (result " + result + ", reverse Result " + revResult + ")"; 
+          errln(msg);
+      }
+  }
+    
+  public void TestRules() {
+      String testSourceCases[] = {
+          "\u0061\u0062\u007a", 
+          "\u0061\u0062\u007a", 
+      };
+    
+      String testTargetCases[] = {
+          "\u0061\u0062\u00e4",
+          "\u0061\u0062\u0061\u0308",
+      };
+        
+      int i=0;
+      logln("Demo Test 1 : Create a new table collation with rules \"& z < 0x00e4\"");
+      Collator col = Collator.getInstance(new Locale("en", "US"));
+      String baseRules = ((RuleBasedCollator)col).getRules();
+      String newRules = " & z < ";
+      newRules = baseRules + newRules + String.valueOf(0x00e4);
+      RuleBasedCollator myCollation = null;
+      try {
+          myCollation = new RuleBasedCollator(newRules);
+      } catch (Exception e) {
+          errln( "Demo Test 1 Table Collation object creation failed.");
+          return;
+      }
+        
+      for(i=0; i<2; i++){
+          doTest(myCollation, testSourceCases[i], testTargetCases[i], -1);
+      }
+      logln("Demo Test 2 : Create a new table collation with rules \"& z < a 0x0308\"");
+      newRules = "";
+      newRules = baseRules + " & z < a" + String.valueOf(0x0308);
+      try {
+          myCollation = new RuleBasedCollator(newRules);
+      } catch (Exception e) {
+          errln( "Demo Test 1 Table Collation object creation failed.");
+          return;
+      }
+      for(i=0; i<2; i++){
+          doTest(myCollation, testSourceCases[i], testTargetCases[i], -1);
+      }
+  }
+    
+  void doTest(RuleBasedCollator myCollation, String mysource, String target, int result) {
+      int compareResult = myCollation.compare(source, target);
+      CollationKey sortKey1, sortKey2;
+        
+      try {
+          sortKey1 = myCollation.getCollationKey(source);
+          sortKey2 = myCollation.getCollationKey(target);
+      } catch (Exception e) {
+          errln("SortKey generation Failed.\n");
+          return;
+      }
+      int keyResult = sortKey1.compareTo(sortKey2);
+      reportCResult( mysource, target, sortKey1, sortKey2, compareResult, keyResult, compareResult, result );
+  }
+    
+  public void reportCResult(String source, String target, CollationKey sourceKey, CollationKey targetKey,
+                            int compareResult, int keyResult, int incResult, int expectedResult ) {
+      if (expectedResult < -1 || expectedResult > 1) {
+          errln("***** invalid call to reportCResult ****");
+          return;
+      }
+      boolean ok1 = (compareResult == expectedResult);
+      boolean ok2 = (keyResult == expectedResult);
+      boolean ok3 = (incResult == expectedResult);
+      if (ok1 && ok2 && ok3 && !isVerbose()) {
+          return;    
+      } else {
+          String msg1 = ok1? "Ok: compare(\"" : "FAIL: compare(\"";
+          String msg2 = "\", \"";
+          String msg3 = "\") returned ";
+          String msg4 = "; expected ";
+          String sExpect = new String("");
+          String sResult = new String("");
+          sResult = appendCompareResult(compareResult, sResult);
+          sExpect = appendCompareResult(expectedResult, sExpect);
+          if (ok1) {
+              logln(msg1 + source + msg2 + target + msg3 + sResult);
+          } else {
+              errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
+          }
+          msg1 = ok2 ? "Ok: key(\"" : "FAIL: key(\"";
+          msg2 = "\").compareTo(key(\"";
+          msg3 = "\")) returned ";
+          sResult = appendCompareResult(keyResult, sResult);
+          if (ok2) {
+              logln(msg1 + source + msg2 + target + msg3 + sResult);
+          } else {
+              errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
+              msg1 = "  ";
+              msg2 = " vs. ";
+              errln(msg1 + prettify(sourceKey) + msg2 + prettify(targetKey));
+          }
+          msg1 = ok3 ? "Ok: incCompare(\"" : "FAIL: incCompare(\"";
+          msg2 = "\", \"";
+          msg3 = "\") returned ";
+          sResult = appendCompareResult(incResult, sResult);
+          if (ok3) {
+              logln(msg1 + source + msg2 + target + msg3 + sResult);
+          } else {
+              errln(msg1 + source + msg2 + target + msg3 + sResult + msg4 + sExpect);
+          }                
+      }
+  }
+    
+  String appendCompareResult(int result, String target) {
+      if (result == -1) {  //LESS
+          target += "LESS";
+      } else if (result == 0) {  //EQUAL
+          target += "EQUAL";
+      } else if (result == 1) {  //GREATER
+          target += "GREATER";
+      } else {
+          String huh = "?";
+          target += huh + result;
+      }
+      return target;
+  }
+    
+  String prettify(CollationKey sourceKey) {
+      int i;
+      byte[] bytes= sourceKey.toByteArray();
+      String target = "[";
+    
+      for (i = 0; i < bytes.length; i++) {
+          target += Integer.toHexString(bytes[i]);
+          target += " ";
+      }
+      target += "]";
+      return target;
+  }
 }
 

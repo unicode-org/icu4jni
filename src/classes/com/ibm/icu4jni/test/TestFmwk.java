@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/test/TestFmwk.java,v $ 
- * $Date: 2003/06/11 17:51:49 $ 
- * $Revision: 1.7 $
+ * $Date: 2004/01/07 01:57:01 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -17,7 +17,7 @@ import java.util.Hashtable;
 import java.util.Enumeration;
 import java.util.Vector;
 import java.io.*;
-
+import java.util.Random;
 
 /**
  * TestFmwk is a base class for tests that can be run conveniently from
@@ -277,6 +277,8 @@ public class TestFmwk implements TestLog {
     	public int         indentLevel = 0;
     	public boolean     needLineFeed = false;
     	public int         errorCount = 0;
+        public long        seed = System.currentTimeMillis(); 
+
     }
 
     /**
@@ -323,6 +325,11 @@ public class TestFmwk implements TestLog {
         while (current < output.length) {
             output[current++] = "";
         }
+    }
+    // use this instead of new random so we get a consistent seed 
+    // for our tests
+    protected Random createRandom() {
+        return new Random(params.seed);
     }
 
 	private TestParams params = null;
