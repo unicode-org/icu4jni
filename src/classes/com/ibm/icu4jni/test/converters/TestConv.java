@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/test/converters/Attic/TestConv.java,v $ 
-* $Date: 2001/06/08 18:36:22 $ 
-* $Revision: 1.8 $
+* $Date: 2001/06/12 23:03:15 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */ 
@@ -746,9 +746,9 @@ public class TestConv{
                     i++;
                 }
                 if(passed){
-                    System.out.println("--Test "+encoding+" to Unicode --PASSED");
+                    System.out.println("--Test convertAll() "+encoding+" to Unicode --PASSED");
                 }else{
-                    System.out.println("--Test "+encoding+" to Unicode  --FAILED");
+                    System.out.println("--Test convertAll() "+encoding+" to Unicode  --FAILED");
                 }
                 
             }
@@ -781,9 +781,9 @@ public class TestConv{
                     i++;
                 }
                 if(passed){
-                    System.out.println("--Test Unicode to "+encoding+" --PASSED");
+                    System.out.println("--Test convertAll() Unicode to "+encoding+" --PASSED");
                 }else{
-                    System.out.println("--Test Unicode to "+encoding+" --FAILED");
+                    System.out.println("--Test convertAll() Unicode to "+encoding+" --FAILED");
                 }
                 System.gc();
             }
@@ -914,9 +914,9 @@ public class TestConv{
                     i++;
                 }
                 if(passed){
-                    System.out.println("--Test GB18030 to Unicode --PASSED");
+                    System.out.println("--Test callback GB18030 to Unicode --PASSED");
                 }else{
-                    System.out.println("--Test GB18030 to Unicode  --FAILED");
+                    System.out.println("--Test callback GB18030 to Unicode  --FAILED");
                 }
                 
             }

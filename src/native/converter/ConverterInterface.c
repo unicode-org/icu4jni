@@ -126,8 +126,8 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_ICUConverterInterface_con
                     ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&mySource,
                                     mySourceLimit,NULL,(UBool) flush, &errorCode);
 
-                    *sourceOffset -= (jint) (mySource - uSource);
-                    *targetOffset -= (jint) ((jbyte*)cTarget - uTarget);
+                    *sourceOffset = (jint) (mySource - uSource)-*sourceOffset;
+                    *targetOffset = (jint) ((jbyte*)cTarget - uTarget)- *targetOffset;
                     if(U_FAILURE(errorCode)){
                         (*env)->ReleasePrimitiveArrayCritical(env,target,uTarget,JNI_COMMIT);
                         (*env)->ReleasePrimitiveArrayCritical(env,source,(jchar*)uSource,JNI_COMMIT);
