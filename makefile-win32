@@ -1,7 +1,7 @@
 # Microsoft Developer Studio Generated NMAKE File, Based on ICUInterface.dsp
 !IF "$(CFG)" == ""
 CFG="Debug"
-!MESSAGE No configuration specified. Defaulting to nmake /f "makefile-win32" CFG="Debug" ICUBIN="..\icu\bin" JDK14="TRUE".
+!MESSAGE No configuration specified. Defaulting to nmake /f "makefile-win32" CFG="Debug".
 !ENDIF 
 
 !IF "$(ICUBIN)" == ""
@@ -14,17 +14,21 @@ BUILDCS = "BUILDCS"
 BUILDCS = 
 !ENDIF
 
+!IF "$(JAVAPATH)" != ""
+JAVABIN=$(JAVAPATH)\\
+!ENDIF
+
 !IF "$(CFG)" != "Release" && "$(CFG)" != "Debug"
 !MESSAGE Invalid configuration "$(CFG)" specified.
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f  "makefile-win32" CFG="Debug"
+!MESSAGE NMAKE /f  "makefile-win32" CFG="Debug" ICUBIN="..\icu\bin" JDK14="TRUE" JAVAPATH="c:\jdk1.4\win32\bin"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "Win32 Release" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "Win32 Debug" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "Release" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "Debug" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE 
 !ERROR An invalid configuration is specified.
 !ENDIF 
@@ -53,7 +57,7 @@ TEDIR=liberante
 SRCDIR=.\src
 NATIVE=$(SRCDIR)\native
 BDIR=$(BUILDDIR)\classes
-JAVAC_EXE=javac.exe
+JAVAC_EXE=$(JAVABIN)javac.exe
 JAVA_FLAGS=-d $(BUILDDIR)\classes -classpath $(BUILDDIR)\classes;.
 VERSION=131 
 DEBUG_TARGET=$(OUTDIR)/ICUInterface$(VERSION)d.dll
