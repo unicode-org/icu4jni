@@ -58,7 +58,8 @@ PATHWD=$(shell pwd)
 
 TESTCLASS=TestAll.java \
 TestFmwk.java \
-TestLog.java 
+TestLog.java \
+UOption.java
 
 CSCLASS=CharsetICU.java \
 CharsetEncoderICU.java \
@@ -138,7 +139,7 @@ MAKE_CLASSOUT =$(MAKE_CLASSOUT1:src/%=build/%)
 CLEANFILES = *~
 
 ## Target information
-JNI_VERSION = 24
+JNI_VERSION = 26
 TARGET = $(BUILD_DIR)/libICUInterface$(JNI_VERSION)d.$(SO)
 TARGETR = $(BUILD_DIR)/libICUInterface$(JNI_VERSION).$(SO)
 

@@ -68,7 +68,7 @@ BDIR=$(BUILDDIR)\classes
 JAVAC_EXE=$(JAVABIN)javac.exe
 JAVA_EXE=$(JAVABIN)java.exe
 JAVA_FLAGS=-d $(BUILDDIR)\classes -classpath $(BUILDDIR)\classes;.
-VERSION=24
+VERSION=26
 DEBUG_TARGET=$(OUTDIR)/ICUInterface$(VERSION)d.dll
 RELEASE_TARGET=$(OUTDIR)/ICUInterface$(VERSION).dll
 OUTDIR=.\build\lib
@@ -145,7 +145,7 @@ CLEAN :
 
 "(CP_TEST_FILE)" :
 	-@echo Copying $(SRCDIR)\$(TTDIR)\NormalizationTest.txt to $(BUILDDIR)\$(TTDIR)
-	-@cp $(SRCDIR)\$(TTDIR)\NormalizationTest.txt $(BUILDDIR)\$(TTDIR)
+	-@copy $(SRCDIR)\$(TTDIR)\NormalizationTest.txt $(BUILDDIR)\$(TTDIR)
 
 CPP_PROJ=/nologo /G6 /MTd /W3 /Gm /GX /ZI /Od /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_INCLUDE)" /I "$(NATIVE)\common" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c
 BSC32_SBRS= \
@@ -203,7 +203,7 @@ LINK32_OBJS= \
 "BUILDT3":
     $(JAVAC_EXE) $(JAVA_FLAGS) $(SRCDIR)\$(TTDIR)\BasicTest.java $(SRCDIR)\$(TTDIR)\ConformanceTest.java \
     $(SRCDIR)\$(TCDIR)\TestConverter.java $(SRCDIR)\$(TESTDIR)\TestAll.java \
-    $(SRCDIR)\$(TESTDIR)\perf\PerfTest.java
+    $(SRCDIR)\$(TESTDIR)\UOption.java $(SRCDIR)\$(TESTDIR)\perf\PerfTest.java
 
 
 "BUILDCS":
