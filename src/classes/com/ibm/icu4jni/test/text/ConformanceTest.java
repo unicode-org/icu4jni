@@ -104,47 +104,45 @@ public class ConformanceTest extends TestFmwk {
         StringBuffer buf = new StringBuffer(); // scratch
         String out;
         int i=0;
-        try{
-            for (i=0; i<5; ++i) {
-                if (i<3) {
-                    out = Normalizer.normalize(field[i], Normalizer.UNORM_NFC);
-                    pass &= assertEqual("C", field[i], out, field[1], "c2!=C(c" + (i+1));
-                /* out = iterativeNorm(field[i], Normalizer.UNORM_NFC, buf, +1);
-                    pass &= assertEqual("C(+1)", field[i], out, field[1], "c2!=C(c" + (i+1));
-                    out = iterativeNorm(field[i], Normalizer.UNORM_NFC, buf, -1);
-                    pass &= assertEqual("C(-1)", field[i], out, field[1], "c2!=C(c" + (i+1));
-                    */
-                    out = Normalizer.normalize(field[i], Normalizer.UNORM_NFD);
-                    pass &= assertEqual("D", field[i], out, field[2], "c3!=D(c" + (i+1));
-                /* out = iterativeNorm(field[i], Normalizer.UNORM_NFD, buf, +1);
-                    pass &= assertEqual("D(+1)", field[i], out, field[2], "c3!=D(c" + (i+1));
-                    out = iterativeNorm(field[i], Normalizer.UNORM_NFD, buf, -1);
-                    pass &= assertEqual("D(-1)", field[i], out, field[2], "c3!=D(c" + (i+1));
-                    */
-                }
-                out = Normalizer.normalize(field[i], Normalizer.UNORM_NFKC);
-                pass &= assertEqual("KC", field[i], out, field[3], "c4!=KC(c" + (i+1));
-            /* out = iterativeNorm(field[i], Normalizer.UNORM_NFKC, buf, +1);
-                pass &= assertEqual("KD(+1)", field[i], out, field[3], "c4!=KC(c" + (i+1));
-                out = iterativeNorm(field[i], Normalizer.UNORM_NFKC, buf, -1);
-                pass &= assertEqual("KD(-1)", field[i], out, field[3], "c4!=KC(c" + (i+1));
-                */
 
-                out = Normalizer.normalize(field[i], Normalizer.UNORM_NFKD);
-                pass &= assertEqual("KD", field[i], out, field[4], "c5!=KD(c" + (i+1));
-                /*out = iterativeNorm(field[i], Normalizer.UNORM_NFKD, buf, +1);
-                pass &= assertEqual("KD(+1)", field[i], out, field[4], "c5!=KD(c" + (i+1));
-                out = iterativeNorm(field[i], Normalizer.UNORM_NFKD, buf, -1);
-                pass &= assertEqual("KD(-1)", field[i], out, field[4], "c5!=KD(c" + (i+1));
+        for (i=0; i<5; ++i) {
+            if (i<3) {
+                out = Normalizer.normalize(field[i], Normalizer.UNORM_NFC);
+                pass &= assertEqual("C", field[i], out, field[1], "c2!=C(c" + (i+1));
+            /* out = iterativeNorm(field[i], Normalizer.UNORM_NFC, buf, +1);
+                pass &= assertEqual("C(+1)", field[i], out, field[1], "c2!=C(c" + (i+1));
+                out = iterativeNorm(field[i], Normalizer.UNORM_NFC, buf, -1);
+                pass &= assertEqual("C(-1)", field[i], out, field[1], "c2!=C(c" + (i+1));
+                */
+                out = Normalizer.normalize(field[i], Normalizer.UNORM_NFD);
+                pass &= assertEqual("D", field[i], out, field[2], "c3!=D(c" + (i+1));
+            /* out = iterativeNorm(field[i], Normalizer.UNORM_NFD, buf, +1);
+                pass &= assertEqual("D(+1)", field[i], out, field[2], "c3!=D(c" + (i+1));
+                out = iterativeNorm(field[i], Normalizer.UNORM_NFD, buf, -1);
+                pass &= assertEqual("D(-1)", field[i], out, field[2], "c3!=D(c" + (i+1));
                 */
             }
-            
-            if (!pass) {
-                errln("FAIL: " + line);
-            }
-        }catch (Exception E){
-            System.out.println("Caught an exception at " + i + " for line: " +line);
+            out = Normalizer.normalize(field[i], Normalizer.UNORM_NFKC);
+            pass &= assertEqual("KC", field[i], out, field[3], "c4!=KC(c" + (i+1));
+        /* out = iterativeNorm(field[i], Normalizer.UNORM_NFKC, buf, +1);
+            pass &= assertEqual("KD(+1)", field[i], out, field[3], "c4!=KC(c" + (i+1));
+            out = iterativeNorm(field[i], Normalizer.UNORM_NFKC, buf, -1);
+            pass &= assertEqual("KD(-1)", field[i], out, field[3], "c4!=KC(c" + (i+1));
+            */
+
+            out = Normalizer.normalize(field[i], Normalizer.UNORM_NFKD);
+            pass &= assertEqual("KD", field[i], out, field[4], "c5!=KD(c" + (i+1));
+            /*out = iterativeNorm(field[i], Normalizer.UNORM_NFKD, buf, +1);
+            pass &= assertEqual("KD(+1)", field[i], out, field[4], "c5!=KD(c" + (i+1));
+            out = iterativeNorm(field[i], Normalizer.UNORM_NFKD, buf, -1);
+            pass &= assertEqual("KD(-1)", field[i], out, field[4], "c5!=KD(c" + (i+1));
+            */
         }
+            
+        if (!pass) {
+            errln("FAIL: " + line);
+        }     
+       
         return pass;
     }
 

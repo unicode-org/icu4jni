@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/converters/CharToByteConverterICU.java,v $ 
-* $Date: 2001/09/18 00:33:49 $ 
-* $Revision: 1.6 $
+* $Date: 2001/10/12 01:32:53 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */ 
@@ -274,7 +274,7 @@
      * 
      */
     public boolean canConvert(int codeUnit){
-        return NativeConverter.canConvert(converterHandle, codeUnit);
+        return NativeConverter.canEncode(converterHandle, codeUnit);
     }
     
     /**

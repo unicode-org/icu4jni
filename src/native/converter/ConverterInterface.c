@@ -13,7 +13,7 @@
 #include "unicode/ucnv_cb.h"  /* for callback functions */
 
 void  JNI_TO_U_CALLBACK_SUBSTITUTE
- (void *,UConverterToUnicodeArgs *,const char* ,int32_t ,UConverterCallbackReason ,UErrorCode * );
+ (const void *,UConverterToUnicodeArgs *,const char* ,int32_t ,UConverterCallbackReason ,UErrorCode * );
 
 JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_openConverter (JNIEnv *env, jclass jClass, 
                                                            jlongArray handle, jstring converterName){
@@ -315,7 +315,7 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_flushChar
             jbyte* uTarget=(jbyte*) (*env)->GetPrimitiveArrayCritical(env,target,NULL);
             if(uTarget){
                 const jchar* mySource = &source;
-                const UChar* mySourceLimit= 0;
+                const UChar* mySourceLimit= &source;
                 char* cTarget=uTarget+ *targetOffset;
                 const char* cTargetLimit=uTarget+targetEnd;
 
@@ -391,12 +391,12 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_setSubsti
             if(u_subChars){
                 SubCharStruct* substitutionCharS = (SubCharStruct*) malloc(sizeof(SubCharStruct));
                 if(substitutionCharS){
-                    substitutionCharS->subChars =(UChar*)malloc(sizeof(UChar)*length);
+                    substitutionCharS->subChars =(UChar*)malloc(sizeof(UChar)*(length+1));
                     if(substitutionCharS->subChars){
                        UConverterToUCallback toUOldAction;
-                       void* toUOldContext;
+                       void* toUOldContext=NULL;
                        void* toUNewContext=NULL ;
-                       u_strcpy(substitutionCharS->subChars,u_subChars);
+                       u_strncpy(substitutionCharS->subChars,u_subChars,length);
                        substitutionCharS->length = length;
                        toUNewContext = substitutionCharS;
 
@@ -412,7 +412,8 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_setSubsti
                            free(temp->subChars);
                            free(temp);
                        }
-               
+
+              
                        if(U_FAILURE(errorCode)){
                           (*env)->ReleasePrimitiveArrayCritical(env,subChars,u_subChars,JNI_COMMIT);
                           return errorCode;
@@ -460,8 +461,8 @@ void  JNI_TO_U_CALLBACK_SUBSTITUTE(void *context,
     SubCharStruct* temp = (SubCharStruct*)context;
     if( temp){
         if (reason > UCNV_IRREGULAR){
-            free(temp->subChars);
-            free(temp);
+          //  free(temp->subChars);
+          //  free(temp);
             return;
         }
 
@@ -472,7 +473,7 @@ void  JNI_TO_U_CALLBACK_SUBSTITUTE(void *context,
     return;
 }
 
-JNIEXPORT jboolean JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_canConvert(JNIEnv *env, jclass jClass, 
+JNIEXPORT jboolean JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_canEncode(JNIEnv *env, jclass jClass, 
                                                            jlong handle, jint codeUnit){
     
     UErrorCode errorCode =U_ZERO_ERROR;
@@ -487,9 +488,9 @@ JNIEXPORT jboolean JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_canCo
         int i=0;
         UTF_APPEND_CHAR(&source[0],i,2,codeUnit);
 
-        ucnv_fromUnicode(cnv,
-            &myTarget,targetLimit, 
-            (const UChar**)&mySource, sourceLimit,NULL, TRUE,&errorCode);
+        ucnv_fromUnicode(cnv,&myTarget,targetLimit, 
+                         (const UChar**)&mySource, 
+                         sourceLimit,NULL, TRUE,&errorCode);
 
         if(U_SUCCESS(errorCode)){
             return (jboolean)TRUE;
@@ -499,3 +500,116 @@ JNIEXPORT jboolean JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_canCo
 }
 
 
+JNIEXPORT jboolean JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_canDecode(JNIEnv *env, jclass jClass, 
+                                                           jlong handle, jbyteArray source){
+    
+    UErrorCode errorCode =U_ZERO_ERROR;
+    UConverter* cnv = (UConverter*)handle;
+    if(cnv){
+        jint len = (*env)->GetArrayLength(env,source);    
+        jbyte* cSource =(jbyte*) (*env)->GetPrimitiveArrayCritical(env,source, NULL);
+        if(cSource){
+            const jbyte* cSourceLimit = cSource+len;
+
+            /* Assume that we need at most twice the length of source */
+            UChar* target = (UChar*) malloc(sizeof(UChar)* (len<<1));
+            UChar* targetLimit = target + (len<<1);
+            if(target){
+                ucnv_toUnicode(cnv,&target,targetLimit, 
+                               (const char**)&cSource, 
+                               cSourceLimit,NULL, TRUE,&errorCode);
+
+                if(U_SUCCESS(errorCode)){
+                    free(target);
+                    (*env)->ReleasePrimitiveArrayCritical(env,source,cSource,JNI_COMMIT);        
+                    return (jboolean)TRUE;
+                }
+            }
+            free(target);
+        }
+        (*env)->ReleasePrimitiveArrayCritical(env,source,cSource,JNI_COMMIT);        
+    }
+    return (jboolean)FALSE;
+}
+
+JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_countAvailable(JNIEnv *env, jclass jClass){
+    return ucnv_countAvailable();
+}
+
+JNIEXPORT jobjectArray JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getAvailable(JNIEnv *env, jclass jClass){
+   
+    jobjectArray ret;
+    int32_t i = ucnv_countAvailable();
+
+    ret= (jobjectArray)(*env)->NewObjectArray( env,i,
+                                               (*env)->FindClass(env,"java/lang/String"),
+                                               (*env)->NewStringUTF(env,""));
+
+  
+    for(;--i>=0;) {
+        const char* name = ucnv_getAvailableName(i);
+        (*env)->SetObjectArrayElement(env,ret,i,(*env)->NewStringUTF(env,name));
+    }
+
+    return (ret);
+}
+
+JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_countAliases(JNIEnv *env, jclass jClass, 
+                                                                                    jstring enc){
+    
+    UErrorCode error = U_ZERO_ERROR;
+    jint num =0;
+    const char* encName = (*env)->GetStringUTFChars(env,enc,NULL);
+    
+    if(encName){
+        num = ucnv_countAliases(encName,&error);
+    }
+    
+    (*env)->ReleaseStringUTFChars(env,enc,encName);
+
+    return num;
+}
+
+JNIEXPORT jobjectArray JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getAliases(JNIEnv *env, jclass jClass,
+                                                                                          jstring enc){
+
+    jobjectArray ret=NULL;
+    int32_t aliasNum = 0;
+    UErrorCode error = U_ZERO_ERROR;
+    const char* encName = (*env)->GetStringUTFChars(env,enc,NULL);
+    
+    if(encName){
+        aliasNum = ucnv_countAliases(encName,&error);
+
+        if(U_SUCCESS(error)){
+            ret =  (jobjectArray)(*env)->NewObjectArray(env,aliasNum,
+                                                        (*env)->FindClass(env,"java/lang/String"),
+                                                        (*env)->NewStringUTF(env,""));
+
+            for(;--aliasNum>=0;) {
+                const char* name = ucnv_getAlias(encName,(uint16_t)aliasNum,&error);
+                if(U_SUCCESS(error)){
+                    (*env)->SetObjectArrayElement(env,ret,aliasNum,(*env)->NewStringUTF(env,name));
+                }
+            }
+        }
+    }
+   (*env)->ReleaseStringUTFChars(env,enc,encName);
+
+    return (ret);
+}
+
+JNIEXPORT jstring JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getCanonicalName(JNIEnv *env, jclass jClass,jstring enc){
+
+    UErrorCode error = U_ZERO_ERROR;
+    const char* encName = (*env)->GetStringUTFChars(env,enc,NULL);
+    const char* canonicalName = NULL;
+
+    if(encName){
+        UConverter* conv = ucnv_open(encName,&error);
+        canonicalName = ucnv_getName(conv,&error);
+        ucnv_close(conv);
+    }
+   (*env)->ReleaseStringUTFChars(env,enc,encName);
+    return((*env)->NewStringUTF(env, canonicalName));
+}

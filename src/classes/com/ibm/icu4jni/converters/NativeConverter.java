@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/converters/NativeConverter.java,v $ 
-* $Date: 2001/09/18 00:33:49 $ 
-* $Revision: 1.1 $
+* $Date: 2001/10/12 01:32:53 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */ 
@@ -199,6 +199,20 @@ public final class NativeConverter{
      * @return true if a character can be converted
      * 
      */
-    public static final native boolean canConvert(long converterHandle,int codeUnit);
-
+    public static final native boolean canEncode(long converterHandle,int codeUnit);
+    
+    /**
+     * Ascertains if a given a byte sequence can be converted to Unicode
+	 * @param converterHandle Address of converter object created by the native code
+     * @param  the bytes to be converted
+     * @return true if a character can be converted
+     * 
+     */
+    public static final native boolean canDecode(long converterHandle,byte[] bytes);
+    
+    public static final native int countAvailable();
+    public static final native Object[] getAvailable();
+    public static final native int countAliases(String enc);
+    public static final native Object[] getAliases(String enc);
+    public static final native String getCanonicalName(String enc);
 }

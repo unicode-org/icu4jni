@@ -70,6 +70,7 @@ Java_com_ibm_icu4jni_text_NativeNormalizer_quickCheck (JNIEnv *env,
          
             if(U_FAILURE(errorCode)){
                 (*env)->ReleasePrimitiveArrayCritical(env,source,(jchar*)uSource,JNI_COMMIT);
+                (*env)->ReleasePrimitiveArrayCritical(env,qcReturn,qcRetVal,JNI_COMMIT);
                 return errorCode;
             }
         }

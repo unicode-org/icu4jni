@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/common/ErrorCode.java,v $ 
-* $Date: 2001/09/18 00:33:49 $ 
-* $Revision: 1.7 $
+* $Date: 2001/10/12 01:32:21 $ 
+* $Revision: 1.8 $
 *
 ******************************************************************************
 */
@@ -187,5 +187,8 @@ public final class ErrorCode extends Exception
     "U_UNSUPPORTED_ERROR",        "U_RESOURCE_TYPE_MISMATCH",
     "U_ILLEGAL_ESCAPE_SEQUENCE",  "U_UNSUPPORTED_ESCAPE_SEQUENCE"
   };
+  public static String getErrorName(int ec){
+    return ERROR_NAMES_[ec];
+  }
 }
 
