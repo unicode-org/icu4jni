@@ -292,6 +292,19 @@ Java_com_ibm_icu4jni_converters_NativeConverter_getMaxBytesPerChar(JNIEnv *env,
     return -1;
 }
 
+
+JNIEXPORT jfloat JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_getAveBytesPerChar(JNIEnv *env, 
+                                                                   jclass jClass, 
+                                                                   jlong handle){
+    UConverter* cnv = (UConverter*)handle;
+    if(cnv){
+         jfloat max = (jfloat)ucnv_getMaxCharSize(cnv);
+         jfloat min = (jfloat)ucnv_getMinCharSize(cnv);
+         return (jfloat) ( (max+min)/2 );
+    }
+    return -1;
+}
 JNIEXPORT jint JNICALL 
 Java_com_ibm_icu4jni_converters_NativeConverter_flushByteToChar(JNIEnv *env, 
                                                                 jclass jClass, 
@@ -772,4 +785,39 @@ JNICALL Java_com_ibm_icu4jni_text_NativeConverter_safeClone(JNIEnv *env,
     }
  
     return result;
+}
+
+JNIEXPORT jfloat JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_maxBytesPerChar(JNIEnv *env, 
+                                                                jclass jClass, 
+                                                                jstring enc){
+    UErrorCode error = U_ZERO_ERROR;
+    const char* encName = (*env)->GetStringUTFChars(env,enc,NULL);
+    jfloat maxBytesPerChar=0;
+
+    if(encName){
+        UConverter* conv = ucnv_open(encName,&error);
+        maxBytesPerChar = ucnv_getMaxCharSize(conv);
+        ucnv_close(conv);
+    }
+   (*env)->ReleaseStringUTFChars(env,enc,encName);
+    return maxBytesPerChar;
+}
+
+JNIEXPORT jfloat JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_aveBytesPerChar(JNIEnv *env, 
+                                                                jclass jclass, 
+                                                                jstring enc){
+    UErrorCode error = U_ZERO_ERROR;
+    const char* encName = (*env)->GetStringUTFChars(env,enc,NULL);
+    jfloat max=0;
+    jfloat min=0;
+    if(encName){
+        UConverter* conv = ucnv_open(encName,&error);
+        max= (jfloat)ucnv_getMaxCharSize(conv);
+        min= (jfloat)ucnv_getMinCharSize(conv);
+        ucnv_close(conv);
+    }
+   (*env)->ReleaseStringUTFChars(env,enc,encName);
+    return (jfloat)((max+min)/2);
 }

@@ -127,6 +127,30 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getMaxByt
 
 /*
  * Class:     com_ibm_icu4jni_converters_NativeConverter
+ * Method:    getMaxBytesPerChar
+ * Signature: (J)F
+ */
+JNIEXPORT jfloat JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getAveBytesPerChar
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     com_ibm_icu4jni_converters_NativeConverter
+ * Method:    maxBytesPerChar
+ * Signature: (Ljava/lang/String;)Ljava/lang/String;
+ */
+JNIEXPORT jfloat JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_maxBytesPerChar
+  (JNIEnv *, jclass, jstring);
+
+/*
+ * Class:     com_ibm_icu4jni_converters_NativeConverter
+ * Method:    aveBytesPerChar
+ * Signature: (Ljava/lang/String;)Ljava/lang/String;
+ */
+JNIEXPORT jfloat JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_aveBytesPerChar
+  (JNIEnv *, jclass, jstring);
+
+/*
+ * Class:     com_ibm_icu4jni_converters_NativeConverter
  * Method:    canEncode
  * Signature: (JI)Z
  */
@@ -196,6 +220,8 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_setCallba
  */
 JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_setCallbackEncode
   (JNIEnv *, jclass, jlong, jint, jboolean);
+
+
 
 #ifdef __cplusplus
 }
