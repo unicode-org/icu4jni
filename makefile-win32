@@ -68,7 +68,7 @@ BDIR=$(BUILDDIR)\classes
 JAVAC_EXE=$(JAVABIN)javac.exe
 JAVA_EXE=$(JAVABIN)java.exe
 JAVA_FLAGS=-d $(BUILDDIR)\classes -classpath $(BUILDDIR)\classes;.
-VERSION=21
+VERSION=22
 DEBUG_TARGET=$(OUTDIR)/ICUInterface$(VERSION)d.dll
 RELEASE_TARGET=$(OUTDIR)/ICUInterface$(VERSION).dll
 OUTDIR=.\build\lib
@@ -82,6 +82,9 @@ ICULIB  = $(ICUBIN)\..\lib
 !MESSAGE "Release"
 
 ALL : "$(OUTDIR)\ICUInterface1.dll" "(CP_TEST_FILE)"
+
+CHECK:
+    @$(JAVA_EXE) -classpath ;.\build\classes; -Djava.library.path=$(ICULIB);.\build\lib; com.ibm.icu4jni.test.TestAll -nothrow
 
 CLEAN :
 	-@rd /S /Q "$(INTDIR)"
@@ -100,9 +103,6 @@ CLEAN :
 "(CP_TEST_FILE)" :
 	-@echo Copying $(SRCDIR)\$(TTDIR)\NormalizationTest.txt to $(BUILDDIR)\$(TTDIR)
 	-@copy $(SRCDIR)\$(TTDIR)\NormalizationTest.txt $(BUILDDIR)\$(TTDIR)
-
-CHECK:
-    @$(JAVA_EXE) -classpath ;.\build\classes; -Djava.library.path=$(ICULIB);.\build\lib; com.ibm.icu4jni.test.TestAll -nothrow
 
 CPP_PROJ=/nologo /MT /W3 /GX /O2 /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_INCLUDE)" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fp"$(INTDIR)\ICUInterface.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c
 BSC32_SBRS= \
@@ -146,9 +146,6 @@ CLEAN :
 "(CP_TEST_FILE)" :
 	-@echo Copying $(SRCDIR)\$(TTDIR)\NormalizationTest.txt to $(BUILDDIR)\$(TTDIR)
 	-@cp $(SRCDIR)\$(TTDIR)\NormalizationTest.txt $(BUILDDIR)\$(TTDIR)
-
-CHECK:
-    @$(JAVA_EXE) -classpath ;.\build\classes; -Djava.library.path=$(ICULIB);.\build\lib; com.ibm.icu4jni.test.TestAll -nothrow
 
 CPP_PROJ=/nologo /G6 /MTd /W3 /Gm /GX /ZI /Od /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_INCLUDE)" /I "$(NATIVE)\common" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c
 BSC32_SBRS= \
