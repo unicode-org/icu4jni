@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/CollationElementIteratorTest.java,v $ 
-* $Date: 2001/04/18 19:20:17 $ 
-* $Revision: 1.8 $
+* $Date: 2001/04/19 18:38:59 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -212,20 +212,21 @@ public final class CollationElementIteratorTest extends TestFmwk
     try
     {
       RuleBasedCollator coll = new RuleBasedCollator(rule);
-      CollationElementIterator iter = coll.getCollationElementIterator("a");
       char ch = 1;
       
       while (ch < 0xFFFF) {
         int count = 1;
         int order = 0;
         ch ++;
-        iter.setText(String.valueOf(ch));
+        CollationElementIterator iter = coll.getCollationElementIterator(
+                                                          String.valueOf(ch));
         order = iter.previous();
-
+        
         /* thai management */
-        if (order == 0)
+        if (order == 0) {
           order = iter.previous();
-
+        }
+          
         while (iter.previous() != CollationElementIterator.NULLORDER) {
           count ++; 
         }
