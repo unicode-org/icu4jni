@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/CollationKey.java,v $ 
-* $Date: 2001/03/16 05:52:26 $ 
-* $Revision: 1.3 $
+* $Date: 2001/03/22 02:49:12 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -14,7 +14,7 @@
 package com.ibm.icu4jni.text;
 
 /**
-* Collation key wrapper.
+* Collation key wrapper, containing the byte array sort key.
 * @author syn wee quek
 * @since Jan 23 01
 */
@@ -54,6 +54,7 @@ public final class CollationKey implements Comparable
         t;
     for (int i = 0; i < count; i ++)
     {
+      // unable to use Arrays.equals
       s = m_bytes_[i] & UNSIGNED_BYTE_MASK_;
       t = tgtbytes[i] & UNSIGNED_BYTE_MASK_;
       if (s < t) {
@@ -145,8 +146,6 @@ public final class CollationKey implements Comparable
     if (m_bytes_ == null || m_bytes_.length == 0)
       return null;
       
-    byte[] result = new byte[m_bytes_.length];
-  
     return (byte[])m_bytes_.clone(); 
   }
 

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/CollationElementIterator.java,v $ 
-* $Date: 2001/03/16 05:52:26 $ 
-* $Revision: 1.3 $
+* $Date: 2001/03/22 02:49:13 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -16,7 +16,27 @@ package com.ibm.icu4jni.text;
 import com.ibm.icu4jni.common.ErrorCode;
 
 /**
-* Collation element iterator JNI wrapper
+* Collation element iterator JNI wrapper.
+* Iterates over the collation elements of a data string.
+* The iterator supports both forward and backwards full iteration, ie if 
+* backwards iteration is performed in the midst of a forward iteration, the 
+* result is undefined. 
+* To perform a backwards iteration in the midst of a forward iteration, 
+* reset() has to be called. 
+* This will shift the position to either the start or the last character in the 
+* data string depending on whether next() is called or previous().
+* <pre>
+*   RuleBasedCollator coll = Collator.getInstance();
+*   CollationElementIterator iterator = coll.getCollationElementIterator("abc");
+*   int ce = 0;
+*   while (ce != CollationElementIterator.NULLORDER) {
+*     ce = iterator.next();
+*   }
+*   iterator.reset();
+*   while (ce != CollationElementIterator.NULLORDER) {
+*     ce = iterator.previous();
+*   }
+* </pre>
 * @author syn wee quek
 * @since Jan 22 01
 */
@@ -65,8 +85,8 @@ public final class CollationElementIterator
   * specified comparison order.
   * @param order collation order returned by previous or next.
   * @return maximum size of the expansion sequences ending with the collation 
-  *              element or 1 if collation element does not occur at the end of any 
-  *              expansion sequence
+  *              element or 1 if collation element does not occur at the end of 
+  *              any expansion sequence
   */
   public int getMaxExpansion(int order)
   {
@@ -150,23 +170,11 @@ public final class CollationElementIterator
   // protected methods --------------------------------------------
   
   /**
-  * Set ownership for C collator element iterator
-  * @param ownership true or false
-  */
-  /*
-  void setOwnCollationElementIterator(boolean ownership)
-  {
-    m_owncollelemiterator_ = ownership;
-  }
-  */
-  
-  /**
   * Garbage collection.
   * Close C collator and reclaim memory.
   */
   protected void finalize()
   {
-    // if (m_owncollelemiterator_)
     NativeCollation.closeElements(m_collelemiterator_);
   }
   
@@ -176,13 +184,6 @@ public final class CollationElementIterator
   * C collator
   */
   private long m_collelemiterator_;
-  
-  /**
-  * Flag indicating if the C data associated with m_collelemiterator_ is 
-  * created by this object. This flag is used to determine if the C data is 
-  * to be destroyed when this object is garbage-collected.
-  */
-  // private boolean m_owncollelemiterator_ = false;
   
   /** 
   * ICU constant primary order mask for collation elements 

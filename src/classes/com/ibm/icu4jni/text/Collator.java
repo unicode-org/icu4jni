@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/Collator.java,v $ 
-* $Date: 2001/03/16 05:52:26 $ 
-* $Revision: 1.3 $
+* $Date: 2001/03/22 02:49:12 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -17,7 +17,56 @@ import java.util.Locale;
 import com.ibm.icu4jni.text.RuleBasedCollator;
 
 /**
-* Abstract class for C Collation.
+* Abstract class handling locale specific collation via JNI and ICU.
+* Subclasses implement specific collation strategies. One subclass, 
+* com.ibm.icu4jni.text.RuleBasedCollator, is currently provided and is 
+* applicable to a wide set of languages. Other subclasses may be created to 
+* handle more specialized needs. 
+* You can use the static factory method, getInstance(), to obtain the 
+* appropriate Collator object for a given locale. 
+* 
+* <pre>
+* // Compare two strings in the default locale
+* Collator myCollator = Collator.getInstance();
+* if (myCollator.compare("abc", "ABC") < 0) {
+*   System.out.println("abc is less than ABC");
+* }
+* else {
+*   System.out.println("abc is greater than or equal to ABC");
+* }
+* </pre>
+*
+* You can set a Collator's strength property to determine the level of 
+* difference considered significant in comparisons. 
+* Five strengths in CollationAttribute are provided: VALUE_PRIMARY, 
+* VALUE_SECONDARY, VALUE_TERTIARY, VALUE_QUARTENARY and VALUE_IDENTICAL. 
+* The exact assignment of strengths to language features is locale dependant. 
+* For example, in Czech, "e" and "f" are considered primary differences, while 
+* "e" and "ê" latin small letter e with circumflex are secondary differences, 
+* "e" and "E" are tertiary differences and "e" and "e" are identical. 
+*
+* <p>
+* The following shows how both case and accents could be ignored for US 
+* English. 
+* <pre>
+* //Get the Collator for US English and set its strength to PRIMARY
+* Collator usCollator = Collator.getInstance(Locale.US);
+* usCollator.setStrength(Collator.PRIMARY);
+* if (usCollator.compare("abc", "ABC") == 0) {
+*   System.out.println("Strings are equivalent");
+* }
+* </pre>
+* For comparing Strings exactly once, the compare method provides the best 
+* performance. 
+* When sorting a list of Strings however, it is generally necessary to compare 
+* each String multiple times. 
+* In this case, com.ibm.icu4jni.text.CollationKey provide better performance. 
+* The CollationKey class converts a String to a series of bits that can be 
+* compared bitwise against other CollationKeys. 
+* A CollationKey is created by a Collator object for a given String. 
+* Note: CollationKeys from different Collators can not be compared. 
+* </p>
+*
 * Considerations :
 * 1) ErrorCode not returned to user throw exceptions instead
 * 2) Similar API to java.text.Collator
@@ -91,7 +140,7 @@ public abstract class Collator implements Cloneable
   }
 
   /**
-  * Equality check for the argument strings.
+  * Locale dependent equality check for the argument strings.
   * @param source string
   * @param target string
   * @return true if source is equivalent to target, false otherwise 
@@ -120,7 +169,7 @@ public abstract class Collator implements Cloneable
   * than, greater than or equal to another string.
   * <p>Example of use:
   * <pre>
-  * .  Collator myCollation = Collator.createInstance(Locale::US);
+  * .  Collator myCollation = Collator.getInstance(Locale::US);
   * .  myCollation.setStrength(CollationAttribute.VALUE_PRIMARY);
   * .  // result would be CollationAttribute.VALUE_EQUAL 
   * .  // ("abc" == "ABC")
@@ -133,8 +182,8 @@ public abstract class Collator implements Cloneable
   * </pre>
   * @param source source string.
   * @param target target string.
-  * @return result of the comparison, Collation.EQUAL, Collation.GREATER
-  *         or Collation.LESS
+  * @return result of the comparison, Collator.RESULT_EQUAL, 
+  *         Collator.RESULT_GREATER or Collator.RESULT_LESS
   */
   public abstract int compare(String source, String target);
                                                

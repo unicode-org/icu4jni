@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/RuleBasedCollator.java,v $ 
-* $Date: 2001/03/20 23:05:16 $ 
-* $Revision: 1.4 $
+* $Date: 2001/03/22 02:49:10 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -19,6 +19,233 @@ import com.ibm.icu4jni.common.ErrorCode;
 
 /**
 * Concrete implementation class for Collation.
+* <p>
+* The collation table is composed of a list of collation rules, where each
+* rule is of three forms:
+* <pre>
+*    < modifier >
+*    < relation > < text-argument >
+*    < reset > < text-argument >
+* </pre>
+* <p>
+* <code>RuleBasedCollator</code> has the following restrictions for efficiency 
+* (other subclasses may be used for more complex languages) :
+* <ol>
+* <li> If a French secondary ordering is specified it applies to the whole 
+*      collator object.
+* <li> All non-mentioned Unicode characters are at the end of the collation 
+*      order.
+* <li> If a character is not located in the RuleBasedCollator, the default 
+*      Unicode Collation Algorithm (UCA) rulebased table is automatically 
+*      searched as a backup.
+* </ol>
+*
+* The following demonstrates how to create your own collation rules:
+* <UL Type=disc>
+*    <LI><strong>Text-Argument</strong>: A text-argument is any sequence of
+*        characters, excluding special characters (that is, common whitespace 
+*        characters [0009-000D, 0020] and rule syntax characters [0021-002F, 
+*        003A-0040, 005B-0060, 007B-007E]). If those characters are desired, 
+*        you can put them in single quotes (e.g. ampersand => '&'). Note that 
+*        unquoted white space characters are ignored; e.g. <code>b c</code> is 
+*        treated as <code>bc</code>.
+*    <LI><strong>Modifier</strong>: There is a single modifier which is used 
+*        to specify that all accents (secondary differences) are backwards.
+*        <p>'@' : Indicates that accents are sorted backwards, as in French.
+*    <LI><strong>Relation</strong>: The relations are the following:
+*        <UL Type=square>
+*            <LI>'<' : Greater, as a letter difference (primary)
+*            <LI>';' : Greater, as an accent difference (secondary)
+*            <LI>',' : Greater, as a case difference (tertiary)
+*            <LI>'=' : Equal
+*        </UL>
+*    <LI><strong>Reset</strong>: There is a single reset which is used 
+*        primarily for contractions and expansions, but which can also be used 
+*        to add a modification at the end of a set of rules.
+*        <p>'&' : Indicates that the next rule follows the position to where
+*            the reset text-argument would be sorted.
+* </UL>
+*
+* <p>
+* This sounds more complicated than it is in practice. For example, the
+* following are equivalent ways of expressing the same thing:
+* <blockquote>
+* <pre>
+* a < b < c
+* a < b & b < c
+* a < c & a < b
+* </pre>
+* </blockquote>
+* Notice that the order is important, as the subsequent item goes immediately
+* after the text-argument. The following are not equivalent:
+* <blockquote>
+* <pre>
+* a < b & a < c
+* a < c & a < b
+* </pre>
+* </blockquote>
+* Either the text-argument must already be present in the sequence, or some
+* initial substring of the text-argument must be present. (e.g. "a < b & ae <
+* e" is valid since "a" is present in the sequence before "ae" is reset). In
+* this latter case, "ae" is not entered and treated as a single character;
+* instead, "e" is sorted as if it were expanded to two characters: "a"
+* followed by an "e". This difference appears in natural languages: in
+* traditional Spanish "ch" is treated as though it contracts to a single
+* character (expressed as "c < ch < d"), while in traditional German a-umlaut 
+* is treated as though it expanded to two characters (expressed as "a,A < b,B 
+* ... & ae;ã & AE;Ã"). [ã and Ã are, of course, the escape sequences for 
+* a-umlaut.]
+* <p>
+* <strong>Ignorable Characters</strong>
+* <p>
+* For ignorable characters, the first rule must start with a relation (the
+* examples we have used above are really fragments; "a < b" really should be
+* "< a < b"). If, however, the first relation is not "<", then all the all
+* text-arguments up to the first "<" are ignorable. For example, ", - < a < b"
+* makes "-" an ignorable character, as we saw earlier in the word
+* "black-birds". In the samples for different languages, you see that most
+* accents are ignorable.
+*
+* <p><strong>Normalization and Accents</strong>
+* <p>
+* <code>RuleBasedCollator</code> automatically processes its rule table to
+* include both pre-composed and combining-character versions of accented 
+* characters. Even if the provided rule string contains only base characters 
+* and separate combining accent characters, the pre-composed accented 
+* characters matching all canonical combinations of characters from the rule 
+* string will be entered in the table.
+* <p>
+* This allows you to use a RuleBasedCollator to compare accented strings even 
+* when the collator is set to NO_DECOMPOSITION. There are two caveats, however.
+* First, if the strings to be collated contain combining sequences that may not 
+* be in canonical order, you should set the collator to 
+* CANONICAL_DECOMPOSITION or FULL_DECOMPOSITION to enable sorting of combining 
+* sequences.  Second, if the strings contain characters with compatibility 
+* decompositions (such as full-width and half-width forms), you must use 
+* FULL_DECOMPOSITION, since the rule tables only include canonical mappings.
+* For more information, see
+* <A HREF="http://www.aw.com/devpress">The Unicode Standard, Version 3.0</A>.)
+*
+* <p><strong>Errors</strong>
+* <p>
+* The following are errors:
+* <UL Type=disc>
+*     <LI>A text-argument contains unquoted punctuation symbols
+*        (e.g. "a < b-c < d").
+*     <LI>A relation or reset character not followed by a text-argument
+*        (e.g. "a < , b").
+*     <LI>A reset where the text-argument (or an initial substring of the
+*         text-argument) is not already in the sequence or allocated in the 
+*         default UCA table.
+*         (e.g. "a < b & e < f")
+* </UL>
+* If you produce one of these errors, a <code>RuleBasedCollator</code> throws
+* a <code>ParseException</code>.
+*
+* <p><strong>Examples</strong>
+* <p>Simple:     "< a < b < c < d"
+* <p>Norwegian:  "< a,A< b,B< c,C< d,D< e,E< f,F< g,G< h,H< i,I< j,J
+*                 < k,K< l,L< m,M< n,N< o,O< p,P< q,Q< r,R< s,S< t,T
+*                < u,U< v,V< w,W< x,X< y,Y< z,Z
+*                 < å=a?,Å=A?
+*                 ;aa,AA< æ,Æ< ø,Ø"
+*
+* <p>
+* Normally, to create a rule-based Collator object, you will use
+* <code>Collator</code>'s factory method <code>getInstance</code>.
+* However, to create a rule-based Collator object with specialized rules 
+* tailored to your needs, you construct the <code>RuleBasedCollator</code>
+* with the rules contained in a <code>String</code> object. For example:
+* <blockquote>
+* <pre>
+* String Simple = "< a < b < c < d";
+* RuleBasedCollator mySimple = new RuleBasedCollator(Simple);
+* </pre>
+* </blockquote>
+* Or:
+* <blockquote>
+* <pre>
+* String Norwegian = "< a,A< b,B< c,C< d,D< e,E< f,F< g,G< h,H< i,I< j,J" +
+*                 "< k,K< l,L< m,M< n,N< o,O< p,P< q,Q< r,R< s,S< t,T" +
+*                 "< u,U< v,V< w,W< x,X< y,Y< z,Z" +
+*                 "< å=a?,Å=A?" +
+*                 ";aa,AA< æ,Æ< ø,Ø";
+* RuleBasedCollator myNorwegian = new RuleBasedCollator(Norwegian);
+* </pre>
+* </blockquote>
+*
+* <p>
+* Combining <code>Collator</code>s is as simple as concatenating strings.
+* Here's an example that combines two <code>Collator</code>s from two
+* different locales:
+* <blockquote>
+* <pre>
+* // Create an en_US Collator object
+* RuleBasedCollator en_USCollator = (RuleBasedCollator)
+*     Collator.getInstance(new Locale("en", "US", ""));
+* // Create a da_DK Collator object
+* RuleBasedCollator da_DKCollator = (RuleBasedCollator)
+*     Collator.getInstance(new Locale("da", "DK", ""));
+* // Combine the two
+* // First, get the collation rules from en_USCollator
+* String en_USRules = en_USCollator.getRules();
+* // Second, get the collation rules from da_DKCollator
+* String da_DKRules = da_DKCollator.getRules();
+* RuleBasedCollator newCollator =
+*     new RuleBasedCollator(en_USRules + da_DKRules);
+* // newCollator has the combined rules
+* </pre>
+* </blockquote>
+*
+* <p>
+* Another more interesting example would be to make changes on an existing
+* table to create a new <code>Collator</code> object.  For example, add
+* "& C < ch, cH, Ch, CH" to the <code>en_USCollator</code> object to create
+* your own:
+* <blockquote>
+* <pre>
+* // Create a new Collator object with additional rules
+* String addRules = "& C < ch, cH, Ch, CH";
+* RuleBasedCollator myCollator =
+*     new RuleBasedCollator(en_USCollator + addRules);
+* // myCollator contains the new rules
+* </pre>
+* </blockquote>
+*
+* <p>
+* The following example demonstrates how to change the order of
+* non-spacing accents,
+* <blockquote>
+* <pre>
+* // old rule
+* String oldRules = "=¨;¯;´"    // main accents Diaeresis 00A8, Macron 00AF
+*                               // Acute 00BF
+*                 + "< a , A ; ae, AE ; æ , Æ"
+*                 + "< b , B < c, C < e, E & C < d, D";
+* // change the order of accent characters
+* String addOn = "& ´;¯;¨;"; // Acute 00BF, Macron 00AF, Diaeresis 00A8
+* RuleBasedCollator myCollator = new RuleBasedCollator(oldRules + addOn);
+* </pre>
+* </blockquote>
+*
+* <p>
+* The last example shows how to put new primary ordering in before the
+* default setting. For example, in Japanese <code>Collator</code>, you
+* can either sort English characters before or after Japanese characters,
+* <blockquote>
+* <pre>
+* // get en_US Collator rules
+* RuleBasedCollator en_USCollator = 
+*                      (RuleBasedCollator)Collator.getInstance(Locale.US);
+* // add a few Japanese character to sort before English characters
+* // suppose the last character before the first base letter 'a' in
+* // the English collation rule is ?
+* String jaString = "& \\u30A2 , \\u30FC < \\u30C8";
+* RuleBasedCollator myJapaneseCollator = new
+*     RuleBasedCollator(en_USCollator.getRules() + jaString);
+* </pre>
+* </blockquote>
+* <P>
 * @author syn wee quek
 * @since Jan 17 01
 */
