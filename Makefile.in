@@ -146,7 +146,7 @@ distclean distclean-local dist dist-local check check-local java javar
 .SUFFIXES :
 
 ## List of standard targets
-all: all-local copy-file java
+all: all-local java
 install: install-local
 clean: clean-local
 distclean : distclean-local
@@ -155,7 +155,7 @@ check: check-local
 debug: all-local java
 release:all-release javar
 
-all-local: $(TARGET) 
+all-local: $(TARGET)
 ## For printing use @echo
 ##	@echo This is JDK14 $(JDK14) 
 
@@ -188,7 +188,7 @@ distclean-local: clean-local
 
 check-local: all testfmwk  testcs
 
-testfmwk:
+testfmwk: copy-file
 	LD_LIBRARY_PATH=$(prefix)/lib ICU_DATA=$(prefix)/lib/icu/$(VERSION) $(JAVA_EXEC) -classpath :./build/classes: -Djava.library.path=$(prefix)/lib:$(PATHWD)/build/lib: com.ibm.icu4jni.test.TestAll -nothrow
 
 testcs:
@@ -210,7 +210,7 @@ javar :
 	$(JAVAC_EXEC) -g:none -O -d $(BUILDDIR)/classes $(MAKE_CLASS)
 
 copy-file :
-	$(shell cp $(SRCDIR)/classes/com/ibm/icu4jni/test/text/*.txt $(BUILDDIR)/classes/com/ibm/icu4jni/test/text) 	
+	cp $(SRCDIR)/classes/com/ibm/icu4jni/test/text/*.txt $(BUILDDIR)/classes/com/ibm/icu4jni/test/text
 
 # ICU4JNILIBS includes all standard ICU libraries.
 # if we wanted only part of the ICU, we could use (for example) just

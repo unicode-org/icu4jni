@@ -43,15 +43,17 @@ public class ConformanceTest extends TestFmwk {
         int failCount = 0;
         InputStream is = null;
         try {
-            is = getClass().getResourceAsStream(FILE);
-        } catch (Exception e) {
+            is = new FileInputStream(TEST_SUITE_FILE);
+        } catch (Exception ex) {
         }
         if (is == null) {
             try {
-                is = getClass().getResourceAsStream(TEST_SUITE_FILE);
-            } catch (Exception ex) {
-                ex.printStackTrace();
+                is = getClass().getResourceAsStream(FILE);
             }
+            catch (Exception e) {
+                // will fail below
+                e.printStackTrace();
+            }    
         }
          try {
             input = new BufferedReader(new InputStreamReader(is),64*1024);
