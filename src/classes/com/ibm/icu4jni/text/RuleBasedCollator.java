@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/RuleBasedCollator.java,v $ 
-* $Date: 2004/06/18 22:45:09 $ 
-* $Revision: 1.17 $
+* $Date: 2004/06/18 22:48:01 $ 
+* $Revision: 1.18 $
 *
 *******************************************************************************
 */
@@ -351,6 +351,7 @@ public final class RuleBasedCollator extends Collator
   * different strings. Returns information about whether a string is less 
   * than, greater than or equal to another string.
   * <p>Example of use:
+  * <br>
   * <code>
   *   Collator myCollation = Collator.createInstance(Locale::US);
   *   myCollation.setStrength(CollationAttribute.VALUE_PRIMARY);
@@ -432,6 +433,7 @@ public final class RuleBasedCollator extends Collator
   /**
   * Sets the minimum strength to be used in comparison or transformation.
   * <p>Example of use:
+  * <br>
   * <code>
   * Collator myCollation = Collator.createInstance(Locale::US);
   * myCollation.setStrength(PRIMARY);
@@ -460,6 +462,7 @@ public final class RuleBasedCollator extends Collator
   /**
   * Sets the attribute to be used in comparison or transformation.
   * <p>Example of use:
+  * <br>
   * <code>
   *  Collator myCollation = Collator.createInstance(Locale::US);
   *  myCollation.setAttribute(CollationAttribute.CASE_LEVEL, 
@@ -495,6 +498,7 @@ public final class RuleBasedCollator extends Collator
   /**
   * Get the sort key as an CollationKey object from the argument string.
   * To retrieve sort key in terms of byte arrays, use the method as below<br>
+  * <br>
   * <code>
   * Collator collator = Collator.getInstance();
   * byte[] array = collator.getSortKey(source);
