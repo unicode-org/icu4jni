@@ -1,12 +1,12 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2001, International Business Machines Corporation and    *
+* Copyright (C) 1996-2003, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/native/converter/ConverterInterface.c,v $ 
-* $Date: 2003/04/12 01:23:22 $ 
-* $Revision: 1.20 $
+* $Date: 2003/06/11 17:51:51 $ 
+* $Revision: 1.21 $
 *
 *******************************************************************************
 */

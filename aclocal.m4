@@ -1,5 +1,5 @@
 dnl aclocal.m4 for ICU apps
-dnl Copyright (c) 2002, International Business Machines Corporation and
+dnl Copyright (c) 2002-2003, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 
 dnl @TOP@

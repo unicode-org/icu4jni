@@ -1,7 +1,7 @@
 dnl -*-m4-*-
 dnl configure.in for ICU4JNI
 dnl Ram Viswanadha
-dnl copyright (c) 2001 IBM, Inc.
+dnl copyright (c) 2001-2003 IBM, Inc.
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(src/native/collation/CollationInterface.h)

@@ -1,12 +1,12 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/test/text/BasicTest.java,v $ 
- * $Date: 2003/04/12 01:21:59 $ 
- * $Revision: 1.5 $
+ * $Date: 2003/06/11 17:51:50 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */

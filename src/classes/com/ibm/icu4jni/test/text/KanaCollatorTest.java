@@ -1,13 +1,13 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2001, International Business Machines Corporation and    *
+* Copyright (C) 1996-2003, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/KanaCollatorTest.java,v $ 
-* $Date: 2003/04/12 01:21:59 $ 
-* $Revision: 1.9 $
+* $Date: 2003/06/11 17:51:50 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
