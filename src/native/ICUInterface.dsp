@@ -53,7 +53,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
-# ADD LINK32 icuin.lib icuuc.lib /nologo /dll /debug /machine:I386 /out:"../../build/lib/ICUInterface24.dll" /implib:"ICUInterface.lib" /pdbtype:sept /libpath:"$(ICUBIN)\..\lib" /libpath:"$(JAVA_HOME)\lib"
+# ADD LINK32 icuin.lib icuuc.lib /nologo /dll /debug /machine:I386 /out:"../../build/lib/ICUInterface28.dll" /implib:"ICUInterface.lib" /pdbtype:sept /libpath:"$(ICUBIN)\..\lib" /libpath:"$(JAVA_HOME)\lib"
 # SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "ICUInterface - Win32 Debug"
@@ -81,7 +81,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 icuind.lib icuucd.lib /nologo /dll /debug /machine:I386 /out:"../../build/lib/ICUInterface26d.dll" /implib:"./ICUInterface.lib" /pdbtype:sept /libpath:"$(ICUBIN)\..\lib"
+# ADD LINK32 icuind.lib icuucd.lib /nologo /dll /debug /machine:I386 /out:"../../build/lib/ICUInterface28d.dll" /implib:"./ICUInterface.lib" /pdbtype:sept /libpath:"$(ICUBIN)\..\lib"
 # SUBTRACT LINK32 /pdb:none
 
 !ENDIF 
