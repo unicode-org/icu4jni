@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/RuleBasedCollator.java,v $ 
-* $Date: 2001/03/22 02:49:10 $ 
-* $Revision: 1.5 $
+* $Date: 2001/03/23 03:01:54 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -537,8 +537,10 @@ public final class RuleBasedCollator extends Collator
     if (getClass() != target.getClass()) 
       return false;
     
-    long tgtcollatoraddress = ((RuleBasedCollator)target).m_collator_;
-    return m_collator_ == tgtcollatoraddress;
+    RuleBasedCollator tgtcoll = (RuleBasedCollator)target;
+    return getRules().equals(tgtcoll.getRules()) && 
+           getStrength() == tgtcoll.getStrength() && 
+           getDecomposition() == tgtcoll.getDecomposition();
   }
   
   // package constructor ----------------------------------------
