@@ -81,8 +81,9 @@ MAKE_CLASS =  $(CONVCLASS:%=$(SRCDIR)/$(CLASSDIR)/$(CONVDIR)/%)  \
 CLEANFILES = *~
 
 ## Target information
-TARGET = $(BUILD_DIR)/libICUInterface1d.$(SO)
-TARGETR = $(BUILD_DIR)/libICUInterface1.$(SO)
+JNI_VERSION = 131
+TARGET = $(BUILD_DIR)/libICUInterface$(JNI_VERSION)d.$(SO)
+TARGETR = $(BUILD_DIR)/libICUInterface$(JNI_VERSION).$(SO)
 
 OBJECTS =  $(CSRC_DIR)/common/ErrorCode.o  $(CSRC_DIR)/collation/CollationInterface.o  $(CSRC_DIR)/converter/ConverterInterface.o
 
@@ -142,13 +143,13 @@ clean-local:
 distclean-local: clean-local
 	rm -f Makefile $(DEPS)
 
-check-local: testconv testfmwk
+check-local: all testconv testfmwk
 
 testfmwk:
-	LD_LIBRARY_PATH=$(prefix)/lib ICU_DATA=$(prefix)/share/icu/$(VERSION) $(JAVA_EXEC) -classpath :./build/classes: -Djava.library.path=$(prefix)/lib:$(PATHWD)/build/lib: com.ibm.icu4jni.test.TestAll -nothrow
+	LD_LIBRARY_PATH=$(prefix)/lib ICU_DATA=$(prefix)/lib/icu/$(VERSION) $(JAVA_EXEC) -classpath :./build/classes: -Djava.library.path=$(prefix)/lib:$(PATHWD)/build/lib: com.ibm.icu4jni.test.TestAll -nothrow
 
 testconv:
-	LD_LIBRARY_PATH=$(prefix)/lib ICU_DATA=$(prefix)/share/icu/$(VERSION) $(JAVA_EXEC) -classpath :./build/classes: -Djava.library.path=$(prefix)/lib:$(PATHWD)/build/lib: com.ibm.icu4jni.test.converters.TestConv
+	LD_LIBRARY_PATH=$(prefix)/lib ICU_DATA=$(prefix)/lib/icu/$(VERSION) $(JAVA_EXEC) -classpath :./build/classes: -Djava.library.path=$(prefix)/lib:$(PATHWD)/build/lib: com.ibm.icu4jni.test.converters.TestConv
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
