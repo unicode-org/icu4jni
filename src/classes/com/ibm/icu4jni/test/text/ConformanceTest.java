@@ -10,6 +10,7 @@ package com.ibm.icu4jni.test.text;
 import java.io.*;
 import com.ibm.icu4jni.test.*;
 import com.ibm.icu4jni.text.*;
+import java.util.ResourceBundle;
 
 public class ConformanceTest extends TestFmwk {
 
@@ -17,7 +18,7 @@ public class ConformanceTest extends TestFmwk {
 
     static final String TEST_SUITE_FILE =
         "./src/classes/com/ibm/icu4jni/test/text/NormalizationTest.txt";
-
+    static final String FILE = "NormalizationTest.txt";
     public static void main(String[] args) throws Exception {
         new ConformanceTest().run(args);
     }
@@ -40,9 +41,9 @@ public class ConformanceTest extends TestFmwk {
         StringBuffer buf = new StringBuffer();
         int passCount = 0;
         int failCount = 0;
-
         try {
-            input = new BufferedReader(new FileReader(TEST_SUITE_FILE),64*1024);
+            InputStream is = getClass().getResourceAsStream(FILE);
+            input = new BufferedReader(new InputStreamReader(is),64*1024);
             for (int count = 0;;++count) {
                 line = input.readLine();
                 if (line == null) break;
