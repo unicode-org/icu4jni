@@ -4,10 +4,6 @@
 * others. All Rights Reserved.				                                  *
 *******************************************************************************
 *
-* $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/charset/CharsetProviderICU.java,v $ 
-* $Date: 2005/03/09 00:12:51 $ 
-* $Revision: 1.15 $
-*
 *******************************************************************************
 */ 
 

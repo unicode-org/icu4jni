@@ -1,13 +1,8 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2001, International Business Machines Corporation and    *
+* Copyright (C) 1996-2005, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
-*
-* $Source: /xsrl/Nsvn/icu/icu4jni/src/native/common/ErrorCode.h,v $ 
-* $Date: 2001/09/18 00:36:03 $ 
-* $Revision: 1.6 $
-*
 *******************************************************************************
 */
 

@@ -4,10 +4,6 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/test/TestFmwk.java,v $ 
- * $Date: 2005/03/09 00:12:52 $ 
- * $Revision: 1.11 $
- *
  *****************************************************************************************
  */
 package com.ibm.icu4jni.test;
@@ -38,7 +34,7 @@ public class TestFmwk implements TestLog {
      * Puts a copyright in the .class file
      */
     private static final String copyrightNotice
-        = "Copyright \u00a92001-2002 IBM Corp.  All rights reserved.";
+        = "Copyright \u00a92001-2005 IBM Corp.  All rights reserved.";
 
     //------------------------------------------------------------------------
     // Everything below here is boilerplate code that makes it possible

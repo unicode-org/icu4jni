@@ -1,12 +1,9 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and    *
+* Copyright (C) 1996-2005, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
-* $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/NativeCollation.java,v $ 
-* $Date: 2004/06/17 20:52:13 $ 
-* $Revision: 1.12 $
 *
 *******************************************************************************
 */

@@ -1,13 +1,8 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and    *
+* Copyright (C) 1996-2005, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
-*
-* $Source: 
-*  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/CurrencyCollatorTest.java,v $ 
-* $Date: 2004/06/17 20:52:12 $ 
-* $Revision: 1.10 $
 *
 *******************************************************************************
 */

@@ -1,12 +1,8 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2001, International Business Machines Corporation and    *
+* Copyright (C) 1996-2005, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
-*
-* $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/converters/ByteToCharGB18030.java,v $ 
-* $Date: 2002/12/18 22:54:29 $ 
-* $Revision: 1.5 $
 *
 *******************************************************************************
 */ 

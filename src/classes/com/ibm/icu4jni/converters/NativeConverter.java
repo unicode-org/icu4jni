@@ -4,10 +4,6 @@
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
-* $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/converters/NativeConverter.java,v $ 
-* $Date: 2005/03/09 00:12:52 $ 
-* $Revision: 1.16 $
-*
 *******************************************************************************
 */ 
 

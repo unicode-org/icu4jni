@@ -1,12 +1,8 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2001, International Business Machines Corporation and    *
+* Copyright (C) 1996-2005, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
-*
-* $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/CollationAttribute.java,v $ 
-* $Date: 2002/12/19 22:00:27 $ 
-* $Revision: 1.8 $
 *
 *******************************************************************************
 */

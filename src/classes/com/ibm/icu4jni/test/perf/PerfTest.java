@@ -1,9 +1,9 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2003, International Business Machines
+* Copyright (c) 2002-2005, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
-* $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/test/perf/PerfTest.java,v $ 
+* 
 **********************************************************************
 */
 package com.ibm.icu4jni.test.perf;

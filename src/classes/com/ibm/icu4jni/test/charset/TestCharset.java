@@ -796,6 +796,23 @@ public class TestCharset extends TestFmwk {
         }
         logln("Total Number of chasets = " + map.size());
 	}
+    public void TestICUAvailableCharsets() {
+        String[] charsets = NativeConverter.getAvailable();
+        CharsetProviderICU icu = new CharsetProviderICU();
+        for(int i=0;i<charsets.length;i++){
+            Charset cs = icu.charsetForName(charsets[i]);
+            try{
+                CharsetEncoder encoder = cs.newEncoder();
+            }catch(Exception ex){
+                errln("Could not instantiate encoder for "+charsets[i]+". Error: "+ex.toString());
+            }
+            try{
+                CharsetDecoder decoder = cs.newDecoder();
+            }catch(Exception ex){
+                errln("Could not instantiate decoder for "+charsets[i]+". Error: "+ex.toString());
+            }
+        }
+    }
     /* jitterbug 4312 */
     public void TestUnsupportedCharset(){
         CharsetProvider icu = new CharsetProviderICU();
@@ -856,7 +873,10 @@ public class TestCharset extends TestFmwk {
             errln("Error creating charset encoder."+ e.toString());
         }
     }
-    
+    public void TestISO88591() {
+        CharsetEncoder encoder = new CharsetProviderICU().charsetForName("iso-8859-1").newEncoder();
+        encoder.canEncode("\uc2a3");
+    }
     public  void TestUTF8Encode() {
         CharsetEncoder encoderICU = new CharsetProviderICU().charsetForName(
                 "utf-8").newEncoder();
