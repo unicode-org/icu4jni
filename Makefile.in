@@ -16,7 +16,7 @@ include @ICU_MAKEFILE@
 
 ## Build directory information
 top_builddir = .
-subdir = /native
+subdir = .
 CSRC_DIR=src/native
 BUILDDIR=build
 BUILD_DIR=build/lib
@@ -108,6 +108,8 @@ CSTEST :=
 MKSERVICE = $(shell mkdir $(BUILDDIR)/META-INF)
 endif
 
+MAKE_CLASSOUT1=$(MAKE_CLASS:.java=.class)
+MAKE_CLASSOUT =$(MAKE_CLASSOUT1:src/%=build/%)
 
 ## Extra files to remove for 'make clean'
 CLEANFILES = *~
@@ -127,6 +129,11 @@ HADERS =   $(CSRC_DIR)/common/ErrorCode.h  $(CSRC_DIR)/collation/CollationInterf
 # We want to get the local copies of these files first, as the
 # dependency. Even though they do get exported.
 LDFLAGS += -L/usr/lib $(CRT)
+
+ICU4JNILIBS= $(LIBS) -L$(libdir)    -l$(ICUPREFIX)data$(ICULIBSUFFIX)      \
+                        -l$(ICUPREFIX)i18n$(ICULIBSUFFIX)      \
+                        -l$(ICUPREFIX)uc$(ICULIBSUFFIX)
+
 
 # get the hostname the code is built on
 CPPFLAGS := -I$(JAVA_HOME)/include	-I$(JAVA_HOME)/include/$(CANON) -I $(CSRC_DIR)/common -I $(CSRC_DIR)/collation -I $(CSRC_DIR)/converter $(CPPFLAGS)
@@ -194,22 +201,25 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 all-release: $(TARGETR)
 
 # Make the class file
-java : 
+java :  $(MAKE_CLASSOUT)
+
+$(MAKE_CLASSOUT): $(MAKE_CLASS)
 	$(JAVAC_EXEC) -g -d $(BUILDDIR)/classes $(MAKE_CLASS)
+
 javar :
 	$(JAVAC_EXEC) -g:none -O -d $(BUILDDIR)/classes $(MAKE_CLASS)
 
 copy-file :
 	$(shell cp $(SRCDIR)/classes/com/ibm/icu4jni/test/text/*.txt $(BUILDDIR)/classes/com/ibm/icu4jni/test/text) 	
 
-# ICULIBS includes all standard ICU libraries.
+# ICU4JNILIBS includes all standard ICU libraries.
 # if we wanted only part of the ICU, we could use (for example) just
 #         '$(LIBS) -licu-uc -lusort' ...
 $(TARGET) : $(OBJECTS)
-	$(SHLIB.c) -o $@ $^ $(ICULIBS)
+	$(SHLIB.c) -o $@ $^ $(ICU4JNILIBS)
 
 $(TARGETR) :$(OBJECTS)
-	$(SHLIB.c) -mno-debug-info -o $@ $^ $(ICULIBS) 
+	$(SHLIB.c) -mno-debug-info -o $@ $^ $(ICU4JNILIBS) 
 
 #ifneq ($(MAKECMDGOALS),distclean)
 #-include $(DEPS)
