@@ -99,11 +99,10 @@
         if(input==null||output==null){
             throw new IllegalArgumentException();
         }
-        
-        /* Are we carrying any state information ? */
-        data[0] = (byteOff == 0) ? inOff : byteOff;
-        data[1] = (charOff == 0) ? outOff : charOff;
-        
+
+        data[0] = inOff;  // input offset 
+        data[1] = outOff; // output offset  
+         
         /* do the conversion */
         int err=ICUConverterInterface.convertByteToChar(
                             converterHandle,  /* Handle to ICU Converter */
@@ -116,9 +115,9 @@
                             );
         
         /* save state */
-        byteOff  = data[0]; /* input offset */
-		charOff = data[1];  /* output offset */
-        
+        byteOff += data[0]; /* input offset */
+		charOff += data[1]; /* output offset */
+            
         /* If we don't have room for the output, throw an exception */
         if(err == ErrorCode.U_BUFFER_OVERFLOW_ERROR){
 		        throw new ConversionBufferFullException();
@@ -134,7 +133,8 @@
    		if(data[0]!=inEnd && !subMode){
 		    throw new UnknownCharacterException();
 		}
-        return  charOff;
+		/*return the number of chars written to the output*/    
+        return data[1];
     }
     
     /**
@@ -168,7 +168,7 @@
         /*set inputStart to 0 */ 
         
         data[0] = 0; 
-        
+        int result=0;
         int oldOutputStart = data[1];
         data[1] = outStart;
         
@@ -190,7 +190,9 @@
 		}
         
         /* return the number of bytes written to ouput buffer */
-	    return data[1]-oldOutputStart;
+	    result = data[1]-oldOutputStart;
+	    reset();
+	    return result;
     }
     
     /**

@@ -90,21 +90,21 @@
      * @exception ConversionBufferFullException if output array is filled prior
      * to converting all the input.
      */
-    public final int convert( char[] input, int inOff, int inEnd,
+    public int convert( char[] input, int inOff, int inEnd,
 		                byte[] output, int outOff, int outEnd)
                         throws ConversionBufferFullException, 
                         UnknownCharacterException, 
-                        IllegalArgumentException,
-                        MalformedInputException{
+                        MalformedInputException,
+                        IllegalArgumentException{
+                            
         /*Aguments check*/
         if(input==null||output==null){
             throw new IllegalArgumentException();
         }
         
-        /* Are we carrying any state information ? */
-        data[0] = (charOff == 0) ? inOff : charOff;  /* input offset */
-        data[1] = (byteOff == 0) ? outOff : byteOff; /* output offset */
-        
+        data[0] = inOff;  // input offset 
+        data[1] = outOff; // output offset 
+
         /* do the conversion */
         int err=ICUConverterInterface.convertCharToByte(
                             converterHandle,  /* Handle to ICU Converter */
@@ -117,8 +117,8 @@
                             );
         
         /* save state */
-        charOff = data[0]; /* input offset */
-		byteOff = data[1]; /* output offset */
+        charOff += data[0]; /* input offset */
+		byteOff += data[1]; /* output offset */
         
         /* If we don't have room for the output, throw an exception*/
         if(err == ErrorCode.U_BUFFER_OVERFLOW_ERROR){
@@ -135,8 +135,8 @@
    		if(data[0]!=inEnd && !subMode){
 		    throw new UnknownCharacterException();
 		}
-		
-        return  charOff;
+		/*return the number of bytes written to the output*/
+        return data[1];
     }
     
     /**
@@ -163,6 +163,7 @@
         data[0] = 0; 
         
         int oldOutputStart = data[1];
+        int result = 0;
         data[1] = outStart;
         
         
@@ -183,7 +184,9 @@
 		}                          
 
         /* return the number of bytes written to ouput buffer */
-	    return data[1]-oldOutputStart;
+	    result = data[1]-oldOutputStart;
+	    reset();
+	    return result;
     }
     
     /** 
