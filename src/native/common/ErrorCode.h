@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/native/common/ErrorCode.h,v $ 
-* $Date: 2001/06/07 22:31:19 $ 
-* $Revision: 1.5 $
+* $Date: 2001/09/18 00:36:03 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -16,7 +16,7 @@
 
 #include <jni.h>
 #include "unicode/utypes.h"
-
+#include "unicode/putil.h"
 
 /**
 * Checks if an error has occured. 

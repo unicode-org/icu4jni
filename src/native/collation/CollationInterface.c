@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/native/collation/CollationInterface.c,v $ 
-* $Date: 2001/06/07 23:52:11 $ 
-* $Revision: 1.7 $
+* $Date: 2001/09/18 00:36:02 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -361,7 +361,7 @@ JNIEXPORT jlong JNICALL Java_com_ibm_icu4jni_text_NativeCollation_openCollatorFr
   
   result = (jint)ucol_openRules(rulestr, ruleslength, 
                                (UNormalizationMode)normalizationmode,
-                               (UCollationStrength)strength, &status);
+                               (UCollationStrength)strength, NULL, &status);
 
   (*env)->ReleaseStringCritical(env, rules, rulestr);
   if ( error(env, status) != FALSE) {
