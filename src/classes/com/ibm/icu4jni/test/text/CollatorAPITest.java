@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/CollatorAPITest.java,v $ 
-* $Date: 2001/06/06 16:26:20 $ 
-* $Revision: 1.8 $
+* $Date: 2001/06/06 17:30:19 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -95,9 +95,14 @@ public final class CollatorAPITest extends TestFmwk
     Collator defaultcollator = Collator.getInstance();
 
     if (!((RuleBasedCollator)collator).getRules().equals(
-         ((RuleBasedCollator)defaultcollator).getRules()))
-      errln("Failed : Undefined locale should return the default " +
-                    "collator");
+         ((RuleBasedCollator)defaultcollator).getRules())) {
+      errln("Failed: Undefined locale should return the default " +
+                    "collator ");
+      String str = ((RuleBasedCollator)defaultcollator).getRules();
+      errln("Default collator: " + str + " " + str.length());
+      str = ((RuleBasedCollator)collator).getRules();
+      errln("Default collator: " + str + " " + str.length());
+    }
                     
     Collator frenchcollator = Collator.getInstance(Locale.FRANCE);
     if (frenchcollator.equals(collator))
