@@ -41,7 +41,16 @@ Systems Supported:
 	Win98				CL			nmake
 	WinNT				CL			nmake
 	Win2000   			CL			nmake
- 
+License Information 
+	The ICU projects (ICU4C and ICU4J) have changed their licenses from the IPL (IBM Public License) to the X license. 
+	The X license is a non-viral and recommended free software license that is compatible with the GNU GPL license. 
+	This is effective starting with release 1.8.1 of ICU4C and release 1.3.1 of ICU4J. All previous ICU releases will
+	continue to utilize the IPL. New ICU releases will adopt the X license. The users of previous releases of ICU will 
+	need to accept the terms and conditions of the X license in order to adopt the new ICU releases. The main effect 
+	of the change is to provide GPL compatibility. The X license is isted as GPL compatible, see the gnu page at 				http://www.gnu.org/philosophy/license-list.html#GPLCompatibleLicenses The text of the X license is available at				http://www.x.org/terms.htm. The IBM version contains the essential text of the license, omitting the X-specific 
+	trademarks and 	copyright notices. For more details please see the press announcement and the Project FAQ.
+
+
 Installation
 
      UNIX
