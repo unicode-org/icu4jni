@@ -1040,11 +1040,72 @@ fi
 if  "${JAVAC}" == "false"  ; then
      { echo "configure: error: Could not find JAVAC compiler. Please check its existence." 1>&2; exit 1; } 
 fi
+ac_aux_dir=
+for ac_dir in $srcdir $srcdir/.. $srcdir/../..; do
+  if test -f $ac_dir/install-sh; then
+    ac_aux_dir=$ac_dir
+    ac_install_sh="$ac_aux_dir/install-sh -c"
+    break
+  elif test -f $ac_dir/install.sh; then
+    ac_aux_dir=$ac_dir
+    ac_install_sh="$ac_aux_dir/install.sh -c"
+    break
+  fi
+done
+if test -z "$ac_aux_dir"; then
+  { echo "configure: error: can not find install-sh or install.sh in $srcdir $srcdir/.. $srcdir/../.." 1>&2; exit 1; }
+fi
+ac_config_guess=$ac_aux_dir/config.guess
+ac_config_sub=$ac_aux_dir/config.sub
+ac_configure=$ac_aux_dir/configure # This should be Cygnus configure.
+
+
+# Make sure we can run config.sub.
+if ${CONFIG_SHELL-/bin/sh} $ac_config_sub sun4 >/dev/null 2>&1; then :
+else { echo "configure: error: can not run $ac_config_sub" 1>&2; exit 1; }
+fi
+
+echo $ac_n "checking host system type""... $ac_c" 1>&6
+echo "configure:1070: checking host system type" >&5
+
+host_alias=$host
+case "$host_alias" in
+NONE)
+  case $nonopt in
+  NONE)
+    if host_alias=`${CONFIG_SHELL-/bin/sh} $ac_config_guess`; then :
+    else { echo "configure: error: can not guess host type; you must specify one" 1>&2; exit 1; }
+    fi ;;
+  *) host_alias=$nonopt ;;
+  esac ;;
+esac
+
+host=`${CONFIG_SHELL-/bin/sh} $ac_config_sub $host_alias`
+host_cpu=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
+host_vendor=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
+host_os=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
+echo "$ac_t""$host" 1>&6
+
+CANON="helo"
+case "${host}" in
+        *-*-solaris*)   CANON="solaris" ;;
+        *-*-linux*)     CANON="linux" ;;
+        *-*-freebsd*)   CANON="bsd" ;;
+        *-*-aix*)       CANON="aix" ;;
+        *-sequent-*)    CANON="ptx" ;;
+        *-*-hpux*)      CANON="hpux" ;;
+        *-*-irix*)      CANON="irix" ;;
+        *-*-os390*)     CANON="os390" ;;
+        *-*-os400*)     CANON="os400" ;;
+        *-apple-darwin*|*-apple-rhapsody*)      CANON="darwin" ;;
+        *)              CANON="unknown" ;;
+esac
+
 
 
 ac_safe=`echo "$JAVA_HOME/include/jni.h" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for $JAVA_HOME/include/jni.h""... $ac_c" 1>&6
-echo "configure:1048: checking for $JAVA_HOME/include/jni.h" >&5
+echo "configure:1109: checking for $JAVA_HOME/include/jni.h" >&5
 if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1067,16 +1128,16 @@ else
 fi
 
 
-ac_safe=`echo "$JAVA_HOME/include/$OSTYPE/jni_md.h" | sed 'y%./+-%__p_%'`
-echo $ac_n "checking for $JAVA_HOME/include/$OSTYPE/jni_md.h""... $ac_c" 1>&6
-echo "configure:1073: checking for $JAVA_HOME/include/$OSTYPE/jni_md.h" >&5
+ac_safe=`echo "$JAVA_HOME/include/$CANON/jni_md.h" | sed 'y%./+-%__p_%'`
+echo $ac_n "checking for $JAVA_HOME/include/$CANON/jni_md.h""... $ac_c" 1>&6
+echo "configure:1134: checking for $JAVA_HOME/include/$CANON/jni_md.h" >&5
 if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   if test "$cross_compiling" = yes; then
     { echo "configure: error: Cannot check for file existence when cross compiling" 1>&2; exit 1; }
 else
-  if test -r $JAVA_HOME/include/$OSTYPE/jni_md.h; then
+  if test -r $JAVA_HOME/include/$CANON/jni_md.h; then
     eval "ac_cv_file_$ac_safe=yes"
   else
     eval "ac_cv_file_$ac_safe=no"
@@ -1091,7 +1152,7 @@ else
 
 ac_safe=`echo "$JAVA_HOME/include/jni_md.h" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for $JAVA_HOME/include/jni_md.h""... $ac_c" 1>&6
-echo "configure:1095: checking for $JAVA_HOME/include/jni_md.h" >&5
+echo "configure:1156: checking for $JAVA_HOME/include/jni_md.h" >&5
 if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1268,6 +1329,12 @@ s%@AUTOCONF@%$AUTOCONF%g
 s%@ICU_MAKEFILE@%$ICU_MAKEFILE%g
 s%@JAVA@%$JAVA%g
 s%@JAVAC@%$JAVAC%g
+s%@host@%$host%g
+s%@host_alias@%$host_alias%g
+s%@host_cpu@%$host_cpu%g
+s%@host_vendor@%$host_vendor%g
+s%@host_os@%$host_os%g
+s%@CANON@%$CANON%g
 
 CEOF
 EOF
@@ -1378,7 +1445,7 @@ test "$no_create" = yes || ${CONFIG_SHELL-/bin/sh} $CONFIG_STATUS || exit 1
 
 ac_safe=`echo "build" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for build""... $ac_c" 1>&6
-echo "configure:1382: checking for build" >&5
+echo "configure:1449: checking for build" >&5
 if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1405,7 +1472,7 @@ fi
 
 ac_safe=`echo "build/lib" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for build/lib""... $ac_c" 1>&6
-echo "configure:1409: checking for build/lib" >&5
+echo "configure:1476: checking for build/lib" >&5
 if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1432,7 +1499,7 @@ fi
 
 ac_safe=`echo "build/classes" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for build/classes""... $ac_c" 1>&6
-echo "configure:1436: checking for build/classes" >&5
+echo "configure:1503: checking for build/classes" >&5
 if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else

@@ -30,9 +30,25 @@ fi
 if [ "${JAVAC}" == "false" ] ; then
      AC_MSG_ERROR([Could not find JAVAC compiler. Please check its existence.]) 
 fi
+AC_CANONICAL_HOST
+CANON="helo"
+case "${host}" in
+        *-*-solaris*)   CANON="solaris" ;;
+        *-*-linux*)     CANON="linux" ;;
+        *-*-freebsd*)   CANON="bsd" ;;
+        *-*-aix*)       CANON="aix" ;;
+        *-sequent-*)    CANON="ptx" ;;
+        *-*-hpux*)      CANON="hpux" ;;
+        *-*-irix*)      CANON="irix" ;;
+        *-*-os390*)     CANON="os390" ;;
+        *-*-os400*)     CANON="os400" ;;
+        *-apple-darwin*|*-apple-rhapsody*)      CANON="darwin" ;;
+        *)              CANON="unknown" ;;
+esac
+AC_SUBST(CANON)
 
 AC_CHECK_FILE($JAVA_HOME/include/jni.h,,AC_MSG_ERROR([Could not find jni include file please check JAVA_HOME enviroment variable.]))
-AC_CHECK_FILE($JAVA_HOME/include/$OSTYPE/jni_md.h,,AC_CHECK_FILE($JAVA_HOME/include/jni_md.h,,AC_MSG_ERROR([Could not find jni_md.h include file please check its existence.])))
+AC_CHECK_FILE($JAVA_HOME/include/$CANON/jni_md.h,,AC_CHECK_FILE($JAVA_HOME/include/jni_md.h,,AC_MSG_ERROR([Could not find jni_md.h include file please check its existence.])))
 
 AC_OUTPUT([Makefile])
 AC_CHECK_FILE(build,,AC_OUTPUT_COMMANDS([echo creating build directory.],mkdir build))
