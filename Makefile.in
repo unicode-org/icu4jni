@@ -112,7 +112,7 @@ endif
 CLEANFILES = *~
 
 ## Target information
-JNI_VERSION = 131
+JNI_VERSION = 20
 TARGET = $(BUILD_DIR)/libICUInterface$(JNI_VERSION)d.$(SO)
 TARGETR = $(BUILD_DIR)/libICUInterface$(JNI_VERSION).$(SO)
 
