@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/FinnishCollatorTest.java,v $ 
-* $Date: 2004/01/07 01:57:01 $ 
-* $Revision: 1.6 $
+* $Date: 2004/06/09 22:08:30 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -55,7 +55,7 @@ public final class FinnishCollatorTest extends TestFmwk
         1,
         -1,
         // test primary > 4
-        1,
+        0, // 
     };
 
     private Collator myCollation = null;
