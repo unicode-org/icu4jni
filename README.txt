@@ -1,6 +1,6 @@
 # *****************************************************************************
 # *
-# *   Copyright (C) 1995-2001, International Business Machines
+# *   Copyright (C) 1995-2002, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # *
 # *   Author: Ram Viswanadha 
@@ -9,7 +9,7 @@
 					   
 				README
 			
-			ICU4JNI Version 2.0
+			ICU4JNI Version 2.1
 Contents
 
 	* Introduction
@@ -24,22 +24,15 @@ Introduction
 
 System Requirements:
 
-	* JDK1.2 or higher
+	* JDK1.3
 	* ICU4C built and Installed
 
 Systems Supported:
 
 	Operating System		Compiler		Additional Requirements
 	
-	AIX 4.3				xlC			gmake	
-	Solaris 2.6			GCC			gmake
+	AIX 5.1.0			xlC			gmake	
 	Solaris 2.7			GCC			gmake
-	RedHat/Linux 6.0		GCC			gmake	
-	RedHat/Linux 6.1		GCC			gmake
-	RedHat Alpha/Linux 6.1		GCC			gmake
-	Win95				CL			nmake
-	Win98				CL			nmake
-	WinNT				CL			nmake
 	Win2000   			CL			nmake
 License Information 
 	The ICU projects (ICU4C and ICU4J) have changed their licenses from the IPL (IBM Public License) to the X license. 
@@ -69,12 +62,13 @@ Installation
 
      Win32
 	* Downloaded and install ICU4C from http://oss.software.ibm.com/icu 
-	* Either set the ICU_DATA environment variable or pass ICUBIN on the command line 
+	* If trying to build with ICU 1.8.1 or earlier, set the ICU_DATA environment variable, e.g: set ICU_DATA=<icu_dir>\source\data. Or pass ICUBIN on the command line as described below.
    	  eg: set ICU_DATA=<icu_dir>\source\data
 	* Either set the JAVA_HOME environment variabale or pass JAVAPATH on the command line.
    	  eg: set JAVA_HOME=c:\jdk1.3
-	* Make sure <icu_dir>\bin directory is in you path
-	* Make is configured to build with or without JDK 1.4 and with the ICU_DATA environment variable being phased out
+	* Make sure <icu_dir>\bin directory is in your path
+        * Ensure that your environment is set right for the C compilation. For Microsoft C compilers, ensure that vcvars32.bat has been ran to set the environment variables.
+	* Make is configured to build with JDK 1.3 and with the ICU_DATA environment variable being phased out
 from ICU the make needs to find out the location of ICU libraries.
 
 	  For building with JDK 1.4 type the following command
