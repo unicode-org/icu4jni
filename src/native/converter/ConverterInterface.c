@@ -818,7 +818,7 @@ getJavaCanonicalName(const char* icuCanonicalName,
         const char* name;
         for(i=0;i<aliasNum;i++){
             name = ucnv_getAlias(icuCanonicalName,(uint16_t)i, status);
-            if(name != NULL && strstr(name,"x-")!= NULL){
+            if(name != NULL && name[0]=='x' && name[1]=='-'){
                 retLen = copyString(canonicalName, capacity, 0, name, status);
                 break;
             }
@@ -929,18 +929,14 @@ JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getCanonicalName(JNIEnv 
 
     UErrorCode error = U_ZERO_ERROR;
     const char* encName = (*env)->GetStringUTFChars(env,enc,NULL);
-    const char* canonicalName = NULL;
+    const char* canonicalName = "";
     jstring ret;
     if(encName){
         canonicalName = ucnv_getAlias(encName,0,&error);
-        if(canonicalName !=NULL){
-            if(strstr(canonicalName,",")!=0){
-               canonicalName = ucnv_getAlias(canonicalName,1,&error);
-            }
-            ret = ((*env)->NewStringUTF(env, canonicalName));
-        }else{
-           ret = ((*env)->NewStringUTF(env, ""));
+        if(canonicalName !=NULL && strstr(canonicalName,",")!=0){
+            canonicalName = ucnv_getAlias(canonicalName,1,&error);
         }
+        ret = ((*env)->NewStringUTF(env, canonicalName));
     }
     (*env)->ReleaseStringUTFChars(env,enc,encName);
     return ret;
@@ -964,9 +960,11 @@ JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getICUCanonicalName(JNIE
             ret = ((*env)->NewStringUTF(env, canonicalName));
         }else if( strstr(encName, "x-") == encName){
             /* TODO: Match with getJavaCanonicalName method */
-            char temp[256] = {0};
+            /*
+            char temp[ UCNV_MAX_CONVERTER_NAME_LENGTH] = {0};
             strcpy(temp, encName+2);
-            ret = ((*env)->NewStringUTF(env, temp));
+            */
+            ret = ((*env)->NewStringUTF(env, encName+2));
         }else{
             /* unsupported encoding */
            ret = ((*env)->NewStringUTF(env, ""));
@@ -989,14 +987,12 @@ JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getJavaCanonicalName(JNI
  */
     UErrorCode error = U_ZERO_ERROR;
     const char* icuCanonicalName = (*env)->GetStringUTFChars(env,icuCanonName,NULL);
-    char cName[256] = {0};
+    char cName[UCNV_MAX_CONVERTER_NAME_LENGTH] = {0};
     jstring ret;
     if(icuCanonicalName && icuCanonicalName[0] != 0){
-        getJavaCanonicalName(icuCanonicalName, cName, 256, &error);
-        ret = ((*env)->NewStringUTF(env, cName));
-    }else{
-        ret = ((*env)->NewStringUTF(env, ""));
+        getJavaCanonicalName(icuCanonicalName, cName, UCNV_MAX_CONVERTER_NAME_LENGTH, &error);
     }
+    ret = ((*env)->NewStringUTF(env, cName));
     (*env)->ReleaseStringUTFChars(env,icuCanonName,icuCanonicalName);
     return ret;
 }
