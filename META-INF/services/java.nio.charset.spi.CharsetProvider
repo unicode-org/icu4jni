@@ -1,0 +1,5 @@
+# Copyright (C) 2005, International Business Machines Corporation and others. All Rights Reserved.   
+# icu4jni converters
+# Please place this file in dir /java/classes/META-INF directory
+# or append the following line to /java/classes/META-INF/java.nio.charset.spi.CharsetProvider file
+com.ibm.icu4jni.charset.CharsetProviderICU
