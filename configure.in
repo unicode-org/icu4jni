@@ -24,6 +24,7 @@ AC_CHECK_PROG(AUTOCONF, autoconf, autoconf, true)
 ICU_MAKEFILE=$prefix/lib/icu/Makefile.inc
 AC_SUBST(ICU_MAKEFILE)
 
+AC_SUBST(JAVA_HOME)
 
 AC_PATH_PROG(JAVA, java,false, $JAVA_HOME/bin)
 AC_PATH_PROG(JAVAC,javac,false, $JAVA_HOME/bin)

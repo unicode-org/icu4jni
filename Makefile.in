@@ -37,6 +37,8 @@ GENRB=$(shell @ICU_CONFIG@ --invoke=genrb)
 PKGDATA=$(shell @ICU_CONFIG@ --invoke=pkgdata)
 ####################################################################
 
+JAVA_HOME=@JAVA_HOME@
+
 MKINSTALLDIRS = $(SHELL) $(top_srcdir)/mkinstalldirs
 
 INSTALL = @INSTALL@
