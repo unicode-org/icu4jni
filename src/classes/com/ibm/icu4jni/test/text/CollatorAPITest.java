@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/CollatorAPITest.java,v $ 
-* $Date: 2001/03/22 02:48:35 $ 
-* $Revision: 1.5 $
+* $Date: 2001/03/23 03:02:17 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -102,8 +102,7 @@ public final class CollatorAPITest extends TestFmwk
                     "collator");
                     
     Collator frenchcollator = Collator.getInstance(Locale.FRANCE);
-    if (((RuleBasedCollator)frenchcollator).getRules().equals(
-         ((RuleBasedCollator)collator).getRules()))
+    if (frenchcollator.equals(collator))
       errln("Failed : French collator should be different from default " +
             "collator");
                     
@@ -111,6 +110,91 @@ public final class CollatorAPITest extends TestFmwk
     if (!((RuleBasedCollator)frenchcollator).getRules().equals(
          ((RuleBasedCollator)clonefrench).getRules()))
       errln("Failed : Cloning of a French collator");
+  }
+
+  public void TestRuleBasedColl() throws Exception
+  {
+    String ruleset1 = "&9 < a, A < b, B < c, C; ch, cH, Ch, CH < d, D, e, E";
+    String ruleset2 = "&9 < a, A < b, B < c, C < d, D, e, E";
+      
+    RuleBasedCollator col1 = new RuleBasedCollator(ruleset1);
+    RuleBasedCollator col2 = new RuleBasedCollator(ruleset2);
+    RuleBasedCollator col3 = (RuleBasedCollator)Collator.getInstance();
+      
+    String rule1 = col1.getRules();
+    String rule2 = col2.getRules();
+    String rule3 = col3.getRules();
+
+    if (rule1.equals(rule2)) {
+      errln("Failed : Collators with different rules should produce " +
+            "different results with getRules");
+    }
+    if (rule2.equals(rule3)) {
+      errln("Failed : Collators with different rules should produce " +
+            "different results with getRules");
+    }
+    if (rule1.equals(rule3)) {
+      errln("Failed : Collators with different rules should produce " +
+            "different results with getRules");
+    }
+      
+    RuleBasedCollator col4 = new RuleBasedCollator(rule2);
+    String rule4 = col4.getRules();
+    if (!rule2.equals(rule4)) {
+      errln("Railed : Collators with the same rules should produce " +
+            "same results with getRules");
+    }
+  }
+
+  public void TestDecomposition() throws Exception {
+    Collator en_US = Collator.getInstance(Locale.US),
+      el_GR = Collator.getInstance(new Locale("el", "GR")),
+      vi_VN = Collator.getInstance(new Locale("vi", "VN"));
+
+    // there is no reason to have canonical decomposition in en_US OR default 
+    // locale
+    if (vi_VN.getDecomposition() != NormalizationMode.DECOMP_CAN) {
+      errln("Failed : vi_VN collation did not have cannonical " +
+            "decomposition for normalization!");
+    }
+
+    if (el_GR.getDecomposition() != NormalizationMode.DECOMP_CAN) {
+      errln("Failed : el_GR collation did not have cannonical " +
+            "decomposition for normalization!");
+    }
+
+    if (en_US.getDecomposition() != NormalizationMode.NO_NORMALIZATION) {
+      errln("Failed : en_US collation had cannonical decomposition for " +
+            "normalization!");
+    }
+  }
+
+  public void TestSafeClone() throws Exception {
+    Collator col;
+	  Collator clone;
+    
+    String test1 = "abCda";
+    String test2 = "abcda";
+    
+    Locale loc[] = {Locale.ENGLISH, Locale.KOREA, Locale.JAPAN};
+      
+    // one default collator & two complex ones
+    for (int i = 0; i < 3; i ++) {
+      col = Collator.getInstance(loc[i]);
+      clone = (Collator)col.clone();
+      clone.setStrength(CollationAttribute.VALUE_TERTIARY);
+      col.setStrength(CollationAttribute.VALUE_PRIMARY);
+      clone.setAttribute(CollationAttribute.CASE_LEVEL, 
+                        CollationAttribute.VALUE_OFF);
+      col.setAttribute(CollationAttribute.CASE_LEVEL, 
+                      CollationAttribute.VALUE_OFF);
+      if (clone.compare(test1, test2) != Collator.RESULT_GREATER) {
+        errln("Failed : Result should be " + test1 + " >>> " + test2);
+      }
+      if (col.compare(test1, test2) != Collator.RESULT_EQUAL) {
+        errln("Failed : Result should be " + test1 + " >>> " + test2);
+      }
+    }
   }
 
   /**
@@ -147,6 +231,7 @@ public final class CollatorAPITest extends TestFmwk
            test2 = "abcda";
     
     Collator defaultcollator = Collator.getInstance(Locale.ENGLISH);
+    defaultcollator.setStrength(CollationAttribute.VALUE_TERTIARY);
     CollationKey sortk1 = defaultcollator.getCollationKey(test1), 
                  sortk2 = defaultcollator.getCollationKey(test2);
     if (sortk1.compareTo(sortk2) != Collator.RESULT_GREATER)
@@ -158,6 +243,13 @@ public final class CollatorAPITest extends TestFmwk
     if (sortk1.hashCode() == sortk2.hashCode())
       errln("Failed : sort key hashCode() for different strings " +
                     "should be different");
+                    
+    defaultcollator.setStrength(CollationAttribute.VALUE_SECONDARY);
+    if (defaultcollator.getCollationKey(test1).compareTo(
+                                     defaultcollator.getCollationKey(test2)) 
+                                     != Collator.RESULT_EQUAL) {
+      errln("Failed : Result should be " + test1 + " == " + test2);
+    }
   }
   
   /**
@@ -170,57 +262,85 @@ public final class CollatorAPITest extends TestFmwk
 
     String test1 = "XFILE What subset of all possible test cases has the " +
                    "highest probability of detecting the most errors?";
-    String test2 = "Xf ile What subset of all possible test cases has the " +
+    String test2 = "Xf_ile What subset of all possible test cases has the " +
                    "lowest probability of detecting the least errors?";
     Collator defaultcollator = Collator.getInstance(Locale.ENGLISH);
     
     CollationElementIterator iterator1 = 
       ((RuleBasedCollator)defaultcollator).getCollationElementIterator(
                                                                        test1);
+    iterator1.setOffset(6);
+    iterator1.setOffset(0);
     
     // copy ctor
     CollationElementIterator iterator2 = 
       ((RuleBasedCollator)defaultcollator).getCollationElementIterator(
+                                                                       test1);
+    CollationElementIterator iterator3 =                                      
+      ((RuleBasedCollator)defaultcollator).getCollationElementIterator(
                                                                        test2);
+    /* equals not implemented 
     if (iterator1.equals(iterator2))
       errln("Failed : Two iterators with different strings should " +
                     "be different");
+    */
     
     int order1 = iterator1.next();
-    int order2 = iterator2.next();
-    
+    int order2 = iterator2.getOffset();
+    if (order1 == order2) {
+      errln("Failed : Order result should not be the same");
+    }
+    order2 = iterator2.next();
+    if (order1 != order2) {
+      errln("Failed : Order result should be the same");
+    }
+    int order3 = iterator3.next();
     if (CollationElementIterator.primaryOrder(order1) != 
-        CollationElementIterator.primaryOrder(order2))
+        CollationElementIterator.primaryOrder(order3))
       errln("Failed : The primary orders should be the same");
     if (CollationElementIterator.secondaryOrder(order1) != 
-        CollationElementIterator.secondaryOrder(order2))
+        CollationElementIterator.secondaryOrder(order3))
       errln("Failed : The secondary orders should be the same");
     if (CollationElementIterator.tertiaryOrder(order1) != 
-        CollationElementIterator.tertiaryOrder(order2))
+        CollationElementIterator.tertiaryOrder(order3))
       errln("Failed : The tertiary orders should be the same");
 
     order1 = iterator1.next(); 
-    order2 = iterator2.next();
+    order3 = iterator3.next();
     
     if (CollationElementIterator.primaryOrder(order1) != 
-        CollationElementIterator.primaryOrder(order2))
+        CollationElementIterator.primaryOrder(order3))
       errln("Failed : The primary orders should be identical");
     if (CollationElementIterator.tertiaryOrder(order1) == 
-        CollationElementIterator.tertiaryOrder(order2))
+        CollationElementIterator.tertiaryOrder(order3))
       errln("Failed : The tertiary orders should be different");
 
     order1 = iterator1.next(); 
-    order2 = iterator2.next();
-    if (CollationElementIterator.secondaryOrder(order1) != 
-        CollationElementIterator.secondaryOrder(order2))
-      errln("Failed : The secondary orders should be same");
+    order3 = iterator3.next();
+    if (CollationElementIterator.secondaryOrder(order1) == 
+        CollationElementIterator.secondaryOrder(order3))
+      errln("Failed : The secondary orders should not be same");
+      
     if (order1 == CollationElementIterator.NULLORDER)
       errln("Failed : Unexpected end of iterator reached");
 
     iterator1.reset(); 
     iterator2.reset();
+    iterator3.reset();
     order1 = iterator1.next();
     order2 = iterator2.next();
+    
+    order3 = iterator3.next();
+    
+    if (CollationElementIterator.primaryOrder(order1) != 
+        CollationElementIterator.primaryOrder(order3))
+      errln("Failed : The primary orders should be identical");
+    if (CollationElementIterator.secondaryOrder(order1) != 
+        CollationElementIterator.secondaryOrder(order3))
+      errln("Failed : The secondary orders should be identical");
+    if (CollationElementIterator.tertiaryOrder(order1) != 
+        CollationElementIterator.tertiaryOrder(order3))
+      errln("Failed : The tertiary orders should be identical");
     
     if (CollationElementIterator.primaryOrder(order1) != 
         CollationElementIterator.primaryOrder(order2))
@@ -234,21 +354,27 @@ public final class CollatorAPITest extends TestFmwk
 
     order1 = iterator1.next(); 
     order2 = iterator2.next();
-    
+    order3 = iterator3.next();
+    if (order1 != order2) {
+      errln("Failed : The order result should be the same");
+    }
     if (CollationElementIterator.primaryOrder(order1) != 
-        CollationElementIterator.primaryOrder(order2))
-      errln("Failed : The primary orders should be identical");
+        CollationElementIterator.primaryOrder(order3))
+      errln("Failed : The primary orders should be the same");
     if (CollationElementIterator.tertiaryOrder(order1) == 
-        CollationElementIterator.tertiaryOrder(order2))
+        CollationElementIterator.tertiaryOrder(order3))
       errln("Failed : The tertiary orders should be different");
-
-    order1 = iterator1.next(); 
-    order2 = iterator2.next();
-    if (CollationElementIterator.secondaryOrder(order1) != 
-        CollationElementIterator.secondaryOrder(order2))
-      errln("Failed : The secondary orders should be different");
-    if (order1 == CollationElementIterator.NULLORDER)
+      
+    order1 = iterator1.next();
+    order3 = iterator3.next();
+    
+    if (CollationElementIterator.secondaryOrder(order1) == 
+        CollationElementIterator.secondaryOrder(order3)) {
+      errln("Failed : The secondary orders should not be the same");
+    }
+    if (order1 == CollationElementIterator.NULLORDER) {
       errln("Failed : Unexpected end of iterator reached");
+    }
 
     //test error values
     iterator1.setText("hello there");
@@ -280,10 +406,13 @@ public final class CollatorAPITest extends TestFmwk
     Collator col4 = (Collator)col1.clone();
     Collator col5 = (Collator)col3.clone();
     
+    if (!col1.equals(col4)) {
+      errln("Failed : Cloned collation objects are equal");
+    }
     if (col3.equals(col4))
       errln("Failed : Two different rule collations should compare " +
                     "different");
-    if (col3.equals(col5)) 
+    if (!col3.equals(col5)) 
       errln("Failed : Cloned collation objects should be equal");
     if (col4.equals(col5))
       errln("Failed : Clones of 2 different collations should " +
@@ -324,13 +453,13 @@ public final class CollatorAPITest extends TestFmwk
     Collator defaultcollator = Collator.getInstance(Locale.ENGLISH);
     Collator col2 = (Collator)defaultcollator.clone();
     
-    if (!((RuleBasedCollator)defaultcollator).getRules().equals(
-         ((RuleBasedCollator)col2).getRules()))
+    if (!((RuleBasedCollator)defaultcollator).equals(
+         (RuleBasedCollator)col2))
       errln("Failed : Cloned object should be equal to the orginal");
     String ruleset = "< a, A < b, B < c, C < d, D, e, E";
     RuleBasedCollator col3 = new RuleBasedCollator(ruleset);
-    if (((RuleBasedCollator)defaultcollator).getRules().equals(
-         ((RuleBasedCollator)col3).getRules()))
+    if (((RuleBasedCollator)defaultcollator).equals(
+         (RuleBasedCollator)col3))
       errln("Failed : Cloned object not equal to collator created " + 
                     "by rules");
   }   

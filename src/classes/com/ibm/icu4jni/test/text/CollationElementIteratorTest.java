@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/CollationElementIteratorTest.java,v $ 
-* $Date: 2001/03/22 02:48:35 $ 
-* $Revision: 1.5 $
+* $Date: 2001/03/23 03:02:17 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -118,8 +118,8 @@ public final class CollationElementIteratorTest extends TestFmwk
       iterator = collator.getCollationElementIterator(source);
       previousNext(iterator);
       
-      collator = (RuleBasedCollator)Collator.getInstance(Locale.ENGLISH);
-      
+      collator = (RuleBasedCollator)Collator.getInstance(Locale.JAPAN);
+      source = "\\u0061\\u30CF\\u3099\\u30FC";
       iterator = collator.getCollationElementIterator(source);
       previousNext(iterator);
     }
