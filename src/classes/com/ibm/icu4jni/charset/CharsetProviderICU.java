@@ -1,7 +1,7 @@
 /**
 *******************************************************************************
 * Copyright (C) 1996-2005, International Business Machines Corporation and    *
-* others. All Rights Reserved.				                                  *
+* others. All Rights Reserved.                                                *
 *******************************************************************************
 *
 *******************************************************************************
@@ -31,16 +31,16 @@ public final class CharsetProviderICU extends CharsetProvider{
      * @stable ICU 2.4
      */
     public final Charset charsetForName(String charsetName) {
-	    // get the canonical name	 
-        String icuCanonicalName = NativeConverter.getICUCanonicalName(charsetName);	     
+        // get the canonical name    
+        String icuCanonicalName = NativeConverter.getICUCanonicalName(charsetName);      
 
         // create the converter object and return it
-        if(icuCanonicalName.length()==0){
-        	// this would make the Charset API to throw 
-        	// unsupported encoding exception
-        	return null;
+        if(icuCanonicalName==null || icuCanonicalName.length()==0){
+            // this would make the Charset API to throw 
+            // unsupported encoding exception
+            return null;
         }
-	    return getCharset(icuCanonicalName);
+        return getCharset(icuCanonicalName);
     }
     private final Charset getCharset(String icuCanonicalName){
        String[] aliases = (String[])NativeConverter.getAliases(icuCanonicalName);    
@@ -54,13 +54,13 @@ public final class CharsetProviderICU extends CharsetProvider{
      * @stable ICU 2.4
      */
     public final void putCharsets(Map map) {
-        // Get the available converter canonical names and aliases	  
+        // Get the available converter canonical names and aliases    
         String[] charsets = NativeConverter.getAvailable();        
         for(int i=0; i<charsets.length;i++){           
-    	    // store the charsets and aliases in a Map    
-    	    if (!map.containsKey(charsets[i])){
-    	        map.put(charsets[i], charsetForName(charsets[i]));
-	        }
+            // store the charsets and aliases in a Map    
+            if (!map.containsKey(charsets[i])){
+                map.put(charsets[i], charsetForName(charsets[i]));
+            }
         }
     }
     /**
@@ -71,18 +71,18 @@ public final class CharsetProviderICU extends CharsetProvider{
       private String[] names;
       private int currentIndex;
       protected CharsetIterator(String[] strs){
-    	names = strs;
-    	currentIndex=0;
+        names = strs;
+        currentIndex=0;
       }
       public boolean hasNext(){
-    	return (currentIndex< names.length);
+        return (currentIndex< names.length);
       }
       public Object next(){
-    	if(currentIndex<names.length){
-    	      return charsetForName(names[currentIndex++]);
-    	}else{
-    	      throw new NoSuchElementException();
-    	}
+        if(currentIndex<names.length){
+              return charsetForName(names[currentIndex++]);
+        }else{
+              throw new NoSuchElementException();
+        }
       }
       public void remove() {
             throw new UnsupportedOperationException();
