@@ -1,3 +1,10 @@
+#**********************************************************************
+#*   Copyright (C) 2001-2003, International Business Machines
+#*   Corporation and others.  All Rights Reserved.
+#***********************************************************************/
+## Makefile for icu4jni
+## Ram Viswanadha 
+
 # Microsoft Developer Studio Generated NMAKE File, Based on ICUInterface.dsp
 !IF "$(CFG)" == ""
 CFG=Debug
