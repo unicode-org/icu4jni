@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/NativeCollation.java,v $ 
-* $Date: 2001/03/16 05:52:26 $ 
-* $Revision: 1.3 $
+* $Date: 2001/03/20 23:05:16 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -26,8 +26,7 @@ final class NativeCollation
   // library loading ----------------------------------------------
   
   static {
-    if (ErrorCode.LIBRARY_LOADED)
-      System.out.println("test");
+    boolean loaded = ErrorCode.LIBRARY_LOADED;
   }
   
   // collator methods ---------------------------------------------

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/CollationAttribute.java,v $ 
-* $Date: 2001/03/16 05:52:26 $ 
-* $Revision: 1.3 $
+* $Date: 2001/03/20 23:05:16 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -24,7 +24,10 @@ package com.ibm.icu4jni.text;
 public final class CollationAttribute
 { 
   // Collation strength constants ----------------------------------
-  
+  /**
+  * Default value, accepted by most attributes
+  */
+  public static final int VALUE_DEFAULT = -1;
   /** 
   * Primary collation strength 
   */
@@ -121,6 +124,10 @@ public final class CollationAttribute
   */
   protected static boolean checkAttribute(int type, int value)
   {
+    if (value == VALUE_DEFAULT) {
+      return true;
+    }
+      
     switch (type)
     {
       case FRENCH_COLLATION :
@@ -138,12 +145,11 @@ public final class CollationAttribute
                             return true;
                           break;
       case CASE_LEVEL :
-                          if (value >= VALUE_LOWER_FIRST && 
-                              value <= VALUE_UPPER_FIRST)
-                            return true;
-                          break;
+                          return (value == VALUE_ON || 
+                                  value <= VALUE_OFF);
       case NORMALIZATION_MODE : 
-                    return NormalizationMode.check(value);
+                          return (value == VALUE_OFF || value == VALUE_ON ||
+                                  value == VALUE_ON_WITHOUT_HANGUL);
       case STRENGTH :
                           checkStrength(value);
     }

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/Attic/NormalizationMode.java,v $ 
-* $Date: 2001/03/16 05:52:26 $ 
-* $Revision: 1.3 $
+* $Date: 2001/03/20 23:05:16 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -46,23 +46,17 @@ public final class NormalizationMode
   */
   public static final int DECOMP_COMPAT_COMP_CAN = 5;
   
-  /** 
-  * Do not normalize Hangul 
-  */
-  public static final int IGNORE_HANGUL = 16;
-  
   // public methods ------------------------------------------------------
   
   /**
-  * Checks if argument is a valid collation strength
-  * @param strength potential collation strength
+  * Checks if argument is a valid normalization format for use
+  * @param normalization format
   * @return true if strength is a valid collation strength, false otherwise
   */
-  static boolean check(int normalizationmode)
+  static boolean check(int normalization)
   {
-    if (normalizationmode < NO_NORMALIZATION || 
-        (normalizationmode > DECOMP_COMPAT_COMP_CAN && 
-         normalizationmode != IGNORE_HANGUL))
+    if (normalization < NO_NORMALIZATION || 
+        (normalization > DECOMP_COMPAT_COMP_CAN))
       return false;
     return true;
   }

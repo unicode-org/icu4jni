@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/RuleBasedCollator.java,v $ 
-* $Date: 2001/03/16 05:52:26 $ 
-* $Revision: 1.3 $
+* $Date: 2001/03/20 23:05:16 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -63,7 +63,7 @@ public final class RuleBasedCollator extends Collator
       
     m_collator_ = NativeCollation.openCollatorFromRules(rules,
                                 NormalizationMode.DEFAULT_NORMALIZATION,
-                              strength);
+                                strength);
   }
 
   /**
