@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/native/collation/CollationInterface.c,v $ 
-* $Date: 2001/06/07 22:30:08 $ 
-* $Revision: 1.6 $
+* $Date: 2001/06/07 23:52:11 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -19,7 +19,6 @@
 /**
 * ICU constant values and methods
 */
-//#define U_COL_SAFECLONE_BUFFERSIZE 256
 #define UCOL_MAX_BUFFER 64
 
 
