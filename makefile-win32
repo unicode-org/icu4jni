@@ -157,7 +157,7 @@ LINK32_OBJS= \
 "BUILDTEST" : "BUILDT1" "BUILDT2"
 
 "BUILDT1" :
-	$(JAVAC_EXE) $(JAVA_FLAGS) 	$(SRCDIR)\$(TESTDIR)\TestAll.java $(SRCDIR)\$(TESTDIR)\TestFmwk.java $(SRCDIR)\$(TESTDIR)\TestLog.java \
+	$(JAVAC_EXE) $(JAVA_FLAGS) 	 $(SRCDIR)\$(TESTDIR)\TestFmwk.java $(SRCDIR)\$(TESTDIR)\TestLog.java \
 	$(SRCDIR)\$(TTDIR)\CollationElementIteratorTest.java $(SRCDIR)\$(TTDIR)\CollatorAPITest.java $(SRCDIR)\$(TTDIR)\CollatorPerformanceTest.java \
     $(SRCDIR)\$(TTDIR)\CollatorRegressionTest.java $(SRCDIR)\$(TTDIR)\CollatorTest.java $(SRCDIR)\$(TTDIR)\CurrencyCollatorTest.java \
 	$(SRCDIR)\$(TTDIR)\DanishCollatorTest.java $(SRCDIR)\$(TTDIR)\DummyCollatorTest.java $(SRCDIR)\$(TTDIR)\EnglishCollatorTest.java \
@@ -165,7 +165,8 @@ LINK32_OBJS= \
 "BUILDT2":    
     $(JAVAC_EXE) $(JAVA_FLAGS) $(SRCDIR)\$(TTDIR)\FinnishCollatorTest.java $(SRCDIR)\$(TTDIR)\FrenchCollatorTest.java $(SRCDIR)\$(TTDIR)\G7CollatorTest.java \
     $(SRCDIR)\$(TTDIR)\GermanCollatorTest.java $(SRCDIR)\$(TTDIR)\KanaCollatorTest.java $(SRCDIR)\$(TTDIR)\MonkeyCollatorTest.java \
-    $(SRCDIR)\$(TTDIR)\SpanishCollatorTest.java $(SRCDIR)\$(TTDIR)\ThaiCollatorTest.java $(SRCDIR)\$(TTDIR)\TurkishCollatorTest.java 
+    $(SRCDIR)\$(TTDIR)\SpanishCollatorTest.java $(SRCDIR)\$(TTDIR)\ThaiCollatorTest.java $(SRCDIR)\$(TTDIR)\TurkishCollatorTest.java \
+    $(SRCDIR)\$(TESTDIR)\TestAll.java
 
 
 
