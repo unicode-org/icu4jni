@@ -99,14 +99,14 @@ CLEAN :
 
 "(CP_TEST_FILE)" :
 	-@echo Copying $(SRCDIR)\$(TTDIR)\NormalizationTest.txt to $(BUILDDIR)\$(TTDIR)
-	-@cp $(SRCDIR)\$(TTDIR)\NormalizationTest.txt $(BUILDDIR)\$(TTDIR)
+	-@copy $(SRCDIR)\$(TTDIR)\NormalizationTest.txt $(BUILDDIR)\$(TTDIR)
 
 CHECK:
     @$(JAVA_EXE) -classpath ;.\build\classes; -Djava.library.path=$(ICULIB);.\build\lib; com.ibm.icu4jni.test.TestAll -nothrow
 
 CPP_PROJ=/nologo /MT /W3 /GX /O2 /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_INCLUDE)" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fp"$(INTDIR)\ICUInterface.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c
 BSC32_SBRS= \
-	
+
 LINK32=link.exe
 LINK32_FLAGS=icuin.lib icuuc.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:no /pdb:"$(INTDIR)\ICUInterface1d.pdb" /debug /machine:I386 /out:"$(RELEASE_TARGET)" /implib:"$(INTDIR)\ICUInterface.lib" /pdbtype:sept /libpath:"$(ICULIB)" /libpath:"$(JAVA_HOME)\lib" 
 LINK32_OBJS= \
