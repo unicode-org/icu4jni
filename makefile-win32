@@ -1,0 +1,216 @@
+# Microsoft Developer Studio Generated NMAKE File, Based on ICUInterface.dsp
+!IF "$(CFG)" == ""
+CFG=ICUInterface - Win32 Debug
+!MESSAGE No configuration specified. Defaulting to ICUInterface - Win32 Debug.
+!ENDIF 
+
+!IF "$(CFG)" != "ICUInterface - Win32 Release" && "$(CFG)" != "ICUInterface - Win32 Debug"
+!MESSAGE Invalid configuration "$(CFG)" specified.
+!MESSAGE You can specify a configuration when running NMAKE
+!MESSAGE by defining the macro CFG on the command line. For example:
+!MESSAGE 
+!MESSAGE NMAKE /f "ICUInterface.mak" CFG="ICUInterface - Win32 Debug"
+!MESSAGE 
+!MESSAGE Possible choices for configuration are:
+!MESSAGE 
+!MESSAGE "ICUInterface - Win32 Release" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "ICUInterface - Win32 Debug" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE 
+!ERROR An invalid configuration is specified.
+!ENDIF 
+
+!IF "$(OS)" == "Windows_NT"
+NULL=
+!ELSE 
+NULL=nul
+!ENDIF 
+
+CPP=cl.exe
+MTL=midl.exe
+RSC=rc.exe
+BUILDDIR=.\build
+CLASSDIR=classes\com\ibm\icu4jni
+CONVDIR=$(CLASSDIR)\converters
+COMDIR=$(CLASSDIR)\common
+TESTDIR=$(CLASSDIR)\test
+COLDIR=$(CLASSDIR)\text
+TTDIR=$(TESTDIR)\text
+TCDIR=$(TESTDIR)\converters
+TDIR=help
+TEDIR=liberante
+SRCDIR=.\src
+NATIVE=$(SRCDIR)\native
+BDIR=$(BUILDDIR)\classes
+JAVAC_EXE=javac.exe
+JAVA_FLAGS=-d $(BUILDDIR)\classes
+JAVA_T_FLAGS=-d $(BUILDDIR)\classes -classpath $(BUILDDIR)\classes;. 
+
+!IF  "$(CFG)" == "ICUConverterInterface - Win32 Release"
+
+OUTDIR=.\build\lib
+INTDIR=.\src\native\int
+
+ALL : "$(OUTDIR)\ICUInterface1d.dll.dll"
+
+CLEAN :
+	-@erase "$(INTDIR)\CollationInterface.obj"
+	-@erase "$(INTDIR)\ConverterInterface.obj"
+	-@erase "$(INTDIR)\ErrorCode.obj"
+	-@erase "$(INTDIR)\vc60.idb"
+	-@erase "$(INTDIR)\ICUInterface1d.exp"
+	-@erase "$(INTDIR)\ICUInterface1d.lib"
+	-@erase "$(INTDIR)\ICUInterface1d.pdb"
+	-@erase "$(OUTDIR)\ICUInterface1d.dll"
+
+"$(OUTDIR)" :
+	if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
+
+"$(BDIR)" :
+	if not exist "$(BDIR)/$(NULL)" mkdir "$(BDIR)"
+
+"$(INTDIR)" :
+    if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
+
+
+
+CPP_PROJ=/nologo /MT /W4 /GX /O2 /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_DATA)\..\..\include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fp"$(INTDIR)\ICUInterface.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+MTL_PROJ=/nologo /D "NDEBUG" /mktyplib203 /win32 
+BSC32=bscmake.exe
+BSC32_FLAGS=/nologo /o"$(OUTDIR)\ICUInterface.bsc" 
+BSC32_SBRS= \
+	
+LINK32=link.exe
+LINK32_FLAGS=icuin.lib icuuc.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:no /pdb:"$(INTDIR)\ICUInterface1d.pdb" /debug /machine:I386 /out:"./../../../build/lib/ICUInterface1d.dll" /implib:"$(OUTDIR)\ICUInterfaced.lib" /pdbtype:sept /libpath:"$(ICU_DATA)\..\..\lib" /libpath:"$(JAVA_HOME)\lib" 
+LINK32_OBJS= \
+	"$(INTDIR)\CollationInterface.obj" \
+	"$(INTDIR)\ConverterInterface.obj" \
+	"$(INTDIR)\ErrorCode.obj"
+
+"..\..\..\build\lib\ICUInterface1d.dll" : "$(OUTDIR)" "$(BDIR)" $(DEF_FILE) $(LINK32_OBJS) "$(BUILDDIR)\java" 
+    $(LINK32) @<<
+  $(LINK32_FLAGS) $(LINK32_OBJS)
+<<
+
+!ELSEIF  "$(CFG)" == "ICUInterface - Win32 Debug"
+
+OUTDIR=.\build\lib
+INTDIR=.\src\native\int
+
+ALL : "..\..\build\lib\ICUInterface1d.dll"
+
+
+CLEAN :
+	-@erase "$(INTDIR)\CollationInterface.obj"
+	-@erase "$(INTDIR)\ConverterInterface.obj"
+	-@erase "$(INTDIR)\ErrorCode.obj"
+	-@erase "$(INTDIR)\vc60.idb"
+	-@erase "$(INTDIR)\vc60.pdb"
+	-@erase "$(INTDIR)\ICUInterface1d.exp"
+	-@erase "$(INTDIR)\ICUInterface1d.pdb"
+	-@erase "$(OUTDIR)\ICUInterface1d.dll"
+	-@erase "$(OUTDIR)\ICUInterface1d.ilk"
+
+"$(OUTDIR)" :
+    if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
+
+"$(INTDIR)" :
+    if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
+
+"$(BDIR)" :
+	if not exist "$(BDIR)/$(NULL)" mkdir "$(BDIR)"
+
+CPP_PROJ=/nologo /G6 /MTd /W4 /Gm /GX /ZI /Od /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_DATA)\..\..\include" /I "$(NATIVE)\common" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+BSC32_SBRS= \
+	
+LINK32=link.exe
+LINK32_FLAGS=icuind.lib icuucd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:yes /pdb:"$(INTDIR)\ICUInterface1d.pdb" /debug /machine:I386 /out:"$(OUTDIR)\ICUInterface1d.dll" /implib:"$(INTDIR)\ICUInterface.lib" /pdbtype:sept /libpath:"$(ICU_DATA)\..\..\lib" 
+LINK32_OBJS= \
+	"$(INTDIR)\CollationInterface.obj" \
+	"$(INTDIR)\ConverterInterface.obj" \
+	"$(INTDIR)\ErrorCode.obj"
+
+"..\..\build\lib\ICUInterface1d.dll" : "$(OUTDIR)" "$(BDIR)" $(DEF_FILE) $(LINK32_OBJS) "$(BUILDDIR)\java"
+    $(LINK32) @<<
+  $(LINK32_FLAGS) $(LINK32_OBJS)
+<<
+
+!ENDIF 
+
+.c{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.c{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+
+<<
+"$(BUILDDIR)\java" :
+   	$(JAVAC_EXE) $(JAVA_FLAGS) $(SRCDIR)\$(CONVDIR)\ICUConverterInterface.java $(SRCDIR)\$(COMDIR)\ErrorCode.java $(SRCDIR)\$(CONVDIR)\ByteToCharConverterICU.java $(SRCDIR)\$(CONVDIR)\CharToByteConverterICU.java $(SRCDIR)\$(CONVDIR)\ByteToCharGB18030.java $(SRCDIR)\$(CONVDIR)\CharToByteGB18030.java $(SRCDIR)\$(TCDIR)\TestConv.java \
+    $(SRCDIR)\$(COLDIR)\NativeCollation.java $(SRCDIR)\$(COLDIR)\CollationAttribute.java $(SRCDIR)\$(COLDIR)\CollationElementIterator.java $(SRCDIR)\$(COLDIR)\CollationKey.java $(SRCDIR)\$(COLDIR)\Collator.java $(SRCDIR)\$(COLDIR)\NormalizationMode.java $(SRCDIR)\$(COLDIR)\RuleBasedCollator.java \
+    $(SRCDIR)\$(TESTDIR)\TestAll.java $(SRCDIR)\$(TESTDIR)\TestFmwk.java $(SRCDIR)\$(TESTDIR)\TestLog.java \
+    $(SRCDIR)\$(TTDIR)\CollationElementIteratorTest.java $(SRCDIR)\$(TTDIR)\CollatorAPITest.java $(SRCDIR)\$(TTDIR)\CollatorPerformanceTest.java $(SRCDIR)\$(TTDIR)\CollatorRegressionTest.java $(SRCDIR)\$(TTDIR)\CollatorTest.java $(SRCDIR)\$(TTDIR)\CurrencyCollatorTest.java \
+    $(SRCDIR)\$(TTDIR)\DanishCollatorTest.java $(SRCDIR)\$(TTDIR)\DummyCollatorTest.java $(SRCDIR)\$(TTDIR)\EnglishCollatorTest.java $(SRCDIR)\$(TTDIR)\FinnishCollatorTest.java $(SRCDIR)\$(TTDIR)\FrenchCollatorTest.java $(SRCDIR)\$(TTDIR)\G7CollatorTest.java $(SRCDIR)\$(TTDIR)\GermanCollatorTest.java \
+    $(SRCDIR)\$(TTDIR)\KanaCollatorTest.java $(SRCDIR)\$(TTDIR)\MonkeyCollatorTest.java $(SRCDIR)\$(TTDIR)\SpanishCollatorTest.java $(SRCDIR)\$(TTDIR)\ThaiCollatorTest.java $(SRCDIR)\$(TTDIR)\TurkishCollatorTest.java 
+
+
+
+!IF "$(CFG)" == "ICUInterface - Win32 Release" || "$(CFG)" == "ICUInterface - Win32 Debug"
+SOURCE=$(NATIVE)\collation\CollationInterface.c
+
+!IF  "$(CFG)" == "ICUInterface - Win32 Release"
+
+CPP_SWITCHES=/nologo /MT /W4 /GX /O2 /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_DATA)\..\..\include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fp"$(INTDIR)\ICUInterface.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+
+"$(INTDIR)\CollationInterface.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ELSEIF  "$(CFG)" == "ICUInterface - Win32 Debug"
+
+CPP_SWITCHES=/nologo /G6 /MTd /W4 /Gm /GX /ZI /Od /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_DATA)\..\..\include" /I "$(NATIVE)\common" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+
+"$(INTDIR)\CollationInterface.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ENDIF 
+
+SOURCE=$(NATIVE)\converter\ConverterInterface.c
+
+!IF  "$(CFG)" == "ICUInterface - Win32 Release"
+
+CPP_SWITCHES=/nologo /MT /W4 /GX /O2 /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_DATA)\..\..\include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fp"$(INTDIR)\ICUInterface.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+
+"$(INTDIR)\ConverterInterface.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ELSEIF  "$(CFG)" == "ICUInterface - Win32 Debug"
+
+CPP_SWITCHES=/nologo /G6 /MTd /W4 /Gm /GX /ZI /Od /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_DATA)\..\..\include" /I "$(NATIVE)\common" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+
+"$(INTDIR)\ConverterInterface.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) @<<
+  $(CPP_SWITCHES) $(SOURCE)
+<<
+
+
+!ENDIF 
+
+SOURCE=$(NATIVE)\common\ErrorCode.c
+
+"$(INTDIR)\ErrorCode.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+
+!ENDIF 
+
