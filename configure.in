@@ -54,5 +54,16 @@ AC_OUTPUT([Makefile])
 AC_CHECK_FILE(build,,AC_OUTPUT_COMMANDS([echo creating build directory.],mkdir build))
 AC_CHECK_FILE(build/lib,,AC_OUTPUT_COMMANDS([echo creating build/lib directory.],mkdir build/lib))
 AC_CHECK_FILE(build/classes,,AC_OUTPUT_COMMANDS([echo creating build/classes directory.], mkdir build/classes))
- 
+
+if test $JDK14 = false;then
+  AC_ARG_ENABLE(JDK14,
+            [--use-jkd14            build ICU4JNI with JDK1.4 [default=no]],
+            [case "$enableval}" in
+                   yes) JDK14=true;;
+                   no) JDK14=false;;
+                   *) AC_MSG_ERROR(bad value ${enableval} for --use-jdk14 ;;
+                   esac],
+            )
+fi
+
 dnl # Makefile
