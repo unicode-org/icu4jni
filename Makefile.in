@@ -10,13 +10,36 @@ top_srcdir=@top_srcdir@
 CANON=@CANON@
 JDK14=@JDK14@
 CRT=@CRT@
-# srcdir must be set before this is included
-include @ICU_MAKEFILE@
-
+ICU_CONFIG=@ICU_CONFIG@
 
 ## Build directory information
 top_builddir = .
 subdir = .
+
+####################################################################
+# Load ICU information. You can copy this to other makefiles #######
+####################################################################
+CC=$(shell @ICU_CONFIG@ --cc)
+CXX=$(shell @ICU_CONFIG@ --cxx)
+CPPFLAGS=$(shell @ICU_CONFIG@ --cppflags)
+CFLAGS=$(shell @ICU_CONFIG@ --cflags)
+CXXFLAGS=$(shell @ICU_CONFIG@ --cxxflags)
+LDFLAGS =$(shell @ICU_CONFIG@ --ldflags)
+INVOKE =$(shell @ICU_CONFIG@ --invoke)
+SO =$(shell @ICU_CONFIG@ --so)
+BINDIR = $(shell @ICU_CONFIG@ --bindir)
+GENRB=$(shell @ICU_CONFIG@ --invoke=genrb)
+PKGDATA=$(shell @ICU_CONFIG@ --invoke=pkgdata)
+SHLIB_c=$(shell @ICU_CONFIG@ --shlib-c)
+SHLIB_cc=$(shell @ICU_CONFIG@ --shlib-cc)
+####################################################################
+MKINSTALLDIRS = $(SHELL) $(top_srcdir)/mkinstalldirs
+
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA = @INSTALL_DATA@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
+
 CSRC_DIR=src/native
 BUILDDIR=build
 BUILD_DIR=build/lib
@@ -121,7 +144,7 @@ TARGETR = $(BUILD_DIR)/libICUInterface$(JNI_VERSION).$(SO)
 
 OBJECTS =  $(CSRC_DIR)/common/ErrorCode.o  $(CSRC_DIR)/collation/CollationInterface.o  $(CSRC_DIR)/converter/ConverterInterface.o $(CSRC_DIR)/normalizer/NormalizationInterface.o
 
-HADERS =   $(CSRC_DIR)/common/ErrorCode.h  $(CSRC_DIR)/collation/CollationInterface.h  $(CSRC_DIR)/converter/ConverterInterface.h $(CSRC_DIR)/normalizer/NormalizationInterface.h
+HEADERS =   $(CSRC_DIR)/common/ErrorCode.h  $(CSRC_DIR)/collation/CollationInterface.h  $(CSRC_DIR)/converter/ConverterInterface.h $(CSRC_DIR)/normalizer/NormalizationInterface.h
 
 #donot produce dependency information
 #DEPS = $(OBJECTS:.o=.d)
@@ -129,10 +152,6 @@ HADERS =   $(CSRC_DIR)/common/ErrorCode.h  $(CSRC_DIR)/collation/CollationInterf
 # We want to get the local copies of these files first, as the
 # dependency. Even though they do get exported.
 LDFLAGS += -L/usr/lib $(CRT)
-
-ICU4JNILIBS= $(LIBS) -L$(libdir)    -l$(ICUPREFIX)data$(ICULIBSUFFIX)      \
-                        -l$(ICUPREFIX)i18n$(ICULIBSUFFIX)      \
-                        -l$(ICUPREFIX)uc$(ICULIBSUFFIX)
 
 
 # get the hostname the code is built on
@@ -142,8 +161,6 @@ CPPFLAGS := -I$(JAVA_HOME)/include	-I$(JAVA_HOME)/include/$(CANON) -I $(CSRC_DIR
 .PHONY : all all-local install install-local clean clean-local \
 distclean distclean-local dist dist-local check check-local java javar
 
-## Clear suffix list
-.SUFFIXES :
 
 ## List of standard targets
 all: all-local java
@@ -189,7 +206,7 @@ distclean-local: clean-local
 check-local: all testfmwk  testcs
 
 testfmwk: copy-file
-	LD_LIBRARY_PATH=$(prefix)/lib ICU_DATA=$(prefix)/lib/icu/$(VERSION) $(JAVA_EXEC) -classpath :./build/classes: -Djava.library.path=$(prefix)/lib:$(PATHWD)/build/lib: com.ibm.icu4jni.test.TestAll -nothrow
+	$(INVOKE) $(JAVA_EXEC) -classpath :./build/classes: -Djava.library.path=$(prefix)/lib:$(PATHWD)/build/lib: com.ibm.icu4jni.test.TestAll -nothrow
 
 testcs:
 	$(CSTEST)
@@ -212,14 +229,11 @@ javar :
 copy-file :
 	cp $(SRCDIR)/classes/com/ibm/icu4jni/test/text/*.txt $(BUILDDIR)/classes/com/ibm/icu4jni/test/text
 
-# ICU4JNILIBS includes all standard ICU libraries.
-# if we wanted only part of the ICU, we could use (for example) just
-#         '$(LIBS) -licu-uc -lusort' ...
 $(TARGET) : $(OBJECTS)
-	$(SHLIB.c) -o $@ $^ $(ICU4JNILIBS)
+	$(SHLIB_c) -o $@ $^ $(LDFLAGS)
 
 $(TARGETR) :$(OBJECTS)
-	$(SHLIB.c) -mno-debug-info -o $@ $^ $(ICU4JNILIBS) 
+	$(SHLIB_c) -mno-debug-info -o $@ $^ $(LDFLAGS) 
 
 #ifneq ($(MAKECMDGOALS),distclean)
 #-include $(DEPS)

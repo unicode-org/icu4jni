@@ -566,10 +566,255 @@ fi
 fi
 
 # Cross compiling is taken care of becuase you're pointing to an entire set of configuration options
+#AC_CHECK_FILE($prefix/lib/icu/Makefile.inc,,AC_MSG_ERROR([Could not find the installed ICU. Re-run ./configure with --prefix=XXX where XXX is the same prefix that the ICU was configured with. ]))
+
+
+  for ac_prog in icu-config
+do
+# Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:578: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_ICU_CONFIG'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$ICU_CONFIG" in
+  /*)
+  ac_cv_path_ICU_CONFIG="$ICU_CONFIG" # Let the user override the test with a path.
+  ;;
+  ?:/*)			 
+  ac_cv_path_ICU_CONFIG="$ICU_CONFIG" # Let the user override the test with a dos path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS=":"
+  ac_dummy="$PATH"
+  for ac_dir in $ac_dummy; do 
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_ICU_CONFIG="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  ;;
+esac
+fi
+ICU_CONFIG="$ac_cv_path_ICU_CONFIG"
+if test -n "$ICU_CONFIG"; then
+  echo "$ac_t""$ICU_CONFIG" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+test -n "$ICU_CONFIG" && break
+done
+
+ 
+
+ if test -n "$ac_cv_path_ICU_CONFIG"; then
+    echo $ac_n "checking ICU installation""... $ac_c" 1>&6
+echo "configure:617: checking ICU installation" >&5
+    if ${ICU_CONFIG} --exists; then
+        echo ok
+    else
+        { echo "configure: error: ICU is not installed properly." 1>&2; exit 1; }
+    fi
+    echo $ac_n "checking ICU version""... $ac_c" 1>&6
+echo "configure:624: checking ICU version" >&5
+    ${ICU_CONFIG} --version
+ else
+    { echo "configure: error: Cannot find icu-config, please check the PATH" 1>&2; exit 1; }
+ fi
+
+
+#OLDCPPFLAGS=${CPPFLAGS}
+#CPPFLAGS="${CPPFLAGS} -I$prefix/include"
+#AC_CHECK_HEADERS($prefix/include/unicode/utypes.h,,AC_MSG_ERROR([Could not find the installed ICU. Re-run ./configure with --prefix=XXX where XXX is the same prefix that the ICU was configured with. ]))
+#CPPFLAGS=${OLDCPPFLAGS}
+
+PACKAGE="icu4jni"
+
+
+# Extract the first word of "autoconf", so it can be a program name with args.
+set dummy autoconf; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:642: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_prog_AUTOCONF'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  if test -n "$AUTOCONF"; then
+  ac_cv_prog_AUTOCONF="$AUTOCONF" # Let the user override the test.
+else
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS=":"
+  ac_dummy="$PATH"
+  for ac_dir in $ac_dummy; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_prog_AUTOCONF="autoconf"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  test -z "$ac_cv_prog_AUTOCONF" && ac_cv_prog_AUTOCONF="true"
+fi
+fi
+AUTOCONF="$ac_cv_prog_AUTOCONF"
+if test -n "$AUTOCONF"; then
+  echo "$ac_t""$AUTOCONF" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+
+ICU_MAKEFILE=$prefix/lib/icu/Makefile.inc
+
+
+
+# Extract the first word of "java", so it can be a program name with args.
+set dummy java; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:677: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_JAVA'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$JAVA" in
+  /*)
+  ac_cv_path_JAVA="$JAVA" # Let the user override the test with a path.
+  ;;
+  ?:/*)			 
+  ac_cv_path_JAVA="$JAVA" # Let the user override the test with a dos path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS=":"
+  ac_dummy="$JAVA_HOME/bin"
+  for ac_dir in $ac_dummy; do 
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_JAVA="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  test -z "$ac_cv_path_JAVA" && ac_cv_path_JAVA="false"
+  ;;
+esac
+fi
+JAVA="$ac_cv_path_JAVA"
+if test -n "$JAVA"; then
+  echo "$ac_t""$JAVA" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+# Extract the first word of "javac", so it can be a program name with args.
+set dummy javac; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:713: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_path_JAVAC'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  case "$JAVAC" in
+  /*)
+  ac_cv_path_JAVAC="$JAVAC" # Let the user override the test with a path.
+  ;;
+  ?:/*)			 
+  ac_cv_path_JAVAC="$JAVAC" # Let the user override the test with a dos path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS=":"
+  ac_dummy="$JAVA_HOME/bin"
+  for ac_dir in $ac_dummy; do 
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_path_JAVAC="$ac_dir/$ac_word"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  test -z "$ac_cv_path_JAVAC" && ac_cv_path_JAVAC="false"
+  ;;
+esac
+fi
+JAVAC="$ac_cv_path_JAVAC"
+if test -n "$JAVAC"; then
+  echo "$ac_t""$JAVAC" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+if test "${JAVA}" = "false" ; then
+    { echo "configure: error: Could not find JAVA virtual machine. Please check its existence." 1>&2; exit 1; }
+fi
+if test "${JAVAC}" = "false" ; then
+     { echo "configure: error: Could not find JAVAC compiler. Please check its existence." 1>&2; exit 1; } 
+fi
+ac_aux_dir=
+for ac_dir in $srcdir $srcdir/.. $srcdir/../..; do
+  if test -f $ac_dir/install-sh; then
+    ac_aux_dir=$ac_dir
+    ac_install_sh="$ac_aux_dir/install-sh -c"
+    break
+  elif test -f $ac_dir/install.sh; then
+    ac_aux_dir=$ac_dir
+    ac_install_sh="$ac_aux_dir/install.sh -c"
+    break
+  fi
+done
+if test -z "$ac_aux_dir"; then
+  { echo "configure: error: can not find install-sh or install.sh in $srcdir $srcdir/.. $srcdir/../.." 1>&2; exit 1; }
+fi
+ac_config_guess=$ac_aux_dir/config.guess
+ac_config_sub=$ac_aux_dir/config.sub
+ac_configure=$ac_aux_dir/configure # This should be Cygnus configure.
+
+
+# Make sure we can run config.sub.
+if ${CONFIG_SHELL-/bin/sh} $ac_config_sub sun4 >/dev/null 2>&1; then :
+else { echo "configure: error: can not run $ac_config_sub" 1>&2; exit 1; }
+fi
+
+echo $ac_n "checking host system type""... $ac_c" 1>&6
+echo "configure:778: checking host system type" >&5
+
+host_alias=$host
+case "$host_alias" in
+NONE)
+  case $nonopt in
+  NONE)
+    if host_alias=`${CONFIG_SHELL-/bin/sh} $ac_config_guess`; then :
+    else { echo "configure: error: can not guess host type; you must specify one" 1>&2; exit 1; }
+    fi ;;
+  *) host_alias=$nonopt ;;
+  esac ;;
+esac
+
+host=`${CONFIG_SHELL-/bin/sh} $ac_config_sub $host_alias`
+host_cpu=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
+host_vendor=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
+host_os=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
+echo "$ac_t""$host" 1>&6
+
+CANON="helo"
+case "${host}" in
+        *-*-solaris*)   CANON="solaris" ;;
+        *-*-linux*)     CANON="linux" ;;
+        *-*-freebsd*)   CANON="bsd" ;;
+        *-*-aix*)       CANON="aix" ;;
+        *-sequent-*)    CANON="ptx" ;;
+        *-*-hpux*)      CANON="hpux" ;;
+        *-*-irix*)      CANON="irix" ;;
+        *-*-os390*)     CANON="os390" ;;
+        *-*-os400*)     CANON="os400" ;;
+        *-apple-darwin*|*-apple-rhapsody*)      CANON="darwin" ;;
+        *)              CANON="unknown" ;;
+esac
+
+
+
 # Extract the first word of "gcc", so it can be a program name with args.
 set dummy gcc; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:573: checking for $ac_word" >&5
+echo "configure:818: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_CC'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -599,7 +844,7 @@ if test -z "$CC"; then
   # Extract the first word of "cc", so it can be a program name with args.
 set dummy cc; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:603: checking for $ac_word" >&5
+echo "configure:848: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_CC'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -650,7 +895,7 @@ fi
       # Extract the first word of "cl", so it can be a program name with args.
 set dummy cl; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:654: checking for $ac_word" >&5
+echo "configure:899: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_CC'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -682,7 +927,7 @@ fi
 fi
 
 echo $ac_n "checking whether the C compiler ($CC $CFLAGS $LDFLAGS) works""... $ac_c" 1>&6
-echo "configure:686: checking whether the C compiler ($CC $CFLAGS $LDFLAGS) works" >&5
+echo "configure:931: checking whether the C compiler ($CC $CFLAGS $LDFLAGS) works" >&5
 
 ac_ext=c
 # CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
@@ -693,12 +938,12 @@ cross_compiling=$ac_cv_prog_cc_cross
 
 cat > conftest.$ac_ext << EOF
 
-#line 697 "configure"
+#line 942 "configure"
 #include "confdefs.h"
 
 main(){return(0);}
 EOF
-if { (eval echo configure:702: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:947: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   ac_cv_prog_cc_works=yes
   # If we can't run a trivial program, we are probably using a cross compiler.
   if (./conftest; exit) 2>/dev/null; then
@@ -724,12 +969,12 @@ if test $ac_cv_prog_cc_works = no; then
   { echo "configure: error: installation or configuration problem: C compiler cannot create executables." 1>&2; exit 1; }
 fi
 echo $ac_n "checking whether the C compiler ($CC $CFLAGS $LDFLAGS) is a cross-compiler""... $ac_c" 1>&6
-echo "configure:728: checking whether the C compiler ($CC $CFLAGS $LDFLAGS) is a cross-compiler" >&5
+echo "configure:973: checking whether the C compiler ($CC $CFLAGS $LDFLAGS) is a cross-compiler" >&5
 echo "$ac_t""$ac_cv_prog_cc_cross" 1>&6
 cross_compiling=$ac_cv_prog_cc_cross
 
 echo $ac_n "checking whether we are using GNU C""... $ac_c" 1>&6
-echo "configure:733: checking whether we are using GNU C" >&5
+echo "configure:978: checking whether we are using GNU C" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_gcc'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -738,7 +983,7 @@ else
   yes;
 #endif
 EOF
-if { ac_try='${CC-cc} -E conftest.c'; { (eval echo configure:742: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }; } | egrep yes >/dev/null 2>&1; then
+if { ac_try='${CC-cc} -E conftest.c'; { (eval echo configure:987: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }; } | egrep yes >/dev/null 2>&1; then
   ac_cv_prog_gcc=yes
 else
   ac_cv_prog_gcc=no
@@ -757,7 +1002,7 @@ ac_test_CFLAGS="${CFLAGS+set}"
 ac_save_CFLAGS="$CFLAGS"
 CFLAGS=
 echo $ac_n "checking whether ${CC-cc} accepts -g""... $ac_c" 1>&6
-echo "configure:761: checking whether ${CC-cc} accepts -g" >&5
+echo "configure:1006: checking whether ${CC-cc} accepts -g" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_cc_g'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -789,336 +1034,9 @@ else
 fi
 
 
-ac_safe=`echo "$prefix/lib/icu/Makefile.inc" | sed 'y%./+-%__p_%'`
-echo $ac_n "checking for $prefix/lib/icu/Makefile.inc""... $ac_c" 1>&6
-echo "configure:795: checking for $prefix/lib/icu/Makefile.inc" >&5
-if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
-  echo $ac_n "(cached) $ac_c" 1>&6
-else
-  if test "$cross_compiling" = yes; then
-    { echo "configure: error: Cannot check for file existence when cross compiling" 1>&2; exit 1; }
-else
-  if test -r $prefix/lib/icu/Makefile.inc; then
-    eval "ac_cv_file_$ac_safe=yes"
-  else
-    eval "ac_cv_file_$ac_safe=no"
-  fi
-fi
-fi
-if eval "test \"`echo '$ac_cv_file_'$ac_safe`\" = yes"; then
-  echo "$ac_t""yes" 1>&6
-  :
-else
-  echo "$ac_t""no" 1>&6
-{ echo "configure: error: Could not find the installed ICU. Re-run ./configure with --prefix=XXX where XXX is the same prefix that the ICU was configured with. " 1>&2; exit 1; }
-fi
-
-
-OLDCPPFLAGS=${CPPFLAGS}
-CPPFLAGS="${CPPFLAGS} -I$prefix/include"
-echo $ac_n "checking how to run the C preprocessor""... $ac_c" 1>&6
-echo "configure:821: checking how to run the C preprocessor" >&5
-# On Suns, sometimes $CPP names a directory.
-if test -n "$CPP" && test -d "$CPP"; then
-  CPP=
-fi
-if test -z "$CPP"; then
-if eval "test \"`echo '$''{'ac_cv_prog_CPP'+set}'`\" = set"; then
-  echo $ac_n "(cached) $ac_c" 1>&6
-else
-    # This must be in double quotes, not single quotes, because CPP may get
-  # substituted into the Makefile and "${CC-cc}" will confuse make.
-  CPP="${CC-cc} -E"
-  # On the NeXT, cc -E runs the code through the compiler's parser,
-  # not just through cpp.
-  cat > conftest.$ac_ext <<EOF
-#line 836 "configure"
-#include "confdefs.h"
-#include <assert.h>
-Syntax Error
-EOF
-ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:842: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
-ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
-if test -z "$ac_err"; then
-  :
-else
-  echo "$ac_err" >&5
-  echo "configure: failed program was:" >&5
-  cat conftest.$ac_ext >&5
-  rm -rf conftest*
-  CPP="${CC-cc} -E -traditional-cpp"
-  cat > conftest.$ac_ext <<EOF
-#line 853 "configure"
-#include "confdefs.h"
-#include <assert.h>
-Syntax Error
-EOF
-ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:859: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
-ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
-if test -z "$ac_err"; then
-  :
-else
-  echo "$ac_err" >&5
-  echo "configure: failed program was:" >&5
-  cat conftest.$ac_ext >&5
-  rm -rf conftest*
-  CPP="${CC-cc} -nologo -E"
-  cat > conftest.$ac_ext <<EOF
-#line 870 "configure"
-#include "confdefs.h"
-#include <assert.h>
-Syntax Error
-EOF
-ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:876: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
-ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
-if test -z "$ac_err"; then
-  :
-else
-  echo "$ac_err" >&5
-  echo "configure: failed program was:" >&5
-  cat conftest.$ac_ext >&5
-  rm -rf conftest*
-  CPP=/lib/cpp
-fi
-rm -f conftest*
-fi
-rm -f conftest*
-fi
-rm -f conftest*
-  ac_cv_prog_CPP="$CPP"
-fi
-  CPP="$ac_cv_prog_CPP"
-else
-  ac_cv_prog_CPP="$CPP"
-fi
-echo "$ac_t""$CPP" 1>&6
-
-for ac_hdr in $prefix/include/unicode/utypes.h
-do
-ac_safe=`echo "$ac_hdr" | sed 'y%./+-%__p_%'`
-echo $ac_n "checking for $ac_hdr""... $ac_c" 1>&6
-echo "configure:904: checking for $ac_hdr" >&5
-if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
-  echo $ac_n "(cached) $ac_c" 1>&6
-else
-  cat > conftest.$ac_ext <<EOF
-#line 909 "configure"
-#include "confdefs.h"
-#include <$ac_hdr>
-EOF
-ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:914: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
-ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
-if test -z "$ac_err"; then
-  rm -rf conftest*
-  eval "ac_cv_header_$ac_safe=yes"
-else
-  echo "$ac_err" >&5
-  echo "configure: failed program was:" >&5
-  cat conftest.$ac_ext >&5
-  rm -rf conftest*
-  eval "ac_cv_header_$ac_safe=no"
-fi
-rm -f conftest*
-fi
-if eval "test \"`echo '$ac_cv_header_'$ac_safe`\" = yes"; then
-  echo "$ac_t""yes" 1>&6
-    ac_tr_hdr=HAVE_`echo $ac_hdr | sed 'y%abcdefghijklmnopqrstuvwxyz./-%ABCDEFGHIJKLMNOPQRSTUVWXYZ___%'`
-  cat >> confdefs.h <<EOF
-#define $ac_tr_hdr 1
-EOF
- 
-else
-  echo "$ac_t""no" 1>&6
-{ echo "configure: error: Could not find the installed ICU. Re-run ./configure with --prefix=XXX where XXX is the same prefix that the ICU was configured with. " 1>&2; exit 1; }
-fi
-done
-
-CPPFLAGS=${OLDCPPFLAGS}
-
-PACKAGE="icu4jni"
-
-
-# Extract the first word of "autoconf", so it can be a program name with args.
-set dummy autoconf; ac_word=$2
-echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:949: checking for $ac_word" >&5
-if eval "test \"`echo '$''{'ac_cv_prog_AUTOCONF'+set}'`\" = set"; then
-  echo $ac_n "(cached) $ac_c" 1>&6
-else
-  if test -n "$AUTOCONF"; then
-  ac_cv_prog_AUTOCONF="$AUTOCONF" # Let the user override the test.
-else
-  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS=":"
-  ac_dummy="$PATH"
-  for ac_dir in $ac_dummy; do
-    test -z "$ac_dir" && ac_dir=.
-    if test -f $ac_dir/$ac_word; then
-      ac_cv_prog_AUTOCONF="autoconf"
-      break
-    fi
-  done
-  IFS="$ac_save_ifs"
-  test -z "$ac_cv_prog_AUTOCONF" && ac_cv_prog_AUTOCONF="true"
-fi
-fi
-AUTOCONF="$ac_cv_prog_AUTOCONF"
-if test -n "$AUTOCONF"; then
-  echo "$ac_t""$AUTOCONF" 1>&6
-else
-  echo "$ac_t""no" 1>&6
-fi
-
-
-ICU_MAKEFILE=$prefix/lib/icu/Makefile.inc
-
-
-for ac_prog in $JAVA_HOME/bin/java
-do
-# Extract the first word of "$ac_prog", so it can be a program name with args.
-set dummy $ac_prog; ac_word=$2
-echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:985: checking for $ac_word" >&5
-if eval "test \"`echo '$''{'ac_cv_prog_JAVA'+set}'`\" = set"; then
-  echo $ac_n "(cached) $ac_c" 1>&6
-else
-  if test -n "$JAVA"; then
-  ac_cv_prog_JAVA="$JAVA" # Let the user override the test.
-else
-  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS=":"
-  ac_dummy="$PATH"
-  for ac_dir in $ac_dummy; do
-    test -z "$ac_dir" && ac_dir=.
-    if test -f $ac_dir/$ac_word; then
-      ac_cv_prog_JAVA="$ac_prog"
-      break
-    fi
-  done
-  IFS="$ac_save_ifs"
-fi
-fi
-JAVA="$ac_cv_prog_JAVA"
-if test -n "$JAVA"; then
-  echo "$ac_t""$JAVA" 1>&6
-else
-  echo "$ac_t""no" 1>&6
-fi
-
-test -n "$JAVA" && break
-done
-test -n "$JAVA" || JAVA="false"
-
-for ac_prog in $JAVA_HOME/bin/javac
-do
-# Extract the first word of "$ac_prog", so it can be a program name with args.
-set dummy $ac_prog; ac_word=$2
-echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:1020: checking for $ac_word" >&5
-if eval "test \"`echo '$''{'ac_cv_prog_JAVAC'+set}'`\" = set"; then
-  echo $ac_n "(cached) $ac_c" 1>&6
-else
-  if test -n "$JAVAC"; then
-  ac_cv_prog_JAVAC="$JAVAC" # Let the user override the test.
-else
-  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS=":"
-  ac_dummy="$PATH"
-  for ac_dir in $ac_dummy; do
-    test -z "$ac_dir" && ac_dir=.
-    if test -f $ac_dir/$ac_word; then
-      ac_cv_prog_JAVAC="$ac_prog"
-      break
-    fi
-  done
-  IFS="$ac_save_ifs"
-fi
-fi
-JAVAC="$ac_cv_prog_JAVAC"
-if test -n "$JAVAC"; then
-  echo "$ac_t""$JAVAC" 1>&6
-else
-  echo "$ac_t""no" 1>&6
-fi
-
-test -n "$JAVAC" && break
-done
-test -n "$JAVAC" || JAVAC="false"
-
-if test "${JAVA}" = "false" ; then
-    { echo "configure: error: Could not find JAVA virtual machine. Please check its existence." 1>&2; exit 1; }
-fi
-if test "${JAVAC}" = "false" ; then
-     { echo "configure: error: Could not find JAVAC compiler. Please check its existence." 1>&2; exit 1; } 
-fi
-ac_aux_dir=
-for ac_dir in $srcdir $srcdir/.. $srcdir/../..; do
-  if test -f $ac_dir/install-sh; then
-    ac_aux_dir=$ac_dir
-    ac_install_sh="$ac_aux_dir/install-sh -c"
-    break
-  elif test -f $ac_dir/install.sh; then
-    ac_aux_dir=$ac_dir
-    ac_install_sh="$ac_aux_dir/install.sh -c"
-    break
-  fi
-done
-if test -z "$ac_aux_dir"; then
-  { echo "configure: error: can not find install-sh or install.sh in $srcdir $srcdir/.. $srcdir/../.." 1>&2; exit 1; }
-fi
-ac_config_guess=$ac_aux_dir/config.guess
-ac_config_sub=$ac_aux_dir/config.sub
-ac_configure=$ac_aux_dir/configure # This should be Cygnus configure.
-
-
-# Make sure we can run config.sub.
-if ${CONFIG_SHELL-/bin/sh} $ac_config_sub sun4 >/dev/null 2>&1; then :
-else { echo "configure: error: can not run $ac_config_sub" 1>&2; exit 1; }
-fi
-
-echo $ac_n "checking host system type""... $ac_c" 1>&6
-echo "configure:1082: checking host system type" >&5
-
-host_alias=$host
-case "$host_alias" in
-NONE)
-  case $nonopt in
-  NONE)
-    if host_alias=`${CONFIG_SHELL-/bin/sh} $ac_config_guess`; then :
-    else { echo "configure: error: can not guess host type; you must specify one" 1>&2; exit 1; }
-    fi ;;
-  *) host_alias=$nonopt ;;
-  esac ;;
-esac
-
-host=`${CONFIG_SHELL-/bin/sh} $ac_config_sub $host_alias`
-host_cpu=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
-host_vendor=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
-host_os=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
-echo "$ac_t""$host" 1>&6
-
-CANON="helo"
-case "${host}" in
-        *-*-solaris*)   CANON="solaris" ;;
-        *-*-linux*)     CANON="linux" ;;
-        *-*-freebsd*)   CANON="bsd" ;;
-        *-*-aix*)       CANON="aix" ;;
-        *-sequent-*)    CANON="ptx" ;;
-        *-*-hpux*)      CANON="hpux" ;;
-        *-*-irix*)      CANON="irix" ;;
-        *-*-os390*)     CANON="os390" ;;
-        *-*-os400*)     CANON="os400" ;;
-        *-apple-darwin*|*-apple-rhapsody*)      CANON="darwin" ;;
-        *)              CANON="unknown" ;;
-esac
-
-
-
-
 ac_safe=`echo "/usr/lib/libC.so" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for /usr/lib/libC.so""... $ac_c" 1>&6
-echo "configure:1122: checking for /usr/lib/libC.so" >&5
+echo "configure:1040: checking for /usr/lib/libC.so" >&5
 if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1146,7 +1064,7 @@ fi
 
 ac_safe=`echo "$JAVA_HOME/include/jni.h" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for $JAVA_HOME/include/jni.h""... $ac_c" 1>&6
-echo "configure:1150: checking for $JAVA_HOME/include/jni.h" >&5
+echo "configure:1068: checking for $JAVA_HOME/include/jni.h" >&5
 if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1171,7 +1089,7 @@ fi
 
 ac_safe=`echo "$JAVA_HOME/include/$CANON/jni_md.h" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for $JAVA_HOME/include/$CANON/jni_md.h""... $ac_c" 1>&6
-echo "configure:1175: checking for $JAVA_HOME/include/$CANON/jni_md.h" >&5
+echo "configure:1093: checking for $JAVA_HOME/include/$CANON/jni_md.h" >&5
 if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1193,7 +1111,7 @@ else
 
 ac_safe=`echo "$JAVA_HOME/include/jni_md.h" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for $JAVA_HOME/include/jni_md.h""... $ac_c" 1>&6
-echo "configure:1197: checking for $JAVA_HOME/include/jni_md.h" >&5
+echo "configure:1115: checking for $JAVA_HOME/include/jni_md.h" >&5
 if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1378,8 +1296,7 @@ s%@oldincludedir@%$oldincludedir%g
 s%@infodir@%$infodir%g
 s%@mandir@%$mandir%g
 s%@GENRB@%$GENRB%g
-s%@CC@%$CC%g
-s%@CPP@%$CPP%g
+s%@ICU_CONFIG@%$ICU_CONFIG%g
 s%@PACKAGE@%$PACKAGE%g
 s%@AUTOCONF@%$AUTOCONF%g
 s%@ICU_MAKEFILE@%$ICU_MAKEFILE%g
@@ -1391,6 +1308,7 @@ s%@host_cpu@%$host_cpu%g
 s%@host_vendor@%$host_vendor%g
 s%@host_os@%$host_os%g
 s%@CANON@%$CANON%g
+s%@CC@%$CC%g
 s%@CRT@%$CRT%g
 s%@JDK14@%$JDK14%g
 
@@ -1504,7 +1422,7 @@ test "$no_create" = yes || ${CONFIG_SHELL-/bin/sh} $CONFIG_STATUS || exit 1
 
 ac_safe=`echo "build" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for build""... $ac_c" 1>&6
-echo "configure:1508: checking for build" >&5
+echo "configure:1426: checking for build" >&5
 if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1529,7 +1447,7 @@ fi
 
 ac_safe=`echo "build/lib" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for build/lib""... $ac_c" 1>&6
-echo "configure:1533: checking for build/lib" >&5
+echo "configure:1451: checking for build/lib" >&5
 if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1554,7 +1472,7 @@ fi
 
 ac_safe=`echo "build/classes" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for build/classes""... $ac_c" 1>&6
-echo "configure:1558: checking for build/classes" >&5
+echo "configure:1476: checking for build/classes" >&5
 if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1586,7 +1504,7 @@ FNAME=./build/META-INF/java.nio.charset.spi.CharsetProvider
 
 ac_safe=`echo "build/META-INF" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for build/META-INF""... $ac_c" 1>&6
-echo "configure:1590: checking for build/META-INF" >&5
+echo "configure:1508: checking for build/META-INF" >&5
 if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1611,7 +1529,7 @@ fi
 
 ac_safe=`echo "build/META-INF/java.nio.charset.spi.CharsetProvider" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for build/META-INF/java.nio.charset.spi.CharsetProvider""... $ac_c" 1>&6
-echo "configure:1615: checking for build/META-INF/java.nio.charset.spi.CharsetProvider" >&5
+echo "configure:1533: checking for build/META-INF/java.nio.charset.spi.CharsetProvider" >&5
 if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
