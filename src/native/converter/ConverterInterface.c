@@ -699,17 +699,25 @@ Java_com_ibm_icu4jni_converters_NativeConverter_getAvailable(JNIEnv *env, jclass
    
     jobjectArray ret;
     int32_t i = ucnv_countAvailable();
+    UErrorCode error = U_ZERO_ERROR;
+    const char* name =NULL;
 
     ret= (jobjectArray)(*env)->NewObjectArray( env,i,
                                                (*env)->FindClass(env,"java/lang/String"),
                                                (*env)->NewStringUTF(env,""));
 
-  
     for(;--i>=0;) {
-        const char* name = ucnv_getAvailableName(i);
-        (*env)->SetObjectArrayElement(env,ret,i,(*env)->NewStringUTF(env,name));
-    }
+        name = ucnv_getAvailableName(i);
+        if(strstr(name,",")!=NULL){
+            name = ucnv_getAlias(name,1,&error);
 
+        }
+        
+        (*env)->SetObjectArrayElement(env,ret,i,(*env)->NewStringUTF(env,name));
+        /* printf("canonical name : %s  at %i\n", name,i); */
+
+    
+    }
     return (ret);
 }
 
@@ -737,22 +745,26 @@ Java_com_ibm_icu4jni_converters_NativeConverter_getAliases(JNIEnv *env, jclass j
     int32_t aliasNum = 0;
     UErrorCode error = U_ZERO_ERROR;
     const char* encName = (*env)->GetStringUTFChars(env,enc,NULL);
-    
+    int i=0;
+    int j=0;
+    const char* aliasArray[50];
+
     if(encName){
         aliasNum = ucnv_countAliases(encName,&error);
-
         if(U_SUCCESS(error)){
-            ret =  (jobjectArray)(*env)->NewObjectArray(env,aliasNum,
-                                                        (*env)->FindClass(env,"java/lang/String"),
-                                                        (*env)->NewStringUTF(env,""));
-
-            for(;--aliasNum>=0;) {
-                const char* name = ucnv_getAlias(encName,(uint16_t)aliasNum,&error);
-                if(U_SUCCESS(error)){
-                    (*env)->SetObjectArrayElement(env,ret,aliasNum,(*env)->NewStringUTF(env,name));
+            for(i=0,j=0;i<aliasNum;i++){
+                const char* name = ucnv_getAlias(encName,(uint16_t)i,&error);
+                if(strstr(name,",")==NULL){
+                    aliasArray[j++]= name;
                 }
             }
-        }
+            ret =  (jobjectArray)(*env)->NewObjectArray(env,j,
+                                                        (*env)->FindClass(env,"java/lang/String"),
+                                                        (*env)->NewStringUTF(env,""));
+            for(;--j>=0;) {
+                 (*env)->SetObjectArrayElement(env,ret,j,(*env)->NewStringUTF(env,aliasArray[j]));
+            }
+        }            
     }
    (*env)->ReleaseStringUTFChars(env,enc,encName);
 
@@ -765,14 +777,16 @@ JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getCanonicalName(JNIEnv 
     UErrorCode error = U_ZERO_ERROR;
     const char* encName = (*env)->GetStringUTFChars(env,enc,NULL);
     const char* canonicalName = NULL;
-
+    jstring ret;
     if(encName){
-        UConverter* conv = ucnv_open(encName,&error);
-        canonicalName = ucnv_getName(conv,&error);
-        ucnv_close(conv);
+        canonicalName = ucnv_getAlias(encName,0,&error);
+        if(strstr(canonicalName,",")!=NULL){
+           canonicalName = ucnv_getAlias(canonicalName,1,&error);
+        }
+        ret = ((*env)->NewStringUTF(env, canonicalName));
     }
-   (*env)->ReleaseStringUTFChars(env,enc,encName);
-    return((*env)->NewStringUTF(env, canonicalName));
+    (*env)->ReleaseStringUTFChars(env,enc,encName);
+    return ret;
 }
 
 JNIEXPORT jint JNICALL 

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/converters/NativeConverter.java,v $ 
-* $Date: 2001/10/27 00:34:55 $ 
-* $Revision: 1.5 $
+* $Date: 2001/11/02 02:28:25 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */ 
@@ -263,7 +263,7 @@ public final class NativeConverter{
      * Gets the canonical names of available converters 
      * @return Object[] names as an object array
      */
-    public static final native Object[] getAvailable();
+    public static final native String[] getAvailable();
     
     /**
      * Gets the number of aliases for a converter name
@@ -277,7 +277,7 @@ public final class NativeConverter{
      * @param converter name
      * @return converter names as elements in an object array
      */
-    public static final native Object[] getAliases(String enc);
+    public static final native String[] getAliases(String enc);
     
     /**
      * Gets the canonical name of the converter

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/charset/CharsetProviderICU.java,v $ 
-* $Date: 2001/10/27 00:34:55 $ 
-* $Revision: 1.3 $
+* $Date: 2001/11/02 02:28:25 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */ 
@@ -36,7 +36,17 @@ public final class CharsetProviderICU extends CharsetProvider{
      * @return charset objet for the given charset name
      */
     public final Charset charsetForName(String charsetName) {
-	    return lookup(charsetName);
+	    // get the canonical name	 
+        String canonicalName = NativeConverter.getCanonicalName(charsetName);            
+        // create the converter object and return it
+        if(canonicalName==null){
+            // this would make the Charset API to throw 
+            // unsupported encoding exception
+            return null;
+        }else{
+            String[] aliases = (String[])NativeConverter.getAliases(charsetName);            
+	        return (new CharsetICU(canonicalName, aliases));
+	    }
     }
     
     /**
@@ -45,95 +55,15 @@ public final class CharsetProviderICU extends CharsetProvider{
      * @param map a map to receive charset objects and names
      */
     public final void putCharsets(Map map) {
-        //get the iterator for the keys in aliases map
-        Iterator iter = alias.keySet().iterator();
-        for (; iter.hasNext();) {
-	        String canonicalName = (String)iter.next();
-	        put(map, canonicalName, lookup(canonicalName));
-	    }
-    }
-    
-    //--------------------------------------------------
-    // Private utility methods
-    //--------------------------------------------------
-    
-    /**
-     * Looks up the charsetName in local cache, constructs a charset
-     * object and returns it
-     * @param charset name
-     * @return charset objet for the given charset name
-     */
-    private Charset lookup(String charsetName) {
-	    // get the canonical name
-	    String canonicalName = canonicalize(charsetName);
-        // create the converter object and return it
-        if(canonicalName==null){
-            // this would make the Charset API to throw 
-            // unsupported encoding exception
-            return null;
-        }else{
-	        return (new CharsetICU(canonicalName, aliases(canonicalName)));
-	    }
-    }
-    /**
-     * Stores the canonical names and aliases in the local cache
-     */
-    private void addMapping(String canonicalName, String[] aliases) {
-        // store the canonical name as one of the aliases
-	    put(alias,canonicalName,canonicalName);
-	    for (int i = 0; i < aliases.length; i++){
-	        put(alias, aliases[i], canonicalName);
-	    }
-	    put(aliasNames, canonicalName, aliases);
-    }
-    
-    // A local cache of available converters and aliases
-    // needs to be maintained since Charset class maintains
-    // cache for the most recently accessed charset
-    
-    /**
-     * Canonicalizes the charset name by looking up in aliasMap
-     */
-    private String canonicalize(String charsetName) {
-	    // get the canonical name from the cache
-	    String canonicalName = (String)alias.get(charsetName);
-	    if(canonicalName ==null){
-	        // lazy evaluate the available converters, aliases  
-	        // and add to the local cache
-            canonicalName = NativeConverter.getCanonicalName(charsetName);
-            if(canonicalName!=null){
-                String[] aliases = (String[])NativeConverter.getAliases(canonicalName);
-                // store the charsets and aliases in a Map
-                addMapping(canonicalName,aliases);
-            }
-	    }
-	    return canonicalName;
-    }
-    
-    /**
-     * Retrieves aliases for a given charset from
-     * the alias map
-     */
-    private final String[] aliases(String canonicalName) {
-	    return (String[])aliasNames.get(canonicalName);
-    }
-
-    /**
-     * Stores canonical names as keys and string array aliases
-     * as value and caches it
-     */
-    private Map alias = Collections.synchronizedMap(new TreeMap(String.CASE_INSENSITIVE_ORDER));
-    /**
-     * Stores alias names as keys and canonical names as value
-     * as value and caches it
-     */
-    private  Map aliasNames = Collections.synchronizedMap(new TreeMap(String.CASE_INSENSITIVE_ORDER));
-    /**
-     * puts the values in the the given map
-     */
-    private static void put(Map map, String name, Object value) {
-	    if (!map.containsKey(name)){
-	        map.put(name, value);
-	    }
-    }
+        // Get the available converter canonical names and aliases        
+        String[] charsets = NativeConverter.getAvailable();        
+        for(int i=0; i<charsets.length;i++){
+            // get the ICU aliases for a converter            
+            String[] aliases = NativeConverter.getAliases(charsets[i]);            
+            // store the charsets and aliases in a Map    
+	        if (!map.containsKey(charsets[i])){
+	            map.put(charsets[i], aliases);
+	        }
+        }
+    }    
 }
