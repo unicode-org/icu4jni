@@ -499,7 +499,11 @@ public class TestCharset extends TestFmwk{
                    result=encoder.encode(mySource,myTarget,false);
                 }                     
                 if(!equals(myTarget,myGBSource)){
+
+                   //System.out.println("Encode small output buffers passed");
+
                     errln("--Test small output buffers "+encoding+" From Unicode --FAILED");
+
                 }
          }
          {
@@ -515,6 +519,7 @@ public class TestCharset extends TestFmwk{
                         continue;
                    }
                    if(mySource.position()==myUSource.length){
+                        myTarget.limit(myGBSource.length);
                         encoder.flush(myTarget);
                         break;
                    }
@@ -522,6 +527,7 @@ public class TestCharset extends TestFmwk{
                 }
                                     
                 if(!equals(myTarget,myGBSource)){
+
                     errln("--Test small output buffers "+encoding+" From Unicode --FAILED");
                 }
                     
@@ -554,7 +560,7 @@ public class TestCharset extends TestFmwk{
         }
     
       }
-    public void TestString(){
+      public void TestString(){
         try{
             {
                 String source = new String(uSource);
@@ -564,6 +570,7 @@ public class TestCharset extends TestFmwk{
                 }
             }
             {
+                           
                 String target = new String(getByteArray(gbSource),encoding);
                 if(!equals(uSource,target.toCharArray())){
                     errln("decode using string API failed");
@@ -572,9 +579,9 @@ public class TestCharset extends TestFmwk{
         }catch(Exception e){
             e.printStackTrace();
         }
-    }
+      }
         
-    public  void TestFromUnicode(/*String encoding*/)throws Exception{
+      public  void TestFromUnicode(/*String encoding*/)throws Exception{
         ByteBuffer myTarget = ByteBuffer.allocate(gbSource.length);
         CharBuffer mySource = CharBuffer.wrap(uSource);
         encoder.reset();
@@ -608,14 +615,18 @@ public class TestCharset extends TestFmwk{
          return target;
      }
      private void smBufCharset(Charset charset){
-        ByteBuffer gbTarget = charset.encode(CharBuffer.wrap(uSource));      
-        CharBuffer uTarget = charset.decode(ByteBuffer.wrap(getByteArray(gbSource)));
-        
-        if(!equals(uTarget,uSource)){
-            errln("Test "+charset.toString()+" to Unicode :FAILED");
-        }
-        if(!equals(gbTarget,gbSource)){
-            errln("Test "+charset.toString()+" from Unicode :FAILED");
+        try{
+            ByteBuffer gbTarget = charset.encode(CharBuffer.wrap(uSource));      
+            CharBuffer uTarget = charset.decode(ByteBuffer.wrap(getByteArray(gbSource)));
+            
+            if(!equals(uTarget,uSource)){
+                errln("Test "+charset.toString()+" to Unicode :FAILED");
+            }
+            if(!equals(gbTarget,gbSource)){
+                errln("Test "+charset.toString()+" from Unicode :FAILED");
+            }
+        }catch (Exception ex){
+            errln("Encountered exception in smBufCharset");
         }
      }
      

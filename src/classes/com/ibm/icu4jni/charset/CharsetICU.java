@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/charset/CharsetICU.java,v $ 
-* $Date: 2001/10/18 01:16:44 $ 
-* $Revision: 1.3 $
+* $Date: 2001/10/27 00:34:55 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */ 
@@ -21,7 +21,7 @@ import com.ibm.icu4jni.charset.*;
 import com.ibm.icu4jni.converters.*;
 import com.ibm.icu4jni.common.*;
 
-public class CharsetICU extends Charset{
+public final class CharsetICU extends Charset{
     /**
      * Constructor to create a the CharsetICU object
      * @param the canonical name as a string
@@ -35,7 +35,18 @@ public class CharsetICU extends Charset{
      * @return a new decoder object
      */
     public CharsetDecoder newDecoder(){
-        return new CharsetDecoderICU((Charset)this,this.toString());
+        // the arrays are locals and not
+        // instance variables since the
+        // methods on this class need to 
+        // be thread safe
+        long[] converterHandle = new long[1];
+        int ec = NativeConverter.openConverter(converterHandle, toString());
+        if(ErrorCode.isSuccess(ec)){
+            return new CharsetDecoderICU(this,converterHandle[0]);
+        }else{
+            throw ErrorCode.getException(ec);
+        }
+            
     };
     
     /**
@@ -43,9 +54,18 @@ public class CharsetICU extends Charset{
      * @return a new encoder
      */
     public CharsetEncoder newEncoder(){
-        byte[] replacement = { 0x001a };
-        return new CharsetEncoderICU((Charset)this,this.toString(),replacement);
-    }; 
+        // the arrays are locals and not
+        // instance variables since the
+        // methods on this class need to 
+        // be thread safe
+        long[] converterHandle = new long[1];
+        int ec = NativeConverter.openConverter(converterHandle, toString());
+        if(ErrorCode.isSuccess(ec)){
+            return new CharsetEncoderICU(this,converterHandle[0]);
+        }else{
+            throw ErrorCode.getException(ec);
+        }
+    } 
     
     /**
      * Ascertains if a charset is a sub set of this charset

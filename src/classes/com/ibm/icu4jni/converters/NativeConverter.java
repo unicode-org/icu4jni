@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/converters/NativeConverter.java,v $ 
-* $Date: 2001/10/18 01:15:53 $ 
-* $Revision: 1.4 $
+* $Date: 2001/10/27 00:34:55 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */ 
@@ -14,9 +14,15 @@
 package com.ibm.icu4jni.converters;
 
 import java.util.*;
+import com.ibm.icu4jni.common.ICU4JNILoader;
 
 public final class NativeConverter{
   
+    // library loading ----------------------------------------------
+    static {
+        ICU4JNILoader.loadLibrary();
+    }
+      
     //Native methods
     
     /**
@@ -41,6 +47,11 @@ public final class NativeConverter{
      */
      
     public static final native int convertByteToChar( long converterHandle,
+                                   byte[] input, int inEnd,
+		                           char[] output, int outEnd,
+		                           int[] data,
+		                           boolean flush);
+	public static final native int decode( long converterHandle,
                                    byte[] input, int inEnd,
 		                           char[] output, int outEnd,
 		                           int[] data,
@@ -70,6 +81,12 @@ public final class NativeConverter{
 		                           byte[] output, int outEnd,
 		                           int[] data,
 		                           boolean flush); 
+		                           
+	public static final native int encode(long converterHandle,
+                                   char[] input, int inEnd,
+		                           byte[] output, int outEnd,
+		                           int[] data,
+		                           boolean flush);
 	/**
      * Writes any remaining output to the output buffer and resets the
      * converter to its initial state. 
@@ -200,21 +217,23 @@ public final class NativeConverter{
     public static final native float getAveBytesPerChar(long converterHandle);
    
     /**
-     * Gets the number of bytes needed for converting a char
+     * Gets the number of chars needed for converting a byte
      *
-	 * @param converter name
+	 * @param converterHandle Address of converter object created by the native code
      * @return number of bytes needed
      */ 
-    public static final native float aveBytesPerChar(String cnvName);
-    
+    public static final native int getMaxCharsPerByte(long converterHandle);
+   
     /**
-     * Gets the number of bytes needed for converting a char
+     * Gets the average numnber of chars needed for converting a byte
      *
-	 * @param converter name
+	 * @param converterHandle Address of converter object created by the native code
      * @return number of bytes needed
      */ 
-    public static final native float maxBytesPerChar(String cnvName);
+    public static final native float getAveCharsPerByte(long converterHandle);
     
+    
+    public static final native String getSubstitutionBytes(long converterHandle);
     /**
      * Ascertains if a given Unicode code unit can 
      * be converted to the target encoding

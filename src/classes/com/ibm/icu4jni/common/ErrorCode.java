@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/common/ErrorCode.java,v $ 
-* $Date: 2001/10/12 01:32:21 $ 
-* $Revision: 1.8 $
+* $Date: 2001/10/27 00:34:55 $ 
+* $Revision: 1.9 $
 *
 ******************************************************************************
 */
@@ -20,19 +20,7 @@ package com.ibm.icu4jni.common;
 */   
 public final class ErrorCode extends Exception
 { 
-  // static library loading ---------------------------------------
-  
-  static
-  {
-    ErrorCode.LIBRARY_LOADED = true;
-    try{
-        System.loadLibrary("ICUInterface131");
-    }
-    catch(UnsatisfiedLinkError e){
-        System.loadLibrary("ICUInterface131d");
-    }   
-  }
-  
+
   // public methods --------------------------------------------------------
   
   /**
@@ -189,6 +177,14 @@ public final class ErrorCode extends Exception
   };
   public static String getErrorName(int ec){
     return ERROR_NAMES_[ec];
+  }
+  
+  public static boolean isSuccess(int ec){
+    return (ec<=U_ZERO_ERROR);
+  }
+  
+  public static boolean isFailure(int ec){
+    return (ec>U_ZERO_ERROR);
   }
 }
 

@@ -11,11 +11,20 @@
 #include "unicode/ucnv.h"     /* C   Converter API    */
 #include "unicode/ustring.h"  /* some more string functions*/
 #include "unicode/ucnv_cb.h"  /* for callback functions */
+#include "ErrorCode.h"
 #include <stdlib.h>
 
+ /* Prototype of callback for substituting user settable sub chars */
 void  JNI_TO_U_CALLBACK_SUBSTITUTE
  (const void *,UConverterToUnicodeArgs *,const char* ,int32_t ,UConverterCallbackReason ,UErrorCode * );
 
+/**
+ * Opens the ICU converter
+ * @param env environment handle for JNI 
+ * @param jClass handle for the class
+ * @param handle buffer to recieve ICU's converter address
+ * @param converterName name of the ICU converter
+ */
 JNIEXPORT jint JNICALL 
 Java_com_ibm_icu4jni_converters_NativeConverter_openConverter (JNIEnv *env, 
                                                                jclass jClass, 
@@ -56,7 +65,12 @@ Java_com_ibm_icu4jni_converters_NativeConverter_openConverter (JNIEnv *env,
     return errorCode;
 }
 
-
+/**
+ * Closes the ICU converter
+ * @param env environment handle for JNI 
+ * @param jClass handle for the class
+ * @param handle address of ICU converter
+ */
 JNIEXPORT void JNICALL 
 Java_com_ibm_icu4jni_converters_NativeConverter_closeConverter (JNIEnv *env, 
                                                                 jclass jClass, 
@@ -68,6 +82,14 @@ Java_com_ibm_icu4jni_converters_NativeConverter_closeConverter (JNIEnv *env,
     }
 }
 
+/**
+ * Sets the substution mode for to Unicode conversion. Currently only 
+ * two modes are supported: substitute or report
+ * @param env environment handle for JNI 
+ * @param jClass handle for the class
+ * @param handle address of ICU converter
+ * @param mode the mode to set 
+ */
 JNIEXPORT jint JNICALL 
 Java_com_ibm_icu4jni_converters_NativeConverter_setSubstitutionModeCharToByte (JNIEnv *env, 
                                                                                jclass jClass, 
@@ -108,6 +130,18 @@ Java_com_ibm_icu4jni_converters_NativeConverter_setSubstitutionModeCharToByte (J
     return errorCode;
 }
 
+/**
+ * Converts a buffer of Unicode code units to target encoding 
+ * @param env environment handle for JNI 
+ * @param jClass handle for the class
+ * @param handle address of ICU converter
+ * @param source buffer of Unicode chars to convert 
+ * @param sourceEnd limit of the source buffer
+ * @param target buffer to recieve the converted bytes
+ * @param targetEnd the limit of the target buffer
+ * @param data buffer to recieve state of the current conversion
+ * @param flush boolean that specifies end of source input
+ */
 JNIEXPORT jint JNICALL 
 Java_com_ibm_icu4jni_converters_NativeConverter_convertCharToByte(JNIEnv *env, 
                                                                   jclass jClass, 
@@ -127,7 +161,6 @@ Java_com_ibm_icu4jni_converters_NativeConverter_convertCharToByte(JNIEnv *env,
         if(myData){
             jint* sourceOffset = &myData[0];
             jint* targetOffset = &myData[1];
-
             const jchar* uSource =(jchar*) (*env)->GetPrimitiveArrayCritical(env,source, NULL);
             if(uSource){
                 jbyte* uTarget=(jbyte*) (*env)->GetPrimitiveArrayCritical(env,target,NULL);
@@ -160,7 +193,45 @@ Java_com_ibm_icu4jni_converters_NativeConverter_convertCharToByte(JNIEnv *env,
     return errorCode;
 }
 
+JNIEXPORT jint JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_encode(JNIEnv *env, 
+                                                      jclass jClass, 
+                                                      jlong handle, 
+                                                      jcharArray source, 
+                                                      jint sourceEnd, 
+                                                      jbyteArray target, 
+                                                      jint targetEnd, 
+                                                      jintArray data, 
+                                                      jboolean flush){
+   
+    UErrorCode ec = Java_com_ibm_icu4jni_converters_NativeConverter_convertCharToByte(env,
+                                                    jClass,handle,source,sourceEnd, 
+                                                    target,targetEnd,data,flush);
 
+    if(ec == U_ILLEGAL_CHAR_FOUND || ec == U_INVALID_CHAR_FOUND){
+        jint* myData = (jint*) (*env)->GetPrimitiveArrayCritical(env,data,NULL);
+        UConverter* cnv = (UConverter*)handle;
+        jint count =0;
+        UChar invalidUChars[32];
+        ucnv_getInvalidUChars(cnv,invalidUChars,(int8_t*)&count,&ec);
+        myData[2] = count;
+        (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,JNI_COMMIT);
+    }
+    return ec;
+}
+
+/**
+ * Converts a buffer of encoded bytes to Unicode code units
+ * @param env environment handle for JNI 
+ * @param jClass handle for the class
+ * @param handle address of ICU converter
+ * @param source buffer of Unicode chars to convert 
+ * @param sourceEnd limit of the source buffer
+ * @param target buffer to recieve the converted bytes
+ * @param targetEnd the limit of the target buffer
+ * @param data buffer to recieve state of the current conversion
+ * @param flush boolean that specifies end of source input
+ */
 JNIEXPORT jint JNICALL 
 Java_com_ibm_icu4jni_converters_NativeConverter_convertByteToChar(JNIEnv *env, 
                                                                   jclass jClass, 
@@ -212,7 +283,35 @@ Java_com_ibm_icu4jni_converters_NativeConverter_convertByteToChar(JNIEnv *env,
     return errorCode;
 }
 
+JNIEXPORT jint JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_decode(JNIEnv *env, 
+                                                      jclass jClass, 
+                                                      jlong handle, 
+                                                      jbyteArray source, 
+                                                      jint sourceEnd, 
+                                                      jcharArray target,
+                                                      jint targetEnd, 
+                                                      jintArray data,
+                                                      jboolean flush){
 
+    jint ec = Java_com_ibm_icu4jni_converters_NativeConverter_convertByteToChar(env,
+                                                    jClass,handle,source,sourceEnd, 
+                                                    target,targetEnd,data,flush);
+
+    if(ec == U_ILLEGAL_CHAR_FOUND || ec == U_INVALID_CHAR_FOUND){
+        UConverter* cnv = (UConverter*)handle;
+        UErrorCode errorCode = U_ZERO_ERROR;
+        if(cnv){
+            jint* myData = (jint*) (*env)->GetPrimitiveArrayCritical(env,data,NULL);
+            UChar invalidUChars[32];
+            jint len = 0;
+            ucnv_getInvalidUChars(cnv,invalidUChars,(int8_t*)len,&errorCode);
+            myData[2] = len;
+            (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,JNI_COMMIT);
+        }
+    }
+    return ec;
+}
 JNIEXPORT void JNICALL 
 Java_com_ibm_icu4jni_converters_NativeConverter_resetByteToChar(JNIEnv *env, 
                                                                 jclass jClass, 
@@ -329,7 +428,8 @@ Java_com_ibm_icu4jni_converters_NativeConverter_flushByteToChar(JNIEnv *env,
                 ucnv_toUnicode( cnv , &cTarget, cTargetLimit,(const char**)&mySource,
                                mySourceLimit,NULL,TRUE, &errorCode);
 
-                *targetOffset = cTarget - uTarget;
+
+                *targetOffset = (jint) ((jchar*)cTarget - uTarget)- *targetOffset;
                 if(U_FAILURE(errorCode)){
                     (*env)->ReleasePrimitiveArrayCritical(env,target,uTarget,JNI_COMMIT);
                     (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,JNI_COMMIT);
@@ -371,7 +471,8 @@ Java_com_ibm_icu4jni_converters_NativeConverter_flushCharToByte (JNIEnv *env,
                 ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&mySource,
                                   mySourceLimit,NULL,TRUE, &errorCode);
             
-                *targetOffset =(jbyte*) cTarget - uTarget;
+
+                *targetOffset = (jint) ((jbyte*)cTarget - uTarget)- *targetOffset;
                 if(U_FAILURE(errorCode)){
                     (*env)->ReleasePrimitiveArrayCritical(env,target,uTarget,JNI_COMMIT);
                 
@@ -787,37 +888,41 @@ JNICALL Java_com_ibm_icu4jni_text_NativeConverter_safeClone(JNIEnv *env,
     return result;
 }
 
-JNIEXPORT jfloat JNICALL 
-Java_com_ibm_icu4jni_converters_NativeConverter_maxBytesPerChar(JNIEnv *env, 
-                                                                jclass jClass, 
-                                                                jstring enc){
-    UErrorCode error = U_ZERO_ERROR;
-    const char* encName = (*env)->GetStringUTFChars(env,enc,NULL);
-    jfloat maxBytesPerChar=0;
-
-    if(encName){
-        UConverter* conv = ucnv_open(encName,&error);
-        maxBytesPerChar = ucnv_getMaxCharSize(conv);
-        ucnv_close(conv);
-    }
-   (*env)->ReleaseStringUTFChars(env,enc,encName);
-    return maxBytesPerChar;
+JNIEXPORT jint JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_getMaxCharsPerByte(JNIEnv *env, 
+                                                                   jclass jClass, 
+                                                                   jlong handle){
+    /*
+     * currently we know that max number of chars per byte is 2
+     */
+    return 2;
 }
 
 JNIEXPORT jfloat JNICALL 
-Java_com_ibm_icu4jni_converters_NativeConverter_aveBytesPerChar(JNIEnv *env, 
-                                                                jclass jclass, 
-                                                                jstring enc){
-    UErrorCode error = U_ZERO_ERROR;
-    const char* encName = (*env)->GetStringUTFChars(env,enc,NULL);
-    jfloat max=0;
-    jfloat min=0;
-    if(encName){
-        UConverter* conv = ucnv_open(encName,&error);
-        max= (jfloat)ucnv_getMaxCharSize(conv);
-        min= (jfloat)ucnv_getMinCharSize(conv);
-        ucnv_close(conv);
+Java_com_ibm_icu4jni_converters_NativeConverter_getAveCharsPerByte(JNIEnv *env, 
+                                                                   jclass jClass, 
+                                                                   jlong handle){
+    jfloat ret = 0;
+    ret = (jfloat)( 1/(jfloat)Java_com_ibm_icu4jni_converters_NativeConverter_getMaxBytesPerChar(env,
+                                                                                      jClass,
+                                                                                      handle));
+    return ret;
+}
+
+JNIEXPORT jstring JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_getSubstitutionBytes(JNIEnv *env, 
+                                                                     jclass jClass, 
+                                                                     jlong handle){
+    const UConverter * cnv = (const UConverter *) handle;
+    UErrorCode status = U_ZERO_ERROR;
+    char subBytes[50];
+    int8_t len =(char)50;
+    if(cnv){
+        ucnv_getSubstChars(cnv,subBytes,&len,&status);
+        if(U_SUCCESS(status)){
+            subBytes[len] = 0; /* Null terminate the array */
+            return((*env)->NewStringUTF(env, subBytes));
+        }
     }
-   (*env)->ReleaseStringUTFChars(env,enc,encName);
-    return (jfloat)((max+min)/2);
+    return 0;
 }

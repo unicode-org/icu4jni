@@ -23,10 +23,26 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_convertBy
 
 /*
  * Class:     com_ibm_icu4jni_converters_NativeConverter
+ * Method:    decode
+ * Signature: (J[BI[CI[IZ)I
+ */
+JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_decode
+  (JNIEnv *, jclass, jlong, jbyteArray, jint, jcharArray, jint, jintArray, jboolean);
+
+/*
+ * Class:     com_ibm_icu4jni_converters_NativeConverter
  * Method:    convertCharToByte
  * Signature: (J[CI[BI[IZ)I
  */
 JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_convertCharToByte
+  (JNIEnv *, jclass, jlong, jcharArray, jint, jbyteArray, jint, jintArray, jboolean);
+
+/*
+ * Class:     com_ibm_icu4jni_converters_NativeConverter
+ * Method:    encode
+ * Signature: (J[CI[BI[IZ)I
+ */
+JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_encode
   (JNIEnv *, jclass, jlong, jcharArray, jint, jbyteArray, jint, jintArray, jboolean);
 
 /*
@@ -127,7 +143,7 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getMaxByt
 
 /*
  * Class:     com_ibm_icu4jni_converters_NativeConverter
- * Method:    getMaxBytesPerChar
+ * Method:    getAveBytesPerChar
  * Signature: (J)F
  */
 JNIEXPORT jfloat JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getAveBytesPerChar
@@ -135,19 +151,27 @@ JNIEXPORT jfloat JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getAveB
 
 /*
  * Class:     com_ibm_icu4jni_converters_NativeConverter
- * Method:    maxBytesPerChar
- * Signature: (Ljava/lang/String;)Ljava/lang/String;
+ * Method:    getMaxCharsPerByte
+ * Signature: (J)I
  */
-JNIEXPORT jfloat JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_maxBytesPerChar
-  (JNIEnv *, jclass, jstring);
+JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getMaxCharsPerByte
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     com_ibm_icu4jni_converters_NativeConverter
- * Method:    aveBytesPerChar
- * Signature: (Ljava/lang/String;)Ljava/lang/String;
+ * Method:    getAveCharsPerByte
+ * Signature: (J)F
  */
-JNIEXPORT jfloat JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_aveBytesPerChar
-  (JNIEnv *, jclass, jstring);
+JNIEXPORT jfloat JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getAveCharsPerByte
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     com_ibm_icu4jni_converters_NativeConverter
+ * Method:    getSubstitutionBytes
+ * Signature: (J)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getSubstitutionBytes
+  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     com_ibm_icu4jni_converters_NativeConverter
@@ -220,8 +244,6 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_setCallba
  */
 JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_setCallbackEncode
   (JNIEnv *, jclass, jlong, jint, jboolean);
-
-
 
 #ifdef __cplusplus
 }

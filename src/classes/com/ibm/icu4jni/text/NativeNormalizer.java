@@ -5,7 +5,7 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/NativeNormalizer.java,v $ 
-* $Date: 2001/09/18 00:33:50 $ 
+* $Date: 2001/10/27 00:34:55 $ 
 * $Revision: 
 *
 *******************************************************************************
@@ -19,13 +19,14 @@
 package com.ibm.icu4jni.text;
 import com.ibm.icu4jni.common.ErrorCode;
 import com.ibm.icu4jni.text.Normalizer;
+import com.ibm.icu4jni.common.ICU4JNILoader;
 /**
  *
  * @author  Ram Viswanadha
  * @version 
  */
  
-public final class NativeNormalizer {
+final class NativeNormalizer {
     
     /*
      * Static block to load the library if not loaded
@@ -33,9 +34,7 @@ public final class NativeNormalizer {
      * are static
      */
     static{
-         if(ErrorCode.LIBRARY_LOADED==false){
-            ErrorCode.LIBRARY_LOADED=true;
-        }
+      ICU4JNILoader.loadLibrary();
     }
     
     /**
@@ -59,7 +58,22 @@ public final class NativeNormalizer {
                                       int resultLength,
                                       int normalizationMode,
                                       int[] requiredLength);   
-    
+   /**
+    * Normalize a string.
+    * The string will be normalized according the the specified normalization mode
+    * and options.
+    * @param source The string to normalize.
+    * @param mode The normalization mode; one of Normalizer.UNORM_NONE, 
+    * Normalizer.UNORM_NFD, Normalizer.UNORM_NFC, Normalizer.UNORM_NFKC, 
+    * Normalizer.UNORM_NFKD, Normalizer.UNORM_DEFAULT
+    * @param requiredLength A array to receive the total buffer size needed; 
+    *                       if greater than resultLength,the output was truncated.
+    * @param errorCode an array to receive the error code returned by ICU  
+    * @return String the normalized string
+    */
+    static native final String normalize(String source, 
+                                         int normalizationMode, 
+                                         int[] errorCode);
     /**
     * Performing quick check on a string, to quickly determine if the string is 
     * in a particular normalization format.
@@ -82,4 +96,5 @@ public final class NativeNormalizer {
                                        int sourceLength,
                                        int normalizationMode,
                                        int[] qcReturn);
+
 }

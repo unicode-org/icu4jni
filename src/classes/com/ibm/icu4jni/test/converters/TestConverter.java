@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/test/converters/TestConverter.java,v $ 
-* $Date: 2001/09/18 00:33:49 $ 
-* $Revision: 1.1 $
+* $Date: 2001/10/27 00:34:55 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */ 
@@ -580,7 +580,7 @@ public class TestConverter extends TestFmwk{
                 i=0;
                 char[] expectedResult = uSource;
                 boolean passed =true;
-                while( i<expectedResult.length){
+                while( i<expectedResult.length){                   
                     if(myTarget[i]!= expectedResult[i]){
                         StringBuffer temp = new StringBuffer("Error:  Expected: ");
                         temp.append(Integer.toHexString(expectedResult[i]));

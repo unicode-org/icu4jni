@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/charset/CharsetEncoderICU.java,v $ 
-* $Date: 2001/10/18 01:16:44 $ 
-* $Revision: 1.3 $
+* $Date: 2001/10/27 00:34:55 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */ 
@@ -24,62 +24,55 @@ import com.ibm.icu4jni.converters.NativeConverter;
 import com.ibm.icu4jni.common.*;
 import java.nio.charset.CodingErrorAction;
 
-public class CharsetEncoderICU extends CharsetEncoder{
-    /* data is 2 element array where
-     * data[0] = inputOffset
-     * data[1] = outputOffset
+public final class CharsetEncoderICU extends CharsetEncoder{
+    /* data is 3 element array where
+     * data[INPUT_CONSUMED] = number of input chars consumed
+     * data[OUTPUT_WRITTEN] = number of output bytes written
+     * data[INVALID_CHARS]  = number of invalid chars
      */
-    private int[] data = new int[2];
+    private int[] data = new int[3];
+    
+    private static final int INPUT_CONSUMED  = 0;
+    private static final int OUTPUT_WRITTEN = 1;
+    private static final int INVALID_CHARS = 2;
     
     /* handle to the ICU converter that is opened */
     private final long converterHandle;
     
-    private byte[] replacement;
+    private  char[] input = null;
+    private  byte[] output= null;
     
-    static{
-        // check if the converter is loaded
-        if(ErrorCode.LIBRARY_LOADED==false){
-            ErrorCode.LIBRARY_LOADED=true;
-        }
-    }
+    // These instance variables are
+    // always assigned in the methods
+    // before being used.
+    private int inEnd;
+    private int outEnd;
+    private int save;
+    private int ec;
+    private int icuAction;
     
     /** 
      * Construcs a new encoder for the given charset
      * @param charset for which the decoder is created
      * @param cHandle the address of ICU converter
-     * @param substitue error sequences in the input with 
-     *        this string in output
      */
-    public CharsetEncoderICU(Charset cs,String canonicalName,byte[] replacement){
+    public CharsetEncoderICU(Charset cs,long cHandle){
          super(cs,
-               (float)NativeConverter.aveBytesPerChar(canonicalName),
-               (float)NativeConverter.maxBytesPerChar(canonicalName),
-               replacement);    
-               
-         data[0] = 0;
-         data[1] = 0;
-	     /* initialize data */       
-         long[] converterHandleArr = new long[1];
-        
-         // open the converter and get the handle 
-         // if there is an error throw Unsupported encoding exception    
-         int errorCode = NativeConverter.openConverter(converterHandleArr,canonicalName);
-         if(errorCode > ErrorCode.U_ZERO_ERROR){
-            throw new UnsupportedCharsetException(canonicalName  + 
-                                                  " ErrorCode: " +
-                                                  ErrorCode.getErrorName(errorCode));
-         }
-         
-         // store the converter handle
-         converterHandle=converterHandleArr[0];
-         
+               (float)NativeConverter.getAveBytesPerChar(cHandle),
+               (float)NativeConverter.getMaxBytesPerChar(cHandle),
+               NativeConverter.getSubstitutionBytes(cHandle).getBytes()
+              );    
+      
          // The default callback action on unmappable input 
-         // or malformed input is to report so we set ICU converter
-         // callback to stop
-         errorCode = NativeConverter.setCallbackEncode(converterHandle,
-                                                       NativeConverter.STOP_CALLBACK,
-                                                       false);
-         implReplaceWith(replacement);
+         // or malformed input is to ignore so we set ICU converter
+         // callback to stop and report the error
+         ec = NativeConverter.setCallbackEncode(cHandle,
+                                                NativeConverter.STOP_CALLBACK,
+                                                false);
+         converterHandle = cHandle;
+         if(ErrorCode.isFailure(ec)){
+            throw ErrorCode.getException(ec);
+         }   
     }
   
     /**
@@ -88,19 +81,18 @@ public class CharsetEncoderICU extends CharsetEncoder{
      * @param string to replace the error chars with
      */   
     protected void implReplaceWith(byte[] newReplacement){
-        if(converterHandle > 0){
+        if(converterHandle != 0 ){
             if( newReplacement.length > NativeConverter.getMaxBytesPerChar(converterHandle) ) {
-                throw new IllegalArgumentException();
+                System.out.println(converterHandle);
+                throw new IllegalArgumentException("Number of replacement Bytes are greater than max bytes per char" );
             }
-            int ec =NativeConverter.setSubstitutionBytes(converterHandle,
-                                                            newReplacement,
-                                                            newReplacement.length);
-            if(ec > ErrorCode.U_ZERO_ERROR){
-                throw new IllegalArgumentException(ErrorCode.getErrorName(ec));
+            ec =NativeConverter.setSubstitutionBytes(converterHandle,
+                                                    newReplacement,
+                                                    newReplacement.length);
+            if(ErrorCode.isFailure(ec)){
+                throw ErrorCode.getException(ec);
             }
         }
-        replacement = newReplacement;
-
     }
 
     /**
@@ -109,17 +101,16 @@ public class CharsetEncoderICU extends CharsetEncoder{
      * @exception IllegalArgumentException
      */
     protected void implOnMalformedInput(CodingErrorAction newAction) {
-        int icuAction = NativeConverter.STOP_CALLBACK;
+        icuAction = NativeConverter.STOP_CALLBACK;
         
         if(newAction.equals(CodingErrorAction.IGNORE)){
             icuAction = NativeConverter.SKIP_CALLBACK;
         }else if(newAction.equals(CodingErrorAction.REPLACE)){
             icuAction = NativeConverter.SUBSTITUTE_CALLBACK;
         }
-        
-        if(NativeConverter.setCallbackEncode(converterHandle,icuAction,false)
-                > ErrorCode.U_ZERO_ERROR){
-            throw new IllegalArgumentException();
+        ec = NativeConverter.setCallbackEncode(converterHandle,icuAction,false);
+        if( ErrorCode.isFailure(ec)){
+            throw ErrorCode.getException(ec);
         } 
                 
     }
@@ -131,19 +122,19 @@ public class CharsetEncoderICU extends CharsetEncoder{
      * @exception IllegalArgumentException
      */
     protected void implOnUnmappableCharacter(CodingErrorAction newAction){
-        int icuAction = NativeConverter.STOP_CALLBACK;
+        icuAction = NativeConverter.STOP_CALLBACK;
         
         if(newAction.equals(CodingErrorAction.IGNORE)){
             icuAction = NativeConverter.SKIP_CALLBACK;
         }else if(newAction.equals(CodingErrorAction.REPLACE)){
             icuAction = NativeConverter.SUBSTITUTE_CALLBACK;
         }
-        int ec = NativeConverter.setCallbackEncode(converterHandle,icuAction,true);
-        if(ec > ErrorCode.U_ZERO_ERROR){
-            throw new IllegalArgumentException(ErrorCode.getErrorName(ec));
+        ec = NativeConverter.setCallbackEncode(converterHandle,icuAction,true);
+        if(ErrorCode.isFailure(ec)){
+            throw ErrorCode.getException(ec);
         } 
     }  
-    
+  
     /**
      * Flushes any characters saved in the converter's internal buffer and
      * resets the converter.
@@ -152,33 +143,28 @@ public class CharsetEncoderICU extends CharsetEncoder{
      *         Returns CoderResult.UNDERFLOW if the action succeeds.
      */
     protected CoderResult implFlush(ByteBuffer out) {       
-        /*set inputStart to 0 */ 
-        data[0] = 0; 
-        data[1] = 0;
-        
-        int outEnd = out.remaining();
-        byte[] output = new byte[outEnd];
-        
-        /* assume that output buffer is big enough since error is not handled*/
-        int err=NativeConverter.flushCharToByte(
-                                        converterHandle,  /* Handle to ICU Converter */
-                                        output,           /* output array of chars */
-                                        outEnd,           /* output index+1 to be written */
-                                        data              /* contains data, inOff,outOff */
-                                        );
-                                  
-        
-        int[] retVal = new int[1];
-            
-        /* If we don't have room for the output, throw an exception*/
-        if(err == ErrorCode.U_BUFFER_OVERFLOW_ERROR){
-		    return CoderResult.OVERFLOW;
-		}
-        if(data[1]>0){
-		    out.put(output,0,data[1]);       // output offset
+       try{
+            getArray(out);          
+            ec=NativeConverter.flushCharToByte(
+                                            converterHandle,  /* Handle to ICU Converter */
+                                            output,           /* output array of chars */
+                                            outEnd,           /* output index+1 to be written */
+                                            data              /* contains data, inOff,outOff */
+                                            );
+                                                     
+            /* If we don't have room for the output, throw an exception*/
+            if(ErrorCode.isFailure(ec)){
+                if(ec == ErrorCode.U_BUFFER_OVERFLOW_ERROR){
+		            return CoderResult.OVERFLOW;
+		        }else{
+		            ErrorCode.getException(ec);
+		        }
+		    }
+	        implReset();
+	        return  CoderResult.UNDERFLOW;
+	    }finally{     
+            setPosition(out);
         }
-	    implReset();
-	    return  CoderResult.UNDERFLOW;
     }
     
     /**
@@ -198,22 +184,16 @@ public class CharsetEncoderICU extends CharsetEncoder{
      *         action succeeds or more input is needed for completing the decoding action.
      */
     protected CoderResult encodeLoop(CharBuffer in,ByteBuffer out){
-        
-        int inEnd = in.remaining();
-        int outEnd = out.remaining();
-        char[] input = new char[inEnd];
-        byte[] output=new byte[outEnd];
-        // save the current position 
-        int pos = in.position();
-        in.get(input,0,inEnd);
-        // reset 
-        in.position(pos);
-     
-        data[0] = 0;  // input offset 
-        data[1] = 0;  // output offset 
+               
+        if(!in.hasRemaining()){
+            return CoderResult.UNDERFLOW;
+        }
+
+        getArray(in);
+        getArray(out);      
         try{
             /* do the conversion */
-            int err=NativeConverter.convertCharToByte(
+            ec=NativeConverter.encode(
                                 converterHandle,  /* Handle to ICU Converter */
                                 input,            /* input array of bytes */
                                 inEnd,            /* last index+1 to be converted */
@@ -222,29 +202,22 @@ public class CharsetEncoderICU extends CharsetEncoder{
                                 data,             /* contains data, inOff,outOff */
                                 false             /* donot flush the data */
                                 );
-            
-            
-            int[] retVal = new int[1];
-            
-            /* If we don't have room for the output, throw an exception*/
-            if(err == ErrorCode.U_BUFFER_OVERFLOW_ERROR){
-		        return CoderResult.OVERFLOW;
-		    }
-            else if(err==ErrorCode.U_INVALID_CHAR_FOUND){
-                NativeConverter.countInvalidBytes(converterHandle, retVal);
-		        return CoderResult.unmappableForLength(retVal[0]);
-		    }else if(err==ErrorCode.U_ILLEGAL_CHAR_FOUND){
-                NativeConverter.countInvalidBytes(converterHandle, retVal);	
-                return CoderResult.malformedForLength(retVal[0]);
+            if(ErrorCode.isFailure(ec)){            
+                /* If we don't have room for the output, throw an exception*/
+                if(ec == ErrorCode.U_BUFFER_OVERFLOW_ERROR){
+		            return CoderResult.OVERFLOW;
+		        }
+                else if(ec==ErrorCode.U_INVALID_CHAR_FOUND){
+		            return CoderResult.unmappableForLength(data[INVALID_CHARS]);
+		        }else if(ec==ErrorCode.U_ILLEGAL_CHAR_FOUND){
+                    return CoderResult.malformedForLength(data[INVALID_CHARS]);
+                }
             }
             return CoderResult.UNDERFLOW;
         }finally{
-            if(data[0]>0){
-                in.position(in.position()+data[0]); // input offset
-            }
-            if(data[1]>0){
-		        out.put(output,0,data[1]);       // output offset 
-		    }		    
+            /* save state */
+            setPosition(in);
+            setPosition(out);         
 		}
 	}
 	
@@ -259,13 +232,13 @@ public class CharsetEncoderICU extends CharsetEncoder{
     public boolean canEncode(char c) {
         return canEncode((int) c);
     }
-    
+        
     /**
-     * Ascertains if a given Unicode codeunit (32bit value for handling surrogates)
+     * Ascertains if a given Unicode code point (32bit value for handling surrogates)
      * can be converted to the target encoding. If the caller wants to test if a
      * surrogate pair can be converted to target encoding then the
      * responsibility of assembling the int value lies with the caller.
-     * For assembling a codeunit the caller has to do something like:
+     * For assembling a code point the caller has to do something like:
      *
      * while(i<mySource.length){
      *        if(isFirstSurrogate(mySource[i])&& i+1< mySource.length){
@@ -280,24 +253,71 @@ public class CharsetEncoderICU extends CharsetEncoder{
      *       }
      * }
      * 
-     * @param Unicode codeunit as int value
+     * @param Unicode code point as int value
      * @return true if a character can be converted
      * 
      */
-    public boolean canEncode(int codeUnit){
-        return NativeConverter.canEncode(converterHandle, codeUnit);
+    public boolean canEncode(int codepoint){
+        return NativeConverter.canEncode(converterHandle, codepoint);
     }
-    
+
     /**
      * Releases the system resources by cleanly closing ICU converter opened
      * @exception Throwable exception thrown by super class' finalize method
      */
     protected void finalize() throws Throwable{
-        try{
-            NativeConverter.closeConverter(converterHandle);
+        NativeConverter.closeConverter(converterHandle);
+        super.finalize();
+    }
+    
+    //------------------------------------------
+    // private utility methods
+    //------------------------------------------
+    private  final void getArray(ByteBuffer out){
+        if(out.hasArray()){
+            output = out.array();
+            outEnd = out.arrayOffset() + out.limit();
+            data[OUTPUT_WRITTEN] = (out.arrayOffset()+out.position());
+        }else{
+            outEnd = out.remaining();
+            output = new byte[outEnd];
+            //since the new 
+            // buffer start position 
+            // is 0
+            data[OUTPUT_WRITTEN] = 0;
         }
-        finally{
-            super.finalize();
+    }
+
+    private  final void getArray(CharBuffer in){
+        if(in.hasArray()){
+            input = in.array();
+            inEnd = in.arrayOffset() + in.limit();
+            data[INPUT_CONSUMED] = (in.arrayOffset()+in.position());
+        }else{
+            inEnd = in.remaining();
+            input = new char[inEnd];
+            int pos = in.position();
+            in.get(input,0,inEnd);
+            in.position(pos);
+            // return 0 since the new 
+            // buffer start position 
+            // is 0
+            data[INPUT_CONSUMED] = 0;
+        }
+       
+    }
+    private final void setPosition(ByteBuffer out){
+        if(out.hasArray()){
+		    out.position(out.position() + data[OUTPUT_WRITTEN] - out.arrayOffset());
+        }else{
+            out.put(output,0,data[OUTPUT_WRITTEN]);
+        }
+    }
+    private final void setPosition(CharBuffer in){          
+        if(in.hasArray()){
+		    in.position(in.position()+data[INPUT_CONSUMED] - in.arrayOffset());
+        }else{
+            in.position(in.position()+data[INPUT_CONSUMED]);
         }
     }
 }

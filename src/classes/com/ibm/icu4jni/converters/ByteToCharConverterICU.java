@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/converters/ByteToCharConverterICU.java,v $ 
-* $Date: 2001/09/18 00:33:49 $ 
-* $Revision: 1.6 $
+* $Date: 2001/10/27 00:34:55 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */ 
@@ -196,9 +196,8 @@
 		}
         
         /* return the number of bytes written to ouput buffer */
-	    result = data[1]-oldOutputStart;
 	    reset();
-	    return result;
+	    return data[1];
     }
     
     /**

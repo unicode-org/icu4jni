@@ -33,7 +33,7 @@ public class ConformanceTest extends TestFmwk {
      * http://www.unicode.org/unicode/reports/tr15/conformance/Draft-TestSuite.txt.
      * This file must be located at the path specified as TEST_SUITE_FILE.
      */
-    public void TestConformance() {
+    public void TestConformance() throws Exception{
         BufferedReader input = null;
         String line = null;
         String[] fields = new String[5];
@@ -99,7 +99,7 @@ public class ConformanceTest extends TestFmwk {
      * @param line the source line from the test suite file
      * @return true if the test passes
      */
-    private boolean checkConformance(String[] field, String line) {
+    private boolean checkConformance(String[] field, String line) throws Exception{
         boolean pass = true;
         StringBuffer buf = new StringBuffer(); // scratch
         String out;
@@ -152,7 +152,7 @@ public class ConformanceTest extends TestFmwk {
      * @param dir either +1 or -1
      */
     private String iterativeNorm(String str, int mode,
-                                 StringBuffer buf, int dir) {
+                                 StringBuffer buf, int dir) throws Exception{
        /* normalizer.setText(str);
         normalizer.setMode(mode);
         buf.setLength(0);
@@ -258,11 +258,11 @@ public class ConformanceTest extends TestFmwk {
     // debugging easier.  These can be eliminated without affecting
     // coverage.
 
-    public void _hideTestCase6() {
+    public void _hideTestCase6() throws Exception{
         _testOneLine("0385;0385;00A8 0301;0020 0308 0301;0020 0308 0301;");
     }
 
-    public void _testOneLine(String line) {
+    public void _testOneLine(String line) throws Exception{
         String[] fields = new String[5];
         StringBuffer buf = new StringBuffer();
         // Parse out the fields

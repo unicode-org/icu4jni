@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/converters/CharToByteConverterICU.java,v $ 
-* $Date: 2001/10/12 01:32:53 $ 
-* $Revision: 1.7 $
+* $Date: 2001/10/27 00:34:55 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */ 
@@ -167,9 +167,6 @@
         }
         /*set inputStart to 0 */ 
         data[0] = 0; 
-        
-        int oldOutputStart = data[1];
-        int result = 0;
         data[1] = outStart;
         
         
@@ -190,9 +187,8 @@
 		}                          
 
         /* return the number of bytes written to ouput buffer */
-	    result = data[1]-oldOutputStart;
 	    reset();
-	    return result;
+	    return data[1];
     }
     
     /** 

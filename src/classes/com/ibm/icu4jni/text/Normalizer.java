@@ -71,20 +71,8 @@ import com.ibm.icu4jni.common.*;
  * own.
  * Currently the only usage model for <tt>Normalizer</tt> is to use the 
  * the static {@link #normalize normalize()} method is used to process an
- * entire input string at once. 
- * <p>
- * <b>Note:</b> <tt>Normalizer</tt> objects behave like iterators and have
- * methods such as <tt>setIndex</tt>, <tt>next</tt>, <tt>previous</tt>, etc.
- * You should note that while the <tt>setIndex</tt> and <tt>getIndex</tt> refer
- * to indices in the underlying <em>input</em> text being processed, the
- * <tt>next</tt> and <tt>previous</tt> methods it iterate through characters
- * in the normalized <em>output</em>.  This means that there is not
- * necessarily a one-to-one correspondence between characters returned
- * by <tt>next</tt> and <tt>previous</tt> and the indices passed to and
- * returned from <tt>setIndex</tt> and <tt>getIndex</tt>.  It is for this
- * reason that <tt>Normalizer</tt> does not implement the
- * {@link CharacterIterator} interface.
- * <p>
+ * entire input string at once.
+ * </p>
  * <b>Note:</b> <tt>Normalizer</tt> is currently based on version 3.1.1
  * of the <a href="http://www.unicode.org" target="unicode">Unicode Standard</a>.
  * It will be updated as later versions of Unicode are released.  If you are
@@ -94,10 +82,12 @@ import com.ibm.icu4jni.common.*;
  * have any data.
  * <p>
  */
-public class Normalizer{
-
-    private static int MAX_BUFFER_SIZE = 1000;
-    
+public final class Normalizer{
+   
+    private static final int[] requiredLength = new int[1];
+    private static final int[] quickCheckMode = new int[1];
+    private static final int[] errCode        = new int[1];
+   
    /**
     * Compose a string.
     * The string will be composed to according the the specified mode.
@@ -106,16 +96,11 @@ public class Normalizer{
     *                   and if false will be decomposed according to NFC rules.
     * @return String    The composed string   
     */            
-    public static String compose(String str, boolean compat){
-        char[] target = new char[MAX_BUFFER_SIZE];
-        char[] source = str.toCharArray();
-        int requiredLength =  compose(source,target,compat);
-        if (requiredLength < MAX_BUFFER_SIZE){
-            target = new char[requiredLength];
-            compose(source,target,compat); 
-        }
-        return new String(target);
+    public static String compose(String str, boolean compat)
+                                 throws Exception{
+        return normalize(str,(compat)? UNORM_NFKC : UNORM_NFC);
     }
+    
    /**
     * Compose a string.
     * The string will be composed to according the the specified mode.
@@ -127,18 +112,11 @@ public class Normalizer{
     *               the output was truncated.
     *   
     */         
-    public static int compose(char[] source,char[] target, boolean compat){
-                                          
-        int[] requiredLength = new int[1];
-        int errorCode = NativeNormalizer.normalize(source,source.length,
-                                                    target,target.length,
-                                                    (compat)? UNORM_NFKC : UNORM_NFC,
-                                                    requiredLength);
-        if(errorCode > ErrorCode.U_ZERO_ERROR){
-            throw ErrorCode.getException(errorCode);
-        }
-        return requiredLength[0];
+    public static int compose(char[] source,char[] target, boolean compat)
+                              throws Exception{
+        return normalize(source,target,(compat)? UNORM_NFKC : UNORM_NFC);
     }
+   
    /**
     * Decompose a string.
     * The string will be decomposed to according the the specified mode.
@@ -147,17 +125,12 @@ public class Normalizer{
     *                   and if false will be decomposed according to NFD rules.
     * @return String    The decomposed string   
     */         
-    public static String decompose(String str,boolean compat){
-        char[] target = new char[MAX_BUFFER_SIZE];
-        char[] source = str.toCharArray();
-        int requiredLength =  decompose(source,target,compat);
-        if (requiredLength < MAX_BUFFER_SIZE){
-            target = new char[requiredLength];
-            decompose(source,target,compat); 
-        }
-        return new String(target);
+    public static String decompose(String str, boolean compat)
+                                   throws Exception{
+        return normalize(str, (compat)? UNORM_NFKD :UNORM_NFD);                   
     }
-    /**
+    
+   /**
     * Decompose a string.
     * The string will be decomposed to according the the specified mode.
     * @param source The char array to decompose.
@@ -168,17 +141,11 @@ public class Normalizer{
     *               the output was truncated.
     *   
     */
-    public static int decompose(char[] source,char[] target,boolean compat){
-        int[] requiredLength = new int[1];
-        int errorCode = NativeNormalizer.normalize(source,source.length, 
-                                                    target,target.length,
-                                                    (compat)? UNORM_NFKD :UNORM_NFD,
-                                                    requiredLength);
-        if(errorCode > ErrorCode.U_ZERO_ERROR){
-            throw ErrorCode.getException(errorCode);
-        }
-        return requiredLength[0];
+    public static int decompose(char[] source,char[] target, boolean compat)
+                                throws Exception{
+        return normalize( source, target,(compat)? UNORM_NFKD :UNORM_NFD);
     }
+    
     /**
     * Normalize a string.
     * The string will be normalized according the the specified normalization mode
@@ -190,15 +157,22 @@ public class Normalizer{
     * @return String    The normalized string
     *   
     */
-    public static String normalize(String str, int normalizationMode){
-        char[] target = new char[MAX_BUFFER_SIZE];
-        char[] source = str.toCharArray();
-        int requiredLength =  normalize(source,target,normalizationMode);
-        if (requiredLength < MAX_BUFFER_SIZE){
-            target = new char[requiredLength];
-            normalize(source,target,normalizationMode); 
-        }
-        return new String(target);    
+    public static String normalize( String str, 
+                                    int normalizationMode)
+                                    throws Exception{
+         synchronized(errCode){
+            if(!check(normalizationMode)){
+                throw ErrorCode.getException(ErrorCode.U_ILLEGAL_ARGUMENT_ERROR);
+            }
+            String retStr =  NativeNormalizer.normalize(str, 
+                                                        normalizationMode, 
+                                                        errCode);
+            if(ErrorCode.isFailure(errCode[0])){
+                throw ErrorCode.getException(errCode[0]);
+            }
+            return retStr;
+         }      
+            
     }
     /**
     * Normalize a string.
@@ -213,20 +187,26 @@ public class Normalizer{
     *               the output was truncated.
     *   
     */
-    public static int normalize(char[] source, char[] target, 
-                                int  normalizationMode){
-        int[] requiredLength = new int[1];
-        if (!check(normalizationMode)){
-                throw ErrorCode.getException(ErrorCode.U_ILLEGAL_ARGUMENT_ERROR);
+    public static int normalize(char[] source, 
+                                char[] target, 
+                                int  normalizationMode) 
+                                throws Exception{
+        synchronized(requiredLength){
+            if (!check(normalizationMode)){
+                    throw ErrorCode.getException(ErrorCode.U_ILLEGAL_ARGUMENT_ERROR);
+            }
+            int errorCode =NativeNormalizer.normalize(source,source.length,
+                                                      target,target.length,
+                                                      normalizationMode,
+                                                      requiredLength); 
+            if(errorCode == ErrorCode.U_BUFFER_OVERFLOW_ERROR){
+                return requiredLength[0];
+            }
+            if(ErrorCode.isFailure(errorCode)){
+                throw ErrorCode.getException(errorCode);
+            }
+            return requiredLength[0];
         }
-        int errorCode =NativeNormalizer.normalize(source,source.length,
-                                                    target,target.length,
-                                                    normalizationMode,
-                                                    requiredLength);
-        if(errorCode > ErrorCode.U_ZERO_ERROR){
-            throw ErrorCode.getException(errorCode);
-        }
-        return requiredLength[0];
     }
 
    /**
@@ -246,21 +226,27 @@ public class Normalizer{
     *                     (Normalizer.UNORM_YES, Normalizer.UNORM_NO or
     *                     Normalizer.UNORM_MAYBE)
     */
-    public static int quickCheck( String source, int mode){
-        if (!check(mode)){
-                throw ErrorCode.getException(ErrorCode.U_ILLEGAL_ARGUMENT_ERROR);
-        }
-        int[] retVal = new int[1];
-        int errorCode = NativeNormalizer.quickCheck(source.toCharArray(), 
-                                                    source.length(),
-                                                    mode,retVal);
-                   
-        if(errorCode > ErrorCode.U_ZERO_ERROR){
-            throw ErrorCode.getException(errorCode);
-        }
-        return retVal[0];
+    public static int quickCheck( String source, int mode)
+                            throws Exception{
+          return quickCheck(source.toCharArray(),mode);
     }
        
+    public static int quickCheck(char[] source, int mode){
+        synchronized(quickCheckMode){
+            if (!check(mode)){
+                    throw ErrorCode.getException(ErrorCode.U_ILLEGAL_ARGUMENT_ERROR);
+            }
+            int errorCode = NativeNormalizer.quickCheck(source, 
+                                                        source.length,
+                                                        mode,
+                                                        quickCheckMode);
+                           
+            if(ErrorCode.isFailure(errorCode)){
+                throw ErrorCode.getException(errorCode);
+            }
+            return quickCheckMode[0];
+        }
+    }
     // public static data members -----------------------------------
 
     public static final int NO_NORMALIZATION = 1;
@@ -307,19 +293,20 @@ public class Normalizer{
     * format without further thorough checks*/
     public static final int UNORM_MAYBE=2;
           
-    // public methods ------------------------------------------------------
 
     /**
     * Checks if argument is a valid normalization format for use
     * @param normalization format
     * @return true if strength is a valid collation strength, false otherwise
     */
-    static boolean check(int normalization)
-    {
-    if (normalization < UNORM_NONE || 
-        (normalization > UNORM_NFKC))
-        return false;
-    return true;
+    public static boolean check(int normalization){
+        
+        if ( normalization < UNORM_NONE || 
+             (normalization > UNORM_NFKC)
+            ){
+            return false;
+        }
+        return true;
     }
 
 }

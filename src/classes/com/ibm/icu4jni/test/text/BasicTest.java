@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/test/text/BasicTest.java,v $ 
- * $Date: 2001/09/18 00:33:49 $ 
- * $Revision: 1.1 $
+ * $Date: 2001/10/27 00:34:55 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -45,9 +45,9 @@ public class BasicTest extends TestFmwk {
         { "\u212b",             "A\u030a",              "\u00c5"            }, // angstrom_sign
         { "\u00c5",             "A\u030a",              "\u00c5"            }, // A-ring
 
-//        { "\u00fdffin",              "A\u0308ffin",          "\u00fdffin"             },
+ //       { "\u00fdffin",              "A\u0308ffin",          "\u00fdffin"             },
         { "\u00fdffin",              "y\u0301ffin",          "\u00fdffin"             },	//updated with 3.0
-//        { "\u00fd\uFB03n",           "A\u0308\uFB03n",       "\u00fd\uFB03n"          },
+ //       { "\u00fd\uFB03n",           "A\u0308\uFB03n",       "\u00fd\uFB03n"          },
         { "\u00fd\uFB03n",           "y\u0301\uFB03n",       "\u00fd\uFB03n"          },	//updated with 3.0
 
         { "Henry IV",           "Henry IV",             "Henry IV"          },
@@ -67,7 +67,7 @@ public class BasicTest extends TestFmwk {
         { "\uFB4f",             "\u05D0\u05DC",         "\u05D0\u05DC",     }, // Alef-Lamed vs. Alef, Lamed
 
 //        { "\u00fdffin",              "A\u0308ffin",          "\u00fdffin"             },
-//       { "\u00fd\uFB03n",           "A\u0308ffin",          "\u00fdffin"             }, // ffi ligature -> f + f + i
+//        { "\u00fd\uFB03n",           "A\u0308ffin",          "\u00fdffin"             }, // ffi ligature -> f + f + i
         { "\u00fdffin",              "y\u0301ffin",          "\u00fdffin"             },	//updated for 3.0
         { "\u00fd\uFB03n",           "y\u0301ffin",          "\u00fdffin"             }, // ffi ligature -> f + f + i
 
@@ -79,10 +79,10 @@ public class BasicTest extends TestFmwk {
 
         { "\uFF76\u3099",       "\u30AB\u3099",         "\u30AC"            }, // hw_ka + ten
 
-        /* These two are broken in Unicode 2.1.2 but fixed in 2.1.5 and later
+        /* These two are broken in Unicode 2.1.2 but fixed in 2.1.5 and later*/
         { "\uFF76\uFF9E",       "\u30AB\u3099",         "\u30AC"            }, // hw_ka + hw_ten
         { "\u30AB\uFF9E",       "\u30AB\u3099",         "\u30AC"            }, // ka + hw_ten
-        */
+        
     };
 
     // With Canonical decomposition, Hangul syllables should get decomposed
@@ -102,7 +102,8 @@ public class BasicTest extends TestFmwk {
         // { "\ud4db",     "\u1111\u116e\u1175\u11af\u11c2",   "\ud478\u1175\u11af\u11c2"  },
     };
 
-    public void TestHangulCompose() {
+    public void TestHangulCompose() 
+                throws Exception{
         // Make sure that the static composition methods work
         logln("Canonical composition...");
         staticTest(Normalizer.UNORM_NFC,        0, hangulCanon,  2);
@@ -110,7 +111,7 @@ public class BasicTest extends TestFmwk {
         staticTest(Normalizer.UNORM_NFKC, 0, hangulCompat, 2);
      }
 
-    public void TestHangulDecomp() {
+    public void TestHangulDecomp() throws Exception{
         // Make sure that the static decomposition methods work
         logln("Canonical decomposition...");
         staticTest(Normalizer.UNORM_NFD,        0, hangulCanon,  1);
@@ -118,23 +119,23 @@ public class BasicTest extends TestFmwk {
         staticTest(Normalizer.UNORM_NFKD, 0, hangulCompat, 1);
     }
 
-    public void TestDecomp() {
+    public void TestDecomp() throws Exception{
         staticTest(Normalizer.UNORM_NFD, 0, canonTests, 1);
     }
 
-    public void TestCompatDecomp() {
+    public void TestCompatDecomp() throws Exception{
         staticTest(Normalizer.UNORM_NFKD, 0, compatTests, 1);
     }
 
-    public void TestCanonCompose() {
+    public void TestCanonCompose() throws Exception{
         staticTest(Normalizer.UNORM_NFC, 0, canonTests, 2);
     }
 
-    public void TestCompatCompose() {
+    public void TestCompatCompose() throws Exception{
         staticTest(Normalizer.UNORM_NFKC, 0, compatTests, 2);
     }
 
-    public void TestExplodingBase() {
+    public void TestExplodingBase() throws Exception{
         // \u017f - Latin small letter long s
         // \u0307 - combining dot above
         // \u1e61 - Latin small letter s with dot above
@@ -162,7 +163,7 @@ public class BasicTest extends TestFmwk {
      * The Tibetan vowel sign AA, 0f71, was messed up prior to Unicode version 2.1.9.
      * Once 2.1.9 or 3.0 is released, uncomment this test.
      */
-    public void TestTibetan() {
+    public void TestTibetan() throws Exception{
         String[][] decomp = {
             { "\u0f77", "\u0f77", "\u0fb2\u0f71\u0f80" }
         };
@@ -180,7 +181,8 @@ public class BasicTest extends TestFmwk {
      * Make sure characters in the CompositionExclusion.txt list do not get
      * composed to.
      */
-    public void TestCompositionExclusion() {
+    public void TestCompositionExclusion() 
+                throws Exception{
         // This list is generated from CompositionExclusion.txt.
         // Update whenever the normalizer tables are updated.  Note
         // that we test all characters listed, even those that can be
@@ -255,7 +257,8 @@ public class BasicTest extends TestFmwk {
      * map to the same canonical class, which is not the case, in
      * reality.
      */
-    public void TestZeroIndex() {
+    public void TestZeroIndex() 
+                throws Exception{
         String[] DATA = {
             // Expect col1 x COMPOSE_COMPAT => col2
             // Expect col2 x DECOMP => col3
@@ -292,7 +295,8 @@ public class BasicTest extends TestFmwk {
      * characters at the start of a string are not put in canonical
      * order correctly by compose() if there is no starter.
      */
-    public void TestVerisign() {
+    public void TestVerisign()
+                throws Exception{
         String[] inputs = {
             "\u05b8\u05b9\u05b1\u0591\u05c3\u05b0\u05ac\u059f",
             "\u0592\u05b7\u05bc\u05a5\u05b0\u05c0\u05c4\u05ad"
@@ -319,7 +323,8 @@ public class BasicTest extends TestFmwk {
             }
         }
     }
-    public void  TestQuickCheckResultNO(){
+    public void  TestQuickCheckResultNO()
+                 throws Exception{
         final char CPNFD[] = {0x00C5, 0x0407, 0x1E00, 0x1F57, 0x220C, 
                                 0x30AE, 0xAC00, 0xD7A3, 0xFB36, 0xFB4E};
         final char CPNFC[] = {0x0340, 0x0F93, 0x1F77, 0x1FBB, 0x1FEB, 
@@ -363,7 +368,8 @@ public class BasicTest extends TestFmwk {
     }
 
  
-    public void TestQuickCheckResultYES() {
+    public void TestQuickCheckResultYES() 
+                throws Exception{
         final char CPNFD[] = {0x00C6, 0x017F, 0x0F74, 0x1000, 0x1E9A, 
                                 0x2261, 0x3075, 0x4000, 0x5000, 0xF000};
         final char CPNFC[] = {0x0400, 0x0540, 0x0901, 0x1000, 0x1500, 
@@ -433,7 +439,8 @@ public class BasicTest extends TestFmwk {
         }
     }
 
-    public void TestQuickCheckResultMAYBE() {
+    public void TestQuickCheckResultMAYBE() 
+                throws Exception{
         
         final char CPNFC[] = {0x0306, 0x0654, 0x0BBE, 0x102E, 0x1161, 
                                 0x116A, 0x1173, 0x1175, 0x3099, 0x309A};
@@ -464,7 +471,7 @@ public class BasicTest extends TestFmwk {
     }
     
     public void TestQuickCheckStringResult() 
-    {
+                throws Exception{
         int count;
         String d;
         String c;
@@ -507,8 +514,8 @@ public class BasicTest extends TestFmwk {
     // Internal utilities
     //
    
-    private void staticTest(int mode, int options, String[][] tests, int outCol)
-    {
+    private void staticTest (int mode, int options, String[][] tests, int outCol)
+                            throws Exception{
         for (int i = 0; i < tests.length; i++)
         {
             String input = tests[i][0];
@@ -522,6 +529,25 @@ public class BasicTest extends TestFmwk {
                 errln("FAIL: case " + i
                     + " expected '" + expect + "' (" + hex(expect) + ")"
                     + " but got '" + output + "' (" + hex(output) + ")" );
+            }
+        }
+        char[] output = new char[1];
+        for (int i = 0; i < tests.length; i++)
+        {
+            char[] input = tests[i][0].toCharArray();
+            String expect = tests[i][outCol];
+
+            logln("Normalizing '" + input + "' (" + hex(new String(input)) + ")" );
+            
+            int reqLength= Normalizer.normalize(input,output, mode);
+            if(reqLength > output.length){
+                output = new char[reqLength];
+                Normalizer.normalize(input,output, mode);
+            }
+            if (!expect.equals(new String(output,0,reqLength))) {
+                errln("FAIL: case " + i
+                    + " expected '" + expect + "' (" + hex(expect) + ")"
+                    + " but got '" + output + "' (" + hex(new String(output)) + ")" );
             }
         }
     }  

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/NativeCollation.java,v $ 
-* $Date: 2001/06/06 19:49:16 $ 
-* $Revision: 1.6 $
+* $Date: 2001/10/27 00:34:55 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -14,6 +14,7 @@
 package com.ibm.icu4jni.text;
 
 import com.ibm.icu4jni.common.ErrorCode;
+import com.ibm.icu4jni.common.ICU4JNILoader;
 
 /**
 * Package static class for declaring all native methods for collation use.
@@ -26,7 +27,7 @@ final class NativeCollation
   // library loading ----------------------------------------------
   
   static {
-    boolean loaded = ErrorCode.LIBRARY_LOADED;
+    ICU4JNILoader.loadLibrary();
   }
   
   // collator methods ---------------------------------------------
