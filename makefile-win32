@@ -1,15 +1,15 @@
 # Microsoft Developer Studio Generated NMAKE File, Based on ICUInterface.dsp
 !IF "$(CFG)" == ""
-CFG="Win32 Debug"
-!MESSAGE No configuration specified. Defaulting to nmake /f "makefile-win32" CFG="Win32 Debug".
+CFG="Debug"
+!MESSAGE No configuration specified. Defaulting to nmake /f "makefile-win32" CFG="Debug".
 !ENDIF 
 
-!IF "$(CFG)" != "Win32 Release" && "$(CFG)" != "Win32 Debug"
+!IF "$(CFG)" != "Release" && "$(CFG)" != "Debug"
 !MESSAGE Invalid configuration "$(CFG)" specified.
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f  "makefile-win32" CFG="Win32 Debug"
+!MESSAGE NMAKE /f  "makefile-win32" CFG="Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
@@ -42,10 +42,10 @@ SRCDIR=.\src
 NATIVE=$(SRCDIR)\native
 BDIR=$(BUILDDIR)\classes
 JAVAC_EXE=javac.exe
-JAVA_FLAGS=-d $(BUILDDIR)\classes
+JAVA_FLAGS=-d $(BUILDDIR)\classes -sourcepath $SRCDIR
 JAVA_T_FLAGS=-d $(BUILDDIR)\classes -classpath $(BUILDDIR)\classes;. 
 
-!IF  "$(CFG)" == "Win32 Release"
+!IF  "$(CFG)" == "Release"
 
 !MESSAGE "Release"
 
@@ -91,7 +91,7 @@ LINK32_OBJS= \
 <<
  
 
-!ELSEIF  "$(CFG)" == "Win32 Debug"
+!ELSEIF  "$(CFG)" == "Debug"
 
 OUTDIR=.\build\lib
 INTDIR=.\src\native\int
@@ -157,10 +157,10 @@ LINK32_OBJS= \
 
 
 
-!IF "$(CFG)" == "Win32 Release" || "$(CFG)" == "Win32 Debug"
+!IF "$(CFG)" == "Release" || "$(CFG)" == "Debug"
 SOURCE=$(NATIVE)\collation\CollationInterface.c
 
-!IF  "$(CFG)" == "Win32 Release"
+!IF  "$(CFG)" == "Release"
 
 CPP_SWITCHES=/nologo /MT /W4 /GX /O2 /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_DATA)\..\..\include"  /I "$(NATIVE)\common"  /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fp"$(INTDIR)\ICUInterface.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 
@@ -170,7 +170,7 @@ CPP_SWITCHES=/nologo /MT /W4 /GX /O2 /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\
 <<
 
 
-!ELSEIF  "$(CFG)" == "Win32 Debug"
+!ELSEIF  "$(CFG)" == "Debug"
 
 CPP_SWITCHES=/nologo /G6 /MTd /W4 /Gm /GX /ZI /Od /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_DATA)\..\..\include" /I "$(NATIVE)\common" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
 
@@ -184,7 +184,7 @@ CPP_SWITCHES=/nologo /G6 /MTd /W4 /Gm /GX /ZI /Od /I "$(JAVA_HOME)\include" /I "
 
 SOURCE=$(NATIVE)\converter\ConverterInterface.c
 
-!IF  "$(CFG)" == "Win32 Release"
+!IF  "$(CFG)" == "Release"
 
 CPP_SWITCHES=/nologo /MT /W4 /GX /O2 /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_DATA)\..\..\include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fp"$(INTDIR)\ICUInterface.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 
@@ -194,7 +194,7 @@ CPP_SWITCHES=/nologo /MT /W4 /GX /O2 /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\
 <<
 
 
-!ELSEIF  "$(CFG)" == "Win32 Debug"
+!ELSEIF  "$(CFG)" == "Debug"
 
 CPP_SWITCHES=/nologo /G6 /MTd /W4 /Gm /GX /ZI /Od /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_DATA)\..\..\include" /I "$(NATIVE)\common" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
 
