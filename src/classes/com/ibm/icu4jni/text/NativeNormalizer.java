@@ -5,7 +5,7 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/NativeNormalizer.java,v $ 
-* $Date: 2001/11/03 03:25:12 $ 
+* $Date: 2001/11/21 22:09:52 $ 
 * $Revision: 
 *
 *******************************************************************************
@@ -69,11 +69,11 @@ final class NativeNormalizer {
     * @param requiredLength A array to receive the total buffer size needed; 
     *                       if greater than resultLength,the output was truncated.
     * @param errorCode an array to receive the error code returned by ICU  
-    * @return String the normalized string
+    * @return int error code returned by ICU
     */
-    static native final String normalize(String source, 
-                                         int normalizationMode, 
-                                         int[] errorCode);
+    static native final int normalize(String source, 
+                                      int normalizationMode, 
+                                      String[] target);
     /**
     * Performing quick check on a string, to quickly determine if the string is 
     * in a particular normalization format.

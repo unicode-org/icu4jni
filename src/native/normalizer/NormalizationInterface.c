@@ -93,12 +93,12 @@ Java_com_ibm_icu4jni_text_NativeNormalizer_quickCheck___3CII_3I (JNIEnv *env,
 
 #define MAX_LENGTH 1000
 
-JNIEXPORT jstring JNICALL 
-Java_com_ibm_icu4jni_text_NativeNormalizer_normalize__Ljava_lang_String_2I_3I(JNIEnv *env, 
-                                                                              jclass jClass, 
-                                                                              jstring source, 
-                                                                              jint mode, 
-                                                                              jintArray data){
+JNIEXPORT jint JNICALL 
+Java_com_ibm_icu4jni_text_NativeNormalizer_normalize__Ljava_lang_String_2I_3Ljava_lang_String_2(JNIEnv *env, 
+                                                                                                jclass jClass, 
+                                                                                                jstring source, 
+                                                                                                jint mode, 
+                                                                                                jobjectArray retStr){
     UErrorCode errorCode = U_ZERO_ERROR;
     const jchar* uSource= (jchar*) (*env)->GetStringChars(env, source,NULL);
     jint sourceLength = (*env)->GetStringLength(env,source);
@@ -109,45 +109,38 @@ Java_com_ibm_icu4jni_text_NativeNormalizer_normalize__Ljava_lang_String_2I_3I(JN
     int retVal =0;
 
     if(uSource){
-       jint* ec = (*env)->GetPrimitiveArrayCritical(env,data, NULL);
-       if(data){
-           target =  dst;
-           targetLength = MAX_LENGTH;
-           
+       target =  dst;
+       targetLength = MAX_LENGTH;
+       
+       retVal=unorm_normalize(uSource,sourceLength,(UNormalizationMode)mode,
+                0 /* Ignore the option IGNORE_HANGUL */,
+                target,targetLength,&errorCode);
+
+       if(retVal>MAX_LENGTH){
+           UChar* target = (UChar*)malloc(sizeof(UChar) * retVal);
+           targetLength = retVal;
            retVal=unorm_normalize(uSource,sourceLength,(UNormalizationMode)mode,
-                    0 /* Ignore the option IGNORE_HANGUL */,
-                    target,targetLength,&errorCode);
-
-           if(retVal>MAX_LENGTH){
-               UChar* target = (UChar*)malloc(sizeof(UChar) * retVal);
-               targetLength = retVal;
-               retVal=unorm_normalize(uSource,sourceLength,(UNormalizationMode)mode,
-                    0 /* Ignore the option IGNORE_HANGUL */,
-                    target,targetLength,&errorCode);
-               retString = (*env)->NewString(env,target,retVal);
-               free(target);
-           }else{
-               target[targetLength]=0;
-               retString = (*env)->NewString(env,target,retVal);
-           }
-           
-           ec[0] = errorCode;
-           if(U_FAILURE(errorCode)){
-               (*env)->ReleasePrimitiveArrayCritical(env,data,ec,JNI_COMMIT);
-               (*env)->ReleaseStringChars(env,source,NULL);
-               return source;
-           }
-
+                0 /* Ignore the option IGNORE_HANGUL */,
+                target,targetLength,&errorCode);
+           retString = (*env)->NewString(env,target,retVal);
+           free(target);
        }else{
-           errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+           target[targetLength]=0;
+           retString = (*env)->NewString(env,target,retVal);
        }
-       (*env)->ReleasePrimitiveArrayCritical(env,data,ec,JNI_COMMIT);
+       
+       if(U_FAILURE(errorCode)){
+           (*env)->ReleaseStringChars(env,source,NULL);
+           return errorCode;
+       }
+        /* succeeded without error set the object array */
+       (*env)->SetObjectArrayElement(env,retStr,0,retString);
 
     }else{
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
     }
     (*env)->ReleaseStringChars(env,source,NULL);
-    return retString;           
+    return errorCode;           
 }
 
 JNIEXPORT jint JNICALL 
@@ -159,7 +152,7 @@ Java_com_ibm_icu4jni_text_NativeNormalizer_quickCheck__Ljava_lang_String_2I_3I(J
     UErrorCode errorCode =U_ZERO_ERROR;
     const jchar* uSource =NULL;
     jint sourceLength = 0;
-    uSource = (*env)->GetStringChars(env,source,NULL);
+    uSource = (*env)->GetStringCritical(env,source,NULL);
     sourceLength = (*env)->GetStringLength(env,source);
     if(uSource){
         jint* qcRetVal = (*env)->GetPrimitiveArrayCritical(env,qcReturn,NULL);
@@ -168,7 +161,7 @@ Java_com_ibm_icu4jni_text_NativeNormalizer_quickCheck__Ljava_lang_String_2I_3I(J
                                         (UNormalizationMode) mode , 
                                         &errorCode);
             if(U_FAILURE(errorCode)){
-                (*env)->ReleaseStringChars(env,source,NULL);
+                (*env)->ReleaseStringCritical(env,source,NULL);
                 (*env)->ReleasePrimitiveArrayCritical(env,qcReturn,qcRetVal,JNI_COMMIT);
                 return errorCode;
             }
@@ -179,6 +172,6 @@ Java_com_ibm_icu4jni_text_NativeNormalizer_quickCheck__Ljava_lang_String_2I_3I(J
     }else{
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
     }
-    (*env)->ReleaseStringChars(env,source,NULL);
+    (*env)->ReleaseStringCritical(env,source,NULL);
     return errorCode;
 }

@@ -18,10 +18,10 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_text_NativeNormalizer_normalize___3C
 /*
  * Class:     com_ibm_icu4jni_text_NativeNormalizer
  * Method:    normalize
- * Signature: (Ljava/lang/String;I[I)Ljava/lang/String;
+ * Signature: (Ljava/lang/String;I[Ljava/lang/String;)I
  */
-JNIEXPORT jstring JNICALL Java_com_ibm_icu4jni_text_NativeNormalizer_normalize__Ljava_lang_String_2I_3I
-  (JNIEnv *, jclass, jstring, jint, jintArray);
+JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_text_NativeNormalizer_normalize__Ljava_lang_String_2I_3Ljava_lang_String_2
+  (JNIEnv *, jclass, jstring, jint, jobjectArray);
 
 /*
  * Class:     com_ibm_icu4jni_text_NativeNormalizer
@@ -38,8 +38,6 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_text_NativeNormalizer_quickCheck___3
  */
 JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_text_NativeNormalizer_quickCheck__Ljava_lang_String_2I_3I
   (JNIEnv *, jclass, jstring, jint, jintArray);
-
-
 
 #ifdef __cplusplus
 }

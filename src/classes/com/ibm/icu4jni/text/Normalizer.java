@@ -26,9 +26,9 @@ import com.ibm.icu4jni.common.*;
  *
  * <h2>Unicode normalization API</h2>
  *
- * <code>unorm_normalize</code> transforms Unicode text into an equivalent composed or
+ * <code>normalize</code> transforms Unicode text into an equivalent composed or
  * decomposed form, allowing for easier sorting and searching of text.
- * <code>unorm_normalize</code> supports the standard normalization forms described in
+ * <code>normalize</code> supports the standard normalization forms described in
  * <a href="http://www.unicode.org/unicode/reports/tr15/" target="unicode">
  * Unicode Standard Annex #15 &mdash; Unicode Normalization Forms</a>.
  *
@@ -77,11 +77,11 @@ import com.ibm.icu4jni.common.*;
  * into the corresponding semantic characters.  When sorting and searching, you
  * will often want to use these mappings.
  *
- * <code>unorm_normalize</code> helps solve these problems by transforming text into the
+ * <code>normalize</code> helps solve these problems by transforming text into the
  * canonical composed and decomposed forms as shown in the first example above.  
  * In addition, you can have it perform compatibility decompositions so that 
  * you can treat compatibility characters the same as their equivalents.
- * Finally, <code>unorm_normalize</code> rearranges accents into the proper canonical
+ * Finally, <code>normalize</code> rearranges accents into the proper canonical
  * order, so that you do not have to worry about accent rearrangement on your
  * own.
  *
@@ -122,15 +122,15 @@ import com.ibm.icu4jni.common.*;
 public final class Normalizer{
    
     private static final int[] requiredLength = new int[1];
-    private static final int[] quickCheckRet = new int[1];
-    private static final int[] errCode        = new int[1];
+    private static final int[] quickCheckRet  = new int[1];
+    private static final String[] retStr      = new String[1];
    
    /**
     * Compose a string.
     * The string will be composed to according the the specified mode.
     * @param source     The string to compose.
-    * @param compat     If true the char array will be decomposed accoding to NFKC rules
-    *                   and if false will be decomposed according to NFC rules.
+    * @param compat     If true the char array will be composed accoding to NFKC rules
+    *                   and if false will be composed according to NFC rules.
     * @return String    The composed string   
     */            
     public static String compose(String str, boolean compat)
@@ -143,8 +143,8 @@ public final class Normalizer{
     * The string will be composed to according the the specified mode.
     * @param source The char array to compose.
     * @param result A char buffer to receive the normalized text.
-    * @param compat If true the char array will be decomposed accoding to NFKC rules
-    *               and if false will be decomposed according to NFC rules.
+    * @param compat If true the char array will be composed accoding to NFKC rules
+    *               and if false will be composed according to NFC rules.
     * @return int   The total buffer size needed;if greater than length of result,
     *               the output was truncated.
     *   
@@ -197,17 +197,17 @@ public final class Normalizer{
     public static String normalize( String str, 
                                     int normalizationMode)
                                     throws Exception{
-         synchronized(errCode){
+         synchronized(retStr){
             if(!check(normalizationMode)){
                 throw ErrorCode.getException(ErrorCode.U_ILLEGAL_ARGUMENT_ERROR);
             }
-            String retStr =  NativeNormalizer.normalize(str, 
-                                                        normalizationMode, 
-                                                        errCode);
-            if(ErrorCode.isFailure(errCode[0])){
-                throw ErrorCode.getException(errCode[0]);
+            int errorCode=  NativeNormalizer.normalize(str, 
+                                                       normalizationMode, 
+                                                       retStr);
+            if(ErrorCode.isFailure(errorCode)){
+                throw ErrorCode.getException(errorCode);
             }
-            return retStr;
+            return retStr[0];
          }      
             
     }

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/test/text/BasicTest.java,v $ 
- * $Date: 2001/10/27 00:34:55 $ 
- * $Revision: 1.2 $
+ * $Date: 2001/11/21 22:10:21 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -438,7 +438,14 @@ public class BasicTest extends TestFmwk {
             }
         }
     }
-
+    public void TestBengali() throws Exception{
+        String input = "\u09bc\u09be\u09cd\u09be";
+        String output=Normalizer.normalize(input,Normalizer.UNORM_NFC);
+        if(!input.equals(output)){
+             errln("ERROR in NFC of string");
+        }
+        return;
+    }
     public void TestQuickCheckResultMAYBE() 
                 throws Exception{
         
