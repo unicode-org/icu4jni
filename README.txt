@@ -72,8 +72,15 @@ Installation
 	* Set the JAVA_HOME environment variabale.
    	  eg: set JAVA_HOME=c:\jdk1.3
 	* Make sure <icu_dir>\bin directory is in you path
-	* Type the following command
-   	  nmake /f makefile-win32
+	* Make is configured to build with or without JDK 1.4 and with the ICU_DATA environment variable being phased out
+from ICU the make need to find out the location of ICU libraries.
+
+	  For building with JDK 1.4 type the following command
+   	  	nmake /f makefile-win32 CFG="Debug" ICUBIN="<location of ICU>\icu\bin" JDK14="TRUE" JAVAPATH="<location of JDK>\bin"
+
+	  For building with JDK1.3 type the following command
+	  	nmake /f makefile-win32 CFG="Debug" ICUBIN="<location of ICU>\bin" JDK14="FALSE" JAVAPATH="<location of JDK>\bin"
+
 	* The files are built in <jniroot>/build directory	
 	* cd to <jniroot>/build directory
 	* run the test with the following command
