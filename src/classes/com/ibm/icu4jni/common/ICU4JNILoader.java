@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/common/ICU4JNILoader.java,v $ 
-* $Date: 2004/06/17 20:52:13 $ 
-* $Revision: 1.11 $
+* $Date: 2004/11/18 19:12:06 $ 
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */ 
@@ -28,11 +28,11 @@ public final class ICU4JNILoader {
     public static final void loadLibrary() 
             throws UnsatisfiedLinkError{
         try{
-            System.loadLibrary("ICUInterface30");
+            System.loadLibrary("ICUInterface32");
             ErrorCode.LIBRARY_LOADED = true;  
         }
         catch(UnsatisfiedLinkError e){
-            System.loadLibrary("ICUInterface30d");
+            System.loadLibrary("ICUInterface32d");
         } 
     }
    
