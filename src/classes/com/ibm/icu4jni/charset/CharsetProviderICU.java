@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/charset/CharsetProviderICU.java,v $ 
-* $Date: 2004/12/29 01:12:53 $ 
-* $Revision: 1.12 $
+* $Date: 2004/12/30 21:17:39 $ 
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */ 
@@ -42,13 +42,14 @@ public final class CharsetProviderICU extends CharsetProvider{
         	// this would make the Charset API to throw 
         	// unsupported encoding exception
         	return null;
-        }else{
-	       String[] aliases = (String[])NativeConverter.getAliases(charsetName);	
-           String canonicalName = NativeConverter.getJavaCanonicalName(icuCanonicalName);
-	       return (new CharsetICU(canonicalName,icuCanonicalName, aliases));
-	    }
+        }
+	    return getCharset(icuCanonicalName);
     }
-    
+    private final Charset getCharset(String icuCanonicalName){
+       String[] aliases = (String[])NativeConverter.getAliases(icuCanonicalName);    
+       String canonicalName = NativeConverter.getJavaCanonicalName(icuCanonicalName);
+       return (new CharsetICU(canonicalName,icuCanonicalName, aliases));  
+    }
     /**
      * Adds an entry to the given map whose key is the charset's 
      * canonical name and whose value is the charset itself. 
@@ -58,12 +59,10 @@ public final class CharsetProviderICU extends CharsetProvider{
     public final void putCharsets(Map map) {
         // Get the available converter canonical names and aliases	  
         String[] charsets = NativeConverter.getAvailable();        
-        for(int i=0; i<charsets.length;i++){
-	    // get the ICU aliases for a converter	  
-	    String[] aliases = NativeConverter.getAliases(charsets[i]);            
-	    // store the charsets and aliases in a Map    
-	    if (!map.containsKey(charsets[i])){
-		      map.put(charsets[i], aliases);
+        for(int i=0; i<charsets.length;i++){           
+    	    // store the charsets and aliases in a Map    
+    	    if (!map.containsKey(charsets[i])){
+    	        map.put(charsets[i], charsetForName(charsets[i]));
 	        }
         }
     }

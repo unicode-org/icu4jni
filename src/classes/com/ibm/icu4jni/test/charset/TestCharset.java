@@ -782,6 +782,58 @@ public class TestCharset extends TestFmwk {
             errln("ICU does not conform to the spec");
         }
     }
+    /* jitterbug 4313 */
+    public void TestPutCharsets(){
+        try{
+            CharsetProviderICU icu = new CharsetProviderICU();
+            TreeMap map = new TreeMap();
+            icu.putCharsets(map);
+            Set set = map.keySet();
+            Iterator iter = set.iterator();
+            while(iter.hasNext()){
+                String key = (String)iter.next();
+                Charset cs = (Charset)map.get(key);
+                if(cs == null){
+                    errln("Could not create charset for name: " + key);
+                }
+                try{
+                    cs.newEncoder();
+                }catch(Exception e){
+                    errln("Could not create encoder for " + key + " error: " + e.toString());
+                }
+                try{
+                    cs.newDecoder();
+                }catch(Exception e){
+                    errln("Could not create decoder for " + key + " error: " + e.toString());
+                }
+            } 
+            logln("Number of entries in the map: " + set.size());
+        }catch(ClassCastException ex){
+            errln("CharsetProviderICU.putCharsets does not conform to the spec");
+        }
+    }
+
+    public void TestEncoderCreation(){
+        try{
+            Charset cs = Charset.forName("x-ibm-16684_P110-2003");
+            CharsetEncoder enc = cs.newEncoder();
+            if(enc!=null){
+                logln("Successfully created the encoder");
+            }
+        }catch(Exception e){
+            errln("Error creating charset encoder."+ e.toString());
+            e.printStackTrace();
+        }
+        try{
+            Charset cs = Charset.forName("x-ibm-971_P100-1995");
+            CharsetEncoder enc = cs.newEncoder();
+            if(enc!=null){
+                logln("Successfully created the encoder");
+            }
+        }catch(Exception e){
+            errln("Error creating charset encoder."+ e.toString());
+        }
+    }
 	private void smBufEncode(CharsetEncoder encoder, String encoding) {
 		CharBuffer mySource = CharBuffer.wrap(myUSource);
 		{

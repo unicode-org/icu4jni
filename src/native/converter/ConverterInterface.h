@@ -140,7 +140,13 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_countInva
  */
 JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getMaxBytesPerChar
   (JNIEnv *, jclass, jlong);
-
+/*
+ * Class:     com_ibm_icu4jni_converters_NativeConverter
+ * Method:    getMinBytesPerChar
+ * Signature: (J)I
+ */
+JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getMinBytesPerChar
+  (JNIEnv *, jclass, jlong);
 /*
  * Class:     com_ibm_icu4jni_converters_NativeConverter
  * Method:    getAveBytesPerChar
@@ -170,7 +176,7 @@ JNIEXPORT jfloat JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getAveC
  * Method:    getSubstitutionBytes
  * Signature: (J)Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getSubstitutionBytes
+JNIEXPORT jbyteArray JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getSubstitutionBytes
   (JNIEnv *, jclass, jlong);
 
 /*

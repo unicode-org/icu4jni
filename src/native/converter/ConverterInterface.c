@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/native/converter/ConverterInterface.c,v $ 
-* $Date: 2004/12/29 00:58:05 $ 
-* $Revision: 1.22 $
+* $Date: 2004/12/30 21:17:39 $ 
+* $Revision: 1.23 $
 *
 *******************************************************************************
 */
@@ -334,9 +334,9 @@ Java_com_ibm_icu4jni_converters_NativeConverter_decode(JNIEnv *env,
         UErrorCode errorCode = U_ZERO_ERROR;
         if(cnv){
             jint* myData = (jint*) (*env)->GetPrimitiveArrayCritical(env,data,NULL);
-            UChar invalidUChars[32];
-            jint len = 0;
-            ucnv_getInvalidUChars(cnv,invalidUChars,(int8_t*)len,&errorCode);
+            char invalidChars[32] = {'\0'};
+            int8_t len = 32;
+            ucnv_getInvalidChars(cnv,invalidChars,&len,&errorCode);
             myData[2] = len;
             (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,JNI_COMMIT);
         }else{
@@ -424,7 +424,16 @@ Java_com_ibm_icu4jni_converters_NativeConverter_getMaxBytesPerChar(JNIEnv *env,
     return -1;
 }
 
-
+JNIEXPORT jint JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_getMinBytesPerChar(JNIEnv *env, 
+                                                                   jclass jClass, 
+                                                                   jlong handle){
+    UConverter* cnv = (UConverter*)handle;
+    if(cnv){
+        return (jint)ucnv_getMinCharSize(cnv);
+    }
+    return -1;
+}
 JNIEXPORT jfloat JNICALL 
 Java_com_ibm_icu4jni_converters_NativeConverter_getAveBytesPerChar(JNIEnv *env, 
                                                                    jclass jClass, 
@@ -530,7 +539,15 @@ Java_com_ibm_icu4jni_converters_NativeConverter_flushCharToByte (JNIEnv *env,
     return errorCode;
 }
 
-
+void 
+toChars(const UChar* us, char* cs, int32_t length){
+    UChar u;
+    while(length>0) {
+        u=*us++;
+        *cs++=(char)u;
+        --length;
+    }
+}
 JNIEXPORT jint JNICALL 
 Java_com_ibm_icu4jni_converters_NativeConverter_setSubstitutionBytes(JNIEnv *env, 
                                                                      jclass jClass, 
@@ -544,7 +561,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_setSubstitutionBytes(JNIEnv *env
         jbyte* u_subChars = (*env)->GetPrimitiveArrayCritical(env,subChars,NULL);
         if(u_subChars){
              char* mySubChars= (char*)malloc(sizeof(char)*length);
-             u_UCharsToChars((UChar*)u_subChars,&mySubChars[0],length);
+             toChars((UChar*)u_subChars,&mySubChars[0],length);
              ucnv_setSubstChars(cnv,mySubChars, (char)length,&errorCode);
              if(U_FAILURE(errorCode)){
                 (*env)->ReleasePrimitiveArrayCritical(env,subChars,mySubChars,JNI_COMMIT);
@@ -930,6 +947,8 @@ JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getICUCanonicalName(JNIE
         }else if((canonicalName = ucnv_getCanonicalName(encName, "IANA", &error))!=NULL){
             ret = ((*env)->NewStringUTF(env, canonicalName));
         }else if((canonicalName = ucnv_getCanonicalName(encName, "", &error))!=NULL){
+            ret = ((*env)->NewStringUTF(env, canonicalName));
+        }else if((canonicalName =  ucnv_getAlias(encName, 0, &error)) != NULL){
             /* we have some aliases in the form x-blah .. match those first */
             ret = ((*env)->NewStringUTF(env, canonicalName));
         }else if( strstr(encName, "x-") == encName){
@@ -1122,20 +1141,34 @@ Java_com_ibm_icu4jni_converters_NativeConverter_getAveCharsPerByte(JNIEnv *env,
     return ret;
 }
 
-JNIEXPORT jstring JNICALL 
+                                                                   void 
+toUChars(const char* cs, UChar* us, int32_t length){
+    char c;
+    while(length>0) {
+        c=*cs++;
+        *us++=(char)c;
+        --length;
+    }
+}
+
+JNIEXPORT jbyteArray JNICALL 
 Java_com_ibm_icu4jni_converters_NativeConverter_getSubstitutionBytes(JNIEnv *env, 
                                                                      jclass jClass, 
                                                                      jlong handle){
     const UConverter * cnv = (const UConverter *) handle;
     UErrorCode status = U_ZERO_ERROR;
-    char subBytes[50];
-    int8_t len =(char)50;
+    char subBytes[10];
+    int8_t len =(char)10;
+    jbyteArray arr;
     if(cnv){
         ucnv_getSubstChars(cnv,subBytes,&len,&status);
         if(U_SUCCESS(status)){
-            subBytes[len] = 0; /* Null terminate the array */
-            return((*env)->NewStringUTF(env, subBytes));
+            arr = ((*env)->NewByteArray(env, len));
+            if(arr){
+                (*env)->SetByteArrayRegion(env,arr,0,len,(jbyte*)subBytes);
+            }
+            return arr;
         }
     }
-    return 0;
+    return ((*env)->NewByteArray(env, 0));
 }

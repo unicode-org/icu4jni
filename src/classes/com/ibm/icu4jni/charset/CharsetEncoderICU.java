@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/charset/CharsetEncoderICU.java,v $ 
-* $Date: 2004/06/17 20:52:12 $ 
-* $Revision: 1.10 $
+* $Date: 2004/12/30 21:17:38 $ 
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -60,12 +60,12 @@ public final class CharsetEncoderICU extends CharsetEncoder {
 	 * @param cHandle the address of ICU converter
      * @stable ICU 2.4
 	 */
-	public CharsetEncoderICU(Charset cs, long cHandle) {
+	public CharsetEncoderICU(Charset cs, long cHandle, byte[] replacement) {
 		super(
 			cs,
 			(float) NativeConverter.getAveBytesPerChar(cHandle),
 			(float) NativeConverter.getMaxBytesPerChar(cHandle),
-			NativeConverter.getSubstitutionBytes(cHandle).getBytes());
+			replacement);
 
 		// The default callback action on unmappable input 
 		// or malformed input is to ignore so we set ICU converter

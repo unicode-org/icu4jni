@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/converters/NativeConverter.java,v $ 
-* $Date: 2004/12/29 00:58:05 $ 
-* $Revision: 1.13 $
+* $Date: 2004/12/30 21:17:39 $ 
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */ 
@@ -264,7 +264,16 @@ public final class NativeConverter{
      * @internal ICU 2.4
      */ 
     public static final native int getMaxBytesPerChar(long converterHandle);
-   
+    
+    /**
+     * Gets the number of bytes needed for converting a char
+     *
+     * @param converterHandle Address of converter object created by the native code
+     * @return number of bytes needed
+     * @internal ICU 3.2
+     */ 
+    public static final native int getMinBytesPerChar(long converterHandle);
+    
     /**
      * Gets the average numnber of bytes needed for converting a char
      *
@@ -293,7 +302,8 @@ public final class NativeConverter{
     public static final native float getAveCharsPerByte(long converterHandle);
     
     
-    public static final native String getSubstitutionBytes(long converterHandle);
+    public static final native byte[] getSubstitutionBytes(long converterHandle);
+    
     /**
      * Ascertains if a given Unicode code unit can 
      * be converted to the target encoding
