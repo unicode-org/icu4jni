@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/CollatorAPITest.java,v $ 
-* $Date: 2001/03/23 19:43:17 $ 
-* $Revision: 1.7 $
+* $Date: 2001/06/06 16:26:20 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -52,35 +52,33 @@ public final class CollatorAPITest extends TestFmwk
   public void TestProperties() throws Exception
   {
     logln("TestProperties --");
-    Collator defaultcollator = Collator.getInstance(Locale.ENGLISH);
+    Collator collator = Collator.getInstance(Locale.ENGLISH);
     
-    if (defaultcollator.compare("ab", "abc") != Collator.RESULT_LESS)
+    if (collator.compare("ab", "abc") != Collator.RESULT_LESS)
       errln("Failed : ab < abc comparison");
-    if (defaultcollator.compare("ab", "AB") != Collator.RESULT_LESS)
+    if (collator.compare("ab", "AB") != Collator.RESULT_LESS)
       errln("Failed : ab < AB");
-    if (defaultcollator.compare("blackbird", "black-bird") != 
+    if (collator.compare("blackbird", "black-bird") != 
                                                 Collator.RESULT_GREATER)
       errln("Failed : black-bird > blackbird comparison");
-    if (defaultcollator.compare("black bird", "black-bird") != 
+    if (collator.compare("black bird", "black-bird") != 
                                                    Collator.RESULT_LESS)
       errln("Failed : black bird > black-bird comparison");
-    if (defaultcollator.compare("Hello", "hello") != 
-                                                Collator.RESULT_GREATER)
+    if (collator.compare("Hello", "hello") != Collator.RESULT_GREATER)
       errln("Failed : Hello > hello comparison");
 
-    if (defaultcollator.getStrength() != CollationAttribute.VALUE_TERTIARY)
+    if (collator.getStrength() != CollationAttribute.VALUE_TERTIARY)
       errln("Failed : Default collation have tertiary strength");
         
-    defaultcollator.setStrength(CollationAttribute.VALUE_SECONDARY);
-    if (defaultcollator.getStrength() != CollationAttribute.VALUE_SECONDARY)
+    collator.setStrength(CollationAttribute.VALUE_SECONDARY);
+    if (collator.getStrength() != CollationAttribute.VALUE_SECONDARY)
       errln("Failed : Collation strength set to secondary");
    
-    defaultcollator.setDecomposition(NormalizationMode.NO_NORMALIZATION);
-    if (defaultcollator.getDecomposition() != 
-                                       NormalizationMode.NO_NORMALIZATION)
+    collator.setDecomposition(NormalizationMode.NO_NORMALIZATION);
+    if (collator.getDecomposition() != NormalizationMode.NO_NORMALIZATION)
       errln("Failed : Collation strength set to no normalization");
 
-    Collator collator = Collator.getInstance(Locale.FRENCH);
+    collator =  Collator.getInstance(Locale.FRENCH);
     
     collator.setStrength(CollationAttribute.VALUE_PRIMARY);
     if (collator.getStrength() != CollationAttribute.VALUE_PRIMARY)
@@ -94,7 +92,7 @@ public final class CollatorAPITest extends TestFmwk
     // should return the default
     Locale abcd = new Locale("ab", "CD");
     collator = Collator.getInstance(abcd);
-    defaultcollator = Collator.getInstance(Locale.ENGLISH);
+    Collator defaultcollator = Collator.getInstance();
 
     if (!((RuleBasedCollator)collator).getRules().equals(
          ((RuleBasedCollator)defaultcollator).getRules()))
