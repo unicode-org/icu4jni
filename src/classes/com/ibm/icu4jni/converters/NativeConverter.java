@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/converters/NativeConverter.java,v $ 
-* $Date: 2004/06/17 20:52:12 $ 
-* $Revision: 1.12 $
+* $Date: 2004/12/29 00:58:05 $ 
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */ 
@@ -352,6 +352,22 @@ public final class NativeConverter{
      * @internal ICU 2.4
      */
     public static final native String getCanonicalName(String enc);
+    
+    /**
+     * Gets the canonical name of the converter as defined by Java
+     * @param enc converter name
+     * @return canonical name of the converter
+     * @internal ICU 3.4
+     */
+    public static final native String getICUCanonicalName(String enc);
+      
+    /**
+     * Gets the canonical name of the converter as defined by Java
+     * @param icuCanonicalName converter name
+     * @return canonical name of the converter
+     * @internal ICU 3.4
+     */
+    public static final native String getJavaCanonicalName(String icuCanonicalName);
     
     /**
      * Sets the callback to Unicode for ICU conveter. The default behaviour of ICU callback

@@ -17,6 +17,9 @@ import java.nio.*;
 import java.nio.charset.spi.*;
 import java.nio.charset.*;
 import java.util.*;
+
+import sun.misc.ASCIICaseInsensitiveComparator;
+
 import com.ibm.icu4jni.charset.*;
 import com.ibm.icu4jni.test.TestFmwk;
 
@@ -53,15 +56,20 @@ public class TestCharset extends TestFmwk {
 		new TestCharset().run(args);
 	}
 
-	TestCharset() {
-        /*
-		charset = Charset.forName(encoding);
+	public TestCharset() {
+     
+		charset = CharsetICU.forName(encoding);
 		decoder = (CharsetDecoder) charset.newDecoder();
 		encoder = (CharsetEncoder) charset.newEncoder();
-        */
+      
 	}
-	public void TestAPISemantics(/*String encoding*/
-	) throws Exception {
+    public void TestUTF16Converter(){
+        CharsetProvider icu = new CharsetProviderICU();
+        Charset icuChar = icu.charsetForName("UTF-16");
+        icuChar.newEncoder();
+    }
+	public void TestAPISemantics(/*String encoding*/) 
+                throws Exception {
 		int rc;
 		ByteBuffer gbval = ByteBuffer.wrap(gb);
 		CharBuffer uniVal = CharBuffer.wrap(unistr);
@@ -731,15 +739,35 @@ public class TestCharset extends TestFmwk {
 			}
 		}
 	}
+    private  int put(Iterator i, Map m) {
+        int ret = 0;
+        while (i.hasNext()) {
+            Charset cs = (Charset)i.next();
+            if (!m.containsKey(cs.name())){
+                m.put(cs.name(), cs);
+            }else{
+                logln(" The map contains "+cs.name());
+                ret++;
+            }
+        }
+        return ret;
+    }
+    private int size(Iterator iter){
+        int num = 0;
+        while(iter.hasNext()){
+            iter.next();
+            num++;
+        }
+        return num;
+    }
 	public void TestAvailableCharsets() {
 		SortedMap map = Charset.availableCharsets();
         Set keySet = map.keySet();
         Iterator iter = keySet.iterator();
-        
         while(iter.hasNext()){
             logln("Charset name: "+iter.next().toString());
         }
-        
+        logln("Total Number of chasets = " + map.size());
 	}
 
 	private void smBufEncode(CharsetEncoder encoder, String encoding) {

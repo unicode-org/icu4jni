@@ -231,6 +231,22 @@ JNIEXPORT jstring JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getCan
 
 /*
  * Class:     com_ibm_icu4jni_converters_NativeConverter
+ * Method:    getJavaCanonicalName
+ * Signature: (Ljava/lang/String;)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getJavaCanonicalName
+  (JNIEnv *, jclass, jstring);
+
+/*
+ * Class:     com_ibm_icu4jni_converters_NativeConverter
+ * Method:    getICUCanonicalName
+ * Signature: (Ljava/lang/String;)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getICUCanonicalName
+  (JNIEnv *, jclass, jstring);
+
+/*
+ * Class:     com_ibm_icu4jni_converters_NativeConverter
  * Method:    setCallbackDecode
  * Signature: (JIZ)I
  */

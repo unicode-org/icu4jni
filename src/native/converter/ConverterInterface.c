@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/native/converter/ConverterInterface.c,v $ 
-* $Date: 2003/06/11 17:51:51 $ 
-* $Revision: 1.21 $
+* $Date: 2004/12/29 00:58:05 $ 
+* $Revision: 1.22 $
 *
 *******************************************************************************
 */
@@ -736,27 +736,111 @@ JNIEXPORT jint JNICALL
 Java_com_ibm_icu4jni_converters_NativeConverter_countAvailable(JNIEnv *env, jclass jClass){
     return ucnv_countAvailable();
 }
-
+int32_t
+copyString(char* dest, int32_t destCapacity, int32_t startIndex,
+           const char* src, UErrorCode* status){
+    int32_t srcLen = 0, i=0;
+    if(U_FAILURE(*status)){
+        return 0;
+    }
+    if(dest == NULL || src == NULL || destCapacity < startIndex){ 
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    srcLen = strlen(src);
+    if(srcLen >= destCapacity){
+        *status = U_BUFFER_OVERFLOW_ERROR;
+        return 0;
+    }
+    for(i=0; i < srcLen; i++){
+        dest[startIndex++] = src[i];
+    }
+    /* null terminate the buffer */
+    dest[startIndex] = 0; /* no bounds check already made sure that we have enough room */
+    return startIndex;
+}
+int32_t 
+getJavaCanonicalName(const char* icuCanonicalName, 
+                     char* canonicalName, int32_t capacity, 
+                     UErrorCode* status){
+ /*
+ If a charset listed in the IANA Charset Registry is supported by an implementation 
+ of the Java platform then its canonical name must be the name listed in the registry. 
+ Many charsets are given more than one name in the registry, in which case the registry 
+ identifies one of the names as MIME-preferred. If a charset has more than one registry 
+ name then its canonical name must be the MIME-preferred name and the other names in 
+ the registry must be valid aliases. If a supported charset is not listed in the IANA 
+ registry then its canonical name must begin with one of the strings "X-" or "x-".
+ */
+    int32_t retLen = 0;
+    const char* cName = NULL;
+    /* find out the alias with MIME tag */
+    if((cName =ucnv_getStandardName(icuCanonicalName, "MIME", status)) !=  NULL){
+        retLen = copyString(canonicalName, capacity, 0, cName, status);
+        /* find out the alias with IANA tag */
+    }else if((cName =ucnv_getStandardName(icuCanonicalName, "IANA", status)) !=  NULL){
+        retLen = copyString(canonicalName, capacity, 0, cName, status);
+    }else {
+        /*  
+            check to see if an alias already exists with x- prefix, if yes then 
+            make that the canonical name
+        */
+        int32_t aliasNum = ucnv_countAliases(icuCanonicalName,status);
+        int32_t i=0;
+        const char* name;
+        for(i=0;i<aliasNum;i++){
+            name = ucnv_getAlias(icuCanonicalName,(uint16_t)i, status);
+            if(name != NULL && strstr(name,"x-")!= NULL){
+                retLen = copyString(canonicalName, capacity, 0, name, status);
+                break;
+            }
+        }
+        /* last resort just append x- to any of the alias and 
+            make it the canonical name */
+        if(retLen == 0 && U_SUCCESS(*status)){
+            name = ucnv_getStandardName(icuCanonicalName, "UTR22", status);
+            if(name == NULL && strchr(icuCanonicalName, ',')!= NULL){
+                name = ucnv_getAlias(icuCanonicalName, 1, status);
+                if(*status == U_INDEX_OUTOFBOUNDS_ERROR){
+                    *status = U_ZERO_ERROR;
+                }
+            }
+            /* if there is no UTR22 canonical name .. then just return itself*/
+            if(name == NULL){
+                name = icuCanonicalName;
+            }
+            if(capacity >= 2){
+                strcpy(canonicalName,"x-");
+            }
+            retLen = copyString(canonicalName, capacity, 2, name, status);
+        }
+    }
+    return retLen;
+}
 JNIEXPORT jobjectArray JNICALL 
 Java_com_ibm_icu4jni_converters_NativeConverter_getAvailable(JNIEnv *env, jclass jClass){
    
     jobjectArray ret;
-    int32_t i = ucnv_countAvailable();
+    int32_t i = 0;
+    int32_t num = ucnv_countAvailable();
     UErrorCode error = U_ZERO_ERROR;
     const char* name =NULL;
-
-    ret= (jobjectArray)(*env)->NewObjectArray( env,i,
+    char canonicalName[256]={0};
+    ret= (jobjectArray)(*env)->NewObjectArray( env,num,
                                                (*env)->FindClass(env,"java/lang/String"),
                                                (*env)->NewStringUTF(env,""));
 
-    for(;--i>=0;) {
+    for(i=0;i<num;i++) {
         name = ucnv_getAvailableName(i);
-        if(strchr(name,',')!=0){
-            name = ucnv_getAlias(name,1,&error);
-
+        getJavaCanonicalName(name, canonicalName, 256, &error);   
+#if DEBUG
+        if(U_FAILURE(error)){
+            printf("An error occurred retrieving index %i. Error: %s. \n", i, u_errorName(error));
         }
-        
-        (*env)->SetObjectArrayElement(env,ret,i,(*env)->NewStringUTF(env,name));
+
+        printf("canonical name for %s\n", canonicalName);
+#endif        
+        (*env)->SetObjectArrayElement(env,ret,i,(*env)->NewStringUTF(env,canonicalName));
          /*printf("canonical name : %s  at %i\n", name,i); */
     }
     return (ret);
@@ -833,7 +917,59 @@ JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getCanonicalName(JNIEnv 
     (*env)->ReleaseStringUTFChars(env,enc,encName);
     return ret;
 }
+JNIEXPORT jstring
+JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getICUCanonicalName(JNIEnv *env, jclass jClass, jstring enc){
 
+    UErrorCode error = U_ZERO_ERROR;
+    const char* encName = (*env)->GetStringUTFChars(env,enc,NULL);
+    const char* canonicalName = NULL;
+    jstring ret;
+    if(encName){
+        if((canonicalName = ucnv_getCanonicalName(encName, "MIME", &error))!=NULL){
+            ret = ((*env)->NewStringUTF(env, canonicalName));
+        }else if((canonicalName = ucnv_getCanonicalName(encName, "IANA", &error))!=NULL){
+            ret = ((*env)->NewStringUTF(env, canonicalName));
+        }else if((canonicalName = ucnv_getCanonicalName(encName, "", &error))!=NULL){
+            /* we have some aliases in the form x-blah .. match those first */
+            ret = ((*env)->NewStringUTF(env, canonicalName));
+        }else if( strstr(encName, "x-") == encName){
+            /* TODO: Match with getJavaCanonicalName method */
+            char temp[256] = {0};
+            strcpy(temp, encName+2);
+            ret = ((*env)->NewStringUTF(env, temp));
+        }else{
+            /* unsupported encoding */
+           ret = ((*env)->NewStringUTF(env, ""));
+        }
+    }
+    (*env)->ReleaseStringUTFChars(env,enc,encName);
+    return ret;
+}
+
+JNIEXPORT jstring 
+JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getJavaCanonicalName(JNIEnv *env, jclass jClass, jstring icuCanonName){
+ /*
+ If a charset listed in the IANA Charset Registry is supported by an implementation 
+ of the Java platform then its canonical name must be the name listed in the registry. 
+ Many charsets are given more than one name in the registry, in which case the registry 
+ identifies one of the names as MIME-preferred. If a charset has more than one registry 
+ name then its canonical name must be the MIME-preferred name and the other names in 
+ the registry must be valid aliases. If a supported charset is not listed in the IANA 
+ registry then its canonical name must begin with one of the strings "X-" or "x-".
+ */
+    UErrorCode error = U_ZERO_ERROR;
+    const char* icuCanonicalName = (*env)->GetStringUTFChars(env,icuCanonName,NULL);
+    char cName[256] = {0};
+    jstring ret;
+    if(icuCanonicalName && icuCanonicalName[0] != 0){
+        getJavaCanonicalName(icuCanonicalName, cName, 256, &error);
+        ret = ((*env)->NewStringUTF(env, cName));
+    }else{
+        ret = ((*env)->NewStringUTF(env, ""));
+    }
+    (*env)->ReleaseStringUTFChars(env,icuCanonName,icuCanonicalName);
+    return ret;
+}
 JNIEXPORT jint JNICALL 
 Java_com_ibm_icu4jni_converters_NativeConverter_setCallbackEncode(JNIEnv *env, 
                                                                   jclass jClass, 

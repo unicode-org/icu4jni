@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/charset/CharsetICU.java,v $ 
-* $Date: 2004/06/17 20:52:12 $ 
-* $Revision: 1.9 $
+* $Date: 2004/12/29 00:58:05 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */ 
@@ -23,14 +23,17 @@ import com.ibm.icu4jni.converters.NativeConverter;
 
 
 public final class CharsetICU extends Charset{
+    private String icuCanonicalName;
     /**
      * Constructor to create a the CharsetICU object
      * @param canonicalName the canonical name as a string
      * @param aliases the alias set as an array of strings
      * @stable ICU 2.4
      */
-    protected CharsetICU(String canonicalName, String[] aliases) {
+    protected CharsetICU(String canonicalName, String icuCanonName, String[] aliases) {
 	     super(canonicalName,aliases);
+         icuCanonicalName = icuCanonName;
+        
     }
     /**
      * Returns a new decoder instance of this charset object
@@ -43,7 +46,7 @@ public final class CharsetICU extends Charset{
         // methods on this class need to 
         // be thread safe
         long[] converterHandle = new long[1];
-        int ec = NativeConverter.openConverter(converterHandle, toString());
+        int ec = NativeConverter.openConverter(converterHandle, icuCanonicalName);
         if(ErrorCode.isSuccess(ec)){
             return new CharsetDecoderICU(this,converterHandle[0]);
         }else{
@@ -63,7 +66,7 @@ public final class CharsetICU extends Charset{
         // methods on this class need to 
         // be thread safe
         long[] converterHandle = new long[1];
-        int ec = NativeConverter.openConverter(converterHandle, toString());
+        int ec = NativeConverter.openConverter(converterHandle, icuCanonicalName);
         if(ErrorCode.isSuccess(ec)){
             return new CharsetEncoderICU(this,converterHandle[0]);
         }else{

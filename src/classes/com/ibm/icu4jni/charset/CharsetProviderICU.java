@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/charset/CharsetProviderICU.java,v $ 
-* $Date: 2004/06/17 20:52:12 $ 
-* $Revision: 1.10 $
+* $Date: 2004/12/29 00:58:05 $ 
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */ 
@@ -36,15 +36,16 @@ public final class CharsetProviderICU extends CharsetProvider{
      */
     public final Charset charsetForName(String charsetName) {
 	    // get the canonical name	 
-        String canonicalName = NativeConverter.getCanonicalName(charsetName);	     
+        String icuCanonicalName = NativeConverter.getICUCanonicalName(charsetName);	     
         // create the converter object and return it
-        if(canonicalName==null){
+        if(icuCanonicalName==null){
         	// this would make the Charset API to throw 
         	// unsupported encoding exception
         	return null;
         }else{
-	       String[] aliases = (String[])NativeConverter.getAliases(charsetName);	         
-	       return (new CharsetICU(canonicalName, aliases));
+	       String[] aliases = (String[])NativeConverter.getAliases(charsetName);	
+           String canonicalName = NativeConverter.getJavaCanonicalName(icuCanonicalName);
+	       return (new CharsetICU(canonicalName,icuCanonicalName, aliases));
 	    }
     }
     
