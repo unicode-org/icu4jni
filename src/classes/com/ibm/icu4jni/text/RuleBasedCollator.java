@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/RuleBasedCollator.java,v $ 
-* $Date: 2001/06/06 19:49:16 $ 
-* $Revision: 1.9 $
+* $Date: 2001/06/06 19:52:13 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -586,7 +586,6 @@ public final class RuleBasedCollator extends Collator
       m_collator_ = NativeCollation.openCollator();
     }
     else {
-      System.out.println("locale : " + locale.toString());
       m_collator_ = NativeCollation.openCollator(locale.toString());
     }
   }
