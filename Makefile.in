@@ -89,11 +89,12 @@ OBJECTS =  $(CSRC_DIR)/common/ErrorCode.o  $(CSRC_DIR)/collation/CollationInterf
 
 HADERS =   $(CSRC_DIR)/common/ErrorCode.h  $(CSRC_DIR)/collation/CollationInterface.h  $(CSRC_DIR)/converter/ConverterInterface.h
 
-DEPS = $(OBJECTS:.o=.d) 
+#donot produce dependency information
+#DEPS = $(OBJECTS:.o=.d) 
 
 # We want to get the local copies of these files first, as the
 # dependency. Even though they do get exported.
-#LDFLAGS += -L../usort/lib -L./util 
+LFLAGS += -L/usr/lib -lc 
 
 # get the hostname the code is built on
 CPPFLAGS := -I$(JAVA_HOME)/include  -I$(JAVA_HOME)/include/$(CANON) -I $(CSRC_DIR)/common -I $(CSRC_DIR)/collation -I $(CSRC_DIR)/converter $(CPPFLAGS)
@@ -139,6 +140,7 @@ clean-local:
 	rm -f $(OBJECTS) $(BUILD_DIR)/$(TARGET)
 	rm -f $(BUILD_DIR)/$(TARGETR)
 	rm -rf $(BUILDDIR)/classes/com
+
 
 distclean-local: clean-local
 	rm -f Makefile $(DEPS)
