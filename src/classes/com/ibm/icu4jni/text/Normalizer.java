@@ -5,7 +5,7 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/Normalizer.java,v $ 
-* $Date: 2004/06/18 22:45:09 $ 
+* $Date: 2004/11/19 19:03:43 $ 
 * $Revision: 
 *
 *******************************************************************************
@@ -190,6 +190,7 @@ public final class Normalizer{
         return normalize( source, target,(compat)? UNORM_NFKD :UNORM_NFD);
     }
     
+    private static final int MAX_BUFFER_SIZE = 1000;
     /**
     * Normalize a string.
     * The string will be normalized according the the specified normalization mode
@@ -205,6 +206,8 @@ public final class Normalizer{
     public static String normalize( String str, 
                                     int normalizationMode)
                                     throws Exception{
+        // TODO: Fix this after the release 3.2
+        /*
          synchronized(retStr){
             if(!check(normalizationMode)){
                 throw ErrorCode.getException(ErrorCode.U_ILLEGAL_ARGUMENT_ERROR);
@@ -217,7 +220,15 @@ public final class Normalizer{
             }
             return retStr[0];
          }      
-            
+       */
+        char[] target = new char[MAX_BUFFER_SIZE];
+        char[] source = str.toCharArray();
+        int requiredLength =  normalize(source,target,normalizationMode);
+        if (requiredLength < MAX_BUFFER_SIZE){
+            target = new char[requiredLength];
+            normalize(source,target,normalizationMode);
+        }
+        return new String(target);  
     }
     /**
     * Normalize a string.
