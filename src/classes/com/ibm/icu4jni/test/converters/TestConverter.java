@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/test/converters/TestConverter.java,v $ 
-* $Date: 2001/10/27 00:34:55 $ 
-* $Revision: 1.2 $
+* $Date: 2002/10/29 02:30:43 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */ 
@@ -36,14 +36,49 @@ public class TestConverter extends TestFmwk{
     public static void main(String[] args) throws Exception {
         new TestConverter().run(args);
     }
+    public void TestClone(/*String encoding*/){
+        int   i, len;
+        int   rc;
+        ByteToCharConverterICU convto;
+        CharToByteConverterICU convfrom;
+        try {
 
+            convto   = new ByteToCharConverterICU(encoding);
+            convfrom = new CharToByteConverterICU(encoding);
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            return;
+        }
+        ByteToCharConverterICU convtoClone = (ByteToCharConverterICU)convto.clone();
+        CharToByteConverterICU convfromClone =(CharToByteConverterICU)convfrom.clone();
+        if(convtoClone == convto){
+            errln("ByteToCharConverterICU clone does not satisfy x.clone()!= x epression"); 
+        }
+        if(convfromClone == convfrom){
+            errln("CharToByteConverterICU clone does not satisfy x.clone()!= x epression");
+        }
+        if(convtoClone.getClass() != convto.getClass()){
+            errln("ByteToCharConverterICU clone does not satisfy x.clone().getClass() == x.getClass() epression"); 
+        }
+        if(convfromClone.getClass() != convfrom.getClass()){
+            errln("CharToByteConverterICU clone does not satisfy x.cloen().getClass() == x.getClass() epression"); 
+        }
+        if(convtoClone.equals(convto)){
+            errln("ByteToCharConverterICU clone does not satisfy x.clone().equals(x)==true epression"); 
+        }
+        
+        if(convfromClone.equals(convfrom)){
+            errln("CharToByteConverterICU clone does not satisfy x.clone().equals(x)==true epression"); 
+        }
+                
+    }
     public void TestAPISemantics(/*String encoding*/){
             int   i, len;
             int   rc;
             try {
 
-                    convto   = (ByteToCharConverter) new ByteToCharConverterICU(encoding);
-                    convfrom = (CharToByteConverter) new CharToByteConverterICU(encoding);
+                convto   = (ByteToCharConverter) new ByteToCharConverterICU(encoding);
+                convfrom = (CharToByteConverter) new CharToByteConverterICU(encoding);
 
             } catch (Exception e) {
                 e.printStackTrace(System.err);

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/native/converter/ConverterInterface.c,v $ 
-* $Date: 2002/10/29 01:58:21 $ 
-* $Revision: 1.18 $
+* $Date: 2002/10/29 02:31:49 $ 
+* $Revision: 1.19 $
 *
 *******************************************************************************
 */
@@ -928,11 +928,11 @@ Java_com_ibm_icu4jni_converters_NativeConverter_setCallbackDecode(JNIEnv *env,
     return errorCode;
 }
 
-JNIEXPORT jlong 
-JNICALL Java_com_ibm_icu4jni_text_NativeConverter_safeClone(JNIEnv *env, 
-                                                            jclass jClass, 
-                                                            jlong src,
-                                                            jlongArray handle){
+JNIEXPORT jint JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_safeClone(JNIEnv *env, 
+                                                          jclass jClass, 
+                                                          jlong src, 
+                                                          jlongArray handle){
 
     UErrorCode status = U_ZERO_ERROR;
 
