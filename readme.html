@@ -4,15 +4,7 @@
      
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
      
-  <meta name="ProgId" content="Word.Document">
-     
-  <meta name="Generator" content="Microsoft Word 9">
-     
-  <meta name="Originator" content="Microsoft Word 9">
-     
-  <link rel="File-List" href="./readme_files/filelist.xml">
-  <title>Read Me</title>
-</head>
+  <title>ICU4JNI Read Me</title>
 <style type="text/css">
       h1 {border-width: 2px; border-style: solid; text-align: center; width: 100%; font-size: 200%; font-weight: bold}
       h2 {margin-top: 3em; text-decoration: underline; page-break-before: always}
@@ -25,6 +17,7 @@
       ul.TOC {list-style-type: none}
       samp {margin-left: 2em; border-style: groove; padding: 1em; display: block; background-color: #EEEEEE}
 </style>
+</head>
     
   <body lang="en-US">
     <h1>ICU4JNI: International Components for Unicode for Java Native Interface<br>
@@ -39,15 +32,13 @@
 <h4>Contents</h4>
 
 <ul type="disc">    
-    <p class="MsoNormal" style="margin-right: 0.5in; margin-left: 0.5in; ">
   <li><a href="#introduction">Introduction</a></li>
   <li><a href="#license">License Information</a></li>
   <li><a href="#requirements">System Requirements</a></li>
   <li><a href="#installation">Installation</a></li>
-  </ul>
-</p>
+</ul>
     
-<h4><a NAME="introduction"></a>Introduction</h4>
+<h4><a NAME="introduction">Introduction</a></h4>
     
 <p class="MsoNormal" style="margin-right: 0.5in; margin-left: 0.5in; ">ICU4JNI 
 contains Java Native Interface wrappers for ICU4C's character set conversion 
@@ -55,7 +46,7 @@ and collation libraries. <br>
   These wrappers provide increased performace of conversion and collation, 
 and complete compatibility with ICU4C.</p>
     
-<h4><a NAME="license"></a>License Information</h4>
+<h4><a NAME="license">License Information</a></h4>
     
 <p class="MsoNormal" style="margin-right: 0.5in; margin-left: 0.5in; ">The 
 ICU projects (ICU4C and ICU4J) have changed their licenses from the IPL (IBM 
@@ -74,111 +65,94 @@ The X license is listed as GPL compatible, see the gnu page at <a href="http://w
  FAQ.</a>
  </p>
     
-<h4><a NAME="requirements"></a>System Requirements</h4>
+<h4><a NAME="requirements">System Requirements</a></h4>
     
-<p class="MsoNormal" style="margin-right: 0.5in; margin-left: 0.5in; ">&nbsp;* 
-JDK1.3  or above with most recent release updates.<br>
-  &nbsp;* ICU4C built and installed</p>
+<ul type="disc" style="margin-left: 0.25in; ">    
+  <li>JDK1.3  or above with most recent release updates.</li>
+  <li>ICU4C built and installed</li>
+</ul>
     
-<p><b>Tested Environments<o:p></o:p></b></p>
+<h5>Tested Environments</h5>
     
-<table border="1" cols="3" width="48%">
+<table border="1" cols="4">
    <tbody>
      <tr>
-       <td>&nbsp;&nbsp; Operating System&nbsp;</td>
-       <td>Compiler</td>
-       <td valign="Middle">Sun's JDK</td>
-       <td>Additional Requirements</td>
+       <td>&nbsp;Operating System</td>
+       <td>&nbsp;Compiler</td>
+       <td>&nbsp;Sun's JDK</td>
+       <td>&nbsp;Additional Requirements</td>
      </tr>
      <tr>
        <td>AIX 4.3</td>
        <td>xlC</td>
-       <td valign="Top">1.3.1<br>
-       </td>
+       <td>1.3.1</td>
        <td>gmake</td>
      </tr>
      <tr>
        <td>AIX 5.1</td>
        <td>xlC</td>
-       <td valign="Top">1.3.0<br>
+       <td>1.3.0<br>
        </td>
        <td>gmake</td>
      </tr>
      <tr>
        <td>HPUX 11</td>
        <td>aCC</td>
-       <td valign="Top">1.3.0<br>
-       </td>
+       <td>1.3.0</td>
        <td>gmake</td>
      </tr>
      <tr>
-       <td>Solaris 2.6&nbsp;</td>
+       <td>Solaris 2.6</td>
        <td>GCC</td>
-       <td valign="Top">1.3.1<br>
-       </td>
+       <td>1.3.1</td>
        <td>gmake</td>
      </tr>
      <tr>
-       <td>Solaris 2.7&nbsp;</td>
-       <td>CC v6 <br>
-       </td>
-       <td valign="Top">1.3.1<br>
-       </td>
+       <td>Solaris 2.7</td>
+       <td>CC v6</td>
+       <td>1.3.1</td>
        <td>gmake</td>
      </tr>
      <tr>
-       <td valign="Top">Solaris 2.7<br>
-       </td>
-       <td valign="Top">CC v4.2 <br>
-       </td>
-       <td valign="Top">1.3.1<br>
-       </td>
-       <td valign="Top">gmake<br>
-       </td>
+       <td>Solaris 2.7</td>
+       <td>CC v4.2</td>
+       <td>1.3.1</td>
+       <td>gmake</td>
      </tr>
      <tr>
-       <td valign="Top">Solaris 2.8<br>
-       </td>
-       <td valign="Top">CC v4.2 <br>
-       </td>
-       <td valign="Top">1.3.1<br>
-       </td>
-       <td valign="Top">gmake<br>
-       </td>
+       <td>Solaris 2.8</td>
+       <td>CC v4.2</td>
+       <td>1.3.1</td>
+       <td>gmake</td>
      </tr>
      <tr>
-       <td>RedHat/Linux 7.2&nbsp;</td>
+       <td>RedHat/Linux 7.2</td>
        <td>GCC</td>
-       <td valign="Top">1.3.1<br>
-       </td>
+       <td>1.3.1</td>
        <td>gmake</td>
      </tr>
      <tr>
        <td>RedHat/Linux 8.0</td>
        <td>GCC</td>
-       <td valign="Top">1.3.1<br>
-       </td>
+       <td>1.3.1</td>
        <td>gmake</td>
      </tr>
      <tr>
-       <td>WinXP&nbsp;</td>
+       <td>Windows XP</td>
        <td>CL</td>
-       <td valign="Top">1.3.1<br>
-       </td>
+       <td>1.3.1</td>
        <td>nmake</td>
      </tr>
      <tr>
-       <td>WinNT&nbsp;</td>
+       <td>Windows 98</td>
        <td>CL</td>
-       <td valign="Top">1.3.1<br>
-       </td>
+       <td>1.3.1</td>
        <td>nmake</td>
      </tr>
      <tr>
-       <td>Win2000</td>
+       <td>Windows 2000</td>
        <td>CL</td>
-       <td valign="Top">1.3.1 &amp; 1.4.0<br>
-       </td>
+       <td>1.3.1 &amp; 1.4.0</td>
        <td>nmake</td>
      </tr>
   </tbody> 
@@ -201,8 +175,8 @@ file<br>
 <ol start="1" type="1">
    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
      mso-list:l0 level1 lfo3;tab-stops:list .5in">
- Download and install ICU4C      from <a href="http://oss.software.ibm.com/icu/">
- http://oss.software.ibm.com/icu</a>
+ Download and install ICU4C from <a href="http://ibm.com/software/globalization/icu/downloads.jsp">
+ http://ibm.com/software/globalization/icu/downloads.jsp</a>
        </li>
    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
      mso-list:l0 level1 lfo3;tab-stops:list .5in">
@@ -234,18 +208,14 @@ check</span></tt>      to build and run tests</li>
  &nbsp;&nbsp;&nbsp;<b><i> Note: <br>
 </i></b>
 <ul>
-</ul>
-<ul>
-  <li><b><i>&nbsp;Building ICU4JNI on Solaris need libC.so and libc.so to
-be present in the search path defined by LD_LIBRARY_PATH&nbsp; environment
+  <li><b><i>Building ICU4JNI on Solaris need libC.so and libc.so to
+be present in the search path defined by LD_LIBRARY_PATH environment
 variable. libC.so should be a symbolic link to libC.so.5</i></b></li>
-  <li><i><b>B</b><b>uilding ICU4JNI on AIX, Solaris 64bit&nbsp; requires
+  <li><i><b>Building ICU4JNI on AIX, Solaris 64bit requires
 ICU to be built with --disable-64bit-libraries configure option enabled.</b></i><br>
   </li>
 </ul>
    
-<h5></h5>
- 
 <h5>Win32</h5>
     
 <p>Make is configured to build with or without JDK 1.4</p>
@@ -253,8 +223,8 @@ ICU to be built with --disable-64bit-libraries configure option enabled.</b></i>
 <ol start="1" type="1">
    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
      mso-list:l1 level1 lfo6;tab-stops:list .5in">
- Download and install ICU4C from <a href="http://oss.software.ibm.com/icu">
- http://oss.software.ibm.com/icu</a>
+ Download and install ICU4C from <a href="http://ibm.com/software/globalization/icu/downloads.jsp">
+ http://ibm.com/software/globalization/icu/downloads.jsp</a>
 
    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
      mso-list:l1 level1 lfo6;tab-stops:list .5in">
@@ -273,7 +243,7 @@ variables.</li>
      mso-list:l1 level1 lfo6;tab-stops:list .5in">
  Run nmake with the supplied      win32 makefile. You can set the configuration 
 option by defining CFG.      Also, if ICU_DATA is not set, you can provide 
-the path to the ICU bin directory      by defining ICUBIN. </li>
+the path to the ICU bin directory      by defining ICUBIN.
       
   <ul type="Circle">
     <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
@@ -285,6 +255,7 @@ default is Debug </li>
  If ICU_DATA is not       set, define ICUBIN=&lt;icu&gt;/bin </li>
       
   </ul>
+  </li>
    
 </ol>
     
@@ -293,7 +264,7 @@ default is Debug </li>
  /f makefile-win32 CFG="Debug" ICUBIN="c:\icu\bin"</span></tt> </p>
     
 <p class="MsoNormal" style="margin-left: 0.5in; ">For building with JDK 1.4 
-type the following command<o:p></o:p></p>
+type the following command</p>
     
 <p class="MsoNormal" style="margin-left: 0.5in; "><span style="mso-spacerun: yes">
  &nbsp;&nbsp; </span><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
@@ -302,7 +273,7 @@ type the following command<o:p></o:p></p>
 CFG="Debug" ICUBIN="&lt;location of ICU&gt;\icu\bin" </p>
     
 <p class="MsoNormal" style="text-indent: 0.5in; ">For building with JDK1.3 
-type the following command<o:p></o:p></p>
+type the following command</p>
     
 <p class="MsoNormal" style="margin-left: 0.5in; "><span style="mso-tab-count:1">
  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="mso-spacerun: yes">
@@ -355,7 +326,6 @@ and installed on the target platform. <br>
   &nbsp;* Package the ICUJNIInterface.dll &lt;jdkbuild&gt;/&lt;platform&gt;/bin
  directory <br>
   &nbsp;* Rebuild the JDK source</p>
-   </div>
     
 </body>
 </html>
