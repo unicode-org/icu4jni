@@ -201,11 +201,15 @@ LINK32_OBJS= \
     $(SRCDIR)\$(TTDIR)\SpanishCollatorTest.java $(SRCDIR)\$(TTDIR)\ThaiCollatorTest.java $(SRCDIR)\$(TTDIR)\TurkishCollatorTest.java \
 
 "BUILDT3":
-    $(JAVAC_EXE) $(JAVA_FLAGS) $(SRCDIR)\$(TTDIR)\BasicTest.java $(SRCDIR)\$(TTDIR)\ConformanceTest.java $(SRCDIR)\$(TCDIR)\TestConverter.java $(SRCDIR)\$(TESTDIR)\TestAll.java
+    $(JAVAC_EXE) $(JAVA_FLAGS) $(SRCDIR)\$(TTDIR)\BasicTest.java $(SRCDIR)\$(TTDIR)\ConformanceTest.java \
+    $(SRCDIR)\$(TCDIR)\TestConverter.java $(SRCDIR)\$(TESTDIR)\TestAll.java \
+    $(SRCDIR)\$(TESTDIR)\perf\PerfTest.java
 
 
 "BUILDCS":
-	$(JAVAC_EXE) $(JAVA_FLAGS) $(SRCDIR)\$(CSDIR)\CharsetICU.java $(SRCDIR)\$(CSDIR)\CharsetDecoderICU.java $(SRCDIR)\$(CSDIR)\CharsetEncoderICU.java $(SRCDIR)\$(CSDIR)\CharsetProviderICU.java $(SRCDIR)\$(TESTDIR)\charset\TestCharset.java
+	$(JAVAC_EXE) $(JAVA_FLAGS) $(SRCDIR)\$(CSDIR)\CharsetICU.java $(SRCDIR)\$(CSDIR)\CharsetDecoderICU.java \
+        $(SRCDIR)\$(CSDIR)\CharsetEncoderICU.java $(SRCDIR)\$(CSDIR)\CharsetProviderICU.java \
+        $(SRCDIR)\$(TESTDIR)\charset\TestCharset.java $(SRCDIR)\$(TESTDIR)\perf\ConverterPerformanceTest.java
 
 
 !IF "$(CFG)" == "Release" || "$(CFG)" == "Debug"
