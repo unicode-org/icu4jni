@@ -1,6 +1,6 @@
 # Microsoft Developer Studio Generated NMAKE File, Based on ICUInterface.dsp
 !IF "$(CFG)" == ""
-CFG=ICUInterface - Win32 Debug
+CFG="Win32 Debug"
 !MESSAGE No configuration specified. Defaulting to nmake /f "makefile-win32" CFG="Win32 Debug".
 !ENDIF 
 
@@ -65,10 +65,10 @@ CLEAN :
 	-@erase "$(OUTDIR)\ICUInterface1d.dll"
 
 "$(OUTDIR)" :
-    if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
+	if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
 "$(INTDIR)" :
-    if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
+	if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
 
 "$(BDIR)" :
 	if not exist "$(BDIR)/$(NULL)" mkdir "$(BDIR)"
@@ -86,7 +86,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\ErrorCode.obj"
 
 "$(OUTDIR)\ICUInterface1.dll" : "$(OUTDIR)" "$(BDIR)" "$(INTDIR)" $(DEF_FILE) "$(BUILDDIR)\java" $(LINK32_OBJS)
-    $(LINK32) @<<
+	$(LINK32) @<<
   $(LINK32_FLAGS) $(LINK32_OBJS)
 <<
  
@@ -111,10 +111,10 @@ CLEAN :
 	-@erase "$(OUTDIR)\ICUInterface1d.ilk"
 
 "$(OUTDIR)" :
-    if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
+	if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
 "$(INTDIR)" :
-    if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
+	if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
 
 "$(BDIR)" :
 	if not exist "$(BDIR)/$(NULL)" mkdir "$(BDIR)"
@@ -130,7 +130,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\ErrorCode.obj"
 
 "..\..\build\lib\ICUInterface1d.dll" : "$(OUTDIR)" "$(BDIR)" $(DEF_FILE) $(LINK32_OBJS) "$(BUILDDIR)\java"
-    $(LINK32) @<<
+	$(LINK32) @<<
   $(LINK32_FLAGS) $(LINK32_OBJS)
 <<
 
@@ -148,12 +148,12 @@ LINK32_OBJS= \
 <<
 
 "$(BUILDDIR)\java" :
-   	$(JAVAC_EXE) $(JAVA_FLAGS) $(SRCDIR)\$(CONVDIR)\ICUConverterInterface.java $(SRCDIR)\$(COMDIR)\ErrorCode.java $(SRCDIR)\$(CONVDIR)\ByteToCharConverterICU.java $(SRCDIR)\$(CONVDIR)\CharToByteConverterICU.java $(SRCDIR)\$(CONVDIR)\ByteToCharGB18030.java $(SRCDIR)\$(CONVDIR)\CharToByteGB18030.java $(SRCDIR)\$(TCDIR)\TestConv.java \
-    $(SRCDIR)\$(COLDIR)\NativeCollation.java $(SRCDIR)\$(COLDIR)\CollationAttribute.java $(SRCDIR)\$(COLDIR)\CollationElementIterator.java $(SRCDIR)\$(COLDIR)\CollationKey.java $(SRCDIR)\$(COLDIR)\Collator.java $(SRCDIR)\$(COLDIR)\NormalizationMode.java $(SRCDIR)\$(COLDIR)\RuleBasedCollator.java \
-    $(SRCDIR)\$(TESTDIR)\TestAll.java $(SRCDIR)\$(TESTDIR)\TestFmwk.java $(SRCDIR)\$(TESTDIR)\TestLog.java \
-    $(SRCDIR)\$(TTDIR)\CollationElementIteratorTest.java $(SRCDIR)\$(TTDIR)\CollatorAPITest.java $(SRCDIR)\$(TTDIR)\CollatorPerformanceTest.java $(SRCDIR)\$(TTDIR)\CollatorRegressionTest.java $(SRCDIR)\$(TTDIR)\CollatorTest.java $(SRCDIR)\$(TTDIR)\CurrencyCollatorTest.java \
-    $(SRCDIR)\$(TTDIR)\DanishCollatorTest.java $(SRCDIR)\$(TTDIR)\DummyCollatorTest.java $(SRCDIR)\$(TTDIR)\EnglishCollatorTest.java $(SRCDIR)\$(TTDIR)\FinnishCollatorTest.java $(SRCDIR)\$(TTDIR)\FrenchCollatorTest.java $(SRCDIR)\$(TTDIR)\G7CollatorTest.java $(SRCDIR)\$(TTDIR)\GermanCollatorTest.java \
-    $(SRCDIR)\$(TTDIR)\KanaCollatorTest.java $(SRCDIR)\$(TTDIR)\MonkeyCollatorTest.java $(SRCDIR)\$(TTDIR)\SpanishCollatorTest.java $(SRCDIR)\$(TTDIR)\ThaiCollatorTest.java $(SRCDIR)\$(TTDIR)\TurkishCollatorTest.java 
+	$(JAVAC_EXE) $(JAVA_FLAGS) $(SRCDIR)\$(CONVDIR)\ICUConverterInterface.java $(SRCDIR)\$(COMDIR)\ErrorCode.java $(SRCDIR)\$(CONVDIR)\ByteToCharConverterICU.java $(SRCDIR)\$(CONVDIR)\CharToByteConverterICU.java $(SRCDIR)\$(CONVDIR)\ByteToCharGB18030.java $(SRCDIR)\$(CONVDIR)\CharToByteGB18030.java $(SRCDIR)\$(TCDIR)\TestConv.java \
+	$(SRCDIR)\$(COLDIR)\NativeCollation.java $(SRCDIR)\$(COLDIR)\CollationAttribute.java $(SRCDIR)\$(COLDIR)\CollationElementIterator.java $(SRCDIR)\$(COLDIR)\CollationKey.java $(SRCDIR)\$(COLDIR)\Collator.java $(SRCDIR)\$(COLDIR)\NormalizationMode.java $(SRCDIR)\$(COLDIR)\RuleBasedCollator.java \
+	$(SRCDIR)\$(TESTDIR)\TestAll.java $(SRCDIR)\$(TESTDIR)\TestFmwk.java $(SRCDIR)\$(TESTDIR)\TestLog.java \
+	$(SRCDIR)\$(TTDIR)\CollationElementIteratorTest.java $(SRCDIR)\$(TTDIR)\CollatorAPITest.java $(SRCDIR)\$(TTDIR)\CollatorPerformanceTest.java $(SRCDIR)\$(TTDIR)\CollatorRegressionTest.java $(SRCDIR)\$(TTDIR)\CollatorTest.java $(SRCDIR)\$(TTDIR)\CurrencyCollatorTest.java \
+	$(SRCDIR)\$(TTDIR)\DanishCollatorTest.java $(SRCDIR)\$(TTDIR)\DummyCollatorTest.java $(SRCDIR)\$(TTDIR)\EnglishCollatorTest.java $(SRCDIR)\$(TTDIR)\FinnishCollatorTest.java $(SRCDIR)\$(TTDIR)\FrenchCollatorTest.java $(SRCDIR)\$(TTDIR)\G7CollatorTest.java $(SRCDIR)\$(TTDIR)\GermanCollatorTest.java \
+	$(SRCDIR)\$(TTDIR)\KanaCollatorTest.java $(SRCDIR)\$(TTDIR)\MonkeyCollatorTest.java $(SRCDIR)\$(TTDIR)\SpanishCollatorTest.java $(SRCDIR)\$(TTDIR)\ThaiCollatorTest.java $(SRCDIR)\$(TTDIR)\TurkishCollatorTest.java 
 
 
 
