@@ -1,9 +1,22 @@
+#/**
+# *******************************************************************************
+# * Copyright (C) 2002-2002, International Business Machines Corporation and    *
+# * others. All Rights Reserved.                                                *
+# *******************************************************************************
+# *
+# * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/test/perf/perf.pl,v $
+# * $Date: 2003/05/14 19:14:14 $
+# * $Revision: 1.2 $
+# *
+# *******************************************************************************
+# */
+
 #!/usr/local/bin/perl
 
 use strict;
 
-# Assume we are running within the icu4j root directory
-use lib 'c:/work/devicu4j/icu4jni/src/classes/com/ibm/icu4jni/test/perf';
+# Assume we are running within the icu4jni root directory
+use lib 'src/classes/com/ibm/icu4jni/test/perf';
 
 use Dataset;
 
@@ -13,9 +26,9 @@ my $TESTCLASS = 'com.ibm.icu.dev.test.perf.UnicodeSetPerf';
 
 # Methods to be tested.  Each pair represents a test method and
 # a baseline method which is used for comparison.
-my @METHODS  = (['UnicodeSetAdd', 'HashSetAdd']);#,
-#                ['UnicodeSetContains', 'HashSetContains'],
-#                ['UnicodeSetIterate', 'HashSetIterate']);
+my @METHODS  = (['UnicodeSetAdd', 'HashSetAdd'],
+                ['UnicodeSetContains', 'HashSetContains'],
+                ['UnicodeSetIterate', 'HashSetIterate']);
 
 # Patterns which define the set of characters used for testing.
 my @PATTERNS = ('[:Lt:]', '[:Cn:]');

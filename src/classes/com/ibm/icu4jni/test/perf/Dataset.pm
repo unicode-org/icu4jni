@@ -1,3 +1,15 @@
+#/**
+# *******************************************************************************
+# * Copyright (C) 2002-2002, International Business Machines Corporation and    *
+# * others. All Rights Reserved.                                                *
+# *******************************************************************************
+# *
+# * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/test/perf/Dataset.pm,v $
+# * $Date: 2003/05/14 19:14:13 $
+# * $Revision: 1.2 $
+# *
+# *******************************************************************************
+# */
 package Dataset;
 use Statistics::Descriptive;
 use Statistics::Distributions;
