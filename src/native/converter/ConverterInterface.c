@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/native/converter/ConverterInterface.c,v $ 
-* $Date: 2002/10/29 02:31:49 $ 
-* $Revision: 1.19 $
+* $Date: 2003/04/12 01:23:22 $ 
+* $Revision: 1.20 $
 *
 *******************************************************************************
 */
@@ -751,13 +751,13 @@ Java_com_ibm_icu4jni_converters_NativeConverter_getAvailable(JNIEnv *env, jclass
 
     for(;--i>=0;) {
         name = ucnv_getAvailableName(i);
-        if(strstr(name,",")!=0){
+        if(strchr(name,',')!=0){
             name = ucnv_getAlias(name,1,&error);
 
         }
         
         (*env)->SetObjectArrayElement(env,ret,i,(*env)->NewStringUTF(env,name));
-        /* printf("canonical name : %s  at %i\n", name,i); */
+         /*printf("canonical name : %s  at %i\n", name,i); */
     }
     return (ret);
 }
@@ -795,7 +795,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_getAliases(JNIEnv *env, jclass j
         if(U_SUCCESS(error)){
             for(i=0,j=0;i<aliasNum;i++){
                 const char* name = ucnv_getAlias(encName,(uint16_t)i,&error);
-                if(strstr(name,",")==0){
+                if(strchr(name,'+')==0 && strchr(name,',')==0){
                     aliasArray[j++]= name;
                 }
             }
