@@ -5,19 +5,27 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/test/converters/TestConverter.java,v $ 
-* $Date: 2002/10/29 02:30:43 $ 
-* $Revision: 1.3 $
+* $Date: 2003/04/12 01:22:00 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */ 
 
 package com.ibm.icu4jni.test.converters;
 
-import java.io.*;
-import java.util.*;
-import sun.io.*;
-import com.ibm.icu4jni.converters.*;
-import com.ibm.icu4jni.test.*;
+
+
+import java.io.UnsupportedEncodingException;
+
+import sun.io.ByteToCharConverter;
+import sun.io.CharToByteConverter;
+import sun.io.ConversionBufferFullException;
+import sun.io.MalformedInputException;
+import sun.io.UnknownCharacterException;
+
+import com.ibm.icu4jni.converters.ByteToCharConverterICU;
+import com.ibm.icu4jni.converters.CharToByteConverterICU;
+import com.ibm.icu4jni.test.TestFmwk;
 
 public class TestConverter extends TestFmwk{
 	
@@ -37,8 +45,7 @@ public class TestConverter extends TestFmwk{
         new TestConverter().run(args);
     }
     public void TestClone(/*String encoding*/){
-        int   i, len;
-        int   rc;
+
         ByteToCharConverterICU convto;
         CharToByteConverterICU convfrom;
         try {
@@ -817,7 +824,7 @@ public class TestConverter extends TestFmwk{
                 gbConv.reset();
                 //CharToByteConverter gbConv = CharToByteConverter.getConverter("gb18030");
                 byte[] myByteTarget = new byte[myUSource.length*5];
-                char[] myCharTarget = new char[myUSource.length+1];
+               // char[] myCharTarget = new char[myUSource.length+1];
                 int inStart = 0;
                 int inStop = myUSource.length;
                 int outStart = 0;
@@ -879,7 +886,7 @@ public class TestConverter extends TestFmwk{
                 //CharToByteConverter gbConv = CharToByteConverter.getConverter("gb18030");
                 gbConv.reset();
                 byte[] myByteTarget = new byte[myUSource.length*5];
-                char[] myCharTarget = new char[myUSource.length+1];
+                //char[] myCharTarget = new char[myUSource.length+1];
                 int inStart = 0;
                 int inStop = myUSource.length;
                 int outStart = 0;

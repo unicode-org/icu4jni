@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/CollatorJNIPerformanceTest.java,v $ 
-* $Date: 2001/03/23 19:43:17 $ 
-* $Revision: 1.5 $
+* $Date: 2003/04/12 01:21:59 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -17,7 +17,6 @@ package com.ibm.icu4jni.test.text;
 import java.util.Locale;
 import com.ibm.icu4jni.text.Collator;
 import com.ibm.icu4jni.text.RuleBasedCollator;
-import com.ibm.icu4jni.text.CollationKey;
 
 /**
 * Performance testing class for Collator

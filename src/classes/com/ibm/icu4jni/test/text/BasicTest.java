@@ -5,18 +5,17 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/test/text/BasicTest.java,v $ 
- * $Date: 2002/12/18 22:54:30 $ 
- * $Revision: 1.4 $
+ * $Date: 2003/04/12 01:21:59 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu4jni.test.text;
 
-import com.ibm.icu4jni.test.*;
-import com.ibm.icu4jni.text.*;
-//import com.ibm.util.Utility;
-//import java.text.CharacterIterator;
-//import java.text.StringCharacterIterator;
+import com.ibm.icu4jni.test.TestFmwk;
+import com.ibm.icu4jni.text.Normalizer;
+
+
 
 public class BasicTest extends TestFmwk {
     public static void main(String[] args) throws Exception {

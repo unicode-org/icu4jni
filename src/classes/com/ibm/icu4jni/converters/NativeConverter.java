@@ -5,15 +5,14 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/converters/NativeConverter.java,v $ 
-* $Date: 2002/12/18 22:54:28 $ 
-* $Revision: 1.8 $
+* $Date: 2003/04/12 01:21:59 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */ 
 
 package com.ibm.icu4jni.converters;
 
-import java.util.*;
 import com.ibm.icu4jni.common.ICU4JNILoader;
 /**
  * Class for accessing the underlying JNI methods

@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/CollationElementIteratorTest.java,v $ 
-* $Date: 2002/11/07 22:41:41 $ 
-* $Revision: 1.11 $
+* $Date: 2003/04/12 01:21:59 $ 
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -20,10 +20,8 @@ import java.text.ParseException;
 import com.ibm.icu4jni.test.TestFmwk;
 import com.ibm.icu4jni.text.Collator;
 import com.ibm.icu4jni.text.RuleBasedCollator;
-import com.ibm.icu4jni.text.CollationKey;
 import com.ibm.icu4jni.text.CollationElementIterator;
-import com.ibm.icu4jni.text.CollationAttribute;
-import com.ibm.icu4jni.text.Normalizer;
+
 
 /**
 * Testing class for Finnish collator

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/converters/ByteToCharConverterICU.java,v $ 
-* $Date: 2002/12/18 22:54:28 $ 
-* $Revision: 1.9 $
+* $Date: 2003/04/12 01:21:58 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */ 
@@ -181,8 +181,6 @@
         /*set inputStart to 0 */ 
         
         data[0] = 0; 
-        int result=0;
-        int oldOutputStart = data[1];
         data[1] = outStart;
         
         /* assume that output buffer is big enough since error is not handled*/

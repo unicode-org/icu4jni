@@ -258,7 +258,6 @@ public abstract class PerfTest {
             int[] counts = (int[]) countList.get(i);
 
             // Call meth to set up the test
-            long eventsPerCall = -1;
             Function testFunction = (Function)meth.invoke(this, NO_ARGS);
             if (testFunction == null) {
                 throw new RuntimeException(meth.getName() + " failed to return a test function");

@@ -5,21 +5,22 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/charset/CharsetICU.java,v $ 
-* $Date: 2002/12/18 22:54:29 $ 
-* $Revision: 1.5 $
+* $Date: 2003/04/12 01:21:59 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */ 
 
 package com.ibm.icu4jni.charset;
 
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.*;
-import java.nio.charset.spi.CharsetProvider;
-import com.ibm.icu4jni.charset.*;
-import com.ibm.icu4jni.converters.*;
-import com.ibm.icu4jni.common.*;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CharsetEncoder;
+
+import com.ibm.icu4jni.common.ErrorCode;
+import com.ibm.icu4jni.converters.NativeConverter;
+
+
 
 public final class CharsetICU extends Charset{
     /**

@@ -18,7 +18,7 @@ import java.nio.charset.spi.*;
 import java.nio.charset.*;
 import java.util.*;
 import com.ibm.icu4jni.charset.*;
-import com.ibm.icu4jni.test.*;
+import com.ibm.icu4jni.test.TestFmwk;
 
 public class TestCharset extends TestFmwk {
 
@@ -54,18 +54,18 @@ public class TestCharset extends TestFmwk {
 	}
 
 	TestCharset() {
+        /*
 		charset = Charset.forName(encoding);
 		decoder = (CharsetDecoder) charset.newDecoder();
 		encoder = (CharsetEncoder) charset.newEncoder();
+        */
 	}
 	public void TestAPISemantics(/*String encoding*/
 	) throws Exception {
-		int len;
 		int rc;
 		ByteBuffer gbval = ByteBuffer.wrap(gb);
 		CharBuffer uniVal = CharBuffer.wrap(unistr);
 		rc = 0;
-		len = 0;
 		decoder.reset();
 		/* Convert the whole buffer to Unicode */
 		try {
@@ -94,17 +94,17 @@ public class TestCharset extends TestFmwk {
 		try {
 			CharBuffer chars = CharBuffer.allocate(unistr.length());
 			ByteBuffer b = ByteBuffer.allocate(1);
-			len = 0;
 			decoder.reset();
 			byte[] temp = new byte[1];
+            CoderResult result=null;
 			for (int i = 0; i < gb.length; i++) {
 				b.rewind();
 				temp[0] = gb[i];
 				b.put(temp);
 				b.rewind();
-				CoderResult result = decoder.decode(b, chars, false);
+				result = decoder.decode(b, chars, false);
 			}
-			if (unistr.length() != (chars.limit())) {
+			if (result.isError() || unistr.length() != (chars.limit())) {
 				errln("ToChars single len does not match");
 				rc = 3;
 			}
@@ -122,7 +122,6 @@ public class TestCharset extends TestFmwk {
 		/* Convert the buffer one at a time to Unicode */
 		try {
 			CharBuffer chars = CharBuffer.allocate(unistr.length());
-			len = 0;
 			decoder.reset();
 			for (int i = 0; i <= gb.length; i++) {
 				gbval.limit(i);
@@ -152,7 +151,6 @@ public class TestCharset extends TestFmwk {
 		}
 
 		rc = 0;
-		len = 0;
 		/* Convert the whole buffer from unicode */
 		try {
 			ByteBuffer bytes = ByteBuffer.allocate(gb.length);
@@ -177,17 +175,17 @@ public class TestCharset extends TestFmwk {
 		try {
 			ByteBuffer bytes = ByteBuffer.allocate(gb.length);
 			CharBuffer c = CharBuffer.allocate(1);
-			len = 0;
 			encoder.reset();
 			char[] temp = new char[1];
+            CoderResult result= null;
 			for (int i = 0; i < unistr.length(); i++) {
 				temp[0] = unistr.charAt(i);
 				c.put(temp);
 				c.rewind();
-				CoderResult result = encoder.encode(c, bytes, false);
+				result = encoder.encode(c, bytes, false);
 				c.rewind();
 			}
-			if (gb.length != bytes.limit()) {
+			if (result.isError() || gb.length != bytes.limit()) {
 				errln("FromChars single len does not match");
 				rc = 3;
 			}
@@ -206,15 +204,14 @@ public class TestCharset extends TestFmwk {
 		/* Convert one char at a time to unicode */
 		try {
 			ByteBuffer bytes = ByteBuffer.allocate(gb.length);
-			len = 0;
 			encoder.reset();
 			char[] temp = unistr.toCharArray();
-
+            CoderResult result=null;
 			for (int i = 0; i <= temp.length; i++) {
 				uniVal.limit(i);
-				CoderResult result = encoder.encode(uniVal, bytes, false);
+				result = encoder.encode(uniVal, bytes, false);
 			}
-			if (bytes.limit() != gb.length) {
+			if (result.isError() || bytes.limit() != gb.length) {
 				errln("FromChars Simple len does not match");
 				rc = 7;
 			}
@@ -736,6 +733,13 @@ public class TestCharset extends TestFmwk {
 	}
 	public void TestAvailableCharsets() {
 		SortedMap map = Charset.availableCharsets();
+        Set keySet = map.keySet();
+        Iterator iter = keySet.iterator();
+        
+        while(iter.hasNext()){
+            logln("Charset name: "+iter.next().toString());
+        }
+        
 	}
 
 	private void smBufEncode(CharsetEncoder encoder, String encoding) {
@@ -744,13 +748,13 @@ public class TestCharset extends TestFmwk {
 			encoder.reset();
 			ByteBuffer myTarget = ByteBuffer.allocate(myGBSource.length);
 			mySource.position(0);
-			CoderResult result = null;
+            CoderResult result=null;
 			while (mySource.position() < myUSource.length) {
 				int pos = mySource.position();
 				mySource.limit(pos + 1);
 				result = encoder.encode(mySource, myTarget, false);
 			}
-			if (!equals(myTarget, myGBSource)) {
+			if (result.isError() || !equals(myTarget, myGBSource)) {
 
 				//System.out.println("Encode small output buffers passed");
 

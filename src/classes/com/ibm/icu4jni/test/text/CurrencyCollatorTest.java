@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/CurrencyCollatorTest.java,v $ 
-* $Date: 2001/03/23 19:43:17 $ 
-* $Revision: 1.6 $
+* $Date: 2003/04/12 01:21:59 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -16,7 +16,6 @@ package com.ibm.icu4jni.test.text;
 
 import com.ibm.icu4jni.text.Collator;
 import com.ibm.icu4jni.text.CollationKey;
-import com.ibm.icu4jni.text.CollationAttribute;
 import com.ibm.icu4jni.test.TestFmwk;
 import java.util.Locale;
 

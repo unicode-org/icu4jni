@@ -6,8 +6,8 @@
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/CollatorAPITest.java,v $ 
-* $Date: 2002/11/07 22:38:22 $ 
-* $Revision: 1.12 $
+* $Date: 2003/04/12 01:21:59 $ 
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */
@@ -21,7 +21,6 @@ import com.ibm.icu4jni.text.RuleBasedCollator;
 import com.ibm.icu4jni.text.CollationKey;
 import com.ibm.icu4jni.text.CollationAttribute;
 import com.ibm.icu4jni.text.CollationElementIterator;
-import com.ibm.icu4jni.text.Normalizer;
 
 /**
 * Collator API testing class

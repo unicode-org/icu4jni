@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/charset/CharsetProviderICU.java,v $ 
-* $Date: 2002/12/18 22:54:29 $ 
-* $Revision: 1.6 $
+* $Date: 2003/04/12 01:21:59 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */ 
@@ -17,7 +17,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.spi.CharsetProvider;
 import java.util.*;
 import java.util.Iterator;
-import com.ibm.icu4jni.common.*;
 import com.ibm.icu4jni.converters.NativeConverter;
 
 public final class CharsetProviderICU extends CharsetProvider{
@@ -59,11 +58,11 @@ public final class CharsetProviderICU extends CharsetProvider{
         // Get the available converter canonical names and aliases	  
         String[] charsets = NativeConverter.getAvailable();        
         for(int i=0; i<charsets.length;i++){
-	// get the ICU aliases for a converter	  
-	String[] aliases = NativeConverter.getAliases(charsets[i]);            
-	// store the charsets and aliases in a Map    
-	        if (!map.containsKey(charsets[i])){
-		map.put(charsets[i], aliases);
+	    // get the ICU aliases for a converter	  
+	    String[] aliases = NativeConverter.getAliases(charsets[i]);            
+	    // store the charsets and aliases in a Map    
+	    if (!map.containsKey(charsets[i])){
+		      map.put(charsets[i], aliases);
 	        }
         }
     }
@@ -83,7 +82,7 @@ public final class CharsetProviderICU extends CharsetProvider{
       }
       public Object next(){
     	if(currentIndex<names.length){
-    	      return (Object) names[currentIndex++];
+    	      return charsetForName(names[currentIndex++]);
     	}else{
     	      throw new NoSuchElementException();
     	}

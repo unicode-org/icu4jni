@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/charset/CharsetDecoderICU.java,v $ 
-* $Date: 2002/12/18 22:54:29 $ 
-* $Revision: 1.7 $
+* $Date: 2003/04/12 01:21:59 $ 
+* $Revision: 1.8 $
 *
 *
 *******************************************************************************
@@ -18,12 +18,17 @@
   * @author Ram Viswanadha, IBM
   */
 package com.ibm.icu4jni.charset;
-import java.nio.charset.*;
-import java.nio.charset.CharsetEncoder;
-import java.nio.*;
+
+import com.ibm.icu4jni.common.ErrorCode;
 import com.ibm.icu4jni.converters.NativeConverter;
-import com.ibm.icu4jni.common.*;
+
+
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
+import java.nio.ByteBuffer;;
 
 public final class CharsetDecoderICU extends CharsetDecoder{ 
         

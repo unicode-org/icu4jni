@@ -7,10 +7,17 @@
 
 package com.ibm.icu4jni.test.text;
 
-import java.io.*;
-import com.ibm.icu4jni.test.*;
-import com.ibm.icu4jni.text.*;
-import java.util.ResourceBundle;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import com.ibm.icu4jni.test.TestFmwk;
+import com.ibm.icu4jni.text.Normalizer;
+
+
+
 
 public class ConformanceTest extends TestFmwk {
 
@@ -115,7 +122,7 @@ public class ConformanceTest extends TestFmwk {
      */
     private boolean checkConformance(String[] field, String line) throws Exception{
         boolean pass = true;
-        StringBuffer buf = new StringBuffer(); // scratch
+        //StringBuffer buf = new StringBuffer(); // scratch
         String out;
         int i=0;
 
@@ -165,9 +172,10 @@ public class ConformanceTest extends TestFmwk {
      * @param buf scratch buffer
      * @param dir either +1 or -1
      */
+    /*
     private String iterativeNorm(String str, int mode,
                                  StringBuffer buf, int dir) throws Exception{
-       /* normalizer.setText(str);
+        normalizer.setText(str);
         normalizer.setMode(mode);
         buf.setLength(0);
         char ch;
@@ -183,10 +191,10 @@ public class ConformanceTest extends TestFmwk {
             }
         }
         return buf.toString();
-        */
+
         return null;
     }
-
+    */
     /**
      * @param op name of normalization form, e.g., "KC"
      * @param s string being normalized

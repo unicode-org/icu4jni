@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/test/TestFmwk.java,v $ 
- * $Date: 2001/09/18 00:33:49 $ 
- * $Revision: 1.5 $
+ * $Date: 2003/04/12 01:22:00 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -17,8 +17,6 @@ import java.util.Hashtable;
 import java.util.Enumeration;
 import java.util.Vector;
 import java.io.*;
-import java.text.*;
-
 
 
 /**
