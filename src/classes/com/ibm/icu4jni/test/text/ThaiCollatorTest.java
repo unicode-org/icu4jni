@@ -1,13 +1,13 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2001, International Business Machines Corporation and    *
+* Copyright (C) 1996-2004, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
 * $Source: 
 *  /usr/cvs/icu4j/icu4j/src/com/ibm/icu/test/text/ThaiCollatorTest.java,v $ 
-* $Date: 2004/06/07 22:24:19 $ 
-* $Revision: 1.6 $
+* $Date: 2004/06/17 20:52:12 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */

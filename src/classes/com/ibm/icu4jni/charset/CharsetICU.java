@@ -1,12 +1,12 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2003, International Business Machines Corporation and    *
+* Copyright (C) 1996-2004, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/charset/CharsetICU.java,v $ 
-* $Date: 2004/06/07 22:24:19 $ 
-* $Revision: 1.8 $
+* $Date: 2004/06/17 20:52:12 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */ 
