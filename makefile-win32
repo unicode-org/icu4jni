@@ -43,7 +43,7 @@ NATIVE=$(SRCDIR)\native
 BDIR=$(BUILDDIR)\classes
 JAVAC_EXE=javac.exe
 JAVA_FLAGS=-d $(BUILDDIR)\classes -classpath $(BUILDDIR)\classes;.
-VERSION=131 
+VERSION=181 
 DEBUG_TARGET=$(OUTDIR)/ICUInterface$(VERSION)d.dll
 RELEASE_TARGET=$(OUTDIR)/ICUInterface$(VERSION).dll
 
