@@ -41,8 +41,19 @@ public class ConformanceTest extends TestFmwk {
         StringBuffer buf = new StringBuffer();
         int passCount = 0;
         int failCount = 0;
+        InputStream is = null;
         try {
-            InputStream is = getClass().getResourceAsStream(FILE);
+            is = getClass().getResourceAsStream(FILE);
+        } catch (Exception e) {
+        }
+        if (is == null) {
+            try {
+                is = getClass().getResourceAsStream(TEST_SUITE_FILE);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+         try {
             input = new BufferedReader(new InputStreamReader(is),64*1024);
             for (int count = 0;;++count) {
                 line = input.readLine();
