@@ -442,7 +442,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_flushByteToChar(JNIEnv *env,
             jchar* uTarget=(jchar*) (*env)->GetPrimitiveArrayCritical(env,target,NULL);
             if(uTarget){
                 const jbyte* mySource =&source;
-                const char* mySourceLimit=0;
+                const char* mySourceLimit=&source;
                 UChar* cTarget=uTarget+ *targetOffset;
                 const UChar* cTargetLimit=uTarget+targetEnd;
 

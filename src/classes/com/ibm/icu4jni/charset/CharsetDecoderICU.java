@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/charset/CharsetDecoderICU.java,v $ 
-* $Date: 2001/11/03 03:25:11 $ 
-* $Revision: 1.5 $
+* $Date: 2001/11/21 22:12:09 $ 
+* $Revision: 1.6 $
 *
 *
 *******************************************************************************
@@ -250,7 +250,7 @@ public final class CharsetDecoderICU extends CharsetDecoder{
             data[OUTPUT_WRITTEN] = (out.arrayOffset()+out.position());
         }else{
             outEnd = out.remaining();
-            if(output==null || outEnd > output.length){
+            if(output==null || (outEnd > output.length)){
                 output = new char[outEnd];
             }
             //since the new 
@@ -267,7 +267,7 @@ public final class CharsetDecoderICU extends CharsetDecoder{
             data[INPUT_CONSUMED] = (in.arrayOffset()+in.position());
         }else{
             inEnd = in.remaining();
-            if(input==null|| inEnd > input.length){ 
+            if(input==null|| (inEnd > input.length)){ 
                 input = new byte[inEnd];
             }
             // save the current position
