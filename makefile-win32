@@ -64,13 +64,14 @@ CLEAN :
 	-@erase "$(OUTDIR)\ICUInterface1d.dll"
 
 "$(OUTDIR)" :
-	if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
+	if not exist "$(BUILDIDR)\$(NULL)" mkdir "$(BUILDIR)"
+	if not exist "$(OUTDIR)\$(NULL)" mkdir "$(OUTDIR)"
 
 "$(INTDIR)" :
-	if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
+	if not exist "$(INTDIR)\$(NULL)" mkdir "$(INTDIR)"
 
 "$(BDIR)" :
-	if not exist "$(BDIR)/$(NULL)" mkdir "$(BDIR)"
+	if not exist "$(BDIR)\$(NULL)" mkdir "$(BDIR)"
 
 
 
@@ -110,13 +111,14 @@ CLEAN :
 	-@erase "$(OUTDIR)\ICUInterface1d.ilk"
 
 "$(OUTDIR)" :
-	if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
+	if not exist "$(BUILDIDR)\$(NULL)" mkdir "$(BUILDIR)"
+	if not exist "$(OUTDIR)\$(NULL)" mkdir "$(OUTDIR)"
 
 "$(INTDIR)" :
-	if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
+	if not exist "$(INTDIR)\$(NULL)" mkdir "$(INTDIR)"
 
 "$(BDIR)" :
-	if not exist "$(BDIR)/$(NULL)" mkdir "$(BDIR)"
+	if not exist "$(BDIR)\$(NULL)" mkdir "$(BDIR)"
 
 CPP_PROJ=/nologo /G6 /MTd /W4 /Gm /GX /ZI /Od /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_DATA)\..\..\include" /I "$(NATIVE)\common" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
 BSC32_SBRS= \
