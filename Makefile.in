@@ -9,6 +9,7 @@ srcdir=@srcdir@
 top_srcdir=@top_srcdir@
 CANON=@CANON@
 JDK14=@JDK14@
+CRT=@CRT@
 # srcdir must be set before this is included
 include @ICU_MAKEFILE@
 
@@ -83,12 +84,6 @@ NativeNormalizer.java \
 Normalizer.java
 
 TESTCSCLASS=TestCharset.java
-
-ifeq ($(platform), U_SOLARIS)
-CRT := -lC
-else
-CRT :=
-endif
 
 ifeq ($(JDK14) , true) 
 MAKE_CLASS :=  $(CONVCLASS:%=$(SRCDIR)/$(CLASSDIR)/$(CONVDIR)/%)  \

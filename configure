@@ -2112,15 +2112,36 @@ case "${host}" in
         *)              CANON="unknown" ;;
 esac
 
+echo "$as_me:2115: checking for /usr/lib/libC.so" >&5
+echo $ECHO_N "checking for /usr/lib/libC.so... $ECHO_C" >&6
+if test "${ac_cv_file__usr_lib_libC_so+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:2121: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/lib/libC.so"; then
+  ac_cv_file__usr_lib_libC_so=yes
+else
+  ac_cv_file__usr_lib_libC_so=no
+fi
+fi
+echo "$as_me:2130: result: $ac_cv_file__usr_lib_libC_so" >&5
+echo "${ECHO_T}$ac_cv_file__usr_lib_libC_so" >&6
+if test $ac_cv_file__usr_lib_libC_so = yes; then
+  CRT=-lC
+fi
+
 #AC_MSG_RESULT( [The canonical name ${CANON} ])
 ac_ac_File=`echo "ac_cv_file_$JAVA_HOME/include/jni.h" | $ac_tr_sh`
-echo "$as_me:2117: checking for $JAVA_HOME/include/jni.h" >&5
+echo "$as_me:2138: checking for $JAVA_HOME/include/jni.h" >&5
 echo $ECHO_N "checking for $JAVA_HOME/include/jni.h... $ECHO_C" >&6
 if eval "test \"\${$ac_ac_File+set}\" = set"; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   test "$cross_compiling" = yes &&
-  { { echo "$as_me:2123: error: cannot check for file existence when cross compiling" >&5
+  { { echo "$as_me:2144: error: cannot check for file existence when cross compiling" >&5
 echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
    { (exit 1); exit 1; }; }
 if test -r "$JAVA_HOME/include/jni.h"; then
@@ -2129,40 +2150,19 @@ else
   eval "$ac_ac_File=no"
 fi
 fi
-echo "$as_me:2132: result: `eval echo '${'$ac_ac_File'}'`" >&5
+echo "$as_me:2153: result: `eval echo '${'$ac_ac_File'}'`" >&5
 echo "${ECHO_T}`eval echo '${'$ac_ac_File'}'`" >&6
 if test `eval echo '${'$ac_ac_File'}'` = yes; then
   :
 else
-  { { echo "$as_me:2137: error: Could not find jni include file please check JAVA_HOME enviroment variable." >&5
+  { { echo "$as_me:2158: error: Could not find jni include file please check JAVA_HOME enviroment variable." >&5
 echo "$as_me: error: Could not find jni include file please check JAVA_HOME enviroment variable." >&2;}
    { (exit 1); exit 1; }; }
 fi
 
 ac_ac_File=`echo "ac_cv_file_$JAVA_HOME/include/$CANON/jni_md.h" | $ac_tr_sh`
-echo "$as_me:2143: checking for $JAVA_HOME/include/$CANON/jni_md.h" >&5
+echo "$as_me:2164: checking for $JAVA_HOME/include/$CANON/jni_md.h" >&5
 echo $ECHO_N "checking for $JAVA_HOME/include/$CANON/jni_md.h... $ECHO_C" >&6
-if eval "test \"\${$ac_ac_File+set}\" = set"; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  test "$cross_compiling" = yes &&
-  { { echo "$as_me:2149: error: cannot check for file existence when cross compiling" >&5
-echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
-   { (exit 1); exit 1; }; }
-if test -r "$JAVA_HOME/include/$CANON/jni_md.h"; then
-  eval "$ac_ac_File=yes"
-else
-  eval "$ac_ac_File=no"
-fi
-fi
-echo "$as_me:2158: result: `eval echo '${'$ac_ac_File'}'`" >&5
-echo "${ECHO_T}`eval echo '${'$ac_ac_File'}'`" >&6
-if test `eval echo '${'$ac_ac_File'}'` = yes; then
-  :
-else
-  ac_ac_File=`echo "ac_cv_file_$JAVA_HOME/include/jni_md.h" | $ac_tr_sh`
-echo "$as_me:2164: checking for $JAVA_HOME/include/jni_md.h" >&5
-echo $ECHO_N "checking for $JAVA_HOME/include/jni_md.h... $ECHO_C" >&6
 if eval "test \"\${$ac_ac_File+set}\" = set"; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
@@ -2170,7 +2170,7 @@ else
   { { echo "$as_me:2170: error: cannot check for file existence when cross compiling" >&5
 echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
    { (exit 1); exit 1; }; }
-if test -r "$JAVA_HOME/include/jni_md.h"; then
+if test -r "$JAVA_HOME/include/$CANON/jni_md.h"; then
   eval "$ac_ac_File=yes"
 else
   eval "$ac_ac_File=no"
@@ -2181,7 +2181,28 @@ echo "${ECHO_T}`eval echo '${'$ac_ac_File'}'`" >&6
 if test `eval echo '${'$ac_ac_File'}'` = yes; then
   :
 else
-  { { echo "$as_me:2184: error: Could not find jni_md.h include file please check its existence." >&5
+  ac_ac_File=`echo "ac_cv_file_$JAVA_HOME/include/jni_md.h" | $ac_tr_sh`
+echo "$as_me:2185: checking for $JAVA_HOME/include/jni_md.h" >&5
+echo $ECHO_N "checking for $JAVA_HOME/include/jni_md.h... $ECHO_C" >&6
+if eval "test \"\${$ac_ac_File+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:2191: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "$JAVA_HOME/include/jni_md.h"; then
+  eval "$ac_ac_File=yes"
+else
+  eval "$ac_ac_File=no"
+fi
+fi
+echo "$as_me:2200: result: `eval echo '${'$ac_ac_File'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$ac_ac_File'}'`" >&6
+if test `eval echo '${'$ac_ac_File'}'` = yes; then
+  :
+else
+  { { echo "$as_me:2205: error: Could not find jni_md.h include file please check its existence." >&5
 echo "$as_me: error: Could not find jni_md.h include file please check its existence." >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -2195,7 +2216,7 @@ if test "${enable_jdk14+set}" = set; then
   case "${enableval}" in
              yes) JDK14="true";;
              no)  JDK14="false";;
-                *) { { echo "$as_me:2198: error: bad value ${enableval} for --enable-jdk14" >&5
+                *) { { echo "$as_me:2219: error: bad value ${enableval} for --enable-jdk14" >&5
 echo "$as_me: error: bad value ${enableval} for --enable-jdk14" >&2;}
    { (exit 1); exit 1; }; } ;;
          esac
@@ -2314,7 +2335,7 @@ rm -f confdef2opt.sed
 : ${CONFIG_STATUS=./config.status}
 ac_clean_files_save=$ac_clean_files
 ac_clean_files="$ac_clean_files $CONFIG_STATUS"
-{ echo "$as_me:2317: creating $CONFIG_STATUS" >&5
+{ echo "$as_me:2338: creating $CONFIG_STATUS" >&5
 echo "$as_me: creating $CONFIG_STATUS" >&6;}
 cat >$CONFIG_STATUS <<_ACEOF
 #! $SHELL
@@ -2481,7 +2502,7 @@ cat >>$CONFIG_STATUS <<\EOF
     echo "$ac_cs_version"; exit 0 ;;
   --he | --h)
     # Conflict between --help and --header
-    { { echo "$as_me:2484: error: ambiguous option: $1
+    { { echo "$as_me:2505: error: ambiguous option: $1
 Try \`$0 --help' for more information." >&5
 echo "$as_me: error: ambiguous option: $1
 Try \`$0 --help' for more information." >&2;}
@@ -2503,12 +2524,12 @@ Try \`$0 --help' for more information." >&2;}
   'Makefile' ) CONFIG_FILES="$CONFIG_FILES Makefile" ;;
 
   # This is an error.
-  -*) { { echo "$as_me:2506: error: unrecognized option: $1
+  -*) { { echo "$as_me:2527: error: unrecognized option: $1
 Try \`$0 --help' for more information." >&5
 echo "$as_me: error: unrecognized option: $1
 Try \`$0 --help' for more information." >&2;}
    { (exit 1); exit 1; }; } ;;
-  *) { { echo "$as_me:2511: error: invalid argument: $1" >&5
+  *) { { echo "$as_me:2532: error: invalid argument: $1" >&5
 echo "$as_me: error: invalid argument: $1" >&2;}
    { (exit 1); exit 1; }; };;
   esac
@@ -2624,6 +2645,7 @@ s,@host_cpu@,$host_cpu,;t t
 s,@host_vendor@,$host_vendor,;t t
 s,@host_os@,$host_os,;t t
 s,@CANON@,$CANON,;t t
+s,@CRT@,$CRT,;t t
 s,@JDK14@,$JDK14,;t t
 CEOF
 
@@ -2734,7 +2756,7 @@ done; }
   esac
 
   if test x"$ac_file" != x-; then
-    { echo "$as_me:2737: creating $ac_file" >&5
+    { echo "$as_me:2759: creating $ac_file" >&5
 echo "$as_me: creating $ac_file" >&6;}
     rm -f "$ac_file"
   fi
@@ -2752,7 +2774,7 @@ echo "$as_me: creating $ac_file" >&6;}
       -) echo $tmp/stdin ;;
       [\\/$]*)
          # Absolute (can't be DOS-style, as IFS=:)
-         test -f "$f" || { { echo "$as_me:2755: error: cannot find input file: $f" >&5
+         test -f "$f" || { { echo "$as_me:2777: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          echo $f;;
@@ -2765,7 +2787,7 @@ echo "$as_me: error: cannot find input file: $f" >&2;}
            echo $srcdir/$f
          else
            # /dev/null tree
-           { { echo "$as_me:2768: error: cannot find input file: $f" >&5
+           { { echo "$as_me:2790: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          fi;;
@@ -2819,13 +2841,13 @@ if test "$no_create" != yes; then
   $ac_cs_success || { (exit 1); exit 1; }
 fi
 
-echo "$as_me:2822: checking for build" >&5
+echo "$as_me:2844: checking for build" >&5
 echo $ECHO_N "checking for build... $ECHO_C" >&6
 if test "${ac_cv_file_build+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   test "$cross_compiling" = yes &&
-  { { echo "$as_me:2828: error: cannot check for file existence when cross compiling" >&5
+  { { echo "$as_me:2850: error: cannot check for file existence when cross compiling" >&5
 echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
    { (exit 1); exit 1; }; }
 if test -r "build"; then
@@ -2834,7 +2856,7 @@ else
   ac_cv_file_build=no
 fi
 fi
-echo "$as_me:2837: result: $ac_cv_file_build" >&5
+echo "$as_me:2859: result: $ac_cv_file_build" >&5
 echo "${ECHO_T}$ac_cv_file_build" >&6
 if test $ac_cv_file_build = yes; then
   :
@@ -2842,13 +2864,13 @@ else
   echo creating build directory;mkdir build
 fi
 
-echo "$as_me:2845: checking for build/lib" >&5
+echo "$as_me:2867: checking for build/lib" >&5
 echo $ECHO_N "checking for build/lib... $ECHO_C" >&6
 if test "${ac_cv_file_build_lib+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   test "$cross_compiling" = yes &&
-  { { echo "$as_me:2851: error: cannot check for file existence when cross compiling" >&5
+  { { echo "$as_me:2873: error: cannot check for file existence when cross compiling" >&5
 echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
    { (exit 1); exit 1; }; }
 if test -r "build/lib"; then
@@ -2857,7 +2879,7 @@ else
   ac_cv_file_build_lib=no
 fi
 fi
-echo "$as_me:2860: result: $ac_cv_file_build_lib" >&5
+echo "$as_me:2882: result: $ac_cv_file_build_lib" >&5
 echo "${ECHO_T}$ac_cv_file_build_lib" >&6
 if test $ac_cv_file_build_lib = yes; then
   :
@@ -2865,13 +2887,13 @@ else
   echo creating build/lib directory.;mkdir build/lib
 fi
 
-echo "$as_me:2868: checking for build/classes" >&5
+echo "$as_me:2890: checking for build/classes" >&5
 echo $ECHO_N "checking for build/classes... $ECHO_C" >&6
 if test "${ac_cv_file_build_classes+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   test "$cross_compiling" = yes &&
-  { { echo "$as_me:2874: error: cannot check for file existence when cross compiling" >&5
+  { { echo "$as_me:2896: error: cannot check for file existence when cross compiling" >&5
 echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
    { (exit 1); exit 1; }; }
 if test -r "build/classes"; then
@@ -2880,7 +2902,7 @@ else
   ac_cv_file_build_classes=no
 fi
 fi
-echo "$as_me:2883: result: $ac_cv_file_build_classes" >&5
+echo "$as_me:2905: result: $ac_cv_file_build_classes" >&5
 echo "${ECHO_T}$ac_cv_file_build_classes" >&6
 if test $ac_cv_file_build_classes = yes; then
   :
@@ -2894,13 +2916,13 @@ MSG2="# Please place this file in dir ${JAVA_HOME}/classes/META-INF directory"
 MSG3="# or append the following line to ${JAVA_HOME}/classes/META-INF/java.nio.charset.spi.CharsetProvider file"
 MSG4="com.ibm.icu4jni.charset.CharsetProviderICU"
 FNAME=./build/META-INF/java.nio.charset.spi.CharsetProvider
-echo "$as_me:2897: checking for build/META-INF" >&5
+echo "$as_me:2919: checking for build/META-INF" >&5
 echo $ECHO_N "checking for build/META-INF... $ECHO_C" >&6
 if test "${ac_cv_file_build_META_INF+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   test "$cross_compiling" = yes &&
-  { { echo "$as_me:2903: error: cannot check for file existence when cross compiling" >&5
+  { { echo "$as_me:2925: error: cannot check for file existence when cross compiling" >&5
 echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
    { (exit 1); exit 1; }; }
 if test -r "build/META-INF"; then
@@ -2909,7 +2931,7 @@ else
   ac_cv_file_build_META_INF=no
 fi
 fi
-echo "$as_me:2912: result: $ac_cv_file_build_META_INF" >&5
+echo "$as_me:2934: result: $ac_cv_file_build_META_INF" >&5
 echo "${ECHO_T}$ac_cv_file_build_META_INF" >&6
 if test $ac_cv_file_build_META_INF = yes; then
   :
@@ -2917,13 +2939,13 @@ else
   echo creating build/META-INF directory.;mkdir build/META-INF
 fi
 
-echo "$as_me:2920: checking for build/META-INF/java.nio.charset.spi.CharsetProvider" >&5
+echo "$as_me:2942: checking for build/META-INF/java.nio.charset.spi.CharsetProvider" >&5
 echo $ECHO_N "checking for build/META-INF/java.nio.charset.spi.CharsetProvider... $ECHO_C" >&6
 if test "${ac_cv_file_build_META_INF_java_nio_charset_spi_CharsetProvider+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   test "$cross_compiling" = yes &&
-  { { echo "$as_me:2926: error: cannot check for file existence when cross compiling" >&5
+  { { echo "$as_me:2948: error: cannot check for file existence when cross compiling" >&5
 echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
    { (exit 1); exit 1; }; }
 if test -r "build/META-INF/java.nio.charset.spi.CharsetProvider"; then
@@ -2932,7 +2954,7 @@ else
   ac_cv_file_build_META_INF_java_nio_charset_spi_CharsetProvider=no
 fi
 fi
-echo "$as_me:2935: result: $ac_cv_file_build_META_INF_java_nio_charset_spi_CharsetProvider" >&5
+echo "$as_me:2957: result: $ac_cv_file_build_META_INF_java_nio_charset_spi_CharsetProvider" >&5
 echo "${ECHO_T}$ac_cv_file_build_META_INF_java_nio_charset_spi_CharsetProvider" >&6
 if test $ac_cv_file_build_META_INF_java_nio_charset_spi_CharsetProvider = yes; then
   :

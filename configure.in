@@ -46,6 +46,11 @@ case "${host}" in
         *)              CANON="unknown" ;;
 esac
 AC_SUBST(CANON)
+
+
+AC_CHECK_FILE(/usr/lib/libC.so,CRT=-lC,)
+AC_SUBST(CRT)
+
 #AC_MSG_RESULT( [The canonical name ${CANON} ])
 AC_CHECK_FILE($JAVA_HOME/include/jni.h,,AC_MSG_ERROR([Could not find jni include file please check JAVA_HOME enviroment variable.]))
 AC_CHECK_FILE($JAVA_HOME/include/$CANON/jni_md.h,,AC_CHECK_FILE($JAVA_HOME/include/jni_md.h,,AC_MSG_ERROR([Could not find jni_md.h include file please check its existence.])))
