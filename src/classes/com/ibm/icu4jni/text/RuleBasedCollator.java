@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/RuleBasedCollator.java,v $ 
-* $Date: 2001/03/23 19:42:16 $ 
-* $Revision: 1.7 $
+* $Date: 2001/06/06 18:06:06 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -562,7 +562,9 @@ public final class RuleBasedCollator extends Collator
   */
   RuleBasedCollator()
   {
-    Locale locale = Locale.getDefault();
+    // default locales in ICU and Java may not be the same 
+    // this way forces the collator to take ICU's default locale
+    Locale locale = new Locale("", "");
     m_collator_ = NativeCollation.openCollator(locale.toString());
   }
 
