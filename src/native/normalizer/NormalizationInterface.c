@@ -1,3 +1,15 @@
+/**
+*******************************************************************************
+* Copyright (C) 1996-2001, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* $Source: /xsrl/Nsvn/icu/icu4jni/src/native/normalizer/NormalizationInterface.c,v $ 
+* $Date: 2001/12/04 18:24:48 $ 
+* $Revision: 1.6 $
+*
+*******************************************************************************
+*/
 /*
  *  @(#) NormalizationInterface.c
  *

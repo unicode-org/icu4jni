@@ -1,3 +1,15 @@
+/**
+*******************************************************************************
+* Copyright (C) 1996-2001, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* $Source: /xsrl/Nsvn/icu/icu4jni/src/native/converter/ConverterInterface.c,v $ 
+* $Date: 2001/12/04 18:24:48 $ 
+* $Revision: 1.17 $
+*
+*******************************************************************************
+*/
 /*
  *  @(#) icujniinterface.c	1.2 00/10/11
  *

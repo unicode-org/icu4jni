@@ -3,7 +3,13 @@
 * Copyright (C) 1996-2001, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
-*/
+*
+* $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/Normalizer.java,v $ 
+* $Date: 2001/12/04 18:24:47 $ 
+* $Revision: 
+*
+*******************************************************************************
+*/ 
  /*
  * Normalizer.java
  *
