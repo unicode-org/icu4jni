@@ -13,34 +13,42 @@
   <link rel="File-List" href="./readme_files/filelist.xml">
   <title>Read Me</title>
 </head>
-  <body lang="EN-US" link="blue" vlink="blue" style="tab-interval:.5in">
+<style type="text/css">
+      h1 {border-width: 2px; border-style: solid; text-align: center; width: 100%; font-size: 200%; font-weight: bold}
+      h2 {margin-top: 3em; text-decoration: underline; page-break-before: always}
+      h2.TOC {page-break-before: auto}
+      h3 {margin-top: 2em; text-decoration: underline}
+      h4 {text-decoration: underline}
+      h5 {text-decoration: underline}
+      caption {font-weight: bold; text-align: left}
+      div.indent {margin-left: 2em}
+      ul.TOC {list-style-type: none}
+      samp {margin-left: 2em; border-style: groove; padding: 1em; display: block; background-color: #EEEEEE}
+</style>
     
-<div class="Section1">   
-<p class="MsoNormal"># ***************************************************************************** 
-<br>
-  # * <br>
-  # *&nbsp;&nbsp; Copyright (C) 1995-2002, International Business Machines 
-<br>
-  # *&nbsp;&nbsp; Corporation and others.&nbsp; All Rights Reserved. <br>
-  # * <br>
-  # *&nbsp;&nbsp; Author: Ram Viswanadha <br>
-  # *&nbsp;&nbsp;&nbsp;&nbsp; IBM <br>
-  # *****************************************************************************
- </p>
-    
-<h2 style="margin-right: 2.5in; margin-left: 2.5in; ">&nbsp;&nbsp;&nbsp;README</h2>
-    
-<h3 style="margin-right: 2.5in; margin-left: 2.5in; ">ICU4JNI Version 2.2</h3>
+  <body lang="en-US">
+    <h1>ICU4JNI: International Components for Unicode for Java Native Interface<br>
+     ICU4JNI 2.2 ReadMe</h1>
+
+    <p>Version: 2002-Aug-15<br>
+     Copyright &copy; 1997-2002 International Business Machines Corporation and
+    others. All Rights Reserved.<br>
+     Author: Ram Viswanadha
+    </p>
+    <!-- Remember that there is a copyright at the end too -->
     
 <h4>Contents</h4>
+
+<ul type="disc">    
+    <p class="MsoNormal" style="margin-right: 0.5in; margin-left: 0.5in; ">
+  <li><a href="#introduction">Introduction</a></li>
+  <li><a href="#license">License Information</a></li>
+  <li><a href="#requirements">System Requirements</a></li>
+  <li><a href="#installation">Installation</a></li>
+  </ul>
+</p>
     
-<p class="MsoNormal" style="margin-right: 0.5in; margin-left: 0.5in; ">* Introduction
-<br>
-  * License Information <br>
-  * System Requirements <br>
-  * Installation</p>
-    
-<h4>Introduction</h4>
+<h4><a NAME="introduction"></a>Introduction</h4>
     
 <p class="MsoNormal" style="margin-right: 0.5in; margin-left: 0.5in; ">ICU4JNI 
 contains Java Native Interface wrappers for ICU4C's character set conversion 
@@ -48,7 +56,7 @@ and collation libraries. <br>
   These wrappers provide increased performace of conversion and collation, 
 and complete compatibility with ICU4C.</p>
     
-<h4>License Information</h4>
+<h4><a NAME="license"></a>License Information</h4>
     
 <p class="MsoNormal" style="margin-right: 0.5in; margin-left: 0.5in; ">The 
 ICU projects (ICU4C and ICU4J) have changed their licenses from the IPL (IBM 
@@ -61,22 +69,19 @@ to accept the terms and conditions of the X license in order to adopt the
 new ICU releases. The main effect of the change is to provide GPL compatibility. 
 The X license is listed as GPL compatible, see the gnu page at <a href="http://www.gnu.org/philosophy/license-list.html#GPLCompatibleLicenses">
  http://www.gnu.org/philosophy/license-list.html#GPLCompatibleLicenses</a>
-  The text of the X license is available at <a href="http://www.x.org/terms.htm">
- http://www.x.org/terms.htm</a>
- . The IBM version contains the essential text of the license, omitting the 
-X-specific trademarks and copyright notices. For more details please see the
-<a href="http://oss.software.ibm.com/icu/press.html">press announcement</a>
-  and the Project <a href="http://oss.software.ibm.com/icu/project_faq.html#license">
+ Please see <a href="http://oss.software.ibm.com/cvs/icu4j/~checkout~/icu4j/license.html">
+ http://oss.software.ibm.com/cvs/icu4j/~checkout~/icu4j/license.html</a> for text of the license 
+ and the Project <a href="http://oss.software.ibm.com/icu/project_faq.html#license">
  FAQ.</a>
  </p>
     
-<h4>System Requirements</h4>
+<h4><a NAME="requirements"></a>System Requirements</h4>
     
 <p class="MsoNormal" style="margin-right: 0.5in; margin-left: 0.5in; ">&nbsp;* 
-JDK1.3 or above<br>
+JDK1.3  or above with most recent release updates.<br>
   &nbsp;* ICU4C built and installed</p>
     
-<p><b>Systems Supported<o:p></o:p></b></p>
+<p><b>Tested Environments<o:p></o:p></b></p>
     
 <table border="1" cols="3" width="48%">
    <tbody>
@@ -177,7 +182,7 @@ file is present in the rt.jar &nbsp;whose contents are as given below:<br>
 file<br>
  com.ibm.icu4jni.charset.CharsetProviderICU<br>
  
-<h4>Installation</h4>
+<h4><a NAME="installation"></a>Installation</h4>
     
 <h5>UNIX</h5>
     
@@ -189,11 +194,8 @@ file<br>
        </li>
    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
      mso-list:l0 level1 lfo3;tab-stops:list .5in">
- Set the ICU_DATA environment      variable if trying to build with ICU 1.8.1 
-or earlier. E.g. if ICU has      been installed in <tt><span style="font-size: 10pt; font-family: &quot;Courier New&quot;; ">
- /usr/local/lib</span></tt>:<br>
-       <tt><span style="font-size: 10pt; font-family: &quot;Courier New&quot;; ">&nbsp;&nbsp;&nbsp;export
-      ICU_DATA=/usr/local/lib/icu/&lt;icu_version&gt;/</span></tt></li>
+       Ensure that ICU libraries are available in system's dynamic library search path.
+   </li>
    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
      mso-list:l0 level1 lfo3;tab-stops:list .5in">
  Make sure that<b> 'icu-config'</b> is in the system's executable search
@@ -226,7 +228,7 @@ check</span></tt>      to build and run tests</li>
 be present in the search path defined by LD_LIBRARY_PATH&nbsp; environment
 variable. libC.so should be a symbolic link to libC.so.5</i></b></li>
   <li><i><b>B</b><b>uilding ICU4JNI on AIX, Solaris 64bit&nbsp; requires
-ICU to be build with --disable-64bit-libraries configure option enabled.</b></i><br>
+ICU to be built with --disable-64bit-libraries configure option enabled.</b></i><br>
   </li>
 </ul>
    
@@ -234,39 +236,26 @@ ICU to be build with --disable-64bit-libraries configure option enabled.</b></i>
  
 <h5>Win32</h5>
     
-<p>Make is configured to build with or without JDK 1.4, and with the ICU_DATA
- environment variable defined or not. </p>
+<p>Make is configured to build with or without JDK 1.4</p>
     
 <ol start="1" type="1">
    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
      mso-list:l1 level1 lfo6;tab-stops:list .5in">
- Download and install ICU4C      from <a href="http://oss.software.ibm.com/icu">
+ Download and install ICU4C from <a href="http://oss.software.ibm.com/icu">
  http://oss.software.ibm.com/icu</a>
-       <br>
-       If trying to build with ICU 1.8.1 or earlier, set the ICU_DATA environment
-      variable, e.g:<br>
-       <tt><span style="font-size: 10pt; font-family: &quot;Courier New&quot;; ">&nbsp;&nbsp;&nbsp;set
-      ICU_DATA=&lt;icu_dir&gt;\source\data</span></tt><br>
-       (or pass ICUBIN on the command line as described below) </li>
+
    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
      mso-list:l1 level1 lfo6;tab-stops:list .5in">
- Set the JAVA_HOME environment      variable or pass JAVAPATH on the command 
-  </li>
-   <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
-     mso-list:l1 level1 lfo6;tab-stops:list .5in">
- line., e.g.:<br>
+ Set the JAVA_HOME environment      variable or pass JAVAPATH on the command line, e.g.:<br>
        <tt><span style="font-size: 10pt; font-family: &quot;Courier New&quot;; ">&nbsp;&nbsp;&nbsp;set
       JAVA_HOME=c:\jdk1.3</span></tt> </li>
    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
      mso-list:l1 level1 lfo6;tab-stops:list .5in">
- Make sure the      &lt;icu_dir&gt;\bin directory is in your path. </li>
+ Ensure that the      &lt;icu_dir&gt;\bin directory is in your path. </li>
    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
      mso-list:l1 level1 lfo6;tab-stops:list .5in">
- Ensure that your environment      is set right for the C compilation. For 
-Microsoft C </li>
-   <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
-     mso-list:l1 level1 lfo6;tab-stops:list .5in">
- compilers, ensure that      vcvars32.bat has been ran to set the environment 
+ Ensure that your environment is set right for the C compilation. For 
+Microsoft C compilers, ensure that <b>&nbsp;vcvars32.bat&nbsp;</b> has been ran to set the environment 
 variables.</li>
    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
      mso-list:l1 level1 lfo6;tab-stops:list .5in">
@@ -310,7 +299,7 @@ type the following command<o:p></o:p></p>
 </span>nmake /f makefile-win32 CFG="Debug" ICUBIN="&lt;location of ICU&gt;\bin" 
 JDK14="FALSE" JAVAPATH="&lt;location of JDK&gt;\bin"</p>
     
-<ol start="8" type="1">
+<ol start="6" type="1">
    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
      mso-list:l1 level1 lfo6;tab-stops:list .5in">
  The files are built in the      &lt;jniroot&gt;/build directory. The test 
@@ -323,7 +312,7 @@ class files. E.g.:<br>
        Alternatively, you can also run the test by making the 'check' target,
       e.g.:<br>
        <tt><span style="font-size: 10pt; font-family: &quot;Courier New&quot;; ">&nbsp;&nbsp;&nbsp;&lt;full
-      nmake command as described above&gt;&nbsp;check</span></tt></li>
+      nmake command as described above&gt;&nbsp;CHECK</span></tt></li>
    
 </ol>
     
