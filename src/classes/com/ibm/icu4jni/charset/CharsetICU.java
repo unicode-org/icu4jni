@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/charset/CharsetICU.java,v $ 
-* $Date: 2001/10/27 00:34:55 $ 
-* $Revision: 1.4 $
+* $Date: 2002/12/18 22:54:29 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */ 
@@ -26,6 +26,7 @@ public final class CharsetICU extends Charset{
      * Constructor to create a the CharsetICU object
      * @param the canonical name as a string
      * @param the alias set as an array of strings
+     * @stable ICU 2.4
      */
     protected CharsetICU(String canonicalName, String[] aliases) {
 	     super(canonicalName,aliases);
@@ -33,6 +34,7 @@ public final class CharsetICU extends Charset{
     /**
      * Returns a new decoder instance of this charset object
      * @return a new decoder object
+     * @stable ICU 2.4
      */
     public CharsetDecoder newDecoder(){
         // the arrays are locals and not
@@ -52,6 +54,7 @@ public final class CharsetICU extends Charset{
     /**
      * Returns a new encoder object of the charset
      * @return a new encoder
+     * @stable ICU 2.4
      */
     public CharsetEncoder newEncoder(){
         // the arrays are locals and not
@@ -71,6 +74,7 @@ public final class CharsetICU extends Charset{
      * Ascertains if a charset is a sub set of this charset
      * @param charset to test
      * @return true if the given charset is a subset of this charset
+     * @stable ICU 2.4
      */
     public boolean contains(Charset cs){
         return false;

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/converters/NativeConverter.java,v $ 
-* $Date: 2002/10/29 01:58:40 $ 
-* $Revision: 1.7 $
+* $Date: 2002/12/18 22:54:28 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */ 
@@ -15,7 +15,10 @@ package com.ibm.icu4jni.converters;
 
 import java.util.*;
 import com.ibm.icu4jni.common.ICU4JNILoader;
-
+/**
+ * Class for accessing the underlying JNI methods
+ * @internal ICU 2.4
+ */
 public final class NativeConverter{
   
     // library loading ----------------------------------------------
@@ -44,6 +47,7 @@ public final class NativeConverter{
      *        data[0] = inputOffset
      *        data[1] = outputOffset
      * @return int error code returned by ICU
+     * @internal ICU 2.4
      */
      
     public static final native int convertByteToChar( long converterHandle,
@@ -51,6 +55,27 @@ public final class NativeConverter{
 		                           char[] output, int outEnd,
 		                           int[] data,
 		                           boolean flush);
+    /**
+     * Converts an array of bytes containing characters in an external
+     * encoding into an array of Unicode characters.  This  method allows
+     * a buffer by buffer conversion of a data stream.  The state of the
+     * conversion is saved between calls to convert.  Among other things,
+     * this means multibyte input sequences can be split between calls.
+     * If a call to convert results in an Error, the conversion may be
+     * continued by calling convert again with suitably modified parameters.
+     * All conversions should be finished with a call to the flush method.
+     *
+     * @param converterHandle Address of converter object created by C code
+     * @param input byte array containing text to be converted.
+     * @param inEnd stop conversion at this offset in input array (exclusive).
+     * @param output character array to receive conversion result.
+     * @param outEnd stop writing to output array at this offset (exclusive).
+     * @param data integer array containing the following data    
+     *        data[0] = inputOffset
+     *        data[1] = outputOffset
+     * @return int error code returned by ICU
+     * @internal ICU 2.4
+     */
 	public static final native int decode( long converterHandle,
                                    byte[] input, int inEnd,
 		                           char[] output, int outEnd,
@@ -75,13 +100,34 @@ public final class NativeConverter{
      *        data[0] = inputOffset
      *        data[1] = outputOffset
      * @return int error code returned by ICU
+     * @internal ICU 2.4
      */	                         
     public static final native int convertCharToByte(long converterHandle,
                                    char[] input, int inEnd,
 		                           byte[] output, int outEnd,
 		                           int[] data,
 		                           boolean flush); 
-		                           
+    /**
+     * Converts an array of Unicode chars containing characters in an 
+     * external encoding into an array of bytes.  This  method allows
+     * a buffer by buffer conversion of a data stream.  The state of the
+     * conversion is saved between calls to convert.  Among other things,
+     * this means multibyte input sequences can be split between calls.
+     * If a call to convert results in an Error, the conversion may be
+     * continued by calling convert again with suitably modified parameters.
+     * All conversions should be finished with a call to the flush method.
+     *
+     * @param converterHandle Address of converter object created by C code
+     * @param input char array containing text to be converted.
+     * @param inEnd stop conversion at this offset in input array (exclusive).
+     * @param output byte array to receive conversion result.
+     * @param outEnd stop writing to output array at this offset (exclusive).
+     * @param data integer array containing the following data    
+     *        data[0] = inputOffset
+     *        data[1] = outputOffset
+     * @return int error code returned by ICU
+     * @internal ICU 2.4
+     */  		                           
 	public static final native int encode(long converterHandle,
                                    char[] input, int inEnd,
 		                           byte[] output, int outEnd,
@@ -98,6 +144,7 @@ public final class NativeConverter{
      * @param data integer array containing the following data    
      *        data[0] = inputOffset
      *        data[1] = outputOffset
+     * @internal ICU 2.4
      */ 
 	public static final native int flushCharToByte(long converterHandle,
 	                               byte[] output, 
@@ -114,6 +161,7 @@ public final class NativeConverter{
      * @param data integer array containing the following data    
      *        data[0] = inputOffset
      *        data[1] = outputOffset
+     * @internal ICU 2.4
      */ 	
 	public static final native int flushByteToChar(long converterHandle,
 	                               char[] output,  
@@ -127,6 +175,7 @@ public final class NativeConverter{
 	 *        created by the native code
 	 * @param encoding string representing encoding
 	 * @return int error code returned by ICU
+     * @internal ICU 2.4
 	 */
 	public static final native int openConverter(long[] converterHandle,
 	                               String encoding);
@@ -134,6 +183,7 @@ public final class NativeConverter{
 	 * Resets the ByteToChar (toUnicode) state of specified converter 
 	 *
 	 * @param converterHandle Address of converter object created by the native code
+     * @internal ICU 2.4
      */
 	public static final native void resetByteToChar(long  converterHandle);
     
@@ -141,6 +191,7 @@ public final class NativeConverter{
 	 * Resets the CharToByte (fromUnicode) state of specified converter 
 	 *
 	 * @param converterHandle Address of converter object created by the native code
+     * @internal ICU 2.4
      */
 	public static final native void resetCharToByte(long  converterHandle);
 	
@@ -148,6 +199,7 @@ public final class NativeConverter{
 	 * Closes the specified converter and releases the resources
 	 *
 	 * @param converterHandle Address of converter object created by the native code
+     * @internal ICU 2.4
 	 */
 	public static final native void closeConverter(long converterHandle);
     
@@ -158,6 +210,7 @@ public final class NativeConverter{
      * @param subChars array of chars to used for substitution
      * @param length length of the array 
      * @return int error code returned by ICU
+     * @internal ICU 2.4
      */    
     public static final native int setSubstitutionChars( long converterHandle,
                                    char[] subChars,int length); 
@@ -168,6 +221,7 @@ public final class NativeConverter{
      * @param subChars array of bytes to used for substitution
      * @param length length of the array 
      * @return int error code returned by ICU
+     * @internal ICU 2.4
      */    
     public static final native int setSubstitutionBytes( long converterHandle,
                                    byte[] subChars,int length);
@@ -177,6 +231,7 @@ public final class NativeConverter{
 	 * @param converterHandle Address of converter object created by the native code
      * @param mode to set the true/false
      * @return int error code returned by ICU
+     * @internal ICU 2.4
      */  
     public static final native int setSubstitutionModeCharToByte(long converterHandle, 
                                    boolean mode);
@@ -187,6 +242,7 @@ public final class NativeConverter{
 	 * @param converterHandle Address of converter object created by the native code
      * @param length array of int to recieve length of the array 
      * @return int error code returned by ICU
+     * @internal ICU 2.4
      */
     public static final native int countInvalidBytes(long converterHandle, int[] length);
     
@@ -197,6 +253,7 @@ public final class NativeConverter{
 	 * @param converterHandle Address of converter object created by the native code
      * @param length array of int to recieve length of the array 
      * @return int error code returned by ICU
+     * @internal ICU 2.4
      */   
     public static final native int countInvalidChars(long converterHandle, int[] length);
     
@@ -205,6 +262,7 @@ public final class NativeConverter{
      *
 	 * @param converterHandle Address of converter object created by the native code
      * @return number of bytes needed
+     * @internal ICU 2.4
      */ 
     public static final native int getMaxBytesPerChar(long converterHandle);
    
@@ -213,6 +271,7 @@ public final class NativeConverter{
      *
 	 * @param converterHandle Address of converter object created by the native code
      * @return number of bytes needed
+     * @internal ICU 2.4
      */ 
     public static final native float getAveBytesPerChar(long converterHandle);
    
@@ -221,6 +280,7 @@ public final class NativeConverter{
      *
 	 * @param converterHandle Address of converter object created by the native code
      * @return number of bytes needed
+     * @internal ICU 2.4
      */ 
     public static final native int getMaxCharsPerByte(long converterHandle);
    
@@ -229,6 +289,7 @@ public final class NativeConverter{
      *
 	 * @param converterHandle Address of converter object created by the native code
      * @return number of bytes needed
+     * @internal ICU 2.4
      */ 
     public static final native float getAveCharsPerByte(long converterHandle);
     
@@ -240,6 +301,7 @@ public final class NativeConverter{
 	 * @param converterHandle Address of converter object created by the native code
      * @param  the character to be converted
      * @return true if a character can be converted
+     * @internal ICU 2.4
      * 
      */
     public static final native boolean canEncode(long converterHandle,int codeUnit);
@@ -249,6 +311,7 @@ public final class NativeConverter{
 	 * @param converterHandle Address of converter object created by the native code
      * @param  the bytes to be converted
      * @return true if a character can be converted
+     * @internal ICU 2.4
      * 
      */
     public static final native boolean canDecode(long converterHandle,byte[] bytes);
@@ -256,12 +319,14 @@ public final class NativeConverter{
     /**
      * Gets the number of converters installed in the current installation of ICU
      * @return int number of converters installed
+     * @internal ICU 2.4
      */
     public static final native int countAvailable();
     
     /**
      * Gets the canonical names of available converters 
      * @return Object[] names as an object array
+     * @internal ICU 2.4
      */
     public static final native String[] getAvailable();
     
@@ -269,6 +334,7 @@ public final class NativeConverter{
      * Gets the number of aliases for a converter name
      * @param encoding name
      * @return number of aliases for the converter
+     * @internal ICU 2.4
      */
     public static final native int countAliases(String enc);
     
@@ -276,6 +342,7 @@ public final class NativeConverter{
      * Gets the aliases associated with the converter name
      * @param converter name
      * @return converter names as elements in an object array
+     * @internal ICU 2.4
      */
     public static final native String[] getAliases(String enc);
     
@@ -283,6 +350,7 @@ public final class NativeConverter{
      * Gets the canonical name of the converter
      * @param converter name
      * @return canonical name of the converter
+     * @internal ICU 2.4
      */
     public static final native String getCanonicalName(String enc);
     
@@ -294,6 +362,7 @@ public final class NativeConverter{
      *        The converter performs the specified callback when an error occurs
      * @param stopOnIllegal If true sets the alerts the converter callback to stop on an illegal sequence
      * @return int error code returned by ICU
+     * @internal ICU 2.4
      */
     public static final native int setCallbackDecode(long converterHandle, int mode, boolean stopOnIllegal);
    
@@ -305,13 +374,21 @@ public final class NativeConverter{
      *        The converter performs the specified callback when an error occurs
      * @param stopOnIllegal If true sets the alerts the converter callback to stop on an illegal sequence
      * @return int error code returned by ICU
+     * @internal ICU 2.4
      */
     public static final native int setCallbackEncode(long converterHandle, int mode, boolean stopOnIllegal);
     
+    /**
+     * Returns a thread safe clone of the converter
+     * @internal ICU 2.4
+     */
     public static final native int safeClone(long converterHandle,long[] handleArr);
     
+    /** @internal ICU 2.4 */
     public static final int STOP_CALLBACK = 0;
+    /** @internal ICU 2.4 */
     public static final int SKIP_CALLBACK = 1;
+    /** @internal ICU 2.4 */
     public static final int SUBSTITUTE_CALLBACK = 3;
 
 }

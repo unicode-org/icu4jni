@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/charset/CharsetDecoderICU.java,v $ 
-* $Date: 2001/11/21 22:12:09 $ 
-* $Revision: 1.6 $
+* $Date: 2002/12/18 22:54:29 $ 
+* $Revision: 1.7 $
 *
 *
 *******************************************************************************
@@ -61,6 +61,7 @@ public final class CharsetDecoderICU extends CharsetDecoder{
      * @param charset for which the decoder is created
      * @param cHandle the address of ICU converter
      * @exception UnsupportedCharsetException
+     * @stable ICU 2.4
      */
     public CharsetDecoderICU(Charset cs,long cHandle){
          super(cs,
@@ -86,6 +87,7 @@ public final class CharsetDecoderICU extends CharsetDecoder{
      * Sets this decoders replacement string. Substitutes the string in input if an
      * umappable or illegal sequence is encountered
      * @param string to replace the error bytes with
+     * @stable ICU 2.4
      */    
     protected void implReplaceWith(String newReplacement) {
         if(converterHandle > 0){
@@ -106,6 +108,7 @@ public final class CharsetDecoderICU extends CharsetDecoder{
      * Sets the action to be taken if an illegal sequence is encountered
      * @param new action to be taken
      * @exception IllegalArgumentException
+     * @stable ICU 2.4
      */
     protected final void implOnMalformedInput(CodingErrorAction newAction) {
         icuAction = NativeConverter.STOP_CALLBACK;
@@ -125,6 +128,7 @@ public final class CharsetDecoderICU extends CharsetDecoder{
      * Sets the action to be taken if an illegal sequence is encountered
      * @param new action to be taken
      * @exception IllegalArgumentException
+     * @stable ICU 2.4
      */
     protected final void implOnUnmappableCharacter(CodingErrorAction newAction) {
         icuAction = NativeConverter.STOP_CALLBACK;
@@ -145,6 +149,7 @@ public final class CharsetDecoderICU extends CharsetDecoder{
      * @param new action to be taken
      * @return result of flushing action and completes the decoding all input. 
      *         Returns CoderResult.UNDERFLOW if the action succeeds.
+     * @stable ICU 2.4
      */
     protected final CoderResult implFlush(CharBuffer out) {
        try{
@@ -172,6 +177,7 @@ public final class CharsetDecoderICU extends CharsetDecoder{
     
     /**
      * Resets the to Unicode mode of converter
+     * @stable ICU 2.4
      */
     protected void implReset() {
         NativeConverter.resetByteToChar(converterHandle);
@@ -192,6 +198,7 @@ public final class CharsetDecoderICU extends CharsetDecoder{
      * @param input buffer to populate with decoded result
      * @return result of decoding action. Returns CoderResult.UNDERFLOW if the decoding
      *         action succeeds or more input is needed for completing the decoding action.
+     * @stable ICU 2.4
      */
     protected CoderResult decodeLoop(ByteBuffer in,CharBuffer out){
 
@@ -233,6 +240,7 @@ public final class CharsetDecoderICU extends CharsetDecoder{
 	
 	/**
      * Releases the system resources by cleanly closing ICU converter opened
+     * @stable ICU 2.4
      */
     protected void finalize()throws Throwable{
         NativeConverter.closeConverter(converterHandle);

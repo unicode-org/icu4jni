@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/RuleBasedCollator.java,v $ 
-* $Date: 2002/11/07 22:38:22 $ 
-* $Revision: 1.12 $
+* $Date: 2002/12/18 22:54:29 $ 
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */
@@ -93,7 +93,7 @@ import com.ibm.icu4jni.common.ErrorCode;
 * traditional Spanish "ch" is treated as though it contracts to a single
 * character (expressed as "c < ch < d"), while in traditional German a-umlaut 
 * is treated as though it expanded to two characters (expressed as "a,A < b,B 
-* ... & ae;ã & AE;Ã"). [ã and Ã are, of course, the escape sequences for 
+* ... & ae;? & AE;?"). [? and ? are, of course, the escape sequences for 
 * a-umlaut.]
 * <p>
 * <strong>Ignorable Characters</strong>
@@ -144,8 +144,8 @@ import com.ibm.icu4jni.common.ErrorCode;
 * <p>Norwegian:  "< a,A< b,B< c,C< d,D< e,E< f,F< g,G< h,H< i,I< j,J
 *                 < k,K< l,L< m,M< n,N< o,O< p,P< q,Q< r,R< s,S< t,T
 *                < u,U< v,V< w,W< x,X< y,Y< z,Z
-*                 < å=a?,Å=A?
-*                 ;aa,AA< æ,Æ< ø,Ø"
+*                 < ?=a?,?=A?
+*                 ;aa,AA< ?,?< ?,?"
 *
 * <p>
 * Normally, to create a rule-based Collator object, you will use
@@ -165,8 +165,8 @@ import com.ibm.icu4jni.common.ErrorCode;
 * String Norwegian = "< a,A< b,B< c,C< d,D< e,E< f,F< g,G< h,H< i,I< j,J" +
 *                 "< k,K< l,L< m,M< n,N< o,O< p,P< q,Q< r,R< s,S< t,T" +
 *                 "< u,U< v,V< w,W< x,X< y,Y< z,Z" +
-*                 "< å=a?,Å=A?" +
-*                 ";aa,AA< æ,Æ< ø,Ø";
+*                 "< ?=a?,?=A?" +
+*                 ";aa,AA< ?,?< ?,?";
 * RuleBasedCollator myNorwegian = new RuleBasedCollator(Norwegian);
 * </pre>
 * </blockquote>
@@ -215,12 +215,12 @@ import com.ibm.icu4jni.common.ErrorCode;
 * <blockquote>
 * <pre>
 * // old rule
-* String oldRules = "=¨;¯;´"    // main accents Diaeresis 00A8, Macron 00AF
+* String oldRules = "=?;?;?"    // main accents Diaeresis 00A8, Macron 00AF
 *                               // Acute 00BF
-*                 + "< a , A ; ae, AE ; æ , Æ"
+*                 + "< a , A ; ae, AE ; ? , ?"
 *                 + "< b , B < c, C < e, E & C < d, D";
 * // change the order of accent characters
-* String addOn = "& ´;¯;¨;"; // Acute 00BF, Macron 00AF, Diaeresis 00A8
+* String addOn = "& ?;?;?;"; // Acute 00BF, Macron 00AF, Diaeresis 00A8
 * RuleBasedCollator myCollator = new RuleBasedCollator(oldRules + addOn);
 * </pre>
 * </blockquote>
@@ -244,7 +244,7 @@ import com.ibm.icu4jni.common.ErrorCode;
 * </blockquote>
 * <P>
 * @author syn wee quek
-* @since Jan 17 01
+* @stable ICU 2.4 
 */
     
 public final class RuleBasedCollator extends Collator 
@@ -258,7 +258,7 @@ public final class RuleBasedCollator extends Collator
   * @param rules the collation rules to build the collation table from.
   * @exception ParseException thrown if rules are empty or a Runtime error
   *            if collator can not be created.
-  * @stable
+  * @stable ICU 2.4 
   */
   public RuleBasedCollator(String rules) throws ParseException
   {
@@ -283,7 +283,7 @@ public final class RuleBasedCollator extends Collator
   * @see #TERTIARY
   * @see #QUATERNARY
   * @see #IDENTICAL
-  * @draft 2.4
+  * @draft ICU 2.4
   */
   public RuleBasedCollator(String rules, int strength) throws ParseException
   {
@@ -318,7 +318,7 @@ public final class RuleBasedCollator extends Collator
   * @see #IDENTICAL
   * @see #CANONICAL_DECOMPOSITION
   * @see #NO_DECOMPOSITION
-  * @draft 2.4
+  * @draft ICU 2.4
   */
   public RuleBasedCollator(String rules, int normalizationmode, int strength)
   {
@@ -336,7 +336,7 @@ public final class RuleBasedCollator extends Collator
   /**
   * Makes a complete copy of the current object.
   * @return a copy of this object if data clone is a success, otherwise null
-  * @stable
+  * @stable ICU 2.4 
   */
   public Object clone() 
   {
@@ -366,7 +366,7 @@ public final class RuleBasedCollator extends Collator
   * @param target The target string.
   * @return result of the comparison, Collator.RESULT_EQUAL, 
   *         Collator.RESULT_GREATER or Collator.RESULT_LESS
-  * @stable
+  * @stable ICU 2.4 
   */
   public int compare(String source, String target)
   {
@@ -378,7 +378,7 @@ public final class RuleBasedCollator extends Collator
   * The normalization mode influences how strings are compared.
   * @see #CANONICAL_DECOMPOSITION
   * @see #NO_DECOMPOSITION
-  * @drafte 2.4
+  * @draft ICU 2.4
   */
   public int getDecomposition()
   {
@@ -393,7 +393,7 @@ public final class RuleBasedCollator extends Collator
   * @param decompositionmode the new decomposition mode
   * @see #CANONICAL_DECOMPOSITION
   * @see #NO_DECOMPOSITION
-  * @draft 2.4
+  * @draft ICU 2.4
   */
   public void setDecomposition(int decompositionmode)
   {
@@ -421,7 +421,7 @@ public final class RuleBasedCollator extends Collator
   * @see #TERTIARY
   * @see #QUATERNARY
   * @see #IDENTICAL
-  * @draft 2.4
+  * @draft ICU 2.4
   */
   public int getStrength()
   {
@@ -447,7 +447,7 @@ public final class RuleBasedCollator extends Collator
   * @see #TERTIARY
   * @see #QUATERNARY
   * @see #IDENTICAL
-  * @draft 2.4
+  * @draft ICU 2.4
   */
   public void setStrength(int strength)
   {
@@ -470,7 +470,7 @@ public final class RuleBasedCollator extends Collator
   * </pre>
   * @param type the attribute to be set from CollationAttribute
   * @param value attribute value from CollationAttribute
-  * @draft 2.4
+  * @draft ICU 2.4
   */
   public void setAttribute(int type, int value)
   {
@@ -483,7 +483,7 @@ public final class RuleBasedCollator extends Collator
   * Gets the attribute to be used in comparison or transformation.
   * @param type the attribute to be set from CollationAttribute
   * @return value attribute value from CollationAttribute
-  * @stable
+  * @stable ICU 2.4 
   */
   public int getAttribute(int type)
   {
@@ -503,7 +503,7 @@ public final class RuleBasedCollator extends Collator
   * java.util.Arrays.equals();
   * @param source string to be processed.
   * @return the sort key
-  * @stable
+  * @stable ICU 2.4 
   */
   public CollationKey getCollationKey(String source)
   {
@@ -516,7 +516,7 @@ public final class RuleBasedCollator extends Collator
   * @param collatoraddress address of the C collator
   * @param source string for key to be generated
   * @return sort key
-  * @stable
+  * @stable ICU 2.4 
   */
   public byte[] getSortKey(String source)
   {
@@ -527,7 +527,7 @@ public final class RuleBasedCollator extends Collator
   * Get the collation rules of this Collation object
   * The rules will follow the rule syntax.
   * @return collation rules.
-  * @stable
+  * @stable ICU 2.4 
   */
   public String getRules()
   {
@@ -542,7 +542,7 @@ public final class RuleBasedCollator extends Collator
   * @param source string to iterate over
   * @return address of C collationelement
   * @exception thrown when error occurs
-  * @stable
+  * @stable ICU 2.4 
   */
   public CollationElementIterator getCollationElementIterator(String source)
   {
@@ -556,7 +556,7 @@ public final class RuleBasedCollator extends Collator
   * Returns a hash of this collation object
   * Note this method is not complete, it only returns 0 at the moment.
   * @return hash of this collation object
-  * @stable
+  * @stable ICU 2.4 
   */
   public int hashCode()
   {
@@ -573,7 +573,7 @@ public final class RuleBasedCollator extends Collator
   * Checks if argument object is equals to this object.
   * @param target object
   * @return true if source is equivalent to target, false otherwise 
-  * @stable
+  * @stable ICU 2.4 
   */
   public boolean equals(Object target)
   {

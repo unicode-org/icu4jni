@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/charset/CharsetProviderICU.java,v $ 
-* $Date: 2002/04/09 20:17:44 $ 
-* $Revision: 1.5 $
+* $Date: 2002/12/18 22:54:29 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */ 
@@ -24,6 +24,7 @@ public final class CharsetProviderICU extends CharsetProvider{
     
     /**
      * Constructs a CharsetProviderICU object 
+     * @stable ICU 2.4
      */
     public CharsetProviderICU(){
     }
@@ -32,18 +33,19 @@ public final class CharsetProviderICU extends CharsetProvider{
      * Constructs a charset for the given charset name
      * @param charset name
      * @return charset objet for the given charset name
+     * @stable ICU 2.4
      */
     public final Charset charsetForName(String charsetName) {
 	    // get the canonical name	 
         String canonicalName = NativeConverter.getCanonicalName(charsetName);	     
         // create the converter object and return it
         if(canonicalName==null){
-	// this would make the Charset API to throw 
-	// unsupported encoding exception
-	return null;
+        	// this would make the Charset API to throw 
+        	// unsupported encoding exception
+        	return null;
         }else{
-	String[] aliases = (String[])NativeConverter.getAliases(charsetName);	         
-	        return (new CharsetICU(canonicalName, aliases));
+	       String[] aliases = (String[])NativeConverter.getAliases(charsetName);	         
+	       return (new CharsetICU(canonicalName, aliases));
 	    }
     }
     
@@ -51,6 +53,7 @@ public final class CharsetProviderICU extends CharsetProvider{
      * Adds an entry to the given map whose key is the charset's 
      * canonical name and whose value is the charset itself. 
      * @param map a map to receive charset objects and names
+     * @stable ICU 2.4
      */
     public final void putCharsets(Map map) {
         // Get the available converter canonical names and aliases	  
@@ -64,30 +67,34 @@ public final class CharsetProviderICU extends CharsetProvider{
 	        }
         }
     }
+    /**
+     * Class that implements the iterator for charsets
+     * @stable ICU 2.4
+     */
     protected final class CharsetIterator implements Iterator{
       private String[] names;
       private int currentIndex;
       protected CharsetIterator(String[] strs){
-	names = strs;
-	currentIndex=0;
+    	names = strs;
+    	currentIndex=0;
       }
       public boolean hasNext(){
-	return (currentIndex< names.length);
+    	return (currentIndex< names.length);
       }
       public Object next(){
-	if(currentIndex<names.length){
-	      return (Object) names[currentIndex++];
-	}else{
-	      throw new NoSuchElementException();
-	}
+    	if(currentIndex<names.length){
+    	      return (Object) names[currentIndex++];
+    	}else{
+    	      throw new NoSuchElementException();
+    	}
       }
       public void remove(){
-           if(currentIndex==0){
-	 throw new IllegalStateException();
-           }else{
-	 names = null;
-	 currentIndex=0;
-           }
+        if(currentIndex==0){
+	       throw new IllegalStateException();
+        }else{
+	       names = null;
+	       currentIndex=0;
+        }
       }
     }
       
@@ -95,6 +102,7 @@ public final class CharsetProviderICU extends CharsetProvider{
     /**
      * Returns an iterator for the available charsets
      * @return Iterator the charset name iterator
+     * @stable ICU 2.4
      */
     public final Iterator charsets(){
           String[] charsets = NativeConverter.getAvailable();

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/NativeCollation.java,v $ 
-* $Date: 2001/10/27 00:34:55 $ 
-* $Revision: 1.7 $
+* $Date: 2002/12/18 22:54:29 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -19,7 +19,7 @@ import com.ibm.icu4jni.common.ICU4JNILoader;
 /**
 * Package static class for declaring all native methods for collation use.
 * @author syn wee quek
-* @since Mar 05 2001
+* @internal ICU 2.4
 */
     
 final class NativeCollation
@@ -35,6 +35,7 @@ final class NativeCollation
   /**
   * Method to create a new C Collator using the default locale rules.
   * @return new c collator
+  * @internal ICU 2.4
   */
   static native long openCollator();
   
@@ -42,6 +43,7 @@ final class NativeCollation
   * Method to create a new C Collator using the argument locale rules.
   * @param locale locale name
   * @return new c collator
+  * @internal ICU 2.4
   */
   static native long openCollator(String locale);
   
@@ -51,6 +53,7 @@ final class NativeCollation
   * @param normalizationmode default normalization mode
   * @param collationstrength default collation strength
   * @return new c collator
+  * @internal ICU 2.4
   */
   static native long openCollatorFromRules(String rules,
                                            int normalizationmode,
@@ -60,6 +63,7 @@ final class NativeCollation
   * Close a C collator
   * Once closed, a UCollatorOld should not be used.
   * @param coll The UCollatorOld to close
+  * @internal ICU 2.4
   */
   static native void closeCollator(long collatoraddress);
   
@@ -72,6 +76,7 @@ final class NativeCollation
   * @param target The target string.
   * @return result of the comparison, Collation.EQUAL, 
   *         Collation.GREATER or Collation.LESS
+  * @internal ICU 2.4
   */
   static native int compare(long collatoraddress, String source, 
                             String target);
@@ -81,6 +86,7 @@ final class NativeCollation
   * The normalization mode influences how strings are compared.
   * @param collatoraddress 
   * @return normalization mode; one of the values from Normalization
+  * @internal ICU 2.4
   */
   static native int getNormalization(long collatoraddress);
 
@@ -90,6 +96,7 @@ final class NativeCollation
   * @param collatoraddress the address of the C collator
   * @param normalizationmode desired normalization mode; one of the values 
   *        from Normalization
+  * @internal ICU 2.4
   */
   static native void setNormalization(long collatoraddress, 
                                       int normalizationmode);
@@ -99,6 +106,7 @@ final class NativeCollation
   * The rules will follow the rule syntax.
   * @param collatoraddress the address of the C collator
   * @return collation rules.
+  * @internal ICU 2.4
   */
   static native String getRules(long collatoraddress);
 
@@ -108,6 +116,7 @@ final class NativeCollation
   * @param collatoraddress address of the C collator
   * @param source string for key to be generated
   * @return sort key
+  * @internal ICU 2.4
   */
   static native byte[] getSortKey(long collatoraddress, String source);
                                    
@@ -115,6 +124,7 @@ final class NativeCollation
   * Gets the version information for collation. 
   * @param collatoraddress address of the C collator
   * @return version information
+  * @internal ICU 2.4
   */
   // private native String getVersion(int collatoraddress);
 
@@ -124,6 +134,7 @@ final class NativeCollation
   * @param type type of attribute to be set
   * @param value attribute value
   * @exception thrown when error occurs while setting attribute value
+  * @internal ICU 2.4
   */
   static native void setAttribute(long collatoraddress, int type, int value);
 
@@ -133,6 +144,7 @@ final class NativeCollation
   * @param type type of attribute to be set
   * @return attribute value
   * @exception thrown when error occurs while getting attribute value
+  * @internal ICU 2.4
   */
   static native int getAttribute(long collatoraddress, int type);
 
@@ -141,6 +153,7 @@ final class NativeCollation
   * @param collatoraddress address of C collator to be cloned
   * @return address of the new clone
   * @exception thrown when error occurs while cloning
+  * @internal ICU 2.4
   */
   static native long safeClone(long collatoraddress);
   
@@ -151,6 +164,7 @@ final class NativeCollation
   * @param collatoraddress address of C collator
   * @param source string to iterate over
   * @return address of C collationelementiterator
+  * @internal ICU 2.4
   */
   static native long getCollationElementIterator(long collatoraddress, 
                                                  String source);
@@ -159,6 +173,7 @@ final class NativeCollation
   * Returns a hash of this collation object
   * @param collatoraddress address of C collator
   * @return hash of this collation object
+  * @internal ICU 2.4
   */
   static native int hashCode(long collatoraddress);
 
@@ -168,6 +183,7 @@ final class NativeCollation
   /**
   * Close a C collation element iterator.
   * @param address of C collation element iterator to close.
+  * @internal ICU 2.4
   */
   static native void closeElements(long address);
 
@@ -175,6 +191,7 @@ final class NativeCollation
   * Reset the collation elements to their initial state.
   * This will move the 'cursor' to the beginning of the text.
   * @param address of C collation element iterator to reset.
+  * @internal ICU 2.4
   */
   static native void reset(long address);
 
@@ -184,6 +201,7 @@ final class NativeCollation
   * @param address if C collation elements containing the text.
   * @return next collation elements ordering, or NULLORDER if the end of the 
   *         text is reached.
+  * @internal ICU 2.4
   */
   static native int next(long address);
 
@@ -193,6 +211,7 @@ final class NativeCollation
   * @param address of the C collation element iterator containing the text.
   * @return previous collation element ordering, or NULLORDER if the end of 
   *         the text is reached.
+  * @internal ICU 2.4
   */
   static native int previous(long address);
 
@@ -203,6 +222,7 @@ final class NativeCollation
   * @param order collation order returned by previous or next.
   * @return maximum length of any expansion sequences ending with the 
   *         specified order.
+  * @internal ICU 2.4
   */
   static native int getMaxExpansion(long address, int order);
 
@@ -210,6 +230,7 @@ final class NativeCollation
   * Set the text containing the collation elements.
   * @param address of the C collation element iterator to be set
   * @param source text containing the collation elements.
+  * @internal ICU 2.4
   */
   static native void setText(long address, String source);
 
@@ -219,6 +240,7 @@ final class NativeCollation
   * collation elements.
   * @param addresss of the C collation elements iterator to query.
   * @return offset of the current source character.
+  * @internal ICU 2.4
   */
   static native int getOffset(long address);
 
@@ -227,6 +249,7 @@ final class NativeCollation
   * This is an offset into the text of the character to be processed.
   * @param address of the C collation element iterator to set.
   * @param offset The desired character offset.
+  * @internal ICU 2.4
   */
   static native void setOffset(long address, int offset);
 }

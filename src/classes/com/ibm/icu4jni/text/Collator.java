@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/Collator.java,v $ 
-* $Date: 2002/11/07 22:41:42 $ 
-* $Revision: 1.9 $
+* $Date: 2002/12/18 22:54:29 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -42,7 +42,7 @@ import com.ibm.icu4jni.text.RuleBasedCollator;
 * VALUE_SECONDARY, VALUE_TERTIARY, VALUE_QUARTENARY and VALUE_IDENTICAL. 
 * The exact assignment of strengths to language features is locale dependant. 
 * For example, in Czech, "e" and "f" are considered primary differences, while 
-* "e" and "ê" latin small letter e with circumflex are secondary differences, 
+* "e" and "?" latin small letter e with circumflex are secondary differences, 
 * "e" and "E" are tertiary differences and "e" and "e" are identical. 
 *
 * <p>
@@ -71,7 +71,7 @@ import com.ibm.icu4jni.text.RuleBasedCollator;
 * 1) ErrorCode not returned to user throw exceptions instead
 * 2) Similar API to java.text.Collator
 * @author syn wee quek
-* @since Jan 17 01
+* @stable ICU 2.4
 */
 
 public abstract class Collator implements Cloneable
@@ -83,7 +83,7 @@ public abstract class Collator implements Cloneable
      * between base characters. See class documentation for more explanation.
      * @see #setStrength
      * @see #getStrength
-     * @draft 2.4
+     * @draft ICU 2.4
      */
     public final static int PRIMARY = CollationAttribute.VALUE_PRIMARY;
 
@@ -95,7 +95,7 @@ public abstract class Collator implements Cloneable
      * See class documentation for more explanation.
      * @see #setStrength
      * @see #getStrength
-     * @draft 2.4
+     * @draft ICU 2.4
      */
     public final static int SECONDARY = CollationAttribute.VALUE_SECONDARY;
 
@@ -107,7 +107,7 @@ public abstract class Collator implements Cloneable
      * See class documentation for more explanation.
      * @see #setStrength
      * @see #getStrength
-     * @draft 2.4
+     * @draft ICU 2.4
      */
     public final static int TERTIARY = CollationAttribute.VALUE_TERTIARY;                            
 
@@ -121,7 +121,7 @@ public abstract class Collator implements Cloneable
      * See class documentation for more explanation.
      * @see #setStrength
      * @see #getStrength
-     * @draft 2.4
+     * @draft ICU 2.4
      */
     public final static int QUATERNARY = CollationAttribute.VALUE_QUATERNARY;
 
@@ -136,7 +136,7 @@ public abstract class Collator implements Cloneable
      * <p>
      * Note this value is different from JDK's
      * </p>
-     * @draft 2.4
+     * @draft ICU 2.4
      */
     public final static int IDENTICAL = CollationAttribute.VALUE_IDENTICAL;
 
@@ -150,7 +150,7 @@ public abstract class Collator implements Cloneable
      * @see #CANONICAL_DECOMPOSITION
      * @see #getDecomposition
      * @see #setDecomposition
-     * @draft 2.4 
+     * @draft ICU 2.4 
      */
     public final static int NO_DECOMPOSITION = CollationAttribute.VALUE_OFF;
 
@@ -166,7 +166,7 @@ public abstract class Collator implements Cloneable
      * @see #NO_DECOMPOSITION
      * @see #getDecomposition
      * @see #setDecomposition
-     * @draft 2.4 
+     * @draft ICU 2.4 
      */
     public final static int CANONICAL_DECOMPOSITION 
 												= CollationAttribute.VALUE_ON;
@@ -175,22 +175,22 @@ public abstract class Collator implements Cloneable
 	// corresponds to ICU's UCollationResult enum balues
 	/** 
 	 * string a == string b 
-	 * @stable
+	 * @stable ICU 2.4
 	 */
     public static final int RESULT_EQUAL = 0;
     /** 
      * string a > string b 
-	 * @stable
+	 * @stable ICU 2.4
 	 */
 	public static final int RESULT_GREATER = 1;
 	/** 
 	 * string a < string b 
-	 * @stable
+	 * @stable ICU 2.4
 	 */
 	public static final int RESULT_LESS = -1;
 	/** 
 	 * accepted by most attributes 
-	 * @stable
+	 * @stable ICU 2.4
 	 */
 	public static final int RESULT_DEFAULT = -1;
   
@@ -209,7 +209,7 @@ public abstract class Collator implements Cloneable
   * <li> null is returned
   * </ul>
   * @return an instance of Collator
-  * @stable
+  * @stable ICU 2.4
   */
   public static Collator getInstance()
   {
@@ -230,7 +230,7 @@ public abstract class Collator implements Cloneable
   * </ul>
   * @param locale to be used for collation
   * @return an instance of Collator
-  * @stable
+  * @stable ICU 2.4
   */
   public static Collator getInstance(Locale locale)
   {
@@ -243,7 +243,7 @@ public abstract class Collator implements Cloneable
   * @param source string
   * @param target string
   * @return true if source is equivalent to target, false otherwise 
-  * @stable
+  * @stable ICU 2.4
   */
   public boolean equals(String source, String target)
   {
@@ -254,14 +254,14 @@ public abstract class Collator implements Cloneable
   * Checks if argument object is equals to this object.
   * @param target object
   * @return true if source is equivalent to target, false otherwise 
-  * @stable
+  * @stable ICU 2.4
   */
   public abstract boolean equals(Object target);
   
   /**
   * Makes a copy of the current object.
   * @return a copy of this object
-  * @stable
+  * @stable ICU 2.4
   */
   public abstract Object clone() throws CloneNotSupportedException;
   
@@ -286,7 +286,7 @@ public abstract class Collator implements Cloneable
   * @param target target string.
   * @return result of the comparison, Collator.RESULT_EQUAL, 
   *         Collator.RESULT_GREATER or Collator.RESULT_LESS
-  * @stable
+  * @stable ICU 2.4
   */
   public abstract int compare(String source, String target);
                                                
@@ -295,7 +295,7 @@ public abstract class Collator implements Cloneable
      * @return the decomposition mode
      * @see #CANONICAL_DECOMPOSITION
 	 * @see #NO_DECOMPOSITION
-	 * @draft 2.4
+	 * @draft ICU 2.4
      */
     public abstract int getDecomposition();
 
@@ -305,7 +305,7 @@ public abstract class Collator implements Cloneable
      * @param mode desired normalization mode
 	 * @see #CANONICAL_DECOMPOSITION
 	 * @see #NO_DECOMPOSITION
-	 * @draft 2.4
+	 * @draft ICU 2.4
      */
     public abstract void setDecomposition(int mode);
 
@@ -325,7 +325,7 @@ public abstract class Collator implements Cloneable
 	 * @see #TERTIARY
 	 * @see #QUATERNARY
 	 * @see #IDENTICAL
-	 * @draft 2.4
+	 * @draft ICU 2.4
 	 */
 	public abstract int getStrength();
   
@@ -333,7 +333,7 @@ public abstract class Collator implements Cloneable
   * Gets the attribute to be used in comparison or transformation.
   * @param type the attribute to be set from CollationAttribute
   * @return value attribute value from CollationAttribute
-  * @stable
+  * @stable ICU 2.4
   */
   public abstract int getAttribute(int type);
   
@@ -353,7 +353,7 @@ public abstract class Collator implements Cloneable
 	 * @see #TERTIARY
 	 * @see #QUATERNARY 
 	 * @see #IDENTICAL
-	 * @draft 2.4
+	 * @draft ICU 2.4
 	 */
 	 public abstract void setStrength(int strength);
   
@@ -370,7 +370,7 @@ public abstract class Collator implements Cloneable
   * </pre>
   * @param type the attribute to be set from CollationAttribute
   * @param value attribute value from CollationAttribute
-  * @stable
+  * @stable ICU 2.4
   */
   public abstract void setAttribute(int type, int value);
   
@@ -386,14 +386,14 @@ public abstract class Collator implements Cloneable
   * java.util.Arrays.equals();
   * @param source string to be processed.
   * @return the sort key
-  * @stable
+  * @stable ICU 2.4
   */
   public abstract CollationKey getCollationKey(String source);
   
   /**
   * Returns a hash of this collation object
   * @return hash of this collation object
-  * @stable
+  * @stable ICU 2.4
   */
   public abstract int hashCode();
 }

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/test/text/BasicTest.java,v $ 
- * $Date: 2001/11/21 22:10:21 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/12/18 22:54:30 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -544,7 +544,7 @@ public class BasicTest extends TestFmwk {
             char[] input = tests[i][0].toCharArray();
             String expect = tests[i][outCol];
 
-            logln("Normalizing '" + input + "' (" + hex(new String(input)) + ")" );
+            logln("Normalizing '" + new String(input) + "' (" + hex(new String(input)) + ")" );
             
             int reqLength= Normalizer.normalize(input,output, mode);
             if(reqLength > output.length){
@@ -554,7 +554,7 @@ public class BasicTest extends TestFmwk {
             if (!expect.equals(new String(output,0,reqLength))) {
                 errln("FAIL: case " + i
                     + " expected '" + expect + "' (" + hex(expect) + ")"
-                    + " but got '" + output + "' (" + hex(new String(output)) + ")" );
+                    + " but got '" +new String( output )+ "' (" + hex(new String(output)) + ")" );
             }
         }
     }  

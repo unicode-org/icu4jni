@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/common/ErrorCode.java,v $ 
-* $Date: 2001/10/27 00:34:55 $ 
-* $Revision: 1.9 $
+* $Date: 2002/12/18 22:54:30 $ 
+* $Revision: 1.10 $
 *
 ******************************************************************************
 */
@@ -16,7 +16,7 @@ package com.ibm.icu4jni.common;
 /**
 * Error exception class mapping ICU error codes of the enum UErrorCode
 * @author syn wee quek
-* @since Jan 18 01
+* @internal
 */   
 public final class ErrorCode extends Exception
 { 
@@ -28,6 +28,7 @@ public final class ErrorCode extends Exception
   * @param error error code
   * @return java default exception that maps to the argument error code, 
   *         otherwise if error is not a valid error code, null is returned.
+  * @stable ICU 2.4
   */
   public static final RuntimeException getException(int error)
   {
@@ -175,14 +176,32 @@ public final class ErrorCode extends Exception
     "U_UNSUPPORTED_ERROR",        "U_RESOURCE_TYPE_MISMATCH",
     "U_ILLEGAL_ESCAPE_SEQUENCE",  "U_UNSUPPORTED_ESCAPE_SEQUENCE"
   };
+  /**
+   * Returns the error name of the input error code
+   * @param ec int value of the error code
+   * @return String name of the error code
+   * @stable ICU 2.4
+   */
   public static String getErrorName(int ec){
     return ERROR_NAMES_[ec];
   }
   
+  /**
+   * Returns true if the input error code denotes success
+   * @param ec int value of the error code
+   * @return boolean 
+   * @stable ICU 2.4
+   */    
   public static boolean isSuccess(int ec){
     return (ec<=U_ZERO_ERROR);
   }
   
+  /**
+   * Returns true if the input error code denotes failure
+   * @param ec int value of the error code
+   * @return boolean
+   * @stable ICU 2.4
+   */
   public static boolean isFailure(int ec){
     return (ec>U_ZERO_ERROR);
   }

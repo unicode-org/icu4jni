@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/CollationAttribute.java,v $ 
-* $Date: 2002/11/07 22:38:22 $ 
-* $Revision: 1.6 $
+* $Date: 2002/12/18 22:54:29 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -18,7 +18,7 @@ package com.ibm.icu4jni.text;
 * Constants with the prefix VALUE corresponds to ICU's UColAttributeValues,
 * the rest corresponds to UColAttribute.
 * @author syn wee quek
-* @since Jan 18 01
+* @stable ICU 2.4
 */
 
 public final class CollationAttribute
@@ -26,71 +26,74 @@ public final class CollationAttribute
   // Collation strength constants ----------------------------------
   /**
   * Default value, accepted by most attributes
-  * @stable
-  */
+  * @stable ICU 2.4
+  */ 
   public static final int VALUE_DEFAULT = -1;
   /** 
   * Primary collation strength 
-  * @stable
+  * @stable ICU 2.4
   */
   public static final int VALUE_PRIMARY = 0;
   /** 
   * Secondary collation strength 
-  * @stable
+  * @stable ICU 2.4
   */
   public static final int VALUE_SECONDARY = 1;
   /** 
   * Tertiary collation strength 
-  * @stable
+  * @stable ICU 2.4
   */
   public static final int VALUE_TERTIARY = 2;
   /** 
   * Default collation strength 
-  * @stable
+  * @stable ICU 2.4
   */
   public static final int VALUE_DEFAULT_STRENGTH = VALUE_TERTIARY;
   /** 
   * Quaternary collation strength 
-  * @stable
+  * @stable ICU 2.4
   */
   public static final int VALUE_QUATERNARY = 3;
   /** 
   * Identical collation strength 
-  * @stable
+  * @stable ICU 2.4
   */
   public static final int VALUE_IDENTICAL = 15;
 
   /** 
    * Turn the feature off - works for FRENCH_COLLATION, CASE_LEVEL, 
    * HIRAGANA_QUATERNARY_MODE and DECOMPOSITION_MODE
-   * @stable
+   * @stable ICU 2.4
    */
   public static final int VALUE_OFF = 16;
+  /** @statble ICU 2.4 */
   public static final int VALUE_ON = 17;
   
   /** 
    * ALTERNATE_HANDLING mode constants
-   * @stable
+   * @stable ICU 2.4
    */
   public static final int VALUE_SHIFTED = 20;
+  /** @statble ICU 2.4 */
   public static final int VALUE_NON_IGNORABLE = 21;
 
   /** 
    * CASE_FIRST mode constants
-   * @stable
+   * @stable ICU 2.4
    */
   public static final int VALUE_LOWER_FIRST = 24;
+  /** @statble ICU 2.4 */
   public static final int VALUE_UPPER_FIRST = 25;
 
   /** 
    * NORMALIZATION_MODE mode constants
-   * @deprecated since 2.4, users advised to use VALUE_ON instead.
+   * @deprecated ICU 2.4. Users advised to use VALUE_ON instead.
    */
   public static final int VALUE_ON_WITHOUT_HANGUL = 28;
 
   /** 
    * Number of attribute value constants
-   * @stable
+   * @stable ICU 2.4
    */
   public static final int VALUE_ATTRIBUTE_VALUE_COUNT = 29;
 
@@ -98,37 +101,37 @@ public final class CollationAttribute
   
   /** 
    * Attribute for direction of secondary weights
-   * @stable
+   * @stable ICU 2.4
    */
   public static final int FRENCH_COLLATION = 0;
   /** 
    * Attribute for handling variable elements
-   * @stable
+   * @stable ICU 2.4
    */
   public static final int ALTERNATE_HANDLING = 1;
   /** 
    * Who goes first, lower case or uppercase.
-   * @stable
+   * @stable ICU 2.4
    */
   public static final int CASE_FIRST = 2;
   /** 
    * Do we have an extra case level
-   * @stable
+   * @stable ICU 2.4
    */
   public static final int CASE_LEVEL = 3;
   /** 
    * Attribute for normalization
-   * @stable
+   * @stable ICU 2.4
    */
   public static final int NORMALIZATION_MODE = 4; 
   /** 
    * Attribute for strength 
-   * @stable
+   * @stable ICU 2.4
    */
   public static final int STRENGTH = 5;
   /** 
    * Attribute count
-   * @stable
+   * @stable ICU 2.4
    */
   public static final int ATTRIBUTE_COUNT = 6;
   

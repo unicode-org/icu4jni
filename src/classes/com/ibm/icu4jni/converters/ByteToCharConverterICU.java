@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/converters/ByteToCharConverterICU.java,v $ 
-* $Date: 2002/10/29 01:58:41 $ 
-* $Revision: 1.8 $
+* $Date: 2002/12/18 22:54:28 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */ 
@@ -21,6 +21,7 @@
   import java.io.UnsupportedEncodingException;
   import sun.io.*;
   import com.ibm.icu4jni.common.*;
+  
   public class ByteToCharConverterICU extends ByteToCharConverter{
     
     /* data is 2 element array where
@@ -40,6 +41,7 @@
      *
      * @param string representing encoding
      * @exception UnsupportedEncodingException if the converter could not be opened
+     * @stable ICU 2.4
      */
     public ByteToCharConverterICU(String enc)
             throws UnsupportedEncodingException{
@@ -95,6 +97,7 @@
      * to converting all the input.
      * @exception IllegalArgumentException is thrown if any of the arrays
      * passed are null
+     * @stable ICU 2.4
      */
     public int convert( byte[] input, int inOff, int inEnd,
 		                char[] output, int outOff, int outEnd)
@@ -147,6 +150,7 @@
     
     /**
      * Return the character set id
+     * @stable ICU 2.4
      */
     public final String getCharacterEncoding()
     {
@@ -164,6 +168,7 @@
      * before all the output can be flushed. flush will write what it can
      * to the output buffer and remember its state.  An additional call to
      * flush with a new output buffer will conclude the operation.
+     * @stable ICU 2.4
      */
     public final int flush(char[] output, int outStart, int outEnd) 
                         throws IllegalArgumentException,
@@ -214,6 +219,7 @@
      *    JNI interface has returned an error code
      * @see #setSubstitutionMode
      * @see #getMaxCharsPerByte
+     * @stable ICU 2.4
      */
     public final void setSubstitutionChars(char[] c) 
         throws IllegalArgumentException{
@@ -229,8 +235,9 @@
         }
     }
     
-    /*
-     *   Reset the state of the converter
+    /***
+     * Reset the state of the converter
+     * @stable ICU 2.4
      */
     public final void reset() {
 	    byteOff = charOff = 0;
@@ -243,6 +250,7 @@
      * input buffer. Returns 2 since surrogate support is included
      * 
      * @return maximum number of chars need for converting a char
+     * @stable ICU 2.4
      */
     public final int getMaxCharsPerByte(){
         return 2;
@@ -257,6 +265,7 @@
      *
      * @param doSub if true, enable substitution mode.
      * @see #setSubstitutionChars
+     * @stable ICU 2.4
      */
     public final void setSubstitutionMode(boolean doSub) {
         if(doSub){
@@ -271,6 +280,7 @@
      * MalformedInputException.  Always refers to the last
      * MalformedInputException thrown by the converter.  If none have
      * ever been thrown, returns 0.
+     * @stable ICU 2.4
      */
     public final int getBadInputLength(){
         int[] length = new int[1];
@@ -280,7 +290,7 @@
     
     /**
      * Returns the substitution characters as an array of chars
-     *
+     * @stable ICU 2.4
      */
     public final char[] getSubChars(){
         return subChars;
@@ -289,6 +299,7 @@
     /**
      * Releases the system resources by cleanly closing ICU converter opened
      * @exception Throwable exception thrown by super class' finalize method
+     * @stable ICU 2.4
      */
     protected void finalize() throws Throwable{
         try{
@@ -304,6 +315,7 @@
      *
      * @param  encoding string
      * @return ByteToCharConverter object
+     * @stable ICU 2.4
      */
     public static final ByteToCharConverter createConverter (String enc)
                     throws UnsupportedEncodingException{
@@ -314,6 +326,7 @@
     /**
      * Makes a complete copy of the current object.
      * @return a copy of this object if data clone is a success, otherwise null
+     * @stable ICU 2.4
      */
     public Object clone(){
         ByteToCharConverter result = null;

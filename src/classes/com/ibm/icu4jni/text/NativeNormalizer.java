@@ -5,7 +5,7 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/NativeNormalizer.java,v $ 
-* $Date: 2001/11/21 22:09:52 $ 
+* $Date: 2002/12/18 22:54:29 $ 
 * $Revision: 
 *
 *******************************************************************************
@@ -23,7 +23,7 @@ import com.ibm.icu4jni.common.ICU4JNILoader;
 /**
  *
  * @author  Ram Viswanadha
- * @version 
+ * @internal ICU 2.4
  */
  
 final class NativeNormalizer {
@@ -50,7 +50,8 @@ final class NativeNormalizer {
     * Normalizer.UNORM_NFKD, Normalizer.UNORM_DEFAULT
     * @param requiredLength A array to receive the total buffer size needed; 
     *                       if greater than resultLength,the output was truncated.
-    * @return int error code returned by ICU  
+    * @return int error code returned by ICU
+    * @internal ICU 2.4  
     */
     static native final int normalize(char[] source,
                                       int sourceLength,  
@@ -70,6 +71,7 @@ final class NativeNormalizer {
     *                       if greater than resultLength,the output was truncated.
     * @param errorCode an array to receive the error code returned by ICU  
     * @return int error code returned by ICU
+    * @internal ICU 2.4
     */
     static native final int normalize(String source, 
                                       int normalizationMode, 
@@ -90,7 +92,8 @@ final class NativeNormalizer {
     * @param qcReturn     An array to receive quick check output which is  
     *                     Normalizer.UNORM_YES, Normalizer.UNORM_NO or
     *                     Normalizer.UNORM_MAYBE
-    * @return int error code returned by ICU          
+    * @return int error code returned by ICU
+    * @internal ICU 2.4          
     */
     static native final int quickCheck(char[] source, 
                                        int sourceLength,
@@ -112,7 +115,8 @@ final class NativeNormalizer {
     * @param qcReturn     An array to receive quick check output which is  
     *                     Normalizer.UNORM_YES, Normalizer.UNORM_NO or
     *                     Normalizer.UNORM_MAYBE
-    * @return int error code returned by ICU          
+    * @return int error code returned by ICU
+    * @internal ICU 2.4          
     */
     static native final int quickCheck(String source,
                                        int normalizationMode,

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/CollationKey.java,v $ 
-* $Date: 2002/11/07 22:38:22 $ 
-* $Revision: 1.6 $
+* $Date: 2002/12/18 22:54:29 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -16,7 +16,7 @@ package com.ibm.icu4jni.text;
 /**
 * Collation key wrapper, containing the byte array sort key.
 * @author syn wee quek
-* @since Jan 23 01
+* @stable ICU 2.4
 */
 
 public final class CollationKey implements Comparable
@@ -28,7 +28,7 @@ public final class CollationKey implements Comparable
   * @param target CollationKey to be compared
   * @return comparison result from Collator, RESULT_LESS, RESULT_EQUAL, 
   *         RESULT_GREATER
-  * @stable
+  * @stable ICU 2.4    
   */
   public int compareTo(CollationKey target)
   {
@@ -83,7 +83,7 @@ public final class CollationKey implements Comparable
   * @param target CollationKey to be compared
   * @return comparison result from Collator, RESULT_LESS, RESULT_EQUAL, 
   * RESULT_GREATER
-  * @stable
+  * @stable ICU 2.4
   */
   public int compareTo(Object target)
   {
@@ -95,7 +95,7 @@ public final class CollationKey implements Comparable
   * Target is first casted to CollationKey and bitwise compared.
   * @param target comparison object
   * @return true if both objects are equal, false otherwise
-  * @stable
+  * @stable ICU 2.4
   */
   public boolean equals(Object target)
   {
@@ -119,7 +119,7 @@ public final class CollationKey implements Comparable
   * congruential random number generator, producing a pseudorandom 
   * deterministic value well distributed over the output range.
   * @return hash value of collation key. Hash value is never 0.
-  * @stable
+  * @stable ICU 2.4
   */
   public int hashCode()
   {
@@ -144,7 +144,7 @@ public final class CollationKey implements Comparable
   /**
   * Create the value of the Collation key in term of bytes
   * @return value of Collation key in bytes
-  * @stable
+  * @stable ICU 2.4
   */
   public byte[] toByteArray()
   {

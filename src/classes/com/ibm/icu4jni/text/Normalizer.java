@@ -5,7 +5,7 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/Normalizer.java,v $ 
-* $Date: 2001/12/04 18:24:47 $ 
+* $Date: 2002/12/18 22:54:29 $ 
 * $Revision: 
 *
 *******************************************************************************
@@ -21,11 +21,6 @@ package com.ibm.icu4jni.text;
 import java.lang.String;
 import com.ibm.icu4jni.common.*;
 
-/**
- *
- * @author Ram Viswanadha
- * @version 
- */
  /**
  * 
  * <t>Unicode Normalization</t> 
@@ -123,6 +118,8 @@ import com.ibm.icu4jni.common.*;
  * encode any combining marks by themselves. For conversion to such character encodings the
  * Unicode text needs to be normalized to NFC.
  * For more usage examples, see the Unicode Standard Annex.
+ * @author Ram Viswanadha
+ * @stable ICU 2.4 
  */
 
 public final class Normalizer{
@@ -138,6 +135,7 @@ public final class Normalizer{
     * @param compat     If true the char array will be composed accoding to NFKC rules
     *                   and if false will be composed according to NFC rules.
     * @return String    The composed string   
+    * @stable ICU 2.4 
     */            
     public static String compose(String str, boolean compat)
                                  throws Exception{
@@ -153,6 +151,7 @@ public final class Normalizer{
     *               and if false will be composed according to NFC rules.
     * @return int   The total buffer size needed;if greater than length of result,
     *               the output was truncated.
+    * @stable ICU 2.4 
     *   
     */         
     public static int compose(char[] source,char[] target, boolean compat)
@@ -166,7 +165,8 @@ public final class Normalizer{
     * @param source     The string to decompose.
     * @param compat     If true the char array will be decomposed accoding to NFKD rules
     *                   and if false will be decomposed according to NFD rules.
-    * @return String    The decomposed string   
+    * @return String    The decomposed string  
+    * @stable ICU 2.4  
     */         
     public static String decompose(String str, boolean compat)
                                    throws Exception{
@@ -182,6 +182,7 @@ public final class Normalizer{
     *               and if false will be decomposed according to NFD rules.
     * @return int   The total buffer size needed;if greater than length of result,
     *               the output was truncated.
+    * @stable ICU 2.4 
     *   
     */
     public static int decompose(char[] source,char[] target, boolean compat)
@@ -198,6 +199,7 @@ public final class Normalizer{
     *                   Normalizer.UNORM_NFD, Normalizer.UNORM_NFC, Normalizer.UNORM_NFKC, 
     *                   Normalizer.UNORM_NFKD, Normalizer.UNORM_DEFAULT
     * @return String    The normalized string
+    * @stable ICU 2.4 
     *   
     */
     public static String normalize( String str, 
@@ -228,6 +230,7 @@ public final class Normalizer{
     *               Normalizer.UNORM_NFKD, Normalizer.UNORM_DEFAULT
     * @return int   The total buffer size needed;if greater than length of result,
     *               the output was truncated.
+    * @stable ICU 2.4 
     *   
     */
     public static int normalize(char[] source, 
@@ -261,6 +264,7 @@ public final class Normalizer{
     * @return             Return code to specify if the text is normalized or not 
     *                     (Normalizer.UNORM_YES, Normalizer.UNORM_NO or
     *                     Normalizer.UNORM_MAYBE)
+    * @stable ICU 2.4 
     */
     public static int quickCheck( String source, int mode)
                             throws Exception{
@@ -295,6 +299,7 @@ public final class Normalizer{
     * @return             Return code to specify if the text is normalized or not 
     *                     (Normalizer.UNORM_YES, Normalizer.UNORM_NO or
     *                     Normalizer.UNORM_MAYBE)
+    * @stable ICU 2.4 
     */
 
     public static int quickCheck(char[] source, int mode){
@@ -315,26 +320,26 @@ public final class Normalizer{
     }
     // public static data members -----------------------------------
           
-    /** No decomposition/composition */
+    /** No decomposition/composition @stable ICU 2.4  */
     public static final int UNORM_NONE = 1; 
-    /** Canonical decomposition */
+    /** Canonical decomposition  @stable ICU 2.4 */
     public static final int UNORM_NFD = 2;
-    /** Compatibility decomposition */
+    /** Compatibility decomposition @stable ICU 2.4  */
     public static final int UNORM_NFKD = 3;
-    /** Canonical decomposition followed by canonical composition */
+    /** Canonical decomposition followed by canonical composition @stable ICU 2.4  */
     public static final int UNORM_NFC = 4;
-    /** Default normalization */
+    /** Default normalization @stable ICU 2.4 */
     public static final int UNORM_DEFAULT = UNORM_NFC; 
-    /** Compatibility decomposition followed by canonical composition */
+    /** Compatibility decomposition followed by canonical composition @stable ICU 2.4 */
     public static final int UNORM_NFKC =5;
     /** "Fast C or D" form */
     public static final int UNORM_FCD = 6;
-    /** Indicates that string is not in the normalized format*/
+    /** Indicates that string is not in the normalized format @stable ICU 2.4 */
     public static final int UNORM_NO=0;
-    /** Indicates that string is in the normalized format*/
+    /** Indicates that string is in the normalized format @stable ICU 2.4 */
     public static final int UNORM_YES=1;
     /** Indicates that string cannot be determined if it is in the normalized 
-    * format without further thorough checks*/
+    * format without further thorough checks @stable ICU 2.4 */
     public static final int UNORM_MAYBE=2;
           
 
@@ -342,6 +347,7 @@ public final class Normalizer{
     * Checks if argument is a valid normalization format for use
     * @param normalization format
     * @return true if strength is a valid collation strength, false otherwise
+    * @stable ICU 2.4 
     */
     public static boolean check(int normalization){
         

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/converters/CharToByteConverterICU.java,v $ 
-* $Date: 2002/10/29 01:58:40 $ 
-* $Revision: 1.9 $
+* $Date: 2002/12/18 22:54:29 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */ 
@@ -101,6 +101,7 @@
      * only when converter is not in substitution mode.
      * @exception ConversionBufferFullException if output array is filled prior
      * to converting all the input.
+     * @stable ICU 2.4
      */
     public int convert( char[] input, int inOff, int inEnd,
 		                byte[] output, int outOff, int outEnd)
@@ -162,6 +163,7 @@
      * before all the output can be flushed. flush will write what it can
      * to the output buffer and remember its state.  An additional call to
      * flush with a new output buffer will conclude the operation.
+     * @stable ICU 2.4
      */ 
     public final int flush(byte[] output, int outStart, int outEnd)
                     throws IllegalArgumentException, 
@@ -199,6 +201,7 @@
     
     /** 
      * Return the character set id
+     * @stable ICU 2.4
      */
     public final String getCharacterEncoding()
     {
@@ -209,6 +212,7 @@
      * Sets the substitution bytes 
      *
      * @param array of bytes to used for substitution
+     * @stable ICU 2.4
      */
     public final void setSubstitutionBytes(byte[] c) 
         throws IllegalArgumentException
@@ -224,7 +228,8 @@
     }
     
     /**
-     *  Reset the state of the converter
+     * Reset the state of the converter
+     * @stable ICU 2.4
      */
     public final void reset() {
 	    byteOff = charOff = 0;
@@ -235,6 +240,7 @@
      * a Unicode character to target encoding
      *
      * @return maximum number of bytes as an int
+     * @stable ICU 2.4
      */
     public final int getMaxBytesPerChar(){
         return maxBytes;
@@ -284,6 +290,7 @@
      * MalformedInputException.  Always refers to the last
      * MalformedInputException thrown by the converter.  If none have
      * ever been thrown, returns 0.
+     * @stable ICU 2.4
      */
     public final int getBadInputLength(){
         int[] length = new int[1];
@@ -300,6 +307,7 @@
      *
      * @param doSub if true, enable substitution mode.
      * @see #setSubstitutionBytes
+     * @stable ICU 2.4
      */
     public final void setSubstitutionMode(boolean doSub) {
         /* set the substitution mode in ICU */ 
@@ -311,6 +319,7 @@
     /**
      * Releases the system resources by cleanly closing ICU converter opened
      * @exception Throwable exception thrown by super class' finalize method
+     * @stable ICU 2.4
      */
     protected void finalize() throws Throwable{
         try{
@@ -327,6 +336,7 @@
      *
      * @param  encoding string
      * @return CharToByteConverter object
+     * @stable ICU 2.4
      */
     public static final CharToByteConverter createConverter (String enc)
                     throws UnsupportedEncodingException{
@@ -336,6 +346,7 @@
     /** 
      * Makes a complete copy of the current object.
      * @return a copy of this object if data clone is a success, otherwise null
+     * @stable ICU 2.4
      */
     public Object clone(){
         CharToByteConverter result = null;

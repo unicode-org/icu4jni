@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/text/CollationElementIterator.java,v $ 
-* $Date: 2002/11/07 22:38:22 $ 
-* $Revision: 1.6 $
+* $Date: 2002/12/18 22:54:29 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -38,7 +38,7 @@ import com.ibm.icu4jni.common.ErrorCode;
 *   }
 * </pre>
 * @author syn wee quek
-* @since Jan 22 01
+* @stable ICU 2.4
 */
     
 public final class CollationElementIterator
@@ -46,7 +46,7 @@ public final class CollationElementIterator
   // public data member -------------------------------------------
   
   /**
-   * @stable
+   * @stable ICU 2.4
    */
   public static final int NULLORDER = 0xFFFFFFFF;
   
@@ -55,7 +55,7 @@ public final class CollationElementIterator
   /**
   * Reset the collation elements to their initial state.
   * This will move the 'cursor' to the beginning of the text.
-  * @stable
+  * @stable ICU 2.4
   */
   public void reset()
   {
@@ -67,7 +67,7 @@ public final class CollationElementIterator
   * A single character may contain more than one collation element.
   * @return next collation elements ordering, or NULLORDER if the end of the 
   *         text is reached.
-  * @stable
+  * @stable ICU 2.4
   */
   public int next()
   {
@@ -79,7 +79,7 @@ public final class CollationElementIterator
   * A single character may contain more than one collation element.
   * @return previous collation element ordering, or NULLORDER if the end of 
   *         the text is reached.
-  * @stable
+  * @stable ICU 2.4
   */
   public int previous()
   {
@@ -93,7 +93,7 @@ public final class CollationElementIterator
   * @return maximum size of the expansion sequences ending with the collation 
   *              element or 1 if collation element does not occur at the end of 
   *              any expansion sequence
-  * @stable
+  * @stable ICU 2.4
   */
   public int getMaxExpansion(int order)
   {
@@ -103,7 +103,7 @@ public final class CollationElementIterator
   /**
   * Set the text containing the collation elements.
   * @param source text containing the collation elements.
-  * @stable
+  * @stable ICU 2.4
   */
   public void setText(String source)
   {
@@ -115,7 +115,7 @@ public final class CollationElementIterator
   * This is an offset into the text of the character containing the current
   * collation elements.
   * @return offset of the current source character.
-  * @stable
+  * @stable ICU 2.4
   */
   public int getOffset()
   {
@@ -126,7 +126,7 @@ public final class CollationElementIterator
   * Set the offset of the current source character.
   * This is an offset into the text of the character to be processed.
   * @param offset The desired character offset.
-  * @stable
+  * @stable ICU 2.4
   */
   public void setOffset(int offset)
   {
@@ -137,7 +137,7 @@ public final class CollationElementIterator
   * Gets the primary order of a collation order.
   * @param order the collation order
   * @return the primary order of a collation order.
-  * @stable
+  * @stable ICU 2.4
   */
   public static int primaryOrder(int order) 
   {
@@ -149,7 +149,7 @@ public final class CollationElementIterator
   * Gets the secondary order of a collation order.
   * @param order the collation order
   * @return the secondary order of a collation order.
-  * @stable
+  * @stable ICU 2.4
   */
   public static int secondaryOrder(int order)
   {
@@ -160,7 +160,7 @@ public final class CollationElementIterator
   * Gets the tertiary order of a collation order.
   * @param order the collation order
   * @return the tertiary order of a collation order.
-  * @stable
+  * @stable ICU 2.4
   */
   public static int tertiaryOrder(int order)
   {
@@ -185,6 +185,7 @@ public final class CollationElementIterator
   /**
   * Garbage collection.
   * Close C collator and reclaim memory.
+  * @stable ICU 2.4
   */
   protected void finalize()
   {
