@@ -126,8 +126,8 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_ICUConverterInterface_con
                     ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&mySource,
                                     mySourceLimit,NULL,(UBool) flush, &errorCode);
 
-                    *sourceOffset = mySource - uSource - *sourceOffset ;
-                    *targetOffset = cTarget - uTarget - *targetOffset;
+                    *sourceOffset -= (jint) (mySource - uSource);
+                    *targetOffset -= (jint) ((jbyte*)cTarget - uTarget);
                     if(U_FAILURE(errorCode)){
                         (*env)->ReleasePrimitiveArrayCritical(env,target,uTarget,JNI_COMMIT);
                         (*env)->ReleasePrimitiveArrayCritical(env,source,(jchar*)uSource,JNI_COMMIT);
@@ -170,7 +170,7 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_ICUConverterInterface_con
                     UChar* cTarget=uTarget+ *targetOffset;
                     const UChar* cTargetLimit=uTarget+targetEnd;
                     
-                    ucnv_toUnicode( cnv , &cTarget, cTargetLimit,&mySource,
+                    ucnv_toUnicode( cnv , &cTarget, cTargetLimit,(const char**)&mySource,
                                    mySourceLimit,NULL,(UBool) flush, &errorCode);
                 
                     *sourceOffset = mySource - uSource - *sourceOffset  ;
@@ -279,7 +279,7 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_ICUConverterInterface_flu
                 UChar* cTarget=uTarget+ *targetOffset;
                 const UChar* cTargetLimit=uTarget+targetEnd;
 
-                ucnv_toUnicode( cnv , &cTarget, cTargetLimit,&mySource,
+                ucnv_toUnicode( cnv , &cTarget, cTargetLimit,(const char**)&mySource,
                                mySourceLimit,NULL,TRUE, &errorCode);
 
                 *targetOffset = cTarget - uTarget;
@@ -322,7 +322,7 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_ICUConverterInterface_flu
                 ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&mySource,
                                   mySourceLimit,NULL,TRUE, &errorCode);
             
-                *targetOffset = cTarget - uTarget;
+                *targetOffset =(jbyte*) cTarget - uTarget;
                 if(U_FAILURE(errorCode)){
                     (*env)->ReleasePrimitiveArrayCritical(env,target,uTarget,JNI_COMMIT);
                 
@@ -389,7 +389,7 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_ICUConverterInterface_set
         if(subChars){
             u_subChars = (*env)->GetPrimitiveArrayCritical(env,subChars,NULL);
             if(u_subChars){
-                SubCharStruct* substitutionCharS = (SubCharStruct*)malloc (sizeof(SubCharStruct));
+                SubCharStruct* substitutionCharS = (SubCharStruct*) malloc(sizeof(SubCharStruct));
                 if(substitutionCharS){
                     substitutionCharS->subChars =(UChar*)malloc(sizeof(UChar)*length);
                     if(substitutionCharS->subChars){
@@ -489,7 +489,7 @@ JNIEXPORT jboolean JNICALL Java_com_ibm_icu4jni_converters_ICUConverterInterface
 
         ucnv_fromUnicode(cnv,
             &myTarget,targetLimit, 
-            &mySource, sourceLimit,NULL, TRUE,&errorCode);
+            (const UChar**)&mySource, sourceLimit,NULL, TRUE,&errorCode);
 
         if(U_SUCCESS(errorCode)){
             return (jboolean)TRUE;
@@ -497,3 +497,5 @@ JNIEXPORT jboolean JNICALL Java_com_ibm_icu4jni_converters_ICUConverterInterface
     }
     return (jboolean)FALSE;
 }
+
+
