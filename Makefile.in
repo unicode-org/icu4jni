@@ -175,7 +175,7 @@ $(TARGET) : $(OBJECTS)
 $(TARGETR) :$(OBJECTS)
 	$(SHLIB.c) -mno-debug-info -o $@ $^ $(ICULIBS) 
 
-ifneq ($(MAKECMDGOALS),distclean)
--include $(DEPS)
-endif
+#ifneq ($(MAKECMDGOALS),distclean)
+#-include $(DEPS)
+#endif
 
