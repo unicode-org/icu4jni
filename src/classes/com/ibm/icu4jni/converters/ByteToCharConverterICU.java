@@ -1,9 +1,15 @@
-/*
- * @(#)ByteToCharConverterICU.java	
- *
- * Copyright 2000-2004 IBM Corp.
- *
- */ 
+/**
+*******************************************************************************
+* Copyright (C) 1996-2001, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/converters/ByteToCharConverterICU.java,v $ 
+* $Date: 2001/03/24 02:59:20 $ 
+* $Revision: 1.5 $
+*
+*******************************************************************************
+*/ 
  /** 
   * A JNI interface for ICU converters.
   *
