@@ -4,8 +4,13 @@ CFG="Debug"
 !MESSAGE No configuration specified. Defaulting to nmake /f "makefile-win32" CFG="Debug".
 !ENDIF 
 
+
 !IF "$(ICUBIN)" == ""
-!ERROR Could not set ICUBIN
+!IF "$(ICU_DATA)" == ""
+!ERROR Could not set ICUBIN please use command: NMAKE /f  "makefile-win32" CFG="Debug" ICUBIN="..\icu\bin" JDK14="TRUE" JAVAPATH="c:\jdk1.4\win32\bin"
+!ELSE
+ICUBIN = $(ICU_DATA)\..\..\bin
+!ENDIF
 !ENDIF 
 
 !IF "$(JDK14)" == "TRUE"
@@ -14,7 +19,13 @@ BUILDCS = "BUILDCS"
 BUILDCS = 
 !ENDIF
 
-!IF "$(JAVAPATH)" != ""
+!IF "$(JAVAPATH)" == ""
+!IF "$(JAVA_HOME)" == ""
+!ERROR Could not set JAVAPATH please use command:  NMAKE /f  "makefile-win32" CFG="Debug" ICUBIN="..\icu\bin" JDK14="TRUE" JAVAPATH="c:\jdk1.4\win32\bin"
+!ELSE
+JAVABIN=$(JAVA_HOME)\win32\bin\\
+!ENDIF
+!ELSE
 JAVABIN=$(JAVAPATH)\\
 !ENDIF
 
