@@ -69,6 +69,7 @@ SRCDIR=.\src
 NATIVE=$(SRCDIR)\native
 BDIR=$(BUILDDIR)\classes
 JAVAC_EXE=$(JAVABIN)javac.exe
+JAVA_EXE=$(JAVABIN)java.exe
 JAVA_FLAGS=-d $(BUILDDIR)\classes -classpath $(BUILDDIR)\classes;.
 VERSION=20
 DEBUG_TARGET=$(OUTDIR)/ICUInterface$(VERSION)d.dll
@@ -100,6 +101,8 @@ CLEAN :
 	if not exist "$(BDIR)\$(NULL)" mkdir "$(BDIR)"
 
 
+CHECK:
+    @$(JAVA_EXE) -classpath ;.\build\classes; -Djava.library.path=$(ICULIB);.\build\lib; com.ibm.icu4jni.test.TestAll -nothrow
 
 CPP_PROJ=/nologo /MT /W3 /GX /O2 /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_INCLUDE)" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fp"$(INTDIR)\ICUInterface.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c
 BSC32_SBRS= \
@@ -122,6 +125,9 @@ LINK32_OBJS= \
 
 
 ALL : "..\..\build\lib\ICUInterface1d.dll"
+
+CHECK:
+    @$(JAVA_EXE) -classpath ;.\build\classes; -Djava.library.path=$(ICULIB);.\build\lib; com.ibm.icu4jni.test.TestAll -nothrow
 
 CLEAN :
 	-@rd /S /Q "$(INTDIR)"
