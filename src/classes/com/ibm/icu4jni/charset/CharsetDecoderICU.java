@@ -5,8 +5,9 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/charset/CharsetDecoderICU.java,v $ 
-* $Date: 2001/10/16 17:23:40 $ 
-* $Revision: 1.2 $
+* $Date: 2001/10/18 01:16:44 $ 
+* $Revision: 1.3 $
+*
 *
 *******************************************************************************
 */ 
@@ -34,39 +35,82 @@ public class CharsetDecoderICU extends CharsetDecoder{
     
     /* handle to the ICU converter that is opened */
     private final long converterHandle;
+      
+    private String replacement;
     
-    private String replacement;    
+    static{
+        // check if the converter is loaded
+        if(ErrorCode.LIBRARY_LOADED==false){
+            ErrorCode.LIBRARY_LOADED=true;
+        }
+    }
     
-    public CharsetDecoderICU(Charset cs,long cHandle){
-         super(cs,(float)NativeConverter.getMaxBytesPerChar(cHandle),
-               (float)NativeConverter.getMaxBytesPerChar(cHandle));      
+    /** 
+     * Construcs a new decoder for the given charset
+     * @param charset for which the decoder is created
+     * @param cHandle the address of ICU converter
+     * @exception UnsupportedCharsetException
+     */
+    public CharsetDecoderICU(Charset cs,String canonicalName){
+         super(cs,
+               1.0f,/* AverageCharsPerByte */
+               2.0f /* maxCharsPerByte     */);        
+               
          data[0] = 0;
          data[1] = 0;
-         converterHandle = cHandle;
+	     /* initialize data */       
+         long[] converterHandleArr = new long[1];
+        
+         // open the converter and get the handle 
+         // if there is an error throw Unsupported encoding exception    
+         int errorCode = NativeConverter.openConverter(converterHandleArr,canonicalName);
+         
+         if(errorCode > ErrorCode.U_ZERO_ERROR){
+            throw new UnsupportedCharsetException(canonicalName + 
+                                                  " ErrorCode: "+
+                                                  ErrorCode.getErrorName(errorCode));
+         }
+         
+         // store the converter handle
+         converterHandle=converterHandleArr[0];
+         
+         // The default callback action on unmappable input 
+         // or malformed input is to report so we set ICU converter
+         // callback to stop
+         errorCode = NativeConverter.setCallbackDecode(converterHandle,
+                                                       NativeConverter.STOP_CALLBACK,
+                                                       false);
          implReplaceWith(replacement);
     }
-
+    
+    /**
+     * Sets this decoders replacement string. Substitutes the string in output if an
+     * umappable or illegal sequence is encountered
+     * @param string to replace the error bytes with
+     */    
     protected void implReplaceWith(String newReplacement) {
-        if(converterHandle!=0){           
+        if(converterHandle > 0){
             if( newReplacement.length() > NativeConverter.getMaxBytesPerChar(converterHandle)) {
-                System.out.println(newReplacement + " length: " +newReplacement.length());
-                throw new IllegalArgumentException();
+                    throw new IllegalArgumentException();
             }           
             int ec =NativeConverter.setSubstitutionChars(converterHandle,
                                                     newReplacement.toCharArray(),
                                                     newReplacement.length()
                                                     );
             if( ec > ErrorCode.U_ZERO_ERROR){
-                System.out.println(ErrorCode.getErrorName(ec));
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException(ErrorCode.getErrorName(ec));
             }
         }
         replacement = newReplacement;
+
      }
     
-
-    //TODO
-    protected void implOnMalformedInput(CodingErrorAction newAction) {
+    /**
+     * Sets the action to be taken if an illegal sequence is encountered
+     * @param new action to be taken
+     * @exception IllegalArgumentException
+     */
+    protected final void implOnMalformedInput(CodingErrorAction newAction) {
         int icuAction = NativeConverter.STOP_CALLBACK;
         if(newAction.equals(CodingErrorAction.IGNORE)){
             icuAction = NativeConverter.SKIP_CALLBACK;
@@ -74,15 +118,19 @@ public class CharsetDecoderICU extends CharsetDecoder{
             icuAction = NativeConverter.SUBSTITUTE_CALLBACK;
         }
         if(converterHandle!=0){   
-            if(NativeConverter.setCallbackDecode(converterHandle,icuAction,false)
-                    > ErrorCode.U_ZERO_ERROR){
-                throw new IllegalArgumentException();
+            int ec =NativeConverter.setCallbackDecode(converterHandle,icuAction,false);
+            if(ec > ErrorCode.U_ZERO_ERROR){
+                throw new IllegalArgumentException(ErrorCode.getErrorName(ec));
             } 
         }
     }
     
-    //TODO
-    protected void implOnUnmappableCharacter(CodingErrorAction newAction) {
+    /**
+     * Sets the action to be taken if an illegal sequence is encountered
+     * @param new action to be taken
+     * @exception IllegalArgumentException
+     */
+    protected final void implOnUnmappableCharacter(CodingErrorAction newAction) {
         int icuAction = NativeConverter.STOP_CALLBACK;
         if(newAction.equals(CodingErrorAction.IGNORE)){
             icuAction = NativeConverter.SKIP_CALLBACK;
@@ -90,19 +138,22 @@ public class CharsetDecoderICU extends CharsetDecoder{
             icuAction = NativeConverter.SUBSTITUTE_CALLBACK;
         }
         if(converterHandle!=0){   
-            if(NativeConverter.setCallbackDecode(converterHandle,icuAction,true)
-                    > ErrorCode.U_ZERO_ERROR){
-                throw new IllegalArgumentException();
+            int ec = NativeConverter.setCallbackDecode(converterHandle,icuAction,true);
+            if(ec > ErrorCode.U_ZERO_ERROR){
+                throw new IllegalArgumentException(ErrorCode.getErrorName(ec));
             } 
         }
     }
-
-    protected CoderResult implFlush(CharBuffer out) {
-	    /* argument check */
-        if(out==null){
-            throw new IllegalArgumentException();
-        }
-        
+    
+    /**
+     * Flushes any characters saved in the converter's internal buffer and
+     * resets the converter.
+     * @param new action to be taken
+     * @return result of flushing action and completes the decoding all input. 
+     *         Returns CoderResult.UNDERFLOW if the action succeeds.
+     */
+    protected final CoderResult implFlush(CharBuffer out) {
+       
         /*set inputStart to 0 */ 
         data[0] = 0; 
         data[1] = 0;
@@ -120,7 +171,7 @@ public class CharsetDecoderICU extends CharsetDecoder{
                                   
         
         
-        /* if we donot have room for output throw an exception*/
+        /* if we donot have room for output throw an error*/
         if(err == ErrorCode.U_BUFFER_OVERFLOW_ERROR){
 		    return CoderResult.OVERFLOW;
 		}
@@ -128,11 +179,30 @@ public class CharsetDecoderICU extends CharsetDecoder{
 	    implReset();
 	    return CoderResult.UNDERFLOW;
     }
-
+    
+    /**
+     * Resets the to Unicode mode of converter
+     */
     protected void implReset() {
         NativeConverter.resetByteToChar(converterHandle);
     }
     
+    /**
+     * Decodes one or more bytes. The default behaviour of the converter
+     * is stop and report if an error in input stream is encountered. 
+     * To set different behaviour use @see CharsetDecoder.onMalformedInput()
+     * This  method allows a buffer by buffer conversion of a data stream.  
+     * The state of the conversion is saved between calls to convert.  
+     * Among other things, this means multibyte input sequences can be 
+     * split between calls. If a call to convert results in an Error, the 
+     * conversion may be continued by calling convert again with suitably 
+     * modified parameters.All conversions should be finished with a call to 
+     * the flush method.
+     * @param input buffer to decode
+     * @param output buffer to populate with decoded result
+     * @return result of decoding action. Returns CoderResult.UNDERFLOW if the decoding
+     *         action succeeds or more input is needed for completing the decoding action.
+     */
     protected CoderResult decodeLoop(ByteBuffer in,CharBuffer out){
 
 	    int inEnd = in.remaining();
@@ -146,9 +216,7 @@ public class CharsetDecoderICU extends CharsetDecoder{
         in.get(input,0,inEnd);
         /* reset the position */
         in.position(pos);
-        //System.out.println("inEnd : " + inEnd  + " inPos: " + in.position() +" inLimit: " + in.limit());
-        //System.out.println("outEnd : " + outEnd  + " outPos: " + out.position() +" outLimit: " + out.limit());
-        
+                
         data[0] = 0;  // input offset 
         data[1] = 0;  // output offset 
         try{
@@ -165,7 +233,7 @@ public class CharsetDecoderICU extends CharsetDecoder{
             
 
             int[] retVal = new int[1];
-            /* If we don't have room for the output, throw an exception*/
+            /* return an error*/
             if(err == ErrorCode.U_BUFFER_OVERFLOW_ERROR){
 		        return CoderResult.OVERFLOW;
 		    }else if(err==ErrorCode.U_INVALID_CHAR_FOUND){
@@ -175,20 +243,32 @@ public class CharsetDecoderICU extends CharsetDecoder{
                 NativeConverter.countInvalidChars(converterHandle, retVal);	
                 return CoderResult.malformedForLength(retVal[0]);
             }
+            /* decoding action succeded */
             return CoderResult.UNDERFLOW;
         }finally{
-            /* save state */
-            //System.out.println("in position: " + in.position()+" data[0]: " +data[0]+ " limit: " +in.limit());
+            
+           /* save state */
             if(data[0]>0){
                 in.position(in.position()+data[0]);
             }
             if(data[1]>0){
 		        out.put(output,0,data[1]);        /* output offset */
 		    }
-		    //System.out.println("Num chars converted: " +data[1] +" output: " + new String(output));
 		   
         }
 
 	}
 	
+	/**
+     * Releases the system resources by cleanly closing ICU converter opened
+     * @exception Throwable exception thrown by super class' finalize method
+     */
+    protected void finalize() throws Throwable{
+        try{
+            NativeConverter.closeConverter(converterHandle);
+        }
+        finally{
+            super.finalize();
+        }
+    }
 }

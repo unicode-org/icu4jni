@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4jni/src/classes/com/ibm/icu4jni/charset/CharsetICU.java,v $ 
-* $Date: 2001/10/16 17:23:40 $ 
-* $Revision: 1.2 $
+* $Date: 2001/10/18 01:16:44 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */ 
@@ -22,66 +22,37 @@ import com.ibm.icu4jni.converters.*;
 import com.ibm.icu4jni.common.*;
 
 public class CharsetICU extends Charset{
-    
+    /**
+     * Constructor to create a the CharsetICU object
+     * @param the canonical name as a string
+     * @param the alias set as an array of strings
+     */
     protected CharsetICU(String canonicalName, String[] aliases) {
 	     super(canonicalName,aliases);
-	     
-	     /* initialize data */       
-         long[] converterHandleArr = new long[1];
-         // check if the converter is loaded
-         if(ErrorCode.LIBRARY_LOADED==false){
-            ErrorCode.LIBRARY_LOADED=true;
-         }
-         //System.out.println("This is the canonicalName " +canonicalName);
-         
-         // open the converter and get the handle 
-         // if there is an error throw Unsupported encoding exception    
-         int errorCode = NativeConverter.openConverter(converterHandleArr,canonicalName);
-         if(errorCode > ErrorCode.U_ZERO_ERROR){
-            throw new UnsupportedCharsetException(canonicalName + " ErrorCode: " +ErrorCode.getErrorName(errorCode));
-         }
-         
-         // store the converter handle
-         converterHandle=converterHandleArr[0];
-         
-         // The default callback action on unmappable input 
-         // or malformed input is to report so we set ICU converter
-         // callback to stop
-         errorCode = NativeConverter.setCallbackDecode(converterHandle,
-                                                       NativeConverter.STOP_CALLBACK,
-                                                       false);
-         errorCode = NativeConverter.setCallbackEncode(converterHandle,
-                                                       NativeConverter.STOP_CALLBACK,
-                                                       false);
     }
-
-    private long converterHandle = 0;
-
+    /**
+     * Returns a new decoder instance of this charset object
+     * @return a new decoder object
+     */
     public CharsetDecoder newDecoder(){
-        return new CharsetDecoderICU((Charset)this,converterHandle);
+        return new CharsetDecoderICU((Charset)this,this.toString());
     };
-
+    
+    /**
+     * Returns a new encoder object of the charset
+     * @return a new encoder
+     */
     public CharsetEncoder newEncoder(){
         byte[] replacement = { 0x001a };
-        return new CharsetEncoderICU((Charset)this,converterHandle,replacement);
+        return new CharsetEncoderICU((Charset)this,this.toString(),replacement);
     }; 
     
-    
+    /**
+     * Ascertains if a charset is a sub set of this charset
+     * @param charset to test
+     * @return true if the given charset is a subset of this charset
+     */
     public boolean contains(Charset cs){
         return false;
-    }
-   
-    /**
-     * Releases the system resources by cleanly closing ICU converter opened
-     * @exception Throwable exception thrown by super class' finalize method
-     */
-    protected void finalize() throws Throwable{
-        try{
-            System.out.println("finalize called");
-            NativeConverter.closeConverter(converterHandle);
-        }
-        finally{
-            super.finalize();
-        }
     }
 }
