@@ -1,5 +1,5 @@
 #/**********************************************************************
-#*   Copyright (C) 2001-2004, International Business Machines
+#*   Copyright (C) 2001-2005, International Business Machines
 #*   Corporation and others.  All Rights Reserved.
 #***********************************************************************/
 ## Makefile.in for icu4jni
@@ -144,7 +144,7 @@ MAKE_CLASSOUT =$(MAKE_CLASSOUT1:src/%=build/%)
 CLEANFILES = *~
 
 ## Target information
-JNI_VERSION = 32
+JNI_VERSION = 34
 TARGET = $(BUILD_DIR)/libICUInterface$(JNI_VERSION)d.$(SO)
 TARGETR = $(BUILD_DIR)/libICUInterface$(JNI_VERSION).$(SO)
 
