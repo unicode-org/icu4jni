@@ -1179,7 +1179,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_getSubstitutionBytes(JNIEnv *env
     }
     return ((*env)->NewByteArray(env, 0));
 }
-//CSDL: this method is added by Jack
+/*CSDL: this method is added by Jack*/
 JNIEXPORT jboolean 
 JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_contains( JNIEnv *env, jclass jClass, 
                                                                  jlong handle1, jlong handle2){

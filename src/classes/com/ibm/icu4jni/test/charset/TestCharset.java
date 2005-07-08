@@ -54,11 +54,10 @@ public class TestCharset extends TestFmwk {
     }
 
     public TestCharset() {
-     
-        charset = CharsetICU.forName(encoding);
+        //charset = CharsetICU.forName(encoding);
+        charset = provider.charsetForName(encoding);
         decoder = (CharsetDecoder) charset.newDecoder();
         encoder = (CharsetEncoder) charset.newEncoder();
-      
     }
     public void TestUTF16Converter(){
         CharsetProvider icu = new CharsetProviderICU();
@@ -664,38 +663,17 @@ public class TestCharset extends TestFmwk {
     private static boolean isSecondSurrogate(char c) {
         return (boolean) (((c) & 0xfffffc00) == 0xdc00);
     }
-    public void TestCanConvert(/*String encoding*/
-    ) throws Exception {
-        char[] mySource = { '\ud800', '\udc00',
-            /*surrogate pair */
-            '\u22A6',
-                '\u22A7',
-                '\u22A8',
-                '\u22A9',
-                '\u22AA',
-                '\u22AB',
-                '\u22AC',
-                '\u22AD',
-                '\u22AE',
-                '\u22AF',
-                '\u22B0',
-                '\u22B1',
-                '\u22B2',
-                '\u22B3',
-                '\u22B4',
-                '\ud800',
-                '\udc00',
-            /*surrogate pair */
-            '\u22B5',
-                '\u22B6',
-                '\u22B7',
-                '\u22B8',
-                '\u22B9',
-                '\u22BA',
-                '\u22BB',
-                '\u22BC',
-                '\u22BD',
-                '\u22BE' };
+    public void TestCanConvert(/*String encoding*/)throws Exception {
+        char[] mySource = { 
+            '\ud800', '\udc00',/*surrogate pair */
+            '\u22A6','\u22A7','\u22A8','\u22A9','\u22AA',
+            '\u22AB','\u22AC','\u22AD','\u22AE','\u22AF',
+            '\u22B0','\u22B1','\u22B2','\u22B3','\u22B4',
+            '\ud800','\udc00',/*surrogate pair */
+            '\u22B5','\u22B6','\u22B7','\u22B8','\u22B9',
+            '\u22BA','\u22BB','\u22BC','\u22BD','\u22BE' 
+            };
+            
         encoder.reset();
         if (!encoder.canEncode(new String(mySource))) {
             errln("Test canConvert()" + encoding + ": FAILED");
@@ -791,6 +769,14 @@ public class TestCharset extends TestFmwk {
                     + " JDK: " + mapSize);
         }
         logln("Total Number of chasets = " + map.size());
+	}
+    public void TestWindows936(){
+        CharsetProviderICU icu = new CharsetProviderICU();
+        Charset cs = icu.charsetForName("windows-936-2000");
+        String canonicalName = cs.name();
+        if(!canonicalName.equals("GBK")){
+            errln("Did not get the expected canonical name. Got: "+canonicalName); //get the canonical name
+        }
     }
     public void TestICUAvailableCharsets() {
         String[] charsets = NativeConverter.getAvailable();
@@ -993,8 +979,10 @@ public class TestCharset extends TestFmwk {
         decoder.decode(outBuf, rt, true);
     }
     private void smBufEncode(CharsetEncoder encoder, String encoding) {
+        logln("Running smBufEncode for "+ encoding + " with class " + encoder);
         CharBuffer mySource = CharBuffer.wrap(myUSource);
         {
+            logln("Running tests on small input buffers for "+ encoding);
             encoder.reset();
             ByteBuffer myTarget = ByteBuffer.allocate(myGBSource.length);
             mySource.position(0);
@@ -1015,19 +1003,27 @@ public class TestCharset extends TestFmwk {
                 errln("Test small input buffers "+ encoding+ " From Unicode failed");
 
             }
+            logln("Tests on small input buffers for "+ encoding +" passed");
         }
         {
+            logln("Running tests on small output buffers for "+ encoding);
             encoder.reset();
             ByteBuffer myTarget = ByteBuffer.allocate(myGBSource.length);
             myTarget.position(0);
+            myTarget.limit(0);
             mySource.rewind();
+            logln("myTarget.limit: " + myTarget.limit() + " myTarget.capcity: " + myTarget.capacity());
             while (true) {
                 int pos = myTarget.position();
-                myTarget.limit(pos + 1);
+
+                myTarget.limit( myTarget.limit()+1);
+                logln("myTarget.Position: "+ pos + "myTarget.limit: " + myTarget.limit());
                 CoderResult result = encoder.encode(mySource, myTarget, true);
+                //logln("CoderResult: " + result.toString());
                 if (result.isOverflow()) {
                     continue;
                 }
+            
                 if (result.isError()) {
                     errln("Test small output buffers while encoding failed. "+result.toString());
                 }
@@ -1042,6 +1038,7 @@ public class TestCharset extends TestFmwk {
             if (!equals(myTarget, myGBSource)) {
                 errln("Test small output buffers "+ encoding+ " From Unicode failed.");
             }
+            logln("Tests on small output buffers for "+ encoding +" passed");
 
         }
     }
@@ -1100,20 +1097,32 @@ public class TestCharset extends TestFmwk {
         }
     }
 
-    public void TestFromUnicode(/*String encoding*/
-    ) throws Exception {
+    public void TestFromUnicode(/*String encoding*/) throws Exception {
+        
+        logln("Loaded Charset: " + charset.getClass().toString());
+        logln("Loaded CharsetEncoder: " + encoder.getClass().toString());
+        logln("Loaded CharsetDecoder: " + decoder.getClass().toString());
+        
         ByteBuffer myTarget = ByteBuffer.allocate(gbSource.length);
+        logln("Created ByteBuffer of length: " + uSource.length);
         CharBuffer mySource = CharBuffer.wrap(uSource);
+        logln("Wrapped ByteBuffer with CharBuffer  ");
         encoder.reset();
+        logln("Test Unicode to " + encoding );
         encoder.encode(mySource, myTarget, true);
         if (!equals(myTarget, gbSource)) {
             errln("--Test Unicode to " + encoding + ": FAILED");
-        }
+        } 
+        logln("Test Unicode to " + encoding +" passed");
         smBufEncode(encoder, encoding);
     }
 
-    public void TestToUnicode(/*String encoding*/
-    ) throws Exception {
+    public void TestToUnicode(/*String encoding*/ ) throws Exception {
+        
+        logln("Loaded Charset: " + charset.getClass().toString());
+        logln("Loaded CharsetEncoder: " + encoder.getClass().toString());
+        logln("Loaded CharsetDecoder: " + decoder.getClass().toString());
+        
         CharBuffer myTarget = CharBuffer.allocate(uSource.length);
         ByteBuffer mySource = ByteBuffer.wrap(getByteArray(gbSource));
         decoder.reset();
