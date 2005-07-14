@@ -80,13 +80,13 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_text_NativeCollation_compare
                   (*env)->ReleaseStringCritical(env, target, tgtstr);
                   return result;
             }else{
-                error(env,U_ILLEGAL_ARGUMENT_ERROR);
+                icu4jni_error(env,U_ILLEGAL_ARGUMENT_ERROR);
             }
         }else{
-            error(env,U_ILLEGAL_ARGUMENT_ERROR);
+            icu4jni_error(env,U_ILLEGAL_ARGUMENT_ERROR);
         }
     }else{
-        error(env,U_ILLEGAL_ARGUMENT_ERROR);
+        icu4jni_error(env,U_ILLEGAL_ARGUMENT_ERROR);
     }
     return result;
 }
@@ -108,12 +108,12 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_text_NativeCollation_getAttribute
     if(collator){
         jint result = (jint)ucol_getAttribute(collator, (UColAttribute)type, 
                                             &status);
-        if (error(env, status) != FALSE){
+        if (icu4jni_error(env, status) != FALSE){
             return (jint)UCOL_DEFAULT;
         }
         return result;
     }else{
-        error(env,U_ILLEGAL_ARGUMENT_ERROR);
+        icu4jni_error(env,U_ILLEGAL_ARGUMENT_ERROR);
     }
     return (jint)UCOL_DEFAULT;
 }
@@ -140,12 +140,12 @@ JNIEXPORT jlong JNICALL Java_com_ibm_icu4jni_text_NativeCollation_getCollationEl
             result = (jlong)(ucol_openElements(collator, srcstr, srclength, &status));
 
             (*env)->ReleaseStringCritical(env, source, srcstr);
-            error(env, status);
+            icu4jni_error(env, status);
         }else{
-            error(env, U_ILLEGAL_ARGUMENT_ERROR);
+            icu4jni_error(env, U_ILLEGAL_ARGUMENT_ERROR);
         }
     }else{
-        error(env, U_ILLEGAL_ARGUMENT_ERROR);
+        icu4jni_error(env, U_ILLEGAL_ARGUMENT_ERROR);
     }
     return result;
 }
@@ -182,7 +182,7 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_text_NativeCollation_getNormalizatio
   UErrorCode status = U_ZERO_ERROR;
   const UCollator *collator = (const UCollator *)address;
   if(U_FAILURE(status)){
-       error(env, status);
+       icu4jni_error(env, status);
   }
   return (jint)ucol_getAttribute(collator,UCOL_NORMALIZATION_MODE,&status);
 
@@ -256,10 +256,10 @@ JNIEXPORT jbyteArray JNICALL Java_com_ibm_icu4jni_text_NativeCollation_getSortKe
           result = (*env)->NewByteArray(env, bytearraysize);
           (*env)->SetByteArrayRegion(env, result, 0, bytearraysize, bytearray);
       }else{
-          error(env,U_ILLEGAL_ARGUMENT_ERROR);
+          icu4jni_error(env,U_ILLEGAL_ARGUMENT_ERROR);
       }
   }else{
-    error(env,U_ILLEGAL_ARGUMENT_ERROR);
+    icu4jni_error(env,U_ILLEGAL_ARGUMENT_ERROR);
   }
   return result;
 }
@@ -300,7 +300,7 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_text_NativeCollation_next
   UErrorCode status = U_ZERO_ERROR;
   jint result = ucol_next(iterator, &status);
 
-   error(env, status);
+   icu4jni_error(env, status);
   return result;
 }
 
@@ -321,7 +321,7 @@ JNIEXPORT jlong JNICALL Java_com_ibm_icu4jni_text_NativeCollation_openCollator__
   UErrorCode status = U_ZERO_ERROR;
 
   result = (jlong)ucol_open(NULL, &status);
-  if ( error(env, status) != FALSE)
+  if ( icu4jni_error(env, status) != FALSE)
     return 0;
  
   return result;
@@ -350,9 +350,9 @@ JNIEXPORT jlong JNICALL Java_com_ibm_icu4jni_text_NativeCollation_openCollator__
   if(localestr){
       result = (jlong)ucol_open(localestr, &status);
       (*env)->ReleaseStringUTFChars(env, locale, localestr);
-      error(env, status);
+      icu4jni_error(env, status);
   }else{
-      error(env,U_ILLEGAL_ARGUMENT_ERROR);
+      icu4jni_error(env,U_ILLEGAL_ARGUMENT_ERROR);
   }
   return result;
 }
@@ -384,9 +384,9 @@ JNIEXPORT jlong JNICALL Java_com_ibm_icu4jni_text_NativeCollation_openCollatorFr
                                    (UCollationStrength)strength, NULL, &status);
 
       (*env)->ReleaseStringCritical(env, rules, rulestr);
-      error(env, status);
+      icu4jni_error(env, status);
   }else{
-      error(env,U_ILLEGAL_ARGUMENT_ERROR);
+      icu4jni_error(env,U_ILLEGAL_ARGUMENT_ERROR);
   }
 
   return result;
@@ -409,7 +409,7 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_text_NativeCollation_previous
   UErrorCode status = U_ZERO_ERROR;
   jint result = ucol_previous(iterator, &status);
 
-   error(env, status);
+   icu4jni_error(env, status);
   return result;
 }
 
@@ -446,7 +446,7 @@ JNIEXPORT jlong JNICALL Java_com_ibm_icu4jni_text_NativeCollation_safeClone
 
   result = (jlong)ucol_safeClone(collator, NULL, &buffersize, &status);
 
-  if ( error(env, status) != FALSE) {
+  if ( icu4jni_error(env, status) != FALSE) {
     return 0;
   }
  
@@ -469,7 +469,7 @@ JNIEXPORT void JNICALL Java_com_ibm_icu4jni_text_NativeCollation_setAttribute
   UErrorCode status = U_ZERO_ERROR;
   ucol_setAttribute(collator, (UColAttribute)type, (UColAttributeValue)value, 
                     &status);
-   error(env, status);
+   icu4jni_error(env, status);
 }
 
 /**
@@ -488,7 +488,7 @@ JNIEXPORT void JNICALL Java_com_ibm_icu4jni_text_NativeCollation_setOffset
   UErrorCode status = U_ZERO_ERROR;
 
   ucol_setOffset(iterator, offset, &status);
-   error(env, status);
+   icu4jni_error(env, status);
 }
 
 /**
@@ -510,5 +510,5 @@ JNIEXPORT void JNICALL Java_com_ibm_icu4jni_text_NativeCollation_setText
   ucol_setText(iterator, str, strlength, &status);
   (*env)->ReleaseStringCritical(env, source, str);
 
-   error(env, status);
+   icu4jni_error(env, status);
 }

@@ -30,7 +30,7 @@
 *         creation of the exception to be thrown fails
 * @exception thrown if errorcode represents an error
 */
-UBool error(JNIEnv *env, UErrorCode errorcode)
+UBool icu4jni_error(JNIEnv *env, UErrorCode errorcode)
 {
   const char   *emsg      = u_errorName(errorcode);
         jclass  exception;
