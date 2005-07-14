@@ -91,7 +91,7 @@ ICULIB  = $(ICUBIN)\..\lib
 
 !MESSAGE "Release"
 
-ALL : INIT "$(OUTDIR)\ICUInterface.dll" "(CP_TEST_FILE)"  "BUILDCORE" "BUILDTEST"
+ALL : INIT "$(OUTDIR)\ICUInterface.dll" "BUILDCORE" "BUILDTEST" "(CP_TEST_FILE)"
 
 CHECK:
     @$(JAVA_EXE) -classpath ;.\build\classes; -Djava.library.path=$(ICULIB);.\build\lib; com.ibm.icu4jni.test.TestAll -nothrow
@@ -143,7 +143,7 @@ LINK32_OBJS= \
 !ELSEIF  "$(CFG)" == "Debug"
 
 
-ALL : INIT "$(OUTDIR)\ICUInterfaced.dll" "(CP_TEST_FILE)"  "BUILDCORE" "BUILDTEST"
+ALL : INIT "$(OUTDIR)\ICUInterfaced.dll" "BUILDCORE" "BUILDTEST" "(CP_TEST_FILE)"
 
 CHECK:
 	@echo $(JAVA_EXE) -classpath ;.\build\classes; -Djava.library.path=$(ICULIB);.\build\lib; com.ibm.icu4jni.test.TestAll -nothrow
