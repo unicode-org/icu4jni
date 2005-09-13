@@ -63,7 +63,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_openConverter (JNIEnv *env,
 
                     if(U_FAILURE(errorCode)){
                         (*env)->ReleaseStringChars(env, converterName,u_cnvName);
-                        (*env)->ReleasePrimitiveArrayCritical(env,handle,(jlong*)myHandle,JNI_COMMIT);
+                        (*env)->ReleasePrimitiveArrayCritical(env,handle,(jlong*)myHandle,0);
                         conv=NULL;
                         return errorCode;
                     }
@@ -78,7 +78,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_openConverter (JNIEnv *env,
         (*env)->ReleaseStringChars(env, converterName,u_cnvName);
         *myHandle =(jlong) conv;
     }
-    (*env)->ReleasePrimitiveArrayCritical(env,handle,(jlong*)myHandle,JNI_COMMIT);
+    (*env)->ReleasePrimitiveArrayCritical(env,handle,(jlong*)myHandle,0);
     return errorCode;
 }
 
@@ -193,23 +193,23 @@ Java_com_ibm_icu4jni_converters_NativeConverter_convertCharToByte(JNIEnv *env,
                     *sourceOffset = (jint) (mySource - uSource)-*sourceOffset;
                     *targetOffset = (jint) ((jbyte*)cTarget - uTarget)- *targetOffset;
                     if(U_FAILURE(errorCode)){
-                        (*env)->ReleasePrimitiveArrayCritical(env,target,uTarget,JNI_COMMIT);
-                        (*env)->ReleasePrimitiveArrayCritical(env,source,(jchar*)uSource,JNI_COMMIT);
-                        (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,JNI_COMMIT);
+                        (*env)->ReleasePrimitiveArrayCritical(env,target,uTarget,0);
+                        (*env)->ReleasePrimitiveArrayCritical(env,source,(jchar*)uSource,0);
+                        (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,0);
                         return errorCode;
                     }
                 }else{
                     errorCode = U_ILLEGAL_ARGUMENT_ERROR;
                 }
-                (*env)->ReleasePrimitiveArrayCritical(env,target,uTarget,JNI_COMMIT);
+                (*env)->ReleasePrimitiveArrayCritical(env,target,uTarget,0);
             }else{
                     errorCode = U_ILLEGAL_ARGUMENT_ERROR;
             }
-            (*env)->ReleasePrimitiveArrayCritical(env,source,(jchar*)uSource,JNI_COMMIT); 
+            (*env)->ReleasePrimitiveArrayCritical(env,source,(jchar*)uSource,0); 
         }else{
                     errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         }
-        (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,JNI_COMMIT);
+        (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,0);
         return errorCode;
     }
     errorCode = U_ILLEGAL_ARGUMENT_ERROR;
@@ -248,7 +248,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_encode(JNIEnv *env,
             }	  
         }
     }
-    (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,JNI_COMMIT);
+    (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,0);
     return ec;
 }
 
@@ -298,23 +298,23 @@ Java_com_ibm_icu4jni_converters_NativeConverter_convertByteToChar(JNIEnv *env,
                     *sourceOffset = mySource - uSource - *sourceOffset  ;
                     *targetOffset = cTarget - uTarget - *targetOffset;
                     if(U_FAILURE(errorCode)){
-                        (*env)->ReleasePrimitiveArrayCritical(env,target,uTarget,JNI_COMMIT);
-                        (*env)->ReleasePrimitiveArrayCritical(env,source,(jchar*)uSource,JNI_COMMIT);
-                        (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,JNI_COMMIT);
+                        (*env)->ReleasePrimitiveArrayCritical(env,target,uTarget,0);
+                        (*env)->ReleasePrimitiveArrayCritical(env,source,(jchar*)uSource,0);
+                        (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,0);
                         return errorCode;
                     }
                 }else{
                     errorCode = U_ILLEGAL_ARGUMENT_ERROR;
                 }
-                (*env)->ReleasePrimitiveArrayCritical(env,target,uTarget,JNI_COMMIT);
+                (*env)->ReleasePrimitiveArrayCritical(env,target,uTarget,0);
             }else{
                 errorCode = U_ILLEGAL_ARGUMENT_ERROR;
             }
-            (*env)->ReleasePrimitiveArrayCritical(env,source,(jchar*)uSource,JNI_COMMIT); 
+            (*env)->ReleasePrimitiveArrayCritical(env,source,(jchar*)uSource,0); 
         }else{
             errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         }
-        (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,JNI_COMMIT);
+        (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,0);
         return errorCode;
     }
     errorCode = U_ILLEGAL_ARGUMENT_ERROR;
@@ -353,7 +353,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_decode(JNIEnv *env,
             }	  
         }
     }
-    (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,JNI_COMMIT);
+    (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,0);
     return ec;
 }
 JNIEXPORT void JNICALL 
@@ -393,7 +393,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_countInvalidBytes (JNIEnv *env,
         if(len){
             ucnv_getInvalidChars(cnv,invalidChars,(int8_t*)len,&errorCode);
         }
-        (*env)->ReleasePrimitiveArrayCritical(env,length,(jint*)len,JNI_COMMIT);
+        (*env)->ReleasePrimitiveArrayCritical(env,length,(jint*)len,0);
         return errorCode;
     }
     errorCode = U_ILLEGAL_ARGUMENT_ERROR;
@@ -484,19 +484,19 @@ Java_com_ibm_icu4jni_converters_NativeConverter_flushByteToChar(JNIEnv *env,
 
                 *targetOffset = (jint) ((jchar*)cTarget - uTarget)- *targetOffset;
                 if(U_FAILURE(errorCode)){
-                    (*env)->ReleasePrimitiveArrayCritical(env,target,uTarget,JNI_COMMIT);
-                    (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,JNI_COMMIT);
+                    (*env)->ReleasePrimitiveArrayCritical(env,target,uTarget,0);
+                    (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,0);
                     return errorCode;
                 }
             }else{
                 errorCode = U_ILLEGAL_ARGUMENT_ERROR;
             }
-            (*env)->ReleasePrimitiveArrayCritical(env,target,uTarget,JNI_COMMIT);
+            (*env)->ReleasePrimitiveArrayCritical(env,target,uTarget,0);
 
         }else{
             errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         }
-        (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,JNI_COMMIT);
+        (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,0);
         return errorCode;
     }
     errorCode = U_ILLEGAL_ARGUMENT_ERROR;
@@ -531,19 +531,19 @@ Java_com_ibm_icu4jni_converters_NativeConverter_flushCharToByte (JNIEnv *env,
 
                 *targetOffset = (jint) ((jbyte*)cTarget - uTarget)- *targetOffset;
                 if(U_FAILURE(errorCode)){
-                    (*env)->ReleasePrimitiveArrayCritical(env,target,uTarget,JNI_COMMIT);
+                    (*env)->ReleasePrimitiveArrayCritical(env,target,uTarget,0);
                 
-                    (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,JNI_COMMIT);
+                    (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,0);
                     return errorCode;
                 }
             }else{
                 errorCode = U_ILLEGAL_ARGUMENT_ERROR;
             }
-            (*env)->ReleasePrimitiveArrayCritical(env,target,uTarget,JNI_COMMIT);
+            (*env)->ReleasePrimitiveArrayCritical(env,target,uTarget,0);
         }else{
             errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         }
-        (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,JNI_COMMIT);
+        (*env)->ReleasePrimitiveArrayCritical(env,data,(jint*)myData,0);
         return errorCode;
     }
     errorCode = U_ILLEGAL_ARGUMENT_ERROR;
@@ -575,7 +575,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_setSubstitutionBytes(JNIEnv *env
              toChars((UChar*)u_subChars,&mySubChars[0],length);
              ucnv_setSubstChars(cnv,mySubChars, (char)length,&errorCode);
              if(U_FAILURE(errorCode)){
-                (*env)->ReleasePrimitiveArrayCritical(env,subChars,mySubChars,JNI_COMMIT);
+                (*env)->ReleasePrimitiveArrayCritical(env,subChars,mySubChars,0);
                 return errorCode;
              }
              free(mySubChars);
@@ -583,7 +583,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_setSubstitutionBytes(JNIEnv *env
         else{   
            errorCode =  U_ILLEGAL_ARGUMENT_ERROR;
         }
-        (*env)->ReleasePrimitiveArrayCritical(env,subChars,u_subChars,JNI_COMMIT); 
+        (*env)->ReleasePrimitiveArrayCritical(env,subChars,u_subChars,0); 
         return errorCode;
     }
     errorCode = U_ILLEGAL_ARGUMENT_ERROR;
@@ -652,7 +652,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_setSubstitutionChars(JNIEnv *env
             }else{
                 errorCode = U_ILLEGAL_ARGUMENT_ERROR;
             }
-            (*env)->ReleasePrimitiveArrayCritical(env,subChars,u_subChars,JNI_COMMIT);
+            (*env)->ReleasePrimitiveArrayCritical(env,subChars,u_subChars,0);
             return errorCode;
         }
     }
@@ -749,13 +749,13 @@ Java_com_ibm_icu4jni_converters_NativeConverter_canDecode(JNIEnv *env,
 
                 if(U_SUCCESS(errorCode)){
                     free(target);
-                    (*env)->ReleasePrimitiveArrayCritical(env,source,cSource,JNI_COMMIT);        
+                    (*env)->ReleasePrimitiveArrayCritical(env,source,cSource,0);        
                     return (jboolean)TRUE;
                 }
             }
             free(target);
         }
-        (*env)->ReleasePrimitiveArrayCritical(env,source,cSource,JNI_COMMIT);        
+        (*env)->ReleasePrimitiveArrayCritical(env,source,cSource,0);        
     }
     return (jboolean)FALSE;
 }
@@ -1111,7 +1111,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_safeClone(JNIEnv *env,
             conv = ucnv_safeClone(source, NULL, &buffersize, &errorCode);
 
             if(U_FAILURE(errorCode)){
-                (*env)->ReleasePrimitiveArrayCritical(env,handle,(jlong*)myHandle,JNI_COMMIT);
+                (*env)->ReleasePrimitiveArrayCritical(env,handle,(jlong*)myHandle,0);
                 conv=NULL;
                 return errorCode;
             }
@@ -1120,7 +1120,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_safeClone(JNIEnv *env,
         }else{
             errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         }
-        (*env)->ReleasePrimitiveArrayCritical(env,handle,(jlong*)myHandle,JNI_COMMIT);
+        (*env)->ReleasePrimitiveArrayCritical(env,handle,(jlong*)myHandle,0);
     }else{
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
     }
