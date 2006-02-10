@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -1285,5 +1285,24 @@ public class TestCharset extends TestFmwk {
         }
 
     }
+    public void TestJB4897(){
+        CharsetProviderICU provider = new CharsetProviderICU();
+        Charset charset = provider.charsetForName("x-abracadabra");  
+        if(charset!=null && charset.canEncode()== true){
+            errln("provider.charsetForName() does not validate the charset names" );
+        }
+    }
 
+    public void TestJB5027() {
+        CharsetProviderICU provider= new CharsetProviderICU();
+
+        Charset fake = provider.charsetForName("doesNotExist");
+        if(fake != null){
+            errln("\"doesNotExist\" returned " + fake);
+        }
+        Charset xfake = provider.charsetForName("x-doesNotExist");
+        if(xfake!=null){
+            errln("\"x-doesNotExist\" returned " + xfake);
+        }
+    }
 }

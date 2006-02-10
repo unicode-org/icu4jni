@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -834,13 +834,12 @@ getJavaCanonicalName(const char* icuCanonicalName,
                 }
             }
             /* if there is no UTR22 canonical name .. then just return itself*/
-            if(name == NULL){
-                name = icuCanonicalName;
+            if(name != NULL){                
+                if(capacity >= 2){
+                    strcpy(canonicalName,"x-");
+                }
+                retLen = copyString(canonicalName, capacity, 2, name, status);
             }
-            if(capacity >= 2){
-                strcpy(canonicalName,"x-");
-            }
-            retLen = copyString(canonicalName, capacity, 2, name, status);
         }
     }
     return retLen;
@@ -947,7 +946,7 @@ JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getICUCanonicalName(JNIE
     UErrorCode error = U_ZERO_ERROR;
     const char* encName = (*env)->GetStringUTFChars(env,enc,NULL);
     const char* canonicalName = NULL;
-    jstring ret;
+    jstring ret = NULL;
     if(encName){
         if((canonicalName = ucnv_getCanonicalName(encName, "MIME", &error))!=NULL){
             ret = ((*env)->NewStringUTF(env, canonicalName));
@@ -958,13 +957,18 @@ JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getICUCanonicalName(JNIE
         }else if((canonicalName =  ucnv_getAlias(encName, 0, &error)) != NULL){
             /* we have some aliases in the form x-blah .. match those first */
             ret = ((*env)->NewStringUTF(env, canonicalName));
-        }else if( strstr(encName, "x-") == encName){
-            /* TODO: Match with getJavaCanonicalName method */
-            /*
-            char temp[ UCNV_MAX_CONVERTER_NAME_LENGTH] = {0};
-            strcpy(temp, encName+2);
-            */
-            ret = ((*env)->NewStringUTF(env, encName+2));
+        }else if( ret ==NULL && strstr(encName, "x-") == encName){
+            /* check if the converter can be opened with the encName given */
+            UConverter* conv = NULL;
+            error = U_ZERO_ERROR;
+            conv = ucnv_open(encName+2, &error);
+            if(conv!=NULL){
+                ret = ((*env)->NewStringUTF(env, encName+2));
+            }else{
+                /* unsupported encoding */
+                ret = ((*env)->NewStringUTF(env, ""));
+            }
+            ucnv_close(conv);
         }else{
             /* unsupported encoding */
            ret = ((*env)->NewStringUTF(env, ""));
