@@ -834,12 +834,13 @@ getJavaCanonicalName(const char* icuCanonicalName,
                 }
             }
             /* if there is no UTR22 canonical name .. then just return itself*/
-            if(name != NULL){                
-                if(capacity >= 2){
-                    strcpy(canonicalName,"x-");
-                }
-                retLen = copyString(canonicalName, capacity, 2, name, status);
+            if(name == NULL){                
+                name = icuCanonicalName;
             }
+            if(capacity >= 2){
+                strcpy(canonicalName,"x-");
+            }
+            retLen = copyString(canonicalName, capacity, 2, name, status);
         }
     }
     return retLen;
@@ -869,6 +870,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_getAvailable(JNIEnv *env, jclass
 #endif        
         (*env)->SetObjectArrayElement(env,ret,i,(*env)->NewStringUTF(env,canonicalName));
          /*printf("canonical name : %s  at %i\n", name,i); */
+        canonicalName[0]='\0';/* nul terminate */
     }
     return (ret);
 }
@@ -900,12 +902,17 @@ Java_com_ibm_icu4jni_converters_NativeConverter_getAliases(JNIEnv *env, jclass j
     int i=0;
     int j=0;
     const char* aliasArray[50];
-
+    
     if(encName){
-        aliasNum = ucnv_countAliases(encName,&error);
+        const char* myEncName = encName;
+        aliasNum = ucnv_countAliases(myEncName,&error);
+        if(aliasNum==0 && encName[0] == 0x78 /*x*/ && encName[1]== 0x2d /*-*/){
+            myEncName = encName+2;
+            aliasNum = ucnv_countAliases(myEncName,&error);
+        }
         if(U_SUCCESS(error)){
             for(i=0,j=0;i<aliasNum;i++){
-                const char* name = ucnv_getAlias(encName,(uint16_t)i,&error);
+                const char* name = ucnv_getAlias(myEncName,(uint16_t)i,&error);
                 if(strchr(name,'+')==0 && strchr(name,',')==0){
                     aliasArray[j++]= name;
                 }
