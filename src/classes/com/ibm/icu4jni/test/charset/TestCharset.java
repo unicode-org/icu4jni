@@ -656,13 +656,14 @@ public class TestCharset extends TestFmwk {
             }
         }
     }
-
+    /*
     private static boolean isFirstSurrogate(char c) {
         return (boolean) (((c) & 0xfffffc00) == 0xd800);
     }
     private static boolean isSecondSurrogate(char c) {
         return (boolean) (((c) & 0xfffffc00) == 0xdc00);
     }
+    */
     public void TestCanConvert(/*String encoding*/)throws Exception {
         char[] mySource = { 
             '\ud800', '\udc00',/*surrogate pair */
@@ -734,6 +735,7 @@ public class TestCharset extends TestFmwk {
             }
         }
     }
+    /*
     private  int put(Iterator i, Map m) {
         int ret = 0;
         while (i.hasNext()) {
@@ -755,6 +757,7 @@ public class TestCharset extends TestFmwk {
         }
         return num;
     }
+    */
     public void TestAvailableCharsets() {
         SortedMap map = Charset.availableCharsets();
         Set keySet = map.keySet();
@@ -1305,4 +1308,33 @@ public class TestCharset extends TestFmwk {
             errln("\"x-doesNotExist\" returned " + xfake);
         }
     }
+    //test to make sure that number of aliases and canonical names are in the charsets that are in
+    public void TestAllNames() {
+        CharsetProviderICU provider= new CharsetProviderICU();
+        Map javaMap = new HashMap();
+        provider.putCharsets(javaMap);
+        String[] available = NativeConverter.getAvailable();
+        for(int i=0; i<available.length;i++){
+            String canon  = NativeConverter.getICUCanonicalName(available[i]);
+            // ',' is not allowed by Java's charset name checker
+            if(canon.indexOf(',')>=0){
+                continue;
+            }
+            Charset cs = (Charset)javaMap.get(available[i]);
+            Object[] javaAliases =  cs.aliases().toArray();
+            //seach for ICU canonical name in javaAliases
+            boolean inAliasList = false;
+            for(int j=0; j<javaAliases.length; j++){
+                String java = (String) javaAliases[j];
+                if(java.equals(canon)){
+                    logln("javaAlias: " + java + " canon: " + canon);
+                    inAliasList = true;
+                }
+            }
+            if(inAliasList == false){
+                errln("Could not find ICU canonical name: "+canon+ " for java canonical name: "+ available[i]+ " "+ i);
+            }
+        }
+    }
+    
 }
