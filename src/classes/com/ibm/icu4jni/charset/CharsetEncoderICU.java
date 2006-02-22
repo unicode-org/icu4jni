@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.				                                  *
 *******************************************************************************
 *
@@ -166,7 +166,9 @@ public final class CharsetEncoderICU extends CharsetEncoder {
 				if (ec == ErrorCode.U_BUFFER_OVERFLOW_ERROR) {
 					return CoderResult.OVERFLOW;
 				}else if (ec == ErrorCode.U_TRUNCATED_CHAR_FOUND) {//CSDL: add this truncated character error handling
-                    return CoderResult.malformedForLength(data[INPUT_OFFSET]);
+                    if(data[INPUT_OFFSET]>0){
+                        return CoderResult.malformedForLength(data[INPUT_OFFSET]);
+                    }
                 }else {
                     ErrorCode.getException(ec);
                 }

@@ -1336,5 +1336,54 @@ public class TestCharset extends TestFmwk {
             }
         }
     }
-    
+    public void TestDecoderImplFlush() {
+        CharsetProviderICU provider = new CharsetProviderICU();
+        Charset ics = provider.charsetForName("UTF-16");
+        Charset jcs = Charset.forName("UTF-16"); // Java's UTF-16 charset
+        execDecoder(jcs);
+        execDecoder(ics);
+    }
+    public void TestEncoderImplFlush() {
+        CharsetProviderICU provider = new CharsetProviderICU();
+        Charset ics = provider.charsetForName("ISO-8859-1");
+        Charset jcs = Charset.forName("ISO-8859-1"); // Java's UTF-16 charset
+        execEncoder(jcs);
+        execEncoder(ics);
+    }
+    private void execDecoder(Charset cs){
+        CharsetDecoder decoder = cs.newDecoder();
+        decoder.onMalformedInput(CodingErrorAction.REPORT);
+        decoder.onUnmappableCharacter(CodingErrorAction.REPORT);
+        CharBuffer out = CharBuffer.allocate(10);
+        CoderResult result = decoder.decode(ByteBuffer.wrap(new byte[] { -1,
+                -2, 32, 0, 98 }), out, false);
+        result = decoder.decode(ByteBuffer.wrap(new byte[] { 98 }), out, true);
+
+        logln(cs.getClass().toString()+ ":" +result.toString());
+        try {
+            result = decoder.flush(out);
+            logln(cs.getClass().toString()+ ":" +result.toString());
+        } catch (Exception e) {
+            errln(e.getMessage()+" "+cs.getClass().toString());
+        }
+    }
+    private void execEncoder(Charset cs){
+        CharsetEncoder encoder = cs.newEncoder();
+        encoder.onMalformedInput(CodingErrorAction.REPORT);
+        encoder.onUnmappableCharacter(CodingErrorAction.REPORT);
+        ByteBuffer out = ByteBuffer.allocate(10);
+        CoderResult result = encoder.encode(CharBuffer.wrap(new char[] { '\uFFFF',
+                '\u2345', 32, 98 }), out, false);
+        logln(cs.getClass().toString()+ ":" +result.toString());
+        result = encoder.encode(CharBuffer.wrap(new char[] { 98 }), out, true);
+
+        logln(cs.getClass().toString()+ ":" +result.toString());
+        try {
+            result = encoder.flush(out);
+            logln(cs.getClass().toString()+ ":" +result.toString());
+        } catch (Exception e) {
+            errln(e.getMessage()+" "+cs.getClass().toString());
+        }
+    }
+
 }

@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -157,8 +157,9 @@ public final class CharsetDecoderICU extends CharsetDecoder{
      */
     protected final CoderResult implFlush(CharBuffer out) {
        try{
+           
            data[OUTPUT_OFFSET] = getArray(out);
-            
+
             ec=NativeConverter.flushByteToChar(
                                             converterHandle,  /* Handle to ICU Converter */
                                             output,           /* input array of chars */
@@ -171,8 +172,10 @@ public final class CharsetDecoderICU extends CharsetDecoder{
             if (ErrorCode.isFailure(ec)) {
                 if (ec == ErrorCode.U_BUFFER_OVERFLOW_ERROR) {
                     return CoderResult.OVERFLOW;
-                }else if (ec == ErrorCode.U_TRUNCATED_CHAR_FOUND) {//CSDL: add this truncated character error handling
-                    return CoderResult.malformedForLength(data[INPUT_OFFSET]);
+                }else if (ec == ErrorCode.U_TRUNCATED_CHAR_FOUND ) {//CSDL: add this truncated character error handling
+                    if(data[INPUT_OFFSET]>0){
+                        return CoderResult.malformedForLength(data[INPUT_OFFSET]);
+                    }
                 }else {
                     ErrorCode.getException(ec);
                 }
