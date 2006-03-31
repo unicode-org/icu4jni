@@ -12,7 +12,7 @@ extern "C" {
 #undef com_ibm_icu4jni_converters_NativeConverter_SKIP_CALLBACK
 #define com_ibm_icu4jni_converters_NativeConverter_SKIP_CALLBACK 1L
 #undef com_ibm_icu4jni_converters_NativeConverter_SUBSTITUTE_CALLBACK
-#define com_ibm_icu4jni_converters_NativeConverter_SUBSTITUTE_CALLBACK 3L
+#define com_ibm_icu4jni_converters_NativeConverter_SUBSTITUTE_CALLBACK 2L
 /*
  * Class:     com_ibm_icu4jni_converters_NativeConverter
  * Method:    convertByteToChar
@@ -119,6 +119,14 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_setSubsti
 
 /*
  * Class:     com_ibm_icu4jni_converters_NativeConverter
+ * Method:    setSubstitutionModeByteToChar
+ * Signature: (JZ)I
+ */
+JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_setSubstitutionModeByteToChar
+  (JNIEnv *, jclass, jlong, jboolean);
+
+/*
+ * Class:     com_ibm_icu4jni_converters_NativeConverter
  * Method:    countInvalidBytes
  * Signature: (J[I)I
  */
@@ -140,6 +148,7 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_countInva
  */
 JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getMaxBytesPerChar
   (JNIEnv *, jclass, jlong);
+
 /*
  * Class:     com_ibm_icu4jni_converters_NativeConverter
  * Method:    getMinBytesPerChar
@@ -147,6 +156,7 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getMaxByt
  */
 JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getMinBytesPerChar
   (JNIEnv *, jclass, jlong);
+
 /*
  * Class:     com_ibm_icu4jni_converters_NativeConverter
  * Method:    getAveBytesPerChar
@@ -173,8 +183,16 @@ JNIEXPORT jfloat JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getAveC
 
 /*
  * Class:     com_ibm_icu4jni_converters_NativeConverter
+ * Method:    contains
+ * Signature: (JJ)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_contains
+  (JNIEnv *, jclass, jlong, jlong);
+
+/*
+ * Class:     com_ibm_icu4jni_converters_NativeConverter
  * Method:    getSubstitutionBytes
- * Signature: (J)Ljava/lang/String;
+ * Signature: (J)[B
  */
 JNIEXPORT jbyteArray JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getSubstitutionBytes
   (JNIEnv *, jclass, jlong);
@@ -237,14 +255,6 @@ JNIEXPORT jstring JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getCan
 
 /*
  * Class:     com_ibm_icu4jni_converters_NativeConverter
- * Method:    getJavaCanonicalName
- * Signature: (Ljava/lang/String;)Ljava/lang/String;
- */
-JNIEXPORT jstring JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getJavaCanonicalName
-  (JNIEnv *, jclass, jstring);
-
-/*
- * Class:     com_ibm_icu4jni_converters_NativeConverter
  * Method:    getICUCanonicalName
  * Signature: (Ljava/lang/String;)Ljava/lang/String;
  */
@@ -253,19 +263,27 @@ JNIEXPORT jstring JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getICU
 
 /*
  * Class:     com_ibm_icu4jni_converters_NativeConverter
+ * Method:    getJavaCanonicalName
+ * Signature: (Ljava/lang/String;)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getJavaCanonicalName
+  (JNIEnv *, jclass, jstring);
+
+/*
+ * Class:     com_ibm_icu4jni_converters_NativeConverter
  * Method:    setCallbackDecode
- * Signature: (JIZ)I
+ * Signature: (JII[CI)I
  */
 JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_setCallbackDecode
-  (JNIEnv *, jclass, jlong, jint, jboolean);
+  (JNIEnv *, jclass, jlong, jint, jint, jcharArray, jint);
 
 /*
  * Class:     com_ibm_icu4jni_converters_NativeConverter
  * Method:    setCallbackEncode
- * Signature: (JIZ)I
+ * Signature: (JII[BI)I
  */
 JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_setCallbackEncode
-  (JNIEnv *, jclass, jlong, jint, jboolean);
+  (JNIEnv *, jclass, jlong, jint, jint, jbyteArray, jint);
 
 /*
  * Class:     com_ibm_icu4jni_converters_NativeConverter
@@ -274,14 +292,6 @@ JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_setCallba
  */
 JNIEXPORT jint JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_safeClone
   (JNIEnv *, jclass, jlong, jlongArray);
-
-/*
- * Class:     com_ibm_icu4jni_converters_NativeConverter
- * Method:    contains
- * Signature: (JJ)Z
- */
-JNIEXPORT jboolean JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_contains
-  (JNIEnv *, jclass, jlong, jlong);
 
 #ifdef __cplusplus
 }

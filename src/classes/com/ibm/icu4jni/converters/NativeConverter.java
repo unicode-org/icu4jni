@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -231,6 +231,16 @@ public final class NativeConverter{
     public static final native int setSubstitutionModeCharToByte(long converterHandle, 
                                    boolean mode);
     /**
+     * Sets the substitution mode of CharToByte(fromUnicode) for the specified converter 
+     *
+     * @param converterHandle Address of converter object created by the native code
+     * @param mode to set the true/false
+     * @return int error code returned by ICU
+     * @internal ICU 3.6
+     */  
+    public static final native int setSubstitutionModeByteToChar(long converterHandle, 
+                                   boolean mode);
+    /**
      * Gets the numnber of invalid bytes in the specified converter object 
      * for the last error that has occured
      *
@@ -390,7 +400,7 @@ public final class NativeConverter{
      * @return int error code returned by ICU
      * @internal ICU 2.4
      */
-    public static final native int setCallbackDecode(long converterHandle, int mode, boolean stopOnIllegal);
+    public static final native int setCallbackDecode(long converterHandle, int onMalformedInput, int onUnmappableInput, char[] subChars, int length);
    
     /**
      * Sets the callback from Unicode for ICU conveter. The default behaviour of ICU callback
@@ -402,7 +412,7 @@ public final class NativeConverter{
      * @return int error code returned by ICU
      * @internal ICU 2.4
      */
-    public static final native int setCallbackEncode(long converterHandle, int mode, boolean stopOnIllegal);
+    public static final native int setCallbackEncode(long converterHandle, int onMalformedInput, int onUnmappableInput, byte[] subBytes, int length);
     
     /**
      * Returns a thread safe clone of the converter
@@ -411,10 +421,9 @@ public final class NativeConverter{
     public static final native int safeClone(long converterHandle,long[] handleArr);
     
     /** @internal ICU 2.4 */
-    public static final int STOP_CALLBACK = 0;
+    public static final int STOP_CALLBACK = 0;//CodingErrorAction.REPORT
     /** @internal ICU 2.4 */
-    public static final int SKIP_CALLBACK = 1;
+    public static final int SKIP_CALLBACK = 1;//CodingErrorAction.IGNORE
     /** @internal ICU 2.4 */
-    public static final int SUBSTITUTE_CALLBACK = 3;
-
+    public static final int SUBSTITUTE_CALLBACK = 2;//CodingErrorAction.REPLACE
 }

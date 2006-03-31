@@ -100,7 +100,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_closeConverter (JNIEnv *env,
 }
 
 /**
- * Sets the substution mode for to Unicode conversion. Currently only 
+ * Sets the substution mode for from Unicode conversion. Currently only 
  * two modes are supported: substitute or report
  * @param env environment handle for JNI 
  * @param jClass handle for the class
@@ -146,7 +146,53 @@ Java_com_ibm_icu4jni_converters_NativeConverter_setSubstitutionModeCharToByte (J
     errorCode = U_ILLEGAL_ARGUMENT_ERROR;
     return errorCode;
 }
+/**
+ * Sets the substution mode for to Unicode conversion. Currently only 
+ * two modes are supported: substitute or report
+ * @param env environment handle for JNI 
+ * @param jClass handle for the class
+ * @param handle address of ICU converter
+ * @param mode the mode to set 
+ */
+JNIEXPORT jint JNICALL 
+Java_com_ibm_icu4jni_converters_NativeConverter_setSubstitutionModeByteToChar (JNIEnv *env, 
+                                                                               jclass jClass, 
+                                                                               jlong handle, 
+                                                                               jboolean mode){
+    
+    UConverter* conv = (UConverter*)handle;
+    UErrorCode errorCode =U_ZERO_ERROR;
 
+    if(conv){
+        
+        UConverterToUCallback toUOldAction ;
+        void* toUOldContext;
+        void* toUNewContext=NULL;
+        if(mode){
+
+            ucnv_setToUCallBack(conv,
+               UCNV_TO_U_CALLBACK_SUBSTITUTE,
+               toUNewContext,
+               &toUOldAction,
+               (const void**)&toUOldContext,
+               &errorCode);
+
+        }
+        else{
+
+            ucnv_setToUCallBack(conv,
+               UCNV_TO_U_CALLBACK_STOP,
+               toUNewContext,
+               &toUOldAction,
+               (const void**)&toUOldContext,
+               &errorCode);
+         
+        }
+        return errorCode;
+    }
+    errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+    return errorCode;
+}
 /**
  * Converts a buffer of Unicode code units to target encoding 
  * @param env environment handle for JNI 
@@ -236,9 +282,9 @@ Java_com_ibm_icu4jni_converters_NativeConverter_encode(JNIEnv *env,
     if(cnv && myData){
         
        UErrorCode errorCode = U_ZERO_ERROR;
-        myData[3] = ucnv_fromUCountPending(cnv, &errorCode);
+       myData[3] = ucnv_fromUCountPending(cnv, &errorCode);
 
-        if(ec == U_ILLEGAL_CHAR_FOUND || ec == U_INVALID_CHAR_FOUND){
+       if(ec == U_ILLEGAL_CHAR_FOUND || ec == U_INVALID_CHAR_FOUND){
             jint count =32;
             UChar invalidUChars[32];
             ucnv_getInvalidUChars(cnv,invalidUChars,(int8_t*)&count,&errorCode);
@@ -335,7 +381,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_decode(JNIEnv *env,
     jint ec = Java_com_ibm_icu4jni_converters_NativeConverter_convertByteToChar(env,
                                                     jClass,handle,source,sourceEnd, 
                                                     target,targetEnd,data,flush);
-    
+
     jint* myData = (jint*) (*env)->GetPrimitiveArrayCritical(env,data,NULL);
     UConverter* cnv = (UConverter*)handle;
 
@@ -656,8 +702,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_setSubstitutionChars(JNIEnv *env
             return errorCode;
         }
     }
-    errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-    return errorCode;
+    return U_ILLEGAL_ARGUMENT_ERROR;
 }
 
 
@@ -1007,42 +1052,131 @@ JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getJavaCanonicalName(JNI
     (*env)->ReleaseStringUTFChars(env,icuCanonName,icuCanonicalName);
     return ret;
 }
+
+#define SUBS_ARRAY_CAPACITY 256
+typedef struct{
+    int length;
+    char subChars[SUBS_ARRAY_CAPACITY];
+    UConverterFromUCallback onUnmappableInput;
+    UConverterFromUCallback onMalformedInput;
+}EncoderCallbackContext;
+
+void  CHARSET_ENCODER_CALLBACK(const void *context,
+                  UConverterFromUnicodeArgs *fromArgs,
+                  const UChar* codeUnits,
+                  int32_t length,
+                  UChar32 codePoint,
+                  UConverterCallbackReason reason,
+                  UErrorCode * status){   
+    if(context){
+        EncoderCallbackContext* ctx = (EncoderCallbackContext*)context;
+        
+        if(ctx){
+            UConverterFromUCallback realCB = NULL;
+            switch(reason){
+                case UCNV_UNASSIGNED:
+                    realCB = ctx->onUnmappableInput;
+                    break;
+                case UCNV_ILLEGAL:/*malformed input*/
+                case UCNV_IRREGULAR:/*malformed input*/
+                    realCB = ctx->onMalformedInput;
+                    break;
+                /*
+                case UCNV_RESET:
+                    ucnv_resetToUnicode(args->converter);
+                    break;
+                case UCNV_CLOSE:
+                    ucnv_close(args->converter);
+                    break;
+                case UCNV_CLONE:
+                    ucnv_clone(args->clone);
+               */
+                default:
+                    *status = U_ILLEGAL_ARGUMENT_ERROR;
+                    return;
+            }
+            if(realCB==NULL){
+                *status = U_INTERNAL_PROGRAM_ERROR;
+            }
+            realCB(context, fromArgs, codeUnits, length, codePoint, reason, status);
+        }
+    }      
+}
+
+void  
+JNI_FROM_U_CALLBACK_SUBSTITUTE_ENCODER(const void *context,
+                                        UConverterFromUnicodeArgs *fromArgs,
+                                        const UChar* codeUnits,
+                                        int32_t length,
+                                        UChar32 codePoint,
+                                        UConverterCallbackReason reason,
+                                        UErrorCode * err){
+    if(context){
+        EncoderCallbackContext* temp = (EncoderCallbackContext*)context;
+        *err = U_ZERO_ERROR;
+        ucnv_cbFromUWriteBytes(fromArgs,temp->subChars ,temp->length , 0, err);
+    }
+    return;
+}
+
+UConverterFromUCallback 
+getFromUCallback(int32_t mode){
+    switch(mode){
+        default: /* falls through */
+        case com_ibm_icu4jni_converters_NativeConverter_STOP_CALLBACK:
+            return UCNV_FROM_U_CALLBACK_STOP;
+        case com_ibm_icu4jni_converters_NativeConverter_SKIP_CALLBACK:
+            return UCNV_FROM_U_CALLBACK_SKIP ;
+        case com_ibm_icu4jni_converters_NativeConverter_SUBSTITUTE_CALLBACK:
+            return JNI_FROM_U_CALLBACK_SUBSTITUTE_ENCODER;
+    }
+}
 JNIEXPORT jint JNICALL 
 Java_com_ibm_icu4jni_converters_NativeConverter_setCallbackEncode(JNIEnv *env, 
                                                                   jclass jClass, 
                                                                   jlong handle, 
-                                                                  jint mode,
-                                                                  jboolean stopOnIllegal){
+                                                                  jint onMalformedInput,
+                                                                  jint onUnmappableInput,
+                                                                  jbyteArray subChars,
+                                                                  jint length){
     UConverter* conv = (UConverter*)handle;
     UErrorCode errorCode =U_ZERO_ERROR;
 
     if(conv){
         
-        UConverterFromUCallback fromUOldAction ;
-        void* fromUOldContext;
-        void* fromUNewContext=NULL;
-        UConverterFromUCallback newAction;
-        switch(mode){
-        default: /* falls through */
-        case com_ibm_icu4jni_converters_NativeConverter_STOP_CALLBACK:
-           newAction  = UCNV_FROM_U_CALLBACK_STOP;
-           break;
-        case com_ibm_icu4jni_converters_NativeConverter_SKIP_CALLBACK:
-            newAction = UCNV_FROM_U_CALLBACK_SKIP;
-            if(stopOnIllegal==TRUE){
-                fromUNewContext = UCNV_SUB_STOP_ON_ILLEGAL;
-            }
-            break;
-        case com_ibm_icu4jni_converters_NativeConverter_SUBSTITUTE_CALLBACK:
-            newAction = UCNV_FROM_U_CALLBACK_SUBSTITUTE;
-            if(stopOnIllegal==TRUE){
-                fromUNewContext = UCNV_SUB_STOP_ON_ILLEGAL;
-            }
-            break;
+        UConverterFromUCallback fromUOldAction = NULL;
+        void* fromUOldContext = NULL;
+        EncoderCallbackContext* fromUNewContext=NULL;
+        UConverterFromUCallback fromUNewAction=NULL;
+        jbyte* sub = (jbyte*) (*env)->GetPrimitiveArrayCritical(env,subChars, NULL);
+        ucnv_getFromUCallBack(conv, &fromUOldAction, &fromUOldContext);
+
+        /* fromUOldContext can only be DecodeCallbackContext since
+           the converter created is private data for the decoder
+           and callbacks can only be set via this method!
+        */
+        if(fromUOldContext==NULL){
+            fromUNewContext = (EncoderCallbackContext*) malloc(sizeof(EncoderCallbackContext));
+            fromUNewAction = CHARSET_ENCODER_CALLBACK;
+        }else{
+            fromUNewContext = fromUOldContext;
+            fromUNewAction = fromUOldAction;
+            fromUOldAction = NULL;
+            fromUOldContext = NULL;
+        }
+        fromUNewContext->onMalformedInput = getFromUCallback(onMalformedInput);
+        fromUNewContext->onUnmappableInput = getFromUCallback(onUnmappableInput);
+        if(sub!=NULL){
+            fromUNewContext->length = length;
+            strncpy(fromUNewContext->subChars, sub, length);
+        }else{
+            errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         }
 
+        (*env)->ReleasePrimitiveArrayCritical(env,subChars, NULL, 0);
+
         ucnv_setFromUCallBack(conv,
-           newAction,
+           fromUNewAction,
            fromUNewContext,
            &fromUOldAction,
            (const void**)&fromUOldContext,
@@ -1051,45 +1185,131 @@ Java_com_ibm_icu4jni_converters_NativeConverter_setCallbackEncode(JNIEnv *env,
 
         return errorCode;
     }
-    errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-    return errorCode;
+    return U_ILLEGAL_ARGUMENT_ERROR;
+}
+                                                                  
+typedef struct{
+    int length;
+    UChar subUChars[256];
+    UConverterToUCallback onUnmappableInput;
+    UConverterToUCallback onMalformedInput;
+}DecoderCallbackContext;
+
+void  
+JNI_TO_U_CALLBACK_SUBSTITUTE_DECODER(const void *context,
+                                    UConverterToUnicodeArgs *toArgs,
+                                    const char* codeUnits,
+                                    int32_t length,
+                                    UConverterCallbackReason reason,
+                                    UErrorCode * err){
+    if(context){
+        DecoderCallbackContext* temp = (DecoderCallbackContext*)context;
+        *err = U_ZERO_ERROR;
+        ucnv_cbToUWriteUChars(toArgs,temp->subUChars ,temp->length , 0, err);
+    }
+    return;
+}
+
+UConverterToUCallback 
+getToUCallback(int32_t mode){
+    switch(mode){
+        default: /* falls through */
+        case com_ibm_icu4jni_converters_NativeConverter_STOP_CALLBACK:
+            return UCNV_TO_U_CALLBACK_STOP;
+        case com_ibm_icu4jni_converters_NativeConverter_SKIP_CALLBACK:
+            return UCNV_TO_U_CALLBACK_SKIP ;
+        case com_ibm_icu4jni_converters_NativeConverter_SUBSTITUTE_CALLBACK:
+            return JNI_TO_U_CALLBACK_SUBSTITUTE_DECODER;
+    }
+}
+
+void  CHARSET_DECODER_CALLBACK(const void *context,
+                               UConverterToUnicodeArgs *args, 
+                               const char* codeUnits, 
+                               int32_t length,
+                               UConverterCallbackReason reason,
+                               UErrorCode *status ){
+   
+    if(context){
+        DecoderCallbackContext* ctx = (DecoderCallbackContext*)context;
+        
+        if(ctx){
+            UConverterToUCallback realCB = NULL;
+            switch(reason){
+                case UCNV_UNASSIGNED:
+                    realCB = ctx->onUnmappableInput;
+                    break;
+                case UCNV_ILLEGAL:/*malformed input*/
+                case UCNV_IRREGULAR:/*malformed input*/
+                    realCB = ctx->onMalformedInput;
+                    break;
+                /*
+                case UCNV_RESET:
+                    ucnv_resetToUnicode(args->converter);
+                    break;
+                case UCNV_CLOSE:
+                    ucnv_close(args->converter);
+                    break;
+                case UCNV_CLONE:
+                    ucnv_clone(args->clone);
+               */
+                default:
+                    *status = U_ILLEGAL_ARGUMENT_ERROR;
+                    return;
+            }
+            if(realCB==NULL){
+                *status = U_INTERNAL_PROGRAM_ERROR;
+            }
+            realCB(context, args, codeUnits, length, reason, status);
+        }
+    }      
 }
 
 JNIEXPORT jint JNICALL 
 Java_com_ibm_icu4jni_converters_NativeConverter_setCallbackDecode(JNIEnv *env, 
                                                                   jclass jClass, 
                                                                   jlong handle, 
-                                                                  jint mode, 
-                                                                  jboolean stopOnIllegal){
+                                                                  jint onMalformedInput, 
+                                                                  jint onUnmappableInput,
+                                                                  jcharArray subChars,
+                                                                  jint length){
+    
     UConverter* conv = (UConverter*)handle;
     UErrorCode errorCode =U_ZERO_ERROR;
     if(conv){
         
         UConverterToUCallback toUOldAction ;
         void* toUOldContext;
-        void* toUNewContext=NULL;
-        UConverterToUCallback newAction;
+        DecoderCallbackContext* toUNewContext = NULL;
+        UConverterToUCallback toUNewAction = NULL;
+        jchar* sub = (jchar*) (*env)->GetPrimitiveArrayCritical(env,subChars, NULL);
+    
+        ucnv_getToUCallBack(conv, &toUOldAction, &toUOldContext);
 
-        switch(mode){
-        default: /* falls through */
-        case com_ibm_icu4jni_converters_NativeConverter_STOP_CALLBACK:
-           newAction  = UCNV_TO_U_CALLBACK_STOP;
-           break;
-        case com_ibm_icu4jni_converters_NativeConverter_SKIP_CALLBACK:
-            newAction = UCNV_TO_U_CALLBACK_SKIP ;
-            
-            if(stopOnIllegal==TRUE){
-                toUNewContext = UCNV_SUB_STOP_ON_ILLEGAL;
-            }
-            
-            break;
-        case com_ibm_icu4jni_converters_NativeConverter_SUBSTITUTE_CALLBACK:
-            return setToUCallbackSubs(conv,NULL,0,stopOnIllegal);
-            
+        /* toUOldContext can only be DecodeCallbackContext since
+           the converter created is private data for the decoder
+           and callbacks can only be set via this method!
+        */
+        if(toUOldContext==NULL){
+            toUNewContext = (DecoderCallbackContext*) malloc(sizeof(DecoderCallbackContext));
+            toUNewAction = CHARSET_DECODER_CALLBACK;
+        }else{
+            toUNewContext = toUOldContext;
+            toUNewAction = toUOldAction;
+            toUOldAction = NULL;
+            toUOldContext = NULL;
         }
-
+        toUNewContext->onMalformedInput = getToUCallback(onMalformedInput);
+        toUNewContext->onUnmappableInput = getToUCallback(onUnmappableInput);
+        if(sub!=NULL){
+            toUNewContext->length = length;
+            u_strncpy(toUNewContext->subUChars, sub, length);
+        }else{
+            errorCode =  U_ILLEGAL_ARGUMENT_ERROR;
+        }
+        (*env)->ReleasePrimitiveArrayCritical(env,subChars, NULL, 0);
         ucnv_setToUCallBack(conv,
-           newAction,
+           toUNewAction,
            toUNewContext,
            &toUOldAction,
            (const void**)&toUOldContext,
@@ -1097,8 +1317,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_setCallbackDecode(JNIEnv *env,
 
         return errorCode;
     }
-    errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-    return errorCode;
+    return U_ILLEGAL_ARGUMENT_ERROR;
 }
 
 JNIEXPORT jint JNICALL 

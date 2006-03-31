@@ -124,7 +124,7 @@ public class TestCharset extends TestFmwk {
             }
         } catch (Exception e) {
             errln("ToChars - exception in single");
-            e.printStackTrace();
+            //e.printStackTrace();
             rc = 6;
         }
 
@@ -156,7 +156,7 @@ public class TestCharset extends TestFmwk {
             }
         } catch (Exception e) {
             errln("ToChars - exception in single buffer");
-            e.printStackTrace(System.err);
+            //e.printStackTrace(System.err);
             rc = 9;
         }
         if (rc != 0) {
@@ -183,7 +183,7 @@ public class TestCharset extends TestFmwk {
             }
         } catch (Exception e) {
             errln("FromChars - exception in buffer");
-            e.printStackTrace(System.err);
+            //e.printStackTrace(System.err);
             rc = 5;
         }
 
@@ -215,7 +215,7 @@ public class TestCharset extends TestFmwk {
 
         } catch (Exception e) {
             errln("FromChars - exception in single");
-            e.printStackTrace(System.err);
+            //e.printStackTrace(System.err);
             rc = 6;
         }
 
@@ -246,7 +246,7 @@ public class TestCharset extends TestFmwk {
             }
         } catch (Exception e) {
             errln("FromChars - exception in single buffer");
-            e.printStackTrace(System.err);
+            //e.printStackTrace(System.err);
             rc = 9;
         }
         if (rc != 0) {
@@ -677,7 +677,7 @@ public class TestCharset extends TestFmwk {
             
         encoder.reset();
         if (!encoder.canEncode(new String(mySource))) {
-            errln("Test canConvert()" + encoding + ": FAILED");
+            errln("Test canConvert() " + encoding + " failed. "+encoder);
         }
 
     }
@@ -720,9 +720,17 @@ public class TestCharset extends TestFmwk {
                 CoderResult result =
                     decoder.decode(mygbSource, myCharTarget, false);
                 if (result.isError()) {
-                    errln("Test small output buffers while decoding -- FAILED");
+                    errln("Test small output buffers while decoding "+ result.toString());
                 }
-                if (myCharTarget.position() == myUSource.length) {
+                if (mygbSource.position()== mygbSource.limit()) {
+                    result = decoder.decode(mygbSource, myCharTarget, true);
+                    if (result.isError()) {
+                        errln("Test small output buffers while decoding "+result.toString());
+                    }
+                    result = decoder.flush(myCharTarget);
+                    if (result.isError()) {
+                        errln("Test small output buffers while decoding "+ result.toString());
+                    }
                     break;
                 }
             }
@@ -846,7 +854,7 @@ public class TestCharset extends TestFmwk {
             }
         }catch(Exception e){
             errln("Error creating charset encoder."+ e.toString());
-            e.printStackTrace();
+           // e.printStackTrace();
         }
         try{
             Charset cs = Charset.forName("x-ibm-971_P100-1995");
@@ -1016,28 +1024,32 @@ public class TestCharset extends TestFmwk {
             myTarget.limit(0);
             mySource.rewind();
             logln("myTarget.limit: " + myTarget.limit() + " myTarget.capcity: " + myTarget.capacity());
+            
             while (true) {
                 int pos = myTarget.position();
+                myTarget.limit(++pos);
+                CoderResult result = encoder.encode(mySource, myTarget, false);
+                logln("myTarget.Position: "+ pos + " myTarget.limit: " + myTarget.limit());
+                logln("mySource.position: " + mySource.position() + " mySource.limit: " + mySource.limit());
+                
 
-                myTarget.limit( myTarget.limit()+1);
-                logln("myTarget.Position: "+ pos + "myTarget.limit: " + myTarget.limit());
-                CoderResult result = encoder.encode(mySource, myTarget, true);
-                //logln("CoderResult: " + result.toString());
-                if (result.isOverflow()) {
-                    continue;
-                }
-            
                 if (result.isError()) {
-                    errln("Test small output buffers while encoding failed. "+result.toString());
+                    errln("Test small output buffers while encoding "+result.toString());
                 }
-                if (mySource.position() == myUSource.length) {
-                    myTarget.limit(myGBSource.length);
-                    encoder.flush(myTarget);
+                if (mySource.position() == mySource.limit()) {
+                    result = encoder.encode(mySource, myTarget, true);
+                    if (result.isError()) {
+                        errln("Test small output buffers while encoding "+result.toString());
+                    }
+                    
+                    myTarget.limit(myTarget.capacity());
+                    result = encoder.flush(myTarget);
+                    if (result.isError()) {
+                        errln("Test small output buffers while encoding "+result.toString());
+                    }
                     break;
                 }
-                errln("small out buf " + pos);
             }
-
             if (!equals(myTarget, myGBSource)) {
                 errln("Test small output buffers "+ encoding+ " From Unicode failed.");
             }
@@ -1045,8 +1057,7 @@ public class TestCharset extends TestFmwk {
 
         }
     }
-    public void TestConvertAll(/*String encoding*/
-    ) throws Exception {
+    public void TestConvertAll(/*String encoding*/) throws Exception {
         {
             try {
                 decoder.reset();
@@ -1059,7 +1070,8 @@ public class TestCharset extends TestFmwk {
                             + " to Unicode  --FAILED");
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
+                errln(e.getMessage());
             }
         }
         {
@@ -1074,7 +1086,8 @@ public class TestCharset extends TestFmwk {
                             + " to Unicode  --FAILED");
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
+                errln("encoder.encode() failed "+ e.getMessage()+" "+e.toString());
             }
         }
 
@@ -1096,7 +1109,8 @@ public class TestCharset extends TestFmwk {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            errln(e.getMessage());
         }
     }
 
@@ -1385,5 +1399,57 @@ public class TestCharset extends TestFmwk {
             errln(e.getMessage()+" "+cs.getClass().toString());
         }
     }
-
+    public void TestDecodeMalformed() {
+        CharsetProviderICU provider = new CharsetProviderICU();
+        Charset ics = provider.charsetForName("UTF-16BE");
+        //Use SUN's charset
+        Charset jcs = Charset.forName("UTF-16");
+        CoderResult ir = execMalformed(ics);
+        CoderResult jr = execMalformed(jcs);
+        if(ir!=jr){
+            errln("ICU's decoder did not return the same result as Sun. ICU: "+ir.toString()+" Sun: "+jr.toString());
+        }
+    }
+    private CoderResult execMalformed(Charset cs){
+        CharsetDecoder decoder = cs.newDecoder();
+        decoder.onMalformedInput(CodingErrorAction.IGNORE);
+        decoder.onUnmappableCharacter(CodingErrorAction.REPORT);
+        ByteBuffer in = ByteBuffer.wrap(new byte[] { 0x00, 0x41, 0x00, 0x42, 0x01 });
+        CharBuffer out = CharBuffer.allocate(3);
+        return decoder.decode(in, out, true);
+    }
+    
+    public void TestJavaUTF16Decoder(){
+        CharsetProviderICU provider = new CharsetProviderICU();
+        Charset ics = provider.charsetForName("UTF-16BE");
+        //Use SUN's charset
+        Charset jcs = Charset.forName("UTF-16");
+        Exception ie = execConvertAll(ics);
+        Exception je = execConvertAll(jcs);
+        if(ie!=je){
+            errln("ICU's decoder did not return the same result as Sun. ICU: "+ie.toString()+" Sun: "+je.toString());
+        }
+    }
+    private Exception execConvertAll(Charset cs){
+        ByteBuffer in = ByteBuffer.allocate(400);
+        int i=0;
+        while(in.position()!=in.capacity()){
+            in.put((byte)0xD8);
+            in.put((byte)i);
+            in.put((byte)0xDC);
+            in.put((byte)i);
+            i++;
+        }
+        in.limit(in.position());
+        in.position(0);
+        CharsetDecoder decoder = cs.newDecoder();
+        decoder.onMalformedInput(CodingErrorAction.IGNORE);
+        decoder.onUnmappableCharacter(CodingErrorAction.REPORT);
+        try{
+            CharBuffer out = decoder.decode(in);
+        }catch ( Exception ex){
+            return ex;
+        }
+        return null;
+    }
 }
