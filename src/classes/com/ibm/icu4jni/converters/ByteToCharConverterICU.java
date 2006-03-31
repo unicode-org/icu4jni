@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -16,7 +16,8 @@
   
   import java.io.UnsupportedEncodingException;
   import sun.io.*;
-  import com.ibm.icu4jni.common.*;
+
+import com.ibm.icu4jni.common.*;
   
   public class ByteToCharConverterICU extends ByteToCharConverter{
     
@@ -111,7 +112,7 @@
         data[1] = outOff; // output offset  
          
         /* do the conversion */
-        int err=NativeConverter.convertByteToChar(
+        int err = NativeConverter.convertByteToChar(
                             converterHandle,  /* Handle to ICU Converter */
                             input,            /* input array of bytes */
                             inEnd,            /* last index+1 to be converted */
@@ -168,7 +169,8 @@
      */
     public final int flush(char[] output, int outStart, int outEnd) 
                         throws IllegalArgumentException,
-                        ConversionBufferFullException {
+                        ConversionBufferFullException,
+                        MalformedInputException{
         
         /* argument check */
         if(output==null){
@@ -194,7 +196,9 @@
         /* if we donot have room for output throw an exception*/
         if(err == ErrorCode.U_BUFFER_OVERFLOW_ERROR){
 		        throw new ConversionBufferFullException();
-		}
+		}else if(err>ErrorCode.U_ZERO_ERROR){
+                throw new MalformedInputException();
+        }
         
         /* return the number of bytes written to ouput buffer */
 	    reset();
@@ -262,10 +266,14 @@
      * @stable ICU 2.4
      */
     public final void setSubstitutionMode(boolean doSub) {
+        int ec = ErrorCode.U_ZERO_ERROR;
         if(doSub){
-            NativeConverter.setSubstitutionChars(converterHandle,subChars,subChars.length);
+            ec = NativeConverter.setSubstitutionChars(converterHandle,subChars,subChars.length);
         }else{
-            NativeConverter.setSubstitutionChars(converterHandle,null,0);
+            ec = NativeConverter.setSubstitutionModeByteToChar(converterHandle, false);
+        }
+        if(ec> ErrorCode.U_ZERO_ERROR){
+            throw new IllegalArgumentException(ErrorCode.getErrorName(ec));
         }
     }
     

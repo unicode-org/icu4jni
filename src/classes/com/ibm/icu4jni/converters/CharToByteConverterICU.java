@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -216,10 +216,10 @@
         if( c.length > getMaxBytesPerChar() ) {
             throw new IllegalArgumentException();
         }
+        int ec = NativeConverter.setSubstitutionBytes(converterHandle,c,c.length);
         
-        if(NativeConverter.setSubstitutionBytes(converterHandle,c,c.length)
-                > ErrorCode.U_ZERO_ERROR){
-            throw new IllegalArgumentException();
+        if(ec > ErrorCode.U_ZERO_ERROR){
+            throw new IllegalArgumentException(ErrorCode.getErrorName(ec));
         }
     }
     

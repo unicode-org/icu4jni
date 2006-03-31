@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and	  *
+* Copyright (C) 1996-2006, International Business Machines Corporation and	  *
 * others. All Rights Reserved.												  *
 *******************************************************************************
 *
@@ -1014,4 +1014,21 @@ public class TestConverter extends TestFmwk{
         //}
     }
 
+    public void TestJB5109()throws Exception{
+        try{                   
+            ByteToCharConverterICU b2c = new ByteToCharConverterICU("ibm-943_P15A-2003");
+            b2c.setSubstitutionMode(false);
+            byte[] bb = new byte[] { (byte)0x8f };
+            char[] cc = new char[10];
+            int ret = b2c.convert(bb, 0, bb.length, cc, 0, cc.length);
+            logln("C ret=" + ret);
+            ret = b2c.flush(cc, 0, cc.length);
+            logln("F ret=" + ret);
+            errln("did not get the expected exception");
+        }catch (MalformedInputException e){
+              logln("Got the expected exception: "+ e.getMessage());
+        }catch(Exception e){
+            throw e;
+        }
+    }
 }
