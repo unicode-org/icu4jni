@@ -1,5 +1,5 @@
 #/**********************************************************************
-#*   Copyright (C) 2001-2005, International Business Machines
+#*   Copyright (C) 2001-2006, International Business Machines
 #*   Corporation and others.  All Rights Reserved.
 #***********************************************************************/
 ## Makefile.in for icu4jni
@@ -137,6 +137,15 @@ CSTEST :=
 MKSERVICE = $(shell mkdir $(BUILDDIR)/META-INF)
 endif
 
+ifeq ($(CANON), win32)
+
+COMMAND := $(JAVA_EXEC) -classpath \"./build/classes\" -Djava.library.path=\"$(PATHWD)/build/lib\" com.ibm.icu4jni.test.TestAll -nothrow
+else
+
+COMMAND := $(JAVA_EXEC) -classpath :./build/classes: -Djava.library.path=$(prefix)/lib:$(PATHWD)/build/lib: com.ibm.icu4jni.test.TestAll -nothrow
+
+endif
+
 MAKE_CLASSOUT1=$(MAKE_CLASS:.java=.class)
 MAKE_CLASSOUT =$(MAKE_CLASSOUT1:src/%=build/%)
 
@@ -212,7 +221,7 @@ distclean-local: clean-local
 check-local: all testfmwk  testcs
 
 testfmwk: copy-file
-	$(INVOKE) $(JAVA_EXEC) -classpath :./build/classes: -Djava.library.path=$(prefix)/lib:$(PATHWD)/build/lib: com.ibm.icu4jni.test.TestAll -nothrow
+	$(INVOKE) $(COMMAND)
 
 testcs:
 	$(CSTEST)

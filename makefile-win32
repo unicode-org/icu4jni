@@ -1,5 +1,5 @@
 #**********************************************************************
-#*   Copyright (C) 2001-2005, International Business Machines
+#*   Copyright (C) 2001-2006, International Business Machines
 #*   Corporation and others.  All Rights Reserved.
 #***********************************************************************/
 ## Makefile for icu4jni
@@ -79,10 +79,10 @@ JAVA_EXE=$(JAVABIN)java.exe
 JAVA_JAR=$(JAVABIN)jar.exe
 JAVA_FLAGS=-d $(BUILDDIR)\classes -classpath $(BUILDDIR)\classes;.
 VERSION=34
-DEBUG_TARGET=$(OUTDIR)/ICUInterface$(VERSION)d.dll
-RELEASE_TARGET=$(OUTDIR)/ICUInterface$(VERSION).dll
 OUTDIR=.\build\lib
 INTDIR=.\src\native\int
+DEBUG_TARGET=$(OUTDIR)\ICUInterface$(VERSION)d.dll
+RELEASE_TARGET=$(OUTDIR)\ICUInterface$(VERSION).dll
 INTERFACE_NAME=$(INTDIR)\ICUInterface$(VERSION)
 ICU_INCLUDE = $(ICUBIN)\..\include
 ICULIB  = $(ICUBIN)\..\lib
@@ -100,10 +100,25 @@ CLEAN :
 	-@rd /S /Q "$(INTDIR)"
 	-@rd /S /Q "$(BUILDDIR)"
     
-JAR : INIT "$(OUTDIR)\ICUInterfaced.dll" "BUILDCORE" 
+JAR : INIT "$(OUTDIR)\ICUInterface.dll" "BUILDCORE" 
 	-@echo Creating Jar file
 	-@xcopy META-INF\* $(BDIR)\META-INF\ /s /y
 	$(JAVA_HOME)\bin\jar cf icu4jni.jar -C $(BDIR) .
+
+INSTALL : JAR 
+	-@echo Installing ICU4JNI in $(JAVA_HOME) $(DEBUG_TARGET)
+	-@xcopy icu4jni.jar $(JAVA_HOME)\jre\lib\ext 
+	-@xcopy $(DEBUG_TARGET) $(JAVA_HOME)\jre\lib\ext
+	-@xcopy $(ICUBIN)\icuin*.dll $(JAVA_HOME)\jre\lib\ext
+	-@xcopy $(ICUBIN)\icuuc*.dll $(JAVA_HOME)\jre\lib\ext
+	-@xcopy $(ICUBIN)\icudt*.dll $(JAVA_HOME)\jre\lib\ext
+
+DISTCLEAN : CLEAN
+	-@del $(JAVA_HOME)\jre\lib\ext\icuin*.dll
+	-@del $(JAVA_HOME)\jre\lib\ext\icuuc*.dll
+	-@del $(JAVA_HOME)\jre\lib\ext\icudt*.dll
+	-@del $(JAVA_HOME)\jre\lib\ext\ICUInterface*.dll
+	-@del $(JAVA_HOME)\jre\lib\ext\icu4jni.jar
     
 TESTS : INIT "BUILDTEST"
 
@@ -157,6 +172,21 @@ JAR : INIT "$(OUTDIR)\ICUInterfaced.dll" "BUILDCORE"
 	-@echo Creating Jar file
 	-@xcopy META-INF\* $(BDIR)\META-INF\ /s /y
 	$(JAVA_HOME)\bin\jar cf icu4jni.jar -C $(BDIR) .
+
+INSTALL : JAR 
+	-@echo Installing ICU4JNI in $(JAVA_HOME) $(DEBUG_TARGET)
+	-@xcopy icu4jni.jar $(JAVA_HOME)\jre\lib\ext 
+	-@xcopy $(DEBUG_TARGET) $(JAVA_HOME)\jre\lib\ext
+	-@xcopy $(ICUBIN)\icuin*d.dll $(JAVA_HOME)\jre\lib\ext
+	-@xcopy $(ICUBIN)\icuuc*d.dll $(JAVA_HOME)\jre\lib\ext
+	-@xcopy $(ICUBIN)\icudt*.dll $(JAVA_HOME)\jre\lib\ext
+
+DISTCLEAN : CLEAN
+	-@del $(JAVA_HOME)\jre\lib\ext\icuin*d.dll
+	-@del $(JAVA_HOME)\jre\lib\ext\icuuc*d.dll
+	-@del $(JAVA_HOME)\jre\lib\ext\icudt*.dll
+	-@del $(JAVA_HOME)\jre\lib\ext\ICUInterface*d.dll
+	-@del $(JAVA_HOME)\jre\lib\ext\icu4jni.jar
     
 TESTS : INIT "BUILDTEST"
 
@@ -326,5 +356,6 @@ SOURCE=$(NATIVE)\common\ErrorCode.c
 
 
 
-!ENDIF 
+!ENDIF
+
 

@@ -806,6 +806,7 @@ case "${host}" in
         *-*-irix*)      CANON="irix" ;;
         *-*-os390*)     CANON="os390" ;;
         *-*-os400*)     CANON="os400" ;;
+        *-*-cygwin*|*-*-mingw*)	CANON="win32";;
         *-apple-darwin*|*-apple-rhapsody*)      CANON="darwin" ;;
         *)              CANON="unknown" ;;
 esac

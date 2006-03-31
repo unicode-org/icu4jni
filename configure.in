@@ -1,7 +1,7 @@
 dnl -*-m4-*-
 dnl configure.in for ICU4JNI
 dnl Ram Viswanadha
-dnl copyright (c) 2001-2003 IBM, Inc.
+dnl Copyright (c) 2001-2006 IBM, Inc.
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(src/native/collation/CollationInterface.h)
@@ -46,6 +46,7 @@ case "${host}" in
         *-*-irix*)      CANON="irix" ;;
         *-*-os390*)     CANON="os390" ;;
         *-*-os400*)     CANON="os400" ;;
+        *-*-cygwin*|*-*-mingw*)	CANON="win32";;
         *-apple-darwin*|*-apple-rhapsody*)      CANON="darwin" ;;
         *)              CANON="unknown" ;;
 esac
