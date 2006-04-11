@@ -42,7 +42,7 @@ public final class CharsetDecoderICU extends CharsetDecoder{
     private int[] data = new int[LIMIT];
     
     /* handle to the ICU converter that is opened */
-    private final long converterHandle;
+    private long converterHandle=0;
 
     
     private  byte[] input = null;
@@ -268,6 +268,7 @@ public final class CharsetDecoderICU extends CharsetDecoder{
     protected void finalize()throws Throwable{
         NativeConverter.closeConverter(converterHandle);
         super.finalize();
+        converterHandle = 0;
     }
     
     //------------------------------------------
