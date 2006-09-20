@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -13,7 +13,7 @@ package com.ibm.icu4jni.common;
  * @internal ICU 2.4
  */
 public final class ICU4JNILoader {
-    private static final String VERSION_STRING = "34";
+    private static final String VERSION_STRING = "36";
     private static final String VERSION_STRING_DEBUG = VERSION_STRING + "d";
     /**
      * @internal ICU 2.4
