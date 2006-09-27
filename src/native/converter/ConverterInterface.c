@@ -25,6 +25,9 @@
 #include <stdlib.h>
 #include <string.h>
  
+#define UTF_16BE "UTF-16BE"
+#define UTF_16 "UTF-16"
+
 /* Prototype of callback for substituting user settable sub chars */
 void  JNI_TO_U_CALLBACK_SUBSTITUTE
  (const void *,UConverterToUnicodeArgs *,const char* ,int32_t ,UConverterCallbackReason ,UErrorCode * );
@@ -947,10 +950,15 @@ Java_com_ibm_icu4jni_converters_NativeConverter_getAliases(JNIEnv *env, jclass j
     int i=0;
     int j=0;
     const char* aliasArray[50];
+    int32_t utf16AliasNum = 0;
     
     if(encName){
         const char* myEncName = encName;
         aliasNum = ucnv_countAliases(myEncName,&error);
+        /* special case for UTF-16. In java UTF-16 is always BE*/
+        if(strcmp(myEncName, UTF_16BE)==0){
+            utf16AliasNum=ucnv_countAliases(UTF_16,&error);
+        }
         if(aliasNum==0 && encName[0] == 0x78 /*x*/ && encName[1]== 0x2d /*-*/){
             myEncName = encName+2;
             aliasNum = ucnv_countAliases(myEncName,&error);
@@ -962,6 +970,15 @@ Java_com_ibm_icu4jni_converters_NativeConverter_getAliases(JNIEnv *env, jclass j
                     aliasArray[j++]= name;
                 }
             }
+            if(utf16AliasNum>0){
+                for(i=0;i<utf16AliasNum;i++){
+                    const char* name = ucnv_getAlias(UTF_16,(uint16_t)i,&error);
+                    if(strchr(name,'+')==0 && strchr(name,',')==0){
+                        aliasArray[j++]= name;
+                    }
+                }
+            }
+
             ret =  (jobjectArray)(*env)->NewObjectArray(env,j,
                                                         (*env)->FindClass(env,"java/lang/String"),
                                                         (*env)->NewStringUTF(env,""));
@@ -1000,7 +1017,9 @@ JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getICUCanonicalName(JNIE
     const char* canonicalName = NULL;
     jstring ret = NULL;
     if(encName){
-        if((canonicalName = ucnv_getCanonicalName(encName, "MIME", &error))!=NULL){
+        if(strcmp(encName,"UTF-16")==0){
+            ret = ((*env)->NewStringUTF(env,UTF_16BE));
+        }else if((canonicalName = ucnv_getCanonicalName(encName, "MIME", &error))!=NULL){
             ret = ((*env)->NewStringUTF(env, canonicalName));
         }else if((canonicalName = ucnv_getCanonicalName(encName, "IANA", &error))!=NULL){
             ret = ((*env)->NewStringUTF(env, canonicalName));

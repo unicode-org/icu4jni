@@ -60,9 +60,43 @@ public class TestCharset extends TestFmwk {
         encoder = (CharsetEncoder) charset.newEncoder();
     }
     public void TestUTF16Converter(){
-        CharsetProvider icu = new CharsetProviderICU();
+        CharsetProviderICU icu = new CharsetProviderICU();
         Charset icuChar = icu.charsetForName("UTF-16");
-        icuChar.newEncoder();
+        Set aliases = icuChar.aliases();
+        Iterator iter = aliases.iterator();
+        while(iter.hasNext()){
+            logln((String)iter.next());
+        }
+        if(!aliases.contains("csUnicode")){
+            errln("Did not get the expected alias");
+        }
+        char[] expchars = new char[]{'\ud800','\udc00','\ud801','\udc01'};
+        byte[] expbytes = new byte[]{(byte)0xd8,0x00,(byte)0xdc,0x00, (byte)0xd8,0x01,(byte)0xdc,0x01};
+        {
+            try{
+                CharsetEncoder enc =icuChar.newEncoder();
+                CharBuffer in = CharBuffer.wrap(expchars);
+                ByteBuffer out = enc.encode(in);
+                if(!equals(out,expbytes)){
+                    errln("did not get the expected output");
+                }
+            }catch(CharacterCodingException ex){
+                errln(ex.getMessage());
+            }
+        }
+        {
+            try{
+                CharsetDecoder dec =icuChar.newDecoder();
+                ByteBuffer in = ByteBuffer.wrap(expbytes);
+                CharBuffer out = dec.decode(in);
+                if(!equals(out,expchars)){
+                    errln("did not get the expected output");
+                }
+            }catch(CharacterCodingException ex){
+                errln(ex.getMessage());
+            }
+        }
+        
     }
     public void TestAPISemantics(/*String encoding*/) 
                 throws Exception {
@@ -796,11 +830,17 @@ public class TestCharset extends TestFmwk {
             Charset cs = icu.charsetForName(charsets[i]);
             try{
                 CharsetEncoder encoder = cs.newEncoder();
+                if(encoder == null){
+                    errln("newEncoder() returned null for: "+charsets[i]);
+                }
             }catch(Exception ex){
                 errln("Could not instantiate encoder for "+charsets[i]+". Error: "+ex.toString());
             }
             try{
                 CharsetDecoder decoder = cs.newDecoder();
+                if(decoder == null){
+                    errln("newDecoder() returned null for: "+charsets[i]);
+                }
             }catch(Exception ex){
                 errln("Could not instantiate decoder for "+charsets[i]+". Error: "+ex.toString());
             }
