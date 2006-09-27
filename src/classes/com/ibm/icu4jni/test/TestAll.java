@@ -56,9 +56,16 @@ public class TestAll extends TestFmwk {
         if(version.indexOf("1.4")!=0){
             return;
         }
-        run( new TestFmwk[]{
-                new com.ibm.icu4jni.test.charset.TestCharset()
-            }
-        );
+        try{
+            Class cs = Class.forName("com.ibm.icu4jni.test.charset.TestCharset");
+            Object obj = cs.newInstance();
+            run( new TestFmwk[]{
+                    (TestFmwk)obj
+                }
+            );
+        }catch(ClassNotFoundException ex){
+        }catch (IllegalAccessException ex){ 
+        }catch (InstantiationException ex){ 
+        }
     }               
 }
