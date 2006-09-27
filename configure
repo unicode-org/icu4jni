@@ -816,7 +816,7 @@ esac
 # Extract the first word of "gcc", so it can be a program name with args.
 set dummy gcc; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:819: checking for $ac_word" >&5
+echo "configure:820: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_CC'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -846,7 +846,7 @@ if test -z "$CC"; then
   # Extract the first word of "cc", so it can be a program name with args.
 set dummy cc; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:849: checking for $ac_word" >&5
+echo "configure:850: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_CC'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -897,7 +897,7 @@ fi
       # Extract the first word of "cl", so it can be a program name with args.
 set dummy cl; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:900: checking for $ac_word" >&5
+echo "configure:901: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_CC'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -929,7 +929,7 @@ fi
 fi
 
 echo $ac_n "checking whether the C compiler ($CC $CFLAGS $LDFLAGS) works""... $ac_c" 1>&6
-echo "configure:932: checking whether the C compiler ($CC $CFLAGS $LDFLAGS) works" >&5
+echo "configure:933: checking whether the C compiler ($CC $CFLAGS $LDFLAGS) works" >&5
 
 ac_ext=c
 # CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
@@ -940,12 +940,12 @@ cross_compiling=$ac_cv_prog_cc_cross
 
 cat > conftest.$ac_ext << EOF
 
-#line 943 "configure"
+#line 944 "configure"
 #include "confdefs.h"
 
 main(){return(0);}
 EOF
-if { (eval echo configure:948: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:949: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   ac_cv_prog_cc_works=yes
   # If we can't run a trivial program, we are probably using a cross compiler.
   if (./conftest; exit) 2>/dev/null; then
@@ -971,12 +971,12 @@ if test $ac_cv_prog_cc_works = no; then
   { echo "configure: error: installation or configuration problem: C compiler cannot create executables." 1>&2; exit 1; }
 fi
 echo $ac_n "checking whether the C compiler ($CC $CFLAGS $LDFLAGS) is a cross-compiler""... $ac_c" 1>&6
-echo "configure:974: checking whether the C compiler ($CC $CFLAGS $LDFLAGS) is a cross-compiler" >&5
+echo "configure:975: checking whether the C compiler ($CC $CFLAGS $LDFLAGS) is a cross-compiler" >&5
 echo "$ac_t""$ac_cv_prog_cc_cross" 1>&6
 cross_compiling=$ac_cv_prog_cc_cross
 
 echo $ac_n "checking whether we are using GNU C""... $ac_c" 1>&6
-echo "configure:979: checking whether we are using GNU C" >&5
+echo "configure:980: checking whether we are using GNU C" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_gcc'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -985,7 +985,7 @@ else
   yes;
 #endif
 EOF
-if { ac_try='${CC-cc} -E conftest.c'; { (eval echo configure:988: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }; } | egrep yes >/dev/null 2>&1; then
+if { ac_try='${CC-cc} -E conftest.c'; { (eval echo configure:989: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }; } | egrep yes >/dev/null 2>&1; then
   ac_cv_prog_gcc=yes
 else
   ac_cv_prog_gcc=no
@@ -1004,7 +1004,7 @@ ac_test_CFLAGS="${CFLAGS+set}"
 ac_save_CFLAGS="$CFLAGS"
 CFLAGS=
 echo $ac_n "checking whether ${CC-cc} accepts -g""... $ac_c" 1>&6
-echo "configure:1007: checking whether ${CC-cc} accepts -g" >&5
+echo "configure:1008: checking whether ${CC-cc} accepts -g" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_cc_g'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1038,7 +1038,7 @@ fi
 
 ac_safe=`echo "/usr/lib/libC.so" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for /usr/lib/libC.so""... $ac_c" 1>&6
-echo "configure:1041: checking for /usr/lib/libC.so" >&5
+echo "configure:1042: checking for /usr/lib/libC.so" >&5
 if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1066,7 +1066,7 @@ fi
 
 ac_safe=`echo "$JAVA_HOME/include/jni.h" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for $JAVA_HOME/include/jni.h""... $ac_c" 1>&6
-echo "configure:1069: checking for $JAVA_HOME/include/jni.h" >&5
+echo "configure:1070: checking for $JAVA_HOME/include/jni.h" >&5
 if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1088,55 +1088,7 @@ else
 { echo "configure: error: Could not find jni include file please check JAVA_HOME enviroment variable." 1>&2; exit 1; }
 fi
 
-
-ac_safe=`echo "$JAVA_HOME/include/$CANON/jni_md.h" | sed 'y%./+-%__p_%'`
-echo $ac_n "checking for $JAVA_HOME/include/$CANON/jni_md.h""... $ac_c" 1>&6
-echo "configure:1094: checking for $JAVA_HOME/include/$CANON/jni_md.h" >&5
-if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
-  echo $ac_n "(cached) $ac_c" 1>&6
-else
-  if test "$cross_compiling" = yes; then
-    { echo "configure: error: Cannot check for file existence when cross compiling" 1>&2; exit 1; }
-else
-  if test -r $JAVA_HOME/include/$CANON/jni_md.h; then
-    eval "ac_cv_file_$ac_safe=yes"
-  else
-    eval "ac_cv_file_$ac_safe=no"
-  fi
-fi
-fi
-if eval "test \"`echo '$ac_cv_file_'$ac_safe`\" = yes"; then
-  echo "$ac_t""yes" 1>&6
-  :
-else
-  echo "$ac_t""no" 1>&6
-
-ac_safe=`echo "$JAVA_HOME/include/jni_md.h" | sed 'y%./+-%__p_%'`
-echo $ac_n "checking for $JAVA_HOME/include/jni_md.h""... $ac_c" 1>&6
-echo "configure:1116: checking for $JAVA_HOME/include/jni_md.h" >&5
-if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
-  echo $ac_n "(cached) $ac_c" 1>&6
-else
-  if test "$cross_compiling" = yes; then
-    { echo "configure: error: Cannot check for file existence when cross compiling" 1>&2; exit 1; }
-else
-  if test -r $JAVA_HOME/include/jni_md.h; then
-    eval "ac_cv_file_$ac_safe=yes"
-  else
-    eval "ac_cv_file_$ac_safe=no"
-  fi
-fi
-fi
-if eval "test \"`echo '$ac_cv_file_'$ac_safe`\" = yes"; then
-  echo "$ac_t""yes" 1>&6
-  :
-else
-  echo "$ac_t""no" 1>&6
-{ echo "configure: error: Could not find jni_md.h include file please check its existence." 1>&2; exit 1; }
-fi
-
-fi
-
+#AC_CHECK_FILE($JAVA_HOME/include/$CANON/jni_md.h,,AC_CHECK_FILE($JAVA_HOME/include/jni_md.h,,AC_MSG_ERROR([Could not find jni_md.h include file please check its existence.])))
 
 JDK14="helo"
 # Check whether --enable-jdk14 or --disable-jdk14 was given.
@@ -1425,7 +1377,7 @@ test "$no_create" = yes || ${CONFIG_SHELL-/bin/sh} $CONFIG_STATUS || exit 1
 
 ac_safe=`echo "build" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for build""... $ac_c" 1>&6
-echo "configure:1428: checking for build" >&5
+echo "configure:1381: checking for build" >&5
 if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1450,7 +1402,7 @@ fi
 
 ac_safe=`echo "build/lib" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for build/lib""... $ac_c" 1>&6
-echo "configure:1453: checking for build/lib" >&5
+echo "configure:1406: checking for build/lib" >&5
 if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1475,7 +1427,7 @@ fi
 
 ac_safe=`echo "build/classes" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for build/classes""... $ac_c" 1>&6
-echo "configure:1478: checking for build/classes" >&5
+echo "configure:1431: checking for build/classes" >&5
 if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1507,7 +1459,7 @@ FNAME=./build/META-INF/java.nio.charset.spi.CharsetProvider
 
 ac_safe=`echo "build/META-INF" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for build/META-INF""... $ac_c" 1>&6
-echo "configure:1510: checking for build/META-INF" >&5
+echo "configure:1463: checking for build/META-INF" >&5
 if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1532,7 +1484,7 @@ fi
 
 ac_safe=`echo "build/META-INF/java.nio.charset.spi.CharsetProvider" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for build/META-INF/java.nio.charset.spi.CharsetProvider""... $ac_c" 1>&6
-echo "configure:1535: checking for build/META-INF/java.nio.charset.spi.CharsetProvider" >&5
+echo "configure:1488: checking for build/META-INF/java.nio.charset.spi.CharsetProvider" >&5
 if eval "test \"`echo '$''{'ac_cv_file_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
