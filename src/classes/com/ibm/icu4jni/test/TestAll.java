@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2005, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2006 International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -51,5 +51,14 @@ public class TestAll extends TestFmwk {
             }
         );
     }
-               
+    public void TestCharset() throws Exception{
+        String version = System.getProperty("java.version");
+        if(version.indexOf("1.4")!=0){
+            return;
+        }
+        run( new TestFmwk[]{
+                new com.ibm.icu4jni.test.charset.TestCharset()
+            }
+        );
+    }               
 }

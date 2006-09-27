@@ -96,9 +96,6 @@ ALL : INIT "$(OUTDIR)\ICUInterface.dll" "BUILDCORE" "BUILDTEST" "(CP_TEST_FILE)"
 CHECK:
 	@$(JAVA_EXE) -classpath ;.\build\classes; -Djava.library.path=$(ICULIB);.\build\lib; com.ibm.icu4jni.test.TestAll -nothrow
 
-CHECKCS:
-	@$(JAVA_EXE) -classpath ;.\build\classes; -Djava.library.path=$(ICULIB);.\build\lib; com.ibm.icu4jni.test.charset.TestCharset -nothrow
-
 CLEAN :
 	-@rd /S /Q "$(INTDIR)"
 	-@rd /S /Q "$(BUILDDIR)"
@@ -166,9 +163,6 @@ ALL : INIT "$(OUTDIR)\ICUInterfaced.dll" "BUILDCORE" "BUILDTEST" "(CP_TEST_FILE)
 CHECK:
 	@echo $(JAVA_EXE) -classpath ;.\build\classes; -Djava.library.path=$(ICULIB);.\build\lib; com.ibm.icu4jni.test.TestAll -nothrow
 	@ $(JAVA_EXE) -classpath ;.\build\classes; -Djava.library.path=$(ICULIB);.\build\lib; com.ibm.icu4jni.test.TestAll -nothrow
-
-CHECKCS:
-	@$(JAVA_EXE) -classpath ;.\build\classes; -Djava.library.path=$(ICULIB);.\build\lib; com.ibm.icu4jni.test.charset.TestCharset
 
 CLEAN :
 	-@rd /S /Q "$(INTDIR)"
