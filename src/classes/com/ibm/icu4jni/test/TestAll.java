@@ -53,7 +53,7 @@ public class TestAll extends TestFmwk {
     }
     public void TestCharset() throws Exception{
         String version = System.getProperty("java.version");
-        if(version.indexOf("1.4")!=0){
+        if(version.indexOf("1.3")==0){
             return;
         }
         try{
