@@ -288,9 +288,9 @@ Java_com_ibm_icu4jni_converters_NativeConverter_encode(JNIEnv *env,
        myData[3] = ucnv_fromUCountPending(cnv, &errorCode);
 
        if(ec == U_ILLEGAL_CHAR_FOUND || ec == U_INVALID_CHAR_FOUND){
-            jint count =32;
+            int8_t count =32;
             UChar invalidUChars[32];
-            ucnv_getInvalidUChars(cnv,invalidUChars,(int8_t*)&count,&errorCode);
+            ucnv_getInvalidUChars(cnv,invalidUChars,&count,&errorCode);
 
             if(U_SUCCESS(errorCode)){
                 myData[2] = count;
