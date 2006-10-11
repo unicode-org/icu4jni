@@ -956,7 +956,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_getAliases(JNIEnv *env, jclass j
         const char* myEncName = encName;
         aliasNum = ucnv_countAliases(myEncName,&error);
         /* special case for UTF-16. In java UTF-16 is always BE*/
-        if(strcmp(myEncName, UTF_16BE)==0){
+        if(ucnv_compareNames(myEncName, UTF_16BE)==0){
             utf16AliasNum=ucnv_countAliases(UTF_16,&error);
         }
         if(aliasNum==0 && encName[0] == 0x78 /*x*/ && encName[1]== 0x2d /*-*/){
@@ -1017,7 +1017,7 @@ JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getICUCanonicalName(JNIE
     const char* canonicalName = NULL;
     jstring ret = NULL;
     if(encName){
-        if(strcmp(encName,"UTF-16")==0){
+        if(ucnv_compareNames(encName,UTF_16)==0){
             ret = ((*env)->NewStringUTF(env,UTF_16BE));
         }else if((canonicalName = ucnv_getCanonicalName(encName, "MIME", &error))!=NULL){
             ret = ((*env)->NewStringUTF(env, canonicalName));

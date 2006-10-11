@@ -67,7 +67,15 @@ public class TestCharset extends TestFmwk {
         while(iter.hasNext()){
             logln((String)iter.next());
         }
+        Charset cs = icu.charsetForName("UTF16");
+        if(cs.name()!="UTF-16BE"){
+            errln("Did not get the expected converter for alias UTF16");
+        }
+        logln("The name of the charset is: "+ icuChar.name());
         if(!aliases.contains("csUnicode")){
+            errln("Did not get the expected alias");
+        }
+        if(!aliases.contains("UTF-16BE")){
             errln("Did not get the expected alias");
         }
         char[] expchars = new char[]{'\ud800','\udc00','\ud801','\udc01'};
@@ -956,7 +964,10 @@ public class TestCharset extends TestFmwk {
 
     public void TestISO88591() {
         CharsetEncoder encoder = new CharsetProviderICU().charsetForName("iso-8859-1").newEncoder();
-        encoder.canEncode("\uc2a3");
+        boolean enc = encoder.canEncode("\uc2a3");
+        if(enc==true){
+            errln("88591 encoder returned true for \\uc2a3");
+        }
     }
     public  void TestUTF8Encode() {
         CharsetEncoder encoderICU = new CharsetProviderICU().charsetForName(

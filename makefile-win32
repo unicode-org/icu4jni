@@ -206,7 +206,7 @@ INIT : "$(OUTDIR)" "$(BDIR)"
 	-@echo Copying $(SRCDIR)\$(TTDIR)\NormalizationTest.txt to $(BUILDDIR)\$(TTDIR)
 	-@copy $(SRCDIR)\$(TTDIR)\NormalizationTest.txt $(BUILDDIR)\$(TTDIR)
 
-CPP_PROJ=/nologo /G6 /MTd /W3 /Gm /GX /ZI /Od /I "$(JAVA_HOME)\include"  /I "$(ICU_INCLUDE)" /I "$(NATIVE)\common" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c
+CPP_PROJ=/nologo /G6 /MTd /W3 /Gm /GX /ZI /Od /I "$(JAVA_HOME)\include" /I "$(JAVA_HOME)\include\win32" /I "$(ICU_INCLUDE)" /I "$(NATIVE)\common" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ICUInterface_EXPORTS" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c
 BSC32_SBRS= \
 	
 LINK32=link.exe
