@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -111,7 +111,7 @@ public abstract class Collator implements Cloneable
     /**
      * Fourth level collator strength value. 
      * When punctuation is ignored 
-     * <a href="http://www-124.ibm.com/icu/userguide/Collate_Concepts.html#Ignoring_Punctuation">
+     * <a href="http://icu.sourceforge.net/userguide/Collate_Concepts.html#Ignoring_Punctuation">
      * (see Ignoring Punctuations in the user guide)</a> at PRIMARY to TERTIARY 
      * strength, an additional strength level can 
      * be used to distinguish words with and without punctuation.
