@@ -46,42 +46,36 @@ Java_com_ibm_icu4jni_converters_NativeConverter_openConverter (JNIEnv *env,
                                                                jstring converterName){
     
     UConverter* conv=NULL;
-    char cnvName[100];
+    char cnvName[UCNV_MAX_CONVERTER_NAME_LENGTH];
     UErrorCode errorCode = U_ZERO_ERROR;
-
-    jlong* myHandle = (jlong*) (*env)->GetPrimitiveArrayCritical(env,handle, NULL);
-    if(myHandle){
-        const jchar* u_cnvName= (jchar*) (*env)->GetStringChars(env, converterName,NULL);
-        if(u_cnvName){
-            jsize count = (*env)->GetStringLength(env,converterName);
-            if(count>0){
-                if(count< 100){
+    const jchar* u_cnvName= (jchar*) (*env)->GetStringChars(env, converterName,NULL);
+    if(u_cnvName){
+        jsize count = (*env)->GetStringLength(env,converterName);
+        if(count>0 && count< UCNV_MAX_CONVERTER_NAME_LENGTH){
+            jlong* myHandle = (jlong*) (*env)->GetPrimitiveArrayCritical(env,handle, NULL);
+            if(myHandle){
                     u_UCharsToChars(u_cnvName,&cnvName[0],count);
                     /* Sun's java.exe is passing down 0x10 if the string 
                      * is of certain length so we need to null terminate 
                      */
                     cnvName[count] = '\0';
-        
                     conv = ucnv_open(cnvName,&errorCode);
-
                     if(U_FAILURE(errorCode)){
-                        (*env)->ReleaseStringChars(env, converterName,u_cnvName);
                         (*env)->ReleasePrimitiveArrayCritical(env,handle,(jlong*)myHandle,0);
+                        (*env)->ReleaseStringChars(env, converterName,u_cnvName);
                         conv=NULL;
                         return errorCode;
                     }
-                }else{
-                    errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-                }
-
+                    *myHandle =(jlong) conv;
             }else{
                 errorCode = U_ILLEGAL_ARGUMENT_ERROR;
             }
+            (*env)->ReleasePrimitiveArrayCritical(env,handle,(jlong*)myHandle,0);
+        }else{
+             errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         }
-        (*env)->ReleaseStringChars(env, converterName,u_cnvName);
-        *myHandle =(jlong) conv;
+        (*env)->ReleaseStringChars(env, converterName,u_cnvName);   
     }
-    (*env)->ReleasePrimitiveArrayCritical(env,handle,(jlong*)myHandle,0);
     return errorCode;
 }
 
@@ -1016,7 +1010,7 @@ JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_getICUCanonicalName(JNIE
     const char* encName = (*env)->GetStringUTFChars(env,enc,NULL);
     const char* canonicalName = NULL;
     jstring ret = NULL;
-    if(encName){
+    if(encName){        
         if(ucnv_compareNames(encName,UTF_16)==0){
             ret = ((*env)->NewStringUTF(env,UTF_16BE));
         }else if((canonicalName = ucnv_getCanonicalName(encName, "MIME", &error))!=NULL){
