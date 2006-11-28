@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and    *
+* Copyright (C) 1996-2006, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -40,11 +40,17 @@ public final class CharsetProviderICU extends CharsetProvider{
             // unsupported encoding exception
             return null;
         }
-        return getCharset(icuCanonicalName);
+        return getCharset(icuCanonicalName, charsetName);
     }
-    private final Charset getCharset(String icuCanonicalName){
-       String[] aliases = (String[])NativeConverter.getAliases(icuCanonicalName);    
-       String canonicalName = NativeConverter.getJavaCanonicalName(icuCanonicalName);
+    private final Charset getCharset(String icuCanonicalName, String charsetName){
+       String[] aliases = (String[])NativeConverter.getAliases(icuCanonicalName);
+       String canonicalName = null;
+       //special case UTF-16 name.
+       if(NativeConverter.compareNames(charsetName, "UTF-16")==0){
+           canonicalName = "UTF-16";
+       }else{
+           canonicalName = NativeConverter.getJavaCanonicalName(icuCanonicalName);
+       }
        return (new CharsetICU(canonicalName,icuCanonicalName, aliases));  
     }
     /**

@@ -1454,3 +1454,25 @@ JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_contains( JNIEnv *env, j
     }
 	return bRet;
 }
+JNIEXPORT jint 
+JNICALL Java_com_ibm_icu4jni_converters_NativeConverter_compareNames(JNIEnv *env, jclass jClass, jstring n1, jstring n2){
+    const jchar* jcn1 = (jchar*) (*env)->GetStringChars(env, n1, NULL);
+    const jchar* jcn2 = (jchar*) (*env)->GetStringChars(env, n2, NULL);
+    jsize n1Len = (*env)->GetStringLength(env, n1);
+    jsize n2Len = (*env)->GetStringLength(env, n2);
+    char* name1 = malloc(n1Len);
+    char* name2 = malloc(n2Len);
+    jint ret = -1;
+
+    u_UCharsToChars(jcn1, name1, n1Len);
+    u_UCharsToChars(jcn2, name2, n2Len);
+    
+    ret = ucnv_compareNames(name1, name2);
+    
+    free(name1);
+    free(name2);
+    
+    (*env)->ReleaseStringChars(env, n1, jcn1);
+    (*env)->ReleaseStringChars(env, n2, jcn2);
+    return ret;
+}

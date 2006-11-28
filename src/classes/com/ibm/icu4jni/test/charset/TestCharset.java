@@ -68,8 +68,12 @@ public class TestCharset extends TestFmwk {
             logln((String)iter.next());
         }
         Charset cs = icu.charsetForName("UTF16");
-        if(cs.name()!="UTF-16BE"){
+        if(!cs.name().equals("UTF-16")){
             errln("Did not get the expected converter for alias UTF16");
+        }
+        cs = icu.charsetForName("UTF16BE");
+        if(!cs.name().equals("UTF-16BE")){
+            errln("Did not get the expected converter for alias UTF16BE");
         }
         logln("The name of the charset is: "+ icuChar.name());
         if(!aliases.contains("csUnicode")){

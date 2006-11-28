@@ -415,6 +415,23 @@ public final class NativeConverter{
     public static final native int setCallbackEncode(long converterHandle, int onMalformedInput, int onUnmappableInput, byte[] subBytes, int length);
     
     /**
+     * Do a fuzzy compare of two converter/alias names.
+     * The comparison is case-insensitive, ignores leading zeroes if they are not
+     * followed by further digits, and ignores all but letters and digits.
+     * Thus the strings "UTF-8", "utf_8", "u*T@f08" and "Utf 8" are exactly equivalent.
+     * See section 1.4, Charset Alias Matching in Unicode Technical Standard #22
+     * at http://www.unicode.org/reports/tr22/
+     *
+     * @param name1 a converter name or alias, zero-terminated
+     * @param name2 a converter name or alias, zero-terminated
+     * @return 0 if the names match, or a negative value if the name1
+     * lexically precedes name2, or a positive value if the name1
+     * lexically follows name2.
+     * @draft ICU 3.8
+     */
+    public static final native int compareNames(String name1, String name2);
+    
+    /**
      * Returns a thread safe clone of the converter
      * @internal ICU 2.4
      */
