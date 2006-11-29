@@ -166,7 +166,7 @@ HEADERS =   $(CSRC_DIR)/common/ErrorCode.h  $(CSRC_DIR)/collation/CollationInter
 
 # We want to get the local copies of these files first, as the
 # dependency. Even though they do get exported.
-LDFLAGS += -L/usr/lib $(CRT)
+#LDFLAGS += -L/usr/lib $(CRT)
 
 
 # get the hostname the code is built on
