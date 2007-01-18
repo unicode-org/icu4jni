@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2006, International Business Machines Corporation and    *
+* Copyright (C) 1996-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -47,7 +47,7 @@ public final class CharsetDecoderICU extends CharsetDecoder{
     
     private  byte[] input = null;
     private  char[] output= null;
-    
+    private  int outputStart = 0; 
     // These instance variables are
     // always assigned in the methods
     // before being used. This class
@@ -60,7 +60,8 @@ public final class CharsetDecoderICU extends CharsetDecoder{
     private int onUnmappableInput = NativeConverter.STOP_CALLBACK;;
     private int onMalformedInput = NativeConverter.STOP_CALLBACK;;
     private int savedInputHeldLen;
-    
+    private boolean isFirstBuffer = true;
+ 
     /** 
      * Constructs a new decoder for the given charset
      * @param cs for which the decoder is created
@@ -73,7 +74,6 @@ public final class CharsetDecoderICU extends CharsetDecoder{
                NativeConverter.getAveCharsPerByte(cHandle),
                NativeConverter.getMaxCharsPerByte(cHandle)
                );
-                       
          char[] sub = replacement().toCharArray();
          ec = NativeConverter.setCallbackDecode(cHandle,
                                                 onMalformedInput,
@@ -253,6 +253,14 @@ public final class CharsetDecoderICU extends CharsetDecoder{
 		    }else if(ec==ErrorCode.U_ILLEGAL_CHAR_FOUND){
                 return CoderResult.malformedForLength(data[INVALID_BYTES]);
             }
+            if(isFirstBuffer){
+                int[] len = new int[1];
+                String name = detectUnicodeSignature(output, len);
+                if(name.equals(charset().name())){
+                    outputStart+= len[0]; 
+                }
+                isFirstBuffer = false;
+            }
             /* decoding action succeded */
             return CoderResult.UNDERFLOW;
         }finally{
@@ -260,7 +268,16 @@ public final class CharsetDecoderICU extends CharsetDecoder{
             setPosition(out);
         }
 	}
-	
+	public String detectUnicodeSignature(char[] source, int[] len){
+	    if(source.length>=1 && source[0]==0xFEFF){
+            len[0]=1;
+            return "UTF-16";
+        }else if(source.length>=2 && source[0]==0x0000 && source[1]==0xFEFF){
+            len[0]=2;
+            return "UTF-32";
+        }
+        return "";
+    }
 	/**
      * Releases the system resources by cleanly closing ICU converter opened
      * @stable ICU 2.4
@@ -316,9 +333,16 @@ public final class CharsetDecoderICU extends CharsetDecoder{
     }
     private final void setPosition(CharBuffer out){
         if(out.hasArray()){
-		    out.position(out.position() + data[OUTPUT_OFFSET]);
+            if(outputStart==0){
+                out.position(out.position() + data[OUTPUT_OFFSET]);
+            }else{
+                CharBuffer dup = out.duplicate();
+                dup.position(outputStart);
+                out.clear();
+                out.put(dup);
+            }
         }else{
-            out.put(output,0,data[OUTPUT_OFFSET]);
+            out.put(output, outputStart,data[OUTPUT_OFFSET]);
         }
     }
     private final void setPosition(ByteBuffer in){

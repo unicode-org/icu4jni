@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2006, International Business Machines Corporation and    *
+* Copyright (C) 1996-2007, International Business Machines Corporation and    *
 * others. All Rights Reserved.				                                  *
 *******************************************************************************
 *
@@ -56,9 +56,10 @@ public final class CharsetEncoderICU extends CharsetEncoder {
     private int savedInputHeldLen;
     private int onUnmappableInput = NativeConverter.STOP_CALLBACK;;
     private int onMalformedInput = NativeConverter.STOP_CALLBACK;;
-
-	/** 
-	 * Construcs a new encoder for the given charset
+    private boolean isFirstBuffer = true;
+	
+    /** 
+	 * Constructs a new encoder for the given charset
 	 * @param cs for which the decoder is created
 	 * @param cHandle the address of ICU converter
      * @param replacement the substitution bytes
@@ -70,7 +71,7 @@ public final class CharsetEncoderICU extends CharsetEncoder {
 			(float) NativeConverter.getAveBytesPerChar(cHandle),
 			(float) NativeConverter.getMaxBytesPerChar(cHandle),
 			replacement);
-		byte[] sub = replacement();
+        byte[] sub = replacement();
 		// The default callback action on unmappable input 
 		// or malformed input is to ignore so we set ICU converter
 		// callback to stop and report the error
@@ -212,7 +213,17 @@ public final class CharsetEncoderICU extends CharsetEncoder {
 		if (!in.hasRemaining()) {
 			return CoderResult.UNDERFLOW;
 		}
-
+        if(isFirstBuffer && charset().name().equals("UTF-16")){
+            if(out.limit()>=2){
+                out.put((byte)0xFE);
+                out.put((byte)0xFF);
+                isFirstBuffer = false;
+            }else{
+                return CoderResult.OVERFLOW;
+            }
+        }else{
+            isFirstBuffer = false;
+        }
         data[INPUT_OFFSET] = getArray(in);
         data[OUTPUT_OFFSET]= getArray(out);
         data[INPUT_HELD] = 0;
