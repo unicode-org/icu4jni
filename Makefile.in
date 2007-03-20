@@ -37,6 +37,11 @@ GENRB=$(shell @ICU_CONFIG@ --invoke=genrb)
 PKGDATA=$(shell @ICU_CONFIG@ --invoke=pkgdata)
 ####################################################################
 
+ifeq ($(CANON), darwin)
+# on darwin, the suffix must be .jnilib
+SO=jnilib
+endif
+
 JAVA_HOME=@JAVA_HOME@
 
 MKINSTALLDIRS = $(SHELL) $(top_srcdir)/mkinstalldirs
