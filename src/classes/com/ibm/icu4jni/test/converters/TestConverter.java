@@ -1016,7 +1016,7 @@ public class TestConverter extends TestFmwk{
 
     public void TestJB5109()throws Exception{
         try{                   
-            ByteToCharConverterICU b2c = new ByteToCharConverterICU("ibm-943_P15A-2003");
+            ByteToCharConverterICU b2c = new ByteToCharConverterICU("Shift-JIS");
             b2c.setSubstitutionMode(false);
             byte[] bb = new byte[] { (byte)0x8f };
             char[] cc = new char[10];
