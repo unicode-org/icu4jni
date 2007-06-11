@@ -27,16 +27,19 @@ public class ConverterPerformanceTest extends PerfTest {
         try{
             // We only take 3 arguments file name and encoding,
             if (args.length < 6 ) {
-                throw new RuntimeException("Please supply -file_name <name> -src_encoding <enc> -test <converter name>");
+                System.err.println("args.length = " + args.length);
+                for (int i=0; i<args.length; i++)
+                    System.err.println(" : " + args[i]);
+                throw new RuntimeException("Please supply file_name <name> src_encoding <enc> test <converter name>");
             }
             for(int i=0; i<args.length; i++){
-                if(args[i].equals("-file_name")){
+                if(args[i].equals("file_name")){
                     fileName = args[++i];
                 }
-                if(args[i].equals("-src_encoding")){
+                if(args[i].equals("src_encoding")){
                     srcEncoding = args[++i];
                 }
-                if(args[i].equals("-test")){
+                if(args[i].equals("test")){
                     testEncoderName = args[++i];
                 }
             }

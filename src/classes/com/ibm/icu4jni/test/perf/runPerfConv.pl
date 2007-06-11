@@ -3,7 +3,7 @@
 use strict;
 
 # Assume we are running within the icu4jni root directory
-use lib 'c:/work/devicu4j/icu4jni/src/classes/com/ibm/icu4jni/test/perf';
+use lib 'c:/svn/icu4jni/src/classes/com/ibm/icu4jni/test/perf';
 use Dataset;
 
 # Copyright (c) 2002-2004, International Business Machines Corporation
@@ -15,7 +15,8 @@ my $TESTCLASS = 'com.ibm.icu4jni.test.perf.ConverterPerformanceTest';
 
 # Methods to be tested.  Each pair represents a test method and
 # a baseline method which is used for comparison.
-my @METHODS  = (['TestByteToCharConverter', 'TestByteToCharConverterICU'],
+my @METHODS  = (
+                ['TestByteToCharConverter', 'TestByteToCharConverterICU'],
                 ['TestCharToByteConverter', 'TestCharToByteConverterICU'],
                 ['TestCharsetDecoder',      'TestCharsetDecoderICU'],
                 ['TestCharsetEncoder',      'TestCharsetEncoderICU']
@@ -23,21 +24,21 @@ my @METHODS  = (['TestByteToCharConverter', 'TestByteToCharConverterICU'],
 
 # Patterns which define the set of characters used for testing.
 
-my $SOURCEDIR ="c:\\work\\DevICU\\icu\\source\\test\\normperf\\text\\";
+my $SOURCEDIR ="C:\\src\\perf\\data\\";
 
 my @OPTIONS = (
 #                                 src text          src encoding    test encoding  
-#                               [ "arabic.txt",     "UTF-8",        "csisolatinarabic"],
-#                               [ "french.txt",     "UTF-8",        "csisolatin1"],
-#                               [ "greek.txt",      "UTF-8",        "csisolatingreek"],
-#                               [ "hebrew.txt",     "UTF-8",        "csisolatinhebrew"],
+                                [ "arabic.txt",     "UTF-8",        "csisolatinarabic"],
+                                [ "french.txt",     "UTF-8",        "csisolatin1"],
+                                [ "greek.txt",      "UTF-8",        "csisolatingreek"],
+                                [ "hebrew.txt",     "UTF-8",        "csisolatinhebrew"],
 #                               [ "hindi.txt" ,     "UTF-8",        "iscii"],
-#                               [ "japanese.txt",   "UTF-8",        "EUC-JP"],
+                                [ "japanese.txt",   "UTF-8",        "EUC-JP"],
 #                               [ "japanese.txt",   "UTF-8",        "csiso2022jp"],
-#                               [ "japanese.txt",   "UTF-8",        "shift_jis"],
+                                [ "japanese.txt",   "UTF-8",        "shift_jis"],
 #                               [ "korean.txt",     "UTF-8",        "csiso2022kr"],
-#                               [ "korean.txt",     "UTF-8",        "EUC-KR"],
-#                               [ "s-chinese.txt",  "UTF-8",        "EUC_CN"],
+                                [ "korean.txt",     "UTF-8",        "EUC-KR"],
+                                [ "s-chinese.txt",  "UTF-8",        "EUC_CN"],
                                 [ "arabic.txt",     "UTF-8",        "UTF-8"],
                                 [ "french.txt",     "UTF-8",        "UTF-8"],                                
                                 [ "greek.txt",      "UTF-8",        "UTF-8"],
@@ -46,6 +47,9 @@ my @OPTIONS = (
                                 [ "japanese.txt",   "UTF-8",        "UTF-8"],
                                 [ "korean.txt",     "UTF-8",        "UTF-8"],
                                 [ "s-chinese.txt",  "UTF-8",        "UTF-8"],
+                                [ "french.txt",     "UTF-8",        "UTF-16BE"],
+                                [ "french.txt",     "UTF-8",        "UTF-16LE"],
+                                [ "english.txt",    "UTF-8",        "US-ASCII"],
                           );
 
 my $CALIBRATE = 2; # duration in seconds for initial calibration
@@ -133,8 +137,10 @@ EOF
 
             # output ratio
             my $r = $t->divide($b);
-            print HTML "<TD><B>", formatPercent(3, $r->getMean(), $r->getError);
-            print HTML "</B></TD></TR>\n";
+            my $mean = $r->getMean() - 1;
+            my $color = $mean < 0 ? "RED" : "BLACK";
+            print HTML "<TD><B><FONT COLOR=\"$color\">", formatPercent(3, $mean, $r->getError);
+            print HTML "</FONT></B></TD></TR>\n";
         }
 
         print HTML "</TABLE></P>\n";
@@ -213,20 +219,22 @@ sub measure1 {
         out(-$iterCount, " seconds/pass, $NUMPASSES passes</P>\n");
     }
 
-    # is $iterCount actually -seconds?
+    # is $iterCount actually -seconds/pass?
     if ($iterCount < 0) {
 
         # calibrate: estimate ms/iteration
         print "Calibrating...";
-        my @t = callJava($method, $pat, -$CALIBRATE);
+        my @t = callJava($method, $pat, -$CALIBRATE, 1);
         print "done.\n";
 
         my @data = split(/\s+/, $t[0]->[2]);
+        $data[0] *= 1.0e+3;
+
         my $timePerIter = 1.0e-3 * $data[0] / $data[2];
-    
+        
         # determine iterations/pass
         $iterCount = int(-$iterCount / $timePerIter + 0.5);
-
+        
         out("<P>Calibration pass ($CALIBRATE sec): ");
         out("$data[0] ms, ");
         out("$data[2] iterations = ");
@@ -235,7 +243,7 @@ sub measure1 {
     
     # run passes
     print "Measuring $iterCount iterations x $NUMPASSES passes...";
-    my @t = callJava($method, $pat, "$iterCount " x $NUMPASSES);
+    my @t = callJava($method, $pat, $iterCount, $NUMPASSES);
     print "done.\n";
     my @ms = ();
     my @b; # scratch
@@ -245,7 +253,7 @@ sub measure1 {
         # $a->[2]: 'end' data, of the form <ms> <eventsPerIter>
         # $a->[3...]: gc messages from JVM during pass
         @b = split(/\s+/, $a->[2]);
-        push(@ms, $b[0]);
+        push(@ms, $b[0] * 1.0e+3);
     }
     my $eventsPerIter = $b[1];
 
@@ -279,8 +287,10 @@ sub callJava {
     my $method = shift;
     my $pat = shift;
     my $n = shift;
-    my $fileName = $SOURCEDIR . @$pat[0] ; 
-    my $cmd = "c:\\j2sdk1.4.0\\bin\\java -classpath ;c:\\work\\devicu4j\\icu4jni\\build\\classes; -Djava.library.path=c:\\work\\devicu4j\\icu4jni\\build\\lib; $TESTCLASS $method $n -file_name $fileName -src_encoding @$pat[1] -test @$pat[2]";
+    my $passes = shift;
+    my $fileName = $SOURCEDIR.@$pat[0] ;
+    my $n = ($n < 0) ? "-t ".(-$n) : "-i ".$n;
+    my $cmd = "c:\\j2sdk1.4.2_14\\bin\\java -classpath ;c:\\svn\\icu4jni\\build\\classes; -Djava.library.path=c:\\svn\\icu4jni\\build\\lib; $TESTCLASS $method $n -p $passes file_name $fileName src_encoding @$pat[1] test @$pat[2]";
     print "[$cmd]\n"; # for debugging
     open(PIPE, "$cmd|") or die "Can't run \"$cmd\"";
     my @out;
@@ -314,6 +324,7 @@ sub callJava {
                 $data->[1] = $d; # insert end data at [1]
                 #print "#$method:", join(";",@$data), "\n";
                 unshift(@$data, $method); # add method to start
+
                 push(@results, $data);
                 $method = '';
                 $data = [];

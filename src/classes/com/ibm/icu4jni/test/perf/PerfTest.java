@@ -3,7 +3,7 @@
 * Copyright (c) 2002-2005, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
-* 
+*
 **********************************************************************
 */
 package com.ibm.icu4jni.test.perf;
@@ -32,10 +32,10 @@ import java.lang.reflect.*;
  * defined here.  If the subclasses uses any command line arguments
  * (beyond those handled automatically by this calss) then it should
  * override setup() to handle its arguments.
- * 
+ *
  * Example invocation:
  * java -cp classes -verbose:gc com.ibm.icu.dev.test.perf.UnicodeSetPerf --gc --passes 4 --iterations 100 UnicodeSetAdd [[:l:][:c:]]
- * 
+ *
  * Example output:
  * [GC 511K->192K(1984K), 0.0086170 secs]
  * [GC 704K->353K(1984K), 0.0059619 secs]
@@ -211,7 +211,7 @@ public abstract class PerfTest {
             UOption.DEF( "uselen",        'u', UOption.NO_ARG),
             UOption.DEF( "file-name",     'f', UOption.REQUIRES_ARG),
             UOption.DEF( "passes",        'p', UOption.REQUIRES_ARG),
-            UOption.DEF( "iterations",    'i', UOption.REQUIRES_ARG),                    
+            UOption.DEF( "iterations",    'i', UOption.REQUIRES_ARG),
             UOption.DEF( "time",          't', UOption.REQUIRES_ARG),
             UOption.DEF( "line-mode",     'l', UOption.NO_ARG),
             UOption.DEF( "bulk-mode",     'b', UOption.NO_ARG),
@@ -220,8 +220,8 @@ public abstract class PerfTest {
             // Options above here are identical to those in C; keep in sync
             // Options below here are unique to Java
 
-            UOption.DEF( "gc",            'g', UOption.NO_ARG), 
-            UOption.DEF( "list",     (char)-1, UOption.NO_ARG), 
+            UOption.DEF( "gc",            'g', UOption.NO_ARG),
+            UOption.DEF( "list",     (char)-1, UOption.NO_ARG),
         };
     }
 
@@ -253,7 +253,7 @@ public abstract class PerfTest {
 
         UOption[] options = getOptions();
         int remainingArgc = UOption.parseArgs(args, options);
-        
+
         if(args.length==0 || options[HELP1].doesOccur || options[HELP2].doesOccur) {
             throw new UsageException();
         }
@@ -261,23 +261,23 @@ public abstract class PerfTest {
         if(options[VERBOSE].doesOccur) {
             verbose = true;
         }
-        
+
         if(options[SOURCEDIR].doesOccur) {
             sourceDir = options[SOURCEDIR].value;
         }
-        
+
         if(options[ENCODING].doesOccur) {
             encoding = options[ENCODING].value;
         }
-        
+
         if(options[USELEN].doesOccur) {
             uselen = true;
         }
-        
+
         if(options[FILE_NAME].doesOccur){
             fileName = options[FILE_NAME].value;
         }
-        
+
         if (options[TIME].doesOccur && options[ITERATIONS].doesOccur) {
             throw new UsageException("Cannot specify both time and iterations");
         }
@@ -285,17 +285,17 @@ public abstract class PerfTest {
         if(options[PASSES].doesOccur) {
             passes = Integer.parseInt(options[PASSES].value);
         }
-        
+
         if(options[ITERATIONS].doesOccur) {
             iterations = Integer.parseInt(options[ITERATIONS].value);
             time =0;
         }
-        
+
         if(options[TIME].doesOccur) {
             time = Integer.parseInt(options[TIME].value);
             iterations = 0;
         }
-        
+
         if (options[LINE_MODE].doesOccur && options[BULK_MODE].doesOccur) {
             throw new UsageException("Cannot specify both line mode and bulk mode");
         }
@@ -304,12 +304,12 @@ public abstract class PerfTest {
             line_mode = true;
             bulk_mode = false;
         }
-        
+
         if(options[BULK_MODE].doesOccur) {
             bulk_mode = true;
             line_mode = false;
         }
-/*    
+/*
         if(options[LOCALE].doesOccur) {
             locale = LocaleUtility.getLocaleFromName(options[LOCALE].value);
         }
@@ -387,12 +387,12 @@ public abstract class PerfTest {
                     // Run specified number of iterations
                     System.out.println("= " + meth.getName() + " begin " + iterations + " iterations");
                     t = testFunction.time(iterations);
-                    System.out.println("= " + meth.getName() + " end " + (t/1000.0) + " " + testFunction.getOperationsPerIteration());
+                    System.out.println("= " + meth.getName() + " end " + (t / 1000.0) + " " + testFunction.getOperationsPerIteration());
                 } else {
                     // Run for specified duration in seconds
                     System.out.println("= " + meth.getName() + " begin " + time + " seconds");
                     n = time * 1000; // s => ms
-                    //System.out.println("# " + meth.getName() + " " + n + " sec");                            
+                    //System.out.println("# " + meth.getName() + " " + n + " sec");
                     int loops = 0;
                     int failsafe = 1; // last resort for very fast methods
                     t = 0;
@@ -401,7 +401,7 @@ public abstract class PerfTest {
                             loops = failsafe;
                             failsafe *= 10;
                         } else {
-                            //System.out.println("# " + meth.getName() + " x " + loops + " = " + t);                            
+                            //System.out.println("# " + meth.getName() + " x " + loops + " = " + t);
                             loops = (int)((double)n / t * loops + 0.5);
                             if (loops == 0) {
                                 throw new RuntimeException("Unable to converge on desired duration");
@@ -410,7 +410,7 @@ public abstract class PerfTest {
                         //System.out.println("# " + meth.getName() + " x " + loops);
                         t = testFunction.time(loops);
                     }
-                    System.out.println("= " + meth.getName() + " end " + (t/1000.0) + " " + testFunction.getOperationsPerIteration() +
+                    System.out.println("= " + meth.getName() + " end " + (t / 1000.0) + " " + testFunction.getOperationsPerIteration() +
                                        " " + loops);
                 }
             }
@@ -442,7 +442,7 @@ public abstract class PerfTest {
             Thread.sleep(100);
             System.runFinalization();
             Thread.sleep(100);
-            
+
             System.gc();
             Thread.sleep(100);
             System.runFinalization();
@@ -523,7 +523,7 @@ public abstract class PerfTest {
             vec.add(buffer);
             count += pos;
         } while (pos == length);
-                            
+
         char[] data = new char[count];
         pos = 0;
         for (int i = 0; i < vec.size(); ++i) {
@@ -559,8 +559,8 @@ public abstract class PerfTest {
             vec.add(buffer);
             count += pos;
         } while (pos == length);
-                            
-                            
+
+
         byte[] data = new byte[count];
         pos = 0;
         for (int i = 0; i < vec.size(); ++i) {
@@ -571,7 +571,7 @@ public abstract class PerfTest {
         }
         return data;
     }
-    
+
     public String[] readLines(String fileName, String encoding, boolean bulkMode) {
         FileInputStream fis = null;
         InputStreamReader isr = null;
@@ -597,10 +597,10 @@ public abstract class PerfTest {
             if (line.length() == 0) continue;
             list.add(line);
         }
-        
+
         int size = list.size();
         String[] lines = null;
-        
+
         if (bulkMode) {
             lines = new String[1];
             StringBuffer buffer = new StringBuffer("");
@@ -617,10 +617,10 @@ public abstract class PerfTest {
                 lines[i] = (String) list.get(i);
             }
         }
-        
+
         return lines;
     }
-    
+
     public String readDataLine(BufferedReader br) throws Exception {
         String originalLine = "";
         String line = "";
