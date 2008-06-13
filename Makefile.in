@@ -1,5 +1,5 @@
 #/**********************************************************************
-#*   Copyright (C) 2001-2006, International Business Machines
+#*   Copyright (C) 2001-2008, International Business Machines
 #*   Corporation and others.  All Rights Reserved.
 #***********************************************************************/
 ## Makefile.in for icu4jni
@@ -100,7 +100,8 @@ ConformanceTest.java
 TESTCONVCLASS=TestConverter.java
 
 COMCLASS=ErrorCode.java \
-ICU4JNILoader.java
+ICU4JNILoader.java \
+Config.java
 
 CONVCLASS=NativeConverter.java \
 ByteToCharConverterICU.java \
@@ -158,7 +159,7 @@ MAKE_CLASSOUT =$(MAKE_CLASSOUT1:src/%=build/%)
 CLEANFILES = *~
 
 ## Target information
-JNI_VERSION = 36
+LIB_VERSION_MAJOR=@LIB_VERSION_MAJOR@
 TARGET = $(BUILD_DIR)/libICUInterface$(JNI_VERSION)d.$(SO)
 TARGETR = $(BUILD_DIR)/libICUInterface$(JNI_VERSION).$(SO)
 
@@ -221,7 +222,7 @@ clean-local:
 
 
 distclean-local: clean-local
-	rm -f Makefile $(DEPS)
+	rm -f Makefile $(DEPS) src/classes/com/ibm/icu4jni/common/Config.java
 
 check-local: all testfmwk 
 

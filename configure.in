@@ -21,6 +21,17 @@ AC_SUBST(PACKAGE)
 
 AC_CHECK_PROG(AUTOCONF, autoconf, autoconf, true)
 
+# find icu-config
+AC_PATH_PROG(ICU_CONFIG, icu-config,false, $prefix/bin)
+
+dnl Check for the platform make
+AC_PATH_PROGS(U_MAKE, gmake gnumake, make)
+AC_SUBST(U_MAKE)
+
+
+CHECK_ICU_LIBMAJ
+AC_SUBST(LIB_VERSION_MAJOR)
+
 ICU_MAKEFILE=$prefix/lib/icu/Makefile.inc
 AC_SUBST(ICU_MAKEFILE)
 
@@ -73,6 +84,7 @@ AC_SUBST(JDK14)
 #AC_MSG_RESULT([JDK14 has been set to $JDK14])
 
 AC_OUTPUT([Makefile])
+AC_OUTPUT([src/classes/com/ibm/icu4jni/common/Config.java])
 
 AC_CHECK_FILE(build,,[echo creating build directory;mkdir build])
 AC_CHECK_FILE(build/lib,,[echo creating build/lib directory.;mkdir build/lib])

@@ -1,5 +1,5 @@
 dnl aclocal.m4 for ICU apps
-dnl Copyright (c) 2002-2003, International Business Machines Corporation and
+dnl Copyright (c) 2002-2008, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 
 dnl @TOP@
@@ -21,6 +21,16 @@ AC_DEFUN(CHECK_ICU_CONFIG, [
     ${ICU_CONFIG} --version
  else
     AC_MSG_ERROR([Cannot find icu-config, please check the PATH])
+ fi
+])
+
+dnl CHECK_ICU_LIBMAJ
+AC_DEFUN(CHECK_ICU_LIBMAJ, [
+ dnl fetch LIB_VERSION_MAJOR.
+LIB_VERSION_MAJOR="fail"
+LIB_VERSION_MAJOR=`ICU_CONFIG=${ICU_CONFIG} ${U_MAKE} -f Makefile.extract extract || echo FAIL` 
+ if test "$LIB_VERSION_MAJOR" = "FAIL"; then
+    AC_MSG_ERROR([Could not get min/maj number from icu])
  fi
 ])
      

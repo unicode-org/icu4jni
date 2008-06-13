@@ -1,0 +1,18 @@
+/**
+*******************************************************************************
+* Copyright (C) 2008, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+*******************************************************************************
+*/
+
+package com.ibm.icu4jni.common;
+/**
+ * Config for loading the JNI library
+ * @internal ICU 4.0
+ */
+public final class Config {
+    public static String LIB_VERSION_MAJOR="@LIB_VERSION_MAJOR@";
+}
+

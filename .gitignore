@@ -1,0 +1,7 @@
+/Makefile
+/Makefile.extract
+/autom4te.cache
+/build
+/config.log
+/config.status
+src/classes/com/ibm/icu4jni/common/Config.java
