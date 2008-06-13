@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2005, International Business Machines Corporation and    *
+* Copyright (C) 1996-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -28,20 +28,23 @@ public final class FinnishCollatorTest extends TestFmwk
         new FinnishCollatorTest().run(args);
     }
     
+    // OLD Finnish rules had:  V<<w<<<W    ( 0x76 < 0x77 )
+    // NEW Finnish rules have: Y<<u"<<<U"  ( 0x79 < 0xFC )
+    
     private static char[][] testSourceCases = {
-        {0x77, 0x61, 0x74},
-        {0x76, 0x61, 0x74},
+        {0x77, 0x61, 0x74}, // wat
+        {0x76, 0x61, 0x74}, // vat
         {0x61, 0x00FC, 0x62, 0x65, 0x63, 0x6b},
         {0x4c, 0x00E5, 0x76, 0x69},
-        {0x77, 0x61, 0x74}
+        {0xFC, 0x61, 0x74} // u"at
     };
 
     private static char[][] testTargetCases = {
-        {0x76, 0x61, 0x74},
-        {0x77, 0x61, 0x79},
+        {0x76, 0x61, 0x74}, // vat
+        {0x77, 0x61, 0x79}, // vay
         {0x61, 0x78, 0x62, 0x65, 0x63, 0x6b},
         {0x4c, 0x00E4, 0x77, 0x65},
-        {0x76, 0x61, 0x74}
+        {0x79, 0x61, 0x74} // yat
     };
 
     private static int[] results = {
