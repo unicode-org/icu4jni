@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2006, International Business Machines Corporation and    *
+* Copyright (C) 1996-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -28,6 +28,42 @@
 #define UTF_16BE "UTF-16BE"
 #define UTF_16 "UTF-16"
 
+/**
+ * set this to 1 to use setter as opposed to critical array (buggy). 
+ */
+#define I_USESET 1
+
+/**
+ *  set this to 1 to debug
+ */
+#define I_DEBUG 0
+
+
+
+#ifndef I_DEBUG
+#define I_DEBUG 0
+#endif
+
+#ifndef I_USESET
+#define I_USESET 0
+#endif
+
+
+#if I_DEBUG
+#include <stdio.h>
+static int num = 0;
+FILE *x = NULL;
+
+FILE *xlog() {
+    if(x==NULL) {
+        x = fopen("/tmp/xlog","wa");
+        fprintf(x, "-----\n%d:  I_USESET=%d\n", getpid(), I_USESET);
+        fflush(x);
+    }
+    return x;
+}
+#endif
+
 /* Prototype of callback for substituting user settable sub chars */
 void  JNI_TO_U_CALLBACK_SUBSTITUTE
  (const void *,UConverterToUnicodeArgs *,const char* ,int32_t ,UConverterCallbackReason ,UErrorCode * );
@@ -46,35 +82,58 @@ Java_com_ibm_icu4jni_converters_NativeConverter_openConverter (JNIEnv *env,
                                                                jstring converterName){
     
     UConverter* conv=NULL;
+    jlong asPtr = 0;
     char cnvName[UCNV_MAX_CONVERTER_NAME_LENGTH];
     UErrorCode errorCode = U_ZERO_ERROR;
     const jchar* u_cnvName= (jchar*) (*env)->GetStringChars(env, converterName,NULL);
     if(u_cnvName){
         jsize count = (*env)->GetStringLength(env,converterName);
         if(count>0 && count< UCNV_MAX_CONVERTER_NAME_LENGTH){
+#if !I_USESET
             jlong* myHandle = (jlong*) (*env)->GetPrimitiveArrayCritical(env,handle, NULL);
             if(myHandle){
+#endif            
                     u_UCharsToChars(u_cnvName,&cnvName[0],count);
+                    (*env)->ReleaseStringChars(env, converterName,u_cnvName);
                     /* Sun's java.exe is passing down 0x10 if the string 
                      * is of certain length so we need to null terminate 
                      */
                     cnvName[count] = '\0';
                     conv = ucnv_open(cnvName,&errorCode);
                     if(U_FAILURE(errorCode)){
+#if !I_USESET
                         (*env)->ReleasePrimitiveArrayCritical(env,handle,(jlong*)myHandle,0);
-                        (*env)->ReleaseStringChars(env, converterName,u_cnvName);
+#else
+                        (*env)->SetLongArrayRegion(env, handle, 0, 1, &asPtr); /* set to 0 */
+#endif                        
                         conv=NULL;
                         return errorCode;
                     }
+#if !I_USESET
                     *myHandle =(jlong) conv;
+#else
+                 asPtr = (jlong) conv;
+                 (*env)->SetLongArrayRegion(env, handle, 0, 1, &asPtr);
+#endif
+
+#if I_DEBUG
+                    fprintf(xlog(), "n: +%d - %p\n", ++num, conv);
+                    fflush(xlog());
+#endif                   
+                    
+#if !I_USESET
             }else{
                 errorCode = U_ILLEGAL_ARGUMENT_ERROR;
             }
             (*env)->ReleasePrimitiveArrayCritical(env,handle,(jlong*)myHandle,0);
+#endif
         }else{
+             (*env)->ReleaseStringChars(env, converterName,u_cnvName);   
              errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+#if I_USESET             
+             (*env)->SetLongArrayRegion(env, handle, 0, 1, &asPtr); /* set to 0 */
+#endif
         }
-        (*env)->ReleaseStringChars(env, converterName,u_cnvName);   
     }
     return errorCode;
 }
@@ -92,6 +151,10 @@ Java_com_ibm_icu4jni_converters_NativeConverter_closeConverter (JNIEnv *env,
      
     UConverter* cnv = (UConverter*)handle;
     if(cnv){
+#if I_DEBUG                    
+                    fprintf(xlog(), "n: -%d\n", --num);
+                    fflush(xlog());
+#endif                   
         ucnv_close(cnv);
     }
 }

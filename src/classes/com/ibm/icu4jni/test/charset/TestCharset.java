@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2007, International Business Machines Corporation and    *
+* Copyright (C) 1996-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -68,21 +68,23 @@ public class TestCharset extends TestFmwk {
             logln((String)iter.next());
         }
         Charset cs = icu.charsetForName("UTF16");
-        if(!cs.name().equals("UTF-16")){
-            errln("Did not get the expected converter for alias UTF16");
+        if(!cs.name().equals("UTF-16BE")){
+            errln("Did not get the expected converter for alias UTF16, got " + cs.name() + " expected " + "UTF-16");
+//            System.err.println("Class is " + cs.getClass().toString());
         }
         cs = icu.charsetForName("UTF16BE");
         if(!cs.name().equals("UTF-16BE")){
-            errln("Did not get the expected converter for alias UTF16BE");
+            errln("Did not get the expected converter for alias UTF16BE, got " + cs.name() + " expected " + "UTF-16BE");
         }
         logln("The name of the charset is: "+ icuChar.name());
         if(!aliases.contains("csUnicode")){
-            errln("Did not get the expected alias");
+            errln("Did not get the expected alias, was looking for csUnicode");
         }
         if(!aliases.contains("UTF-16BE")){
-            errln("Did not get the expected alias");
+            errln("Did not get the expected alias, was looking for UTF-16BE");
         }
         char[] expchars = new char[]{'\ud800','\udc00','\ud801','\udc01'};
+        byte[] inbytes = new byte[]{(byte)0xd8,0x00,(byte)0xdc,0x00, (byte)0xd8,0x01,(byte)0xdc,0x01};
         byte[] expbytes = new byte[]{(byte)0xfe, (byte)0xff,(byte)0xd8,0x00,(byte)0xdc,0x00, (byte)0xd8,0x01,(byte)0xdc,0x01};
         {
             try{
@@ -90,7 +92,7 @@ public class TestCharset extends TestFmwk {
                 CharBuffer in = CharBuffer.wrap(expchars);
                 ByteBuffer out = enc.encode(in);
                 if(!equals(out,expbytes)){
-                    errln("did not get the expected output");
+                    errln("did not get the expected output after encode");
                 }
             }catch(CharacterCodingException ex){
                 errln(ex.getMessage());
@@ -99,10 +101,10 @@ public class TestCharset extends TestFmwk {
         {
             try{
                 CharsetDecoder dec =icuChar.newDecoder();
-                ByteBuffer in = ByteBuffer.wrap(expbytes);
+                ByteBuffer in = ByteBuffer.wrap(inbytes);
                 CharBuffer out = dec.decode(in);
                 if(!equals(out,expchars)){
-                    errln("did not get the expected output");
+                    errln("did not get the expected output after decode");
                 }
             }catch(CharacterCodingException ex){
                 errln(ex.getMessage());
@@ -389,16 +391,16 @@ public class TestCharset extends TestFmwk {
     }
 
     public boolean equals(byte[] chars, byte[] compareTo) {
+        boolean result = true;
         if (chars.length != compareTo.length) {
             errln(
                 "Length does not match chars: "
                     + chars.length
                     + " compareTo: "
                     + compareTo.length);
-            return false;
+            result = false;
         } else {
-            boolean result = true;
-            for (int i = 0; i < chars.length; i++) {
+            for (int i = 0; i < Math.min(chars.length, compareTo.length); i++) {
                 if (chars[i] != compareTo[i]) {
                     errln(
                         "Got: "
@@ -410,8 +412,8 @@ public class TestCharset extends TestFmwk {
                     result = false;
                 }
             }
-            return result;
         }
+        return result;
     }
     public boolean equals(ByteBuffer buf, char[] compareTo) {
         return equals(buf, getByteArray(compareTo));

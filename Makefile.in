@@ -97,7 +97,8 @@ TurkishCollatorTest.java \
 BasicTest.java \
 ConformanceTest.java
 
-TESTCONVCLASS=TestConverter.java
+TESTCONVCLASS=TestConverter.java \
+TestCMemoryLeak.java
 
 COMCLASS=ErrorCode.java \
 ICU4JNILoader.java \
@@ -119,6 +120,8 @@ NativeNormalizer.java \
 Normalizer.java
 
 TESTCSCLASS=TestCharset.java
+# \
+#TestMemoryLeak.java
 
 ifeq ($(JDK14) , true) 
 MAKE_CLASS :=  $(CONVCLASS:%=$(SRCDIR)/$(CLASSDIR)/$(CONVDIR)/%)  \
@@ -146,9 +149,13 @@ endif
 ifeq ($(CANON), win32)
 
 COMMAND := $(JAVA_EXEC) -classpath \"./build/classes\" -Djava.library.path=\"$(PATHWD)/build/lib\" com.ibm.icu4jni.test.TestAll -nothrow
+LCOMMAND := $(JAVA_EXEC) -classpath \"./build/classes\" -Djava.library.path=\"$(PATHWD)/build/lib\" com.ibm.icu4jni.test.charset.TestMemoryLeak
+CLCOMMAND := $(JAVA_EXEC) -classpath \"./build/classes\" -Djava.library.path=\"$(PATHWD)/build/lib\" com.ibm.icu4jni.test.converters.TestCMemoryLeak
 else
 
 COMMAND := $(JAVA_EXEC) -classpath :./build/classes: -Djava.library.path=$(prefix)/lib:$(PATHWD)/build/lib: com.ibm.icu4jni.test.TestAll -nothrow
+LCOMMAND := $(JAVA_EXEC) -classpath :./build/classes: -Djava.library.path=$(prefix)/lib:$(PATHWD)/build/lib: com.ibm.icu4jni.test.charset.TestMemoryLeak
+CLCOMMAND := $(JAVA_EXEC) -classpath :./build/classes: -Djava.library.path=$(prefix)/lib:$(PATHWD)/build/lib: com.ibm.icu4jni.test.converters.TestCMemoryLeak
 
 endif
 
@@ -225,10 +232,16 @@ clean-local:
 distclean-local: clean-local
 	rm -f Makefile $(DEPS) src/classes/com/ibm/icu4jni/common/Config.java
 
-check-local: all testfmwk 
+check-local: all testfmwk
 
 testfmwk: copy-file
 	$(INVOKE) $(COMMAND)
+
+testcsleak: java
+	$(INVOKE) $(LCOMMAND)
+
+testcleak: java
+	$(INVOKE) $(CLCOMMAND)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
