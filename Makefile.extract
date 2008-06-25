@@ -1,0 +1,18 @@
+#/**********************************************************************
+#*   Copyright (C) 2008, International Business Machines
+#*   Corporation and others.  All Rights Reserved.
+#***********************************************************************/
+INCFILE=$(shell $(ICU_CONFIG) --incfile)
+
+include $(INCFILE)
+
+testit: $(INCFILE)
+	@echo testing $(ICU_CONFIG) and $(INCFILE)  .. 1>&2
+	@if [ ! -x $(ICU_CONFIG)  ]; then \
+		echo ERROR: icu-config $(ICU_CONFIG)  not executable 1>&2 ; \
+		exit 1; \
+	fi
+
+extract: $(INCFILE) testit
+	@echo $(LIB_VERSION_MAJOR)
+

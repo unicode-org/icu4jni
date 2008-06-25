@@ -1,3 +1,4 @@
 * text=auto !eol
+/Makefile.extract -text
 /license.html svneol=native#text/html
 /readme.html svneol=native#text/html
