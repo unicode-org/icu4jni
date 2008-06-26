@@ -7,6 +7,7 @@
 
 srcdir=@srcdir@
 top_srcdir=@top_srcdir@
+abssrcdir=$(shell pwd)
 CANON=@CANON@
 JDK14=@JDK14@
 CRT=@CRT@
@@ -253,7 +254,7 @@ all-release: $(TARGETR)
 java :  $(MAKE_CLASSOUT)
 
 $(MAKE_CLASSOUT): $(MAKE_CLASS)
-	$(JAVAC_EXEC) -g -d $(BUILDDIR)/classes $(MAKE_CLASS)
+	$(JAVAC_EXEC) -g -d $(BUILDDIR)/classes $(MAKE_CLASS:src/%=$(abssrcdir)/src/%)
 
 javar :
 	$(JAVAC_EXEC) -g:none -O -d $(BUILDDIR)/classes $(MAKE_CLASS)
