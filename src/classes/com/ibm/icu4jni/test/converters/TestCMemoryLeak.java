@@ -54,6 +54,8 @@ public class TestCMemoryLeak {
                 char chars[] = new char[2048];
                 byte b[] = "string".getBytes("UTF-8");
                 int len  = convto.convert(b, 0, b.length, chars, 0, chars.length);
+                
+                convto.close();
 
 //                if (i % 50000 == 0) {
 //                    System.out.print(".");
@@ -141,6 +143,7 @@ public class TestCMemoryLeak {
         double free = r.freeMemory();
         free = free / 1024000.0;
         return "Free memory: " + (int)free + "M / " + total + "M";
+
     }
 
 }

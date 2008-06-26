@@ -52,11 +52,11 @@
 #if I_DEBUG
 #include <stdio.h>
 static int num = 0;
-FILE *x = stdout;
+FILE *x;
 
 FILE *xlog() {
     if(x==NULL) {
-        x = fopen("/tmp/xlog","wa");
+	x = stdout;
         fprintf(x, "-----\n%d:  I_USESET=%d\n", getpid(), I_USESET);
         fflush(x);
     }
@@ -156,6 +156,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_closeConverter (JNIEnv *env,
                     fflush(xlog());
 #endif                   
         ucnv_close(cnv);
+        cnv = NULL;
     }
 }
 

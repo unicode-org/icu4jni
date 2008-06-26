@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2006, International Business Machines Corporation and    *
+* Copyright (C) 1996-2008, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -26,7 +26,7 @@
     private int[] data = new int[2];
     
     /* handle to the ICU converter that is opened */
-    private final long converterHandle;
+    private long converterHandle;
     
     /* encoding of this converter object */
     private final String encoding;
@@ -313,14 +313,24 @@
     }
     
     /**
+     * Close the converter.
+     * @draft ICU 4.0
+     */
+    public synchronized final void close() {
+        if(converterHandle != 0) {
+            NativeConverter.closeConverter(converterHandle);
+        } 
+        converterHandle = 0;
+    }
+    
+    /**
      * Releases the system resources by cleanly closing ICU converter opened
      * @exception Throwable exception thrown by super class' finalize method
      * @stable ICU 2.4
      */
     protected void finalize() throws Throwable{
         try{
-            
-            NativeConverter.closeConverter(converterHandle);
+            close();
         }
         finally{
             super.finalize();
