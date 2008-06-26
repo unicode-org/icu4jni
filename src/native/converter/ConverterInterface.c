@@ -52,7 +52,7 @@
 #if I_DEBUG
 #include <stdio.h>
 static int num = 0;
-FILE *x = NULL;
+FILE *x = stdout;
 
 FILE *xlog() {
     if(x==NULL) {
@@ -966,7 +966,7 @@ Java_com_ibm_icu4jni_converters_NativeConverter_getAvailable(JNIEnv *env, jclass
     for(i=0;i<num;i++) {
         name = ucnv_getAvailableName(i);
         getJavaCanonicalName(name, canonicalName, 256, &error);   
-#if DEBUG
+#if I_DEBUG
         if(U_FAILURE(error)){
             printf("An error occurred retrieving index %i. Error: %s. \n", i, u_errorName(error));
         }

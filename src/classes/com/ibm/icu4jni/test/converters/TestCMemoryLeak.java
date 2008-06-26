@@ -29,8 +29,8 @@ import com.ibm.icu4jni.converters.NativeConverter;
 import com.ibm.icu4jni.test.TestFmwk;
 
 public class TestCMemoryLeak {
-    static final int THREAD_COUNT = 18;
-    static final int LOOP_COUNT=470;
+    static final int THREAD_COUNT = 20;
+    static final int LOOP_COUNT=200470;
     static  int nn = 0;
 
     private static class TestThread extends Thread {
@@ -88,7 +88,7 @@ public class TestCMemoryLeak {
                     j++;
                 }
             }
-            System.err.println(j+" threads alive- ops: " + nn);
+            System.err.println(j+" threads alive- ops: " + nn + " - " + freeMem());
             
             if(j==0) { return; }
             
@@ -99,7 +99,7 @@ public class TestCMemoryLeak {
  
     public static void main(String[] args) throws Throwable {
     int i=0;
-        if(args.length<=0||rgs[0].equals("-st")) {
+        if(args.length<=0||args[0].equals("-st")) {
             doMultithreadTest();
             return;
         }
@@ -129,5 +129,19 @@ public class TestCMemoryLeak {
             System.out.println("FAILED- @"+i);
         }
     }
+
+    /**
+     * Print memory stats
+     * @return
+     */
+    public static String freeMem() {
+        Runtime r = Runtime.getRuntime();
+        double total = r.totalMemory();
+        total = total / 1024000.0;
+        double free = r.freeMemory();
+        free = free / 1024000.0;
+        return "Free memory: " + (int)free + "M / " + total + "M";
+    }
+
 }
 
