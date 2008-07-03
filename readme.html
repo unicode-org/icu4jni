@@ -1,308 +1,372 @@
-<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
-<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
-<head>
-  <title>ICU4JNI Read Me</title>
-    <meta name="COPYRIGHT" content=
-    "Copyright (c) 1997-2006 IBM Corporation and others. All Rights Reserved.">
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<style type="text/css">
-      h1 {border-width: 2px; border-style: solid; text-align: center; width: 100%; font-size: 200%; font-weight: bold}
-      h2 {margin-top: 3em; text-decoration: underline; page-break-before: always}
-      h2.TOC {page-break-before: auto}
-      h3 {margin-top: 2em; text-decoration: underline}
-      h4 {text-decoration: underline}
-      h5 {text-decoration: underline}
-      caption {font-weight: bold; text-align: left}
-      div.indent {margin-left: 2em}
-      ul.TOC {list-style-type: none}
-      samp {margin-left: 2em; border-style: groove; padding: 1em; display: block; background-color: #EEEEEE}
-</style>
-</head>
-    
-  <body lang="en-US">
-    <h1>ICU4JNI: International Components for Unicode for Java Native Interface<br>
-     ICU4JNI 3.6 ReadMe</h1>
-
-    <p>Version: 2006-Oct-1<br>
-     Copyright &copy; 1997-2006 International Business Machines Corporation and
-    others. All Rights Reserved.<br>
-     Author: Ram Viswanadha
-    </p>
-    
-<h4>Contents</h4>
-
-<ul type="disc">    
-  <li><a href="#introduction">Introduction</a></li>
-  <li><a href="#license">License Information</a></li>
-  <li><a href="#requirements">System Requirements</a></li>
-  <li><a href="#installation">Installation</a></li>
-</ul>
-    
-<h4><a NAME="introduction">Introduction</a></h4>
-    
-<p class="MsoNormal" style="margin-right: 0.5in; margin-left: 0.5in; ">ICU4JNI 
-contains Java Native Interface wrappers for ICU4C's character set conversion 
-and collation libraries. <br>
-  These wrappers provide increased performace of conversion and collation, 
-and complete compatibility with ICU4C.</p>
-    
-<h4><a NAME="license">License Information</a></h4>
-    
-<p class="MsoNormal" style="margin-right: 0.5in; margin-left: 0.5in; ">The 
-The X license is a non-viral and recommended free software license that is compatible with the GNU GPL license. 
-The X license is listed as GPL compatible, see the gnu page at <a href="http://www.gnu.org/philosophy/license-list.html#GPLCompatibleLicenses">
- http://www.gnu.org/philosophy/license-list.html#GPLCompatibleLicenses</a>. 
- Please see <a href="license.html">license.html</a> for text of the license.</a>
- </p>
-    
-<h4><a NAME="requirements">System Requirements</a></h4>
-    
-<ul type="disc" style="margin-left: 0.25in; ">    
-  <li>JDK1.3  or above with most recent release updates.</li>
-  <li>ICU4C built and installed</li>
-</ul>
-    
-<h5>Tested Environments</h5>
-    
-<table border="1" cols="4">
-   <tbody>
-     <tr>
-       <td>&nbsp;Operating System</td>
-       <td>&nbsp;Compiler</td>
-       <td>&nbsp;Sun's JDK</td>
-       <td>&nbsp;Additional Requirements</td>
-     </tr>
-     <tr>
-       <td>AIX 5.1</td>
-       <td>xlC</td>
-       <td>1.4.2<br>
-       </td>
-       <td>gmake</td>
-     </tr>
-     <tr>
-       <td>AIX 5.2</td>
-       <td>xlC</td>
-       <td>1.5.0</td>
-       <td>gmake</td>
-     </tr>
-     <tr>
-       <td>HPUX 11i</td>
-       <td>aCC</td>
-       <td>1.4.2</td>
-       <td>gmake</td>
-     </tr>
-     <tr>
-       <td>Solaris 2.6</td>
-       <td>GCC</td>
-       <td>1.4.2</td>
-       <td>gmake</td>
-     </tr>
-     <tr>
-       <td>Solaris 2.7</td>
-       <td>CC v6</td>
-       <td>1.4.2</td>
-       <td>gmake</td>
-     </tr>
-     <tr>
-       <td>Solaris 2.7</td>
-       <td>CC v4.2</td>
-       <td>1.4.2</td>
-       <td>gmake</td>
-     </tr>
-     <tr>
-       <td>Solaris 9.0</td>
-       <td>CC v5.5</td>
-       <td>1.4.2</td>
-       <td>gmake</td>
-     </tr>
-     <tr>
-       <td>RedHat/Linux 7.2</td>
-       <td>GCC</td>
-       <td>1.4.2</td>
-       <td>gmake</td>
-     </tr>
-     <tr>
-       <td>RedHat/Linux 9.0</td>
-       <td>GCC</td>
-       <td>1.4.2</td>
-       <td>gmake</td>
-     </tr>
-     <tr>
-       <td>RedHat Enterprise Linux 3.0</td>
-       <td>GCC</td>
-       <td>1.4.2</td>
-       <td>gmake</td>
-     </tr>
-     <tr>
-       <td>Windows XP</td>
-       <td>CL</td>
-       <td>1.4.2</td>
-       <td>nmake</td>
-     </tr>
-  </tbody> 
-</table>
- <br>
- &nbsp;&nbsp;&nbsp;<b><i> Note: For running ICU Conversion service with the 
-JDK 1.4 java.nio.charset API, place the icu4jni.jar and ICU4JNIInterface.&lt;dll/so&gt; files in &lt;java_home&gt;/jre/lib/ext/ directory.</i></b><br>
- 
-<h4><a NAME="installation"></a>Installation</h4>
-    
-<h5>UNIX</h5>
-    
-<ol start="1" type="1">
-   <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
-     mso-list:l0 level1 lfo3;tab-stops:list .5in">
- Download and install ICU4C from <a href="http://ibm.com/software/globalization/icu/downloads.jsp">
- http://ibm.com/software/globalization/icu/downloads.jsp</a>
-       </li>
-   <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
-     mso-list:l0 level1 lfo3;tab-stops:list .5in">
-       Ensure that ICU libraries are available in system's dynamic library search path.
-   </li>
-   <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
-     mso-list:l0 level1 lfo3;tab-stops:list .5in">
- Make sure that<b> 'icu-config'</b> is in the system's executable search
-path defined by PATH environment variable<br>
-  </li>
-   <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
-     mso-list:l0 level1 lfo3;tab-stops:list .5in">
- Set the JAVA_HOME environment      variable, e.g.:<br>
-       <tt><span style="font-size: 10pt; font-family: &quot;Courier New&quot;; ">&nbsp;&nbsp;&nbsp;export
-      JAVA_HOME=/java/jdk1.3</span></tt> </li>
-   <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
-     mso-list:l0 level1 lfo3;tab-stops:list .5in">
- Run configure with prefix and      jdk options, ./configure --&lt;enable/disable&gt;-jdk14, 
-e.g.:<br>
-       <tt><span style="font-size: 10pt; font-family: &quot;Courier New&quot;; ">&nbsp;&nbsp;&nbsp;./configure
-      --prefix=/usr/local/ --enable-jdk14</span></tt> </li>
-   <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
-     mso-list:l0 level1 lfo3;tab-stops:list .5in">
- Run <tt><span style="font-size: 10pt; font-family: &quot;Courier New&quot;; ">make 
-check</span></tt>      to build and run tests</li>
-   
-</ol>
- &nbsp;&nbsp;&nbsp; <br>
- &nbsp;&nbsp;&nbsp;<b><i> Note: <br>
-</i></b>
-<ul>
-  <li><b><i>Building ICU4JNI on Solaris need libC.so and libc.so to
-be present in the search path defined by LD_LIBRARY_PATH environment
-variable. libC.so should be a symbolic link to libC.so.5</i></b></li>
-  <li><i><b>Building ICU4JNI on AIX, Solaris 64bit requires
-ICU to be built with --disable-64bit-libraries configure option enabled.</b></i><br>
-  </li>
-</ul>
-   
-<h5>Win32</h5>
-    
-<p>Make is configured to build with or without JDK 1.4</p>
-    
-<ol start="1" type="1">
-   <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
-     mso-list:l1 level1 lfo6;tab-stops:list .5in">
- Download and install ICU4C from <a href="http://ibm.com/software/globalization/icu/downloads.jsp">
- http://ibm.com/software/globalization/icu/downloads.jsp</a>
-
-   <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
-     mso-list:l1 level1 lfo6;tab-stops:list .5in">
- Set the JAVA_HOME environment      variable or pass JAVAPATH on the command line, e.g.:<br>
-       <tt><span style="font-size: 10pt; font-family: &quot;Courier New&quot;; ">&nbsp;&nbsp;&nbsp;set
-      JAVA_HOME=c:\jdk1.3</span></tt> </li>
-   <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
-     mso-list:l1 level1 lfo6;tab-stops:list .5in">
- Ensure that the      &lt;icu_dir&gt;\bin directory is in your path. </li>
-   <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
-     mso-list:l1 level1 lfo6;tab-stops:list .5in">
- Ensure that your environment is set right for the C compilation. For 
-Microsoft C compilers, ensure that <b>&nbsp;vcvars32.bat&nbsp;</b> has been ran to set the environment 
-variables.</li>
-   <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
-     mso-list:l1 level1 lfo6;tab-stops:list .5in">
- Run nmake with the supplied      win32 makefile. You can set the configuration 
-option by defining CFG.      Also, if ICU_DATA is not set, you can provide 
-the path to the ICU bin directory      by defining ICUBIN.
-      
-  <ul type="Circle">
-    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
-      auto;mso-list:l1 level2 lfo6;tab-stops:list 1.0in">
- To set configuration       options define CFG to either Debug or Release, 
-default is Debug </li>
-    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
-      auto;mso-list:l1 level2 lfo6;tab-stops:list 1.0in">
- If ICU_DATA is not       set, define ICUBIN=&lt;icu&gt;/bin </li>
-      
-  </ul>
-  </li>
-   
-</ol>
-    
-<p class="MsoNormal" style="margin-left: 0.5in; ">For example:<br>
-  <tt><span style="font-size: 10pt; font-family: &quot;Courier New&quot;; ">&nbsp;&nbsp;&nbsp;nmake
- /f makefile-win32 CFG="Debug" ICUBIN="c:\icu\bin"</span></tt> </p>
-    
-<p class="MsoNormal" style="margin-left: 0.5in; ">For building with JDK 1.4 
-type the following command</p>
-    
-<p class="MsoNormal" style="margin-left: 0.5in; "><span style="mso-spacerun: yes">
- &nbsp;&nbsp; </span><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-</span><span style="mso-spacerun: yes">&nbsp;&nbsp;</span><span style="mso-tab-count:1">
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>nmake /f makefile-win32 
-CFG="Debug" ICUBIN="&lt;location of ICU&gt;\icu\bin" </p>
-    
-<p class="MsoNormal" style="text-indent: 0.5in; ">For building with JDK1.3 
-type the following command</p>
-    
-<p class="MsoNormal" style="margin-left: 0.5in; "><span style="mso-tab-count:1">
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="mso-spacerun: yes">
- &nbsp; </span><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-</span>nmake /f makefile-win32 CFG="Debug" ICUBIN="&lt;location of ICU&gt;\bin" 
-JDK14="FALSE"</p>
-    
-<ol start="6" type="1">
-   <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
-     mso-list:l1 level1 lfo6;tab-stops:list .5in">
- The files are built in the      &lt;jniroot&gt;/build directory. The test 
-is com.ibm.icu4jni.test.TestAll.      You must define the library path to 
-point to the jni library, and set the      classpath to point to the icu4jni 
-class files. E.g.:<br>
-       <tt><span style="font-size: 10pt; font-family: &quot;Courier New&quot;; ">&nbsp;&nbsp;&nbsp;java
-      -Djava.library.path=c:\icu4jni\build\lib -classpath ;c:\icu4jni\build\classes;
-      com.ibm.icu4jni.test.TestAll</span></tt><br>
-       Alternatively, you can also run the test by making the 'check' target,
-      e.g.:<br>
-       <tt><span style="font-size: 10pt; font-family: &quot;Courier New&quot;; ">&nbsp;&nbsp;&nbsp;&lt;full
-      nmake command as described above&gt;&nbsp;CHECK</span></tt></li>
-   
-</ol>
-    
-<h4>For Integrating into JVM only</h4>
-    
-<p class="MsoNormal" style="margin-right: 0.5in; margin-left: 0.5in; ">&nbsp;* 
-Place the java source files in $(TARGETDIR)/com,i.e, &lt;jdksource&gt;/com 
-<br>
-  &nbsp;* Add the following lines to &lt;jdk&gt;/make/mkinclude/java_java.jmk 
-<br>
-  &nbsp; $(TARGDIR)com/ibm/icu4jni/ICUJNIInterface.java \ <br>
-  &nbsp; $(TARGDIR)com/ibm/icu4jni/CharToByteConverterICU.java \ <br>
-  &nbsp; $(TARGDIR)com/ibm/icu4jni/ByteToCharConverterICU.java \ <br>
-  &nbsp; # the files below are test classes <br>
-  &nbsp; $(TARGDIR)com/ibm/icu4jni/ByteToCharGB18030.java \ <br>
-  &nbsp; $(TARGDIR)com/ibm/icu4jni/CharToByteGB18030.java \ <br>
-  &nbsp;* The JNI wrappers work under the assumption that ICU4C is available 
-and installed on the target platform. <br>
-  &nbsp;* For adding additional codepages open CharacterEncoding.java in
-&lt;jdksource&gt;/sun/io directory and add the <br>
-  &nbsp;&nbsp; aliases to the converter <br>
-  &nbsp; for eg: <br>
-  &nbsp; For GB18030 support you add: <br>
-  &nbsp; aliasTable.put( "gb18030" , "GB18030"); <br>
-  &nbsp; aliasTable.put( "gb-18030", "GB18030"); <br>
-  &nbsp; aliasTable.put( "gb_18030", "GB18030"); <br>
-  &nbsp; aliasTable.put( "GB-18030", "GB18030"); <br>
-  &nbsp;* Compile JNI wrapper code into dll/so using a C compiler <br>
-  &nbsp;* Package the ICUJNIInterface.dll &lt;jdkbuild&gt;/&lt;platform&gt;/bin
- directory <br>
-  &nbsp;* Rebuild the JDK source</p>
-    
-</body>
-</html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE>ICU4JNI Read Me</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 2.4  (Win32)">
+	<META NAME="CREATED" CONTENT="0;0">
+	<META NAME="CHANGED" CONTENT="20080703;15320206">
+	<META NAME="COPYRIGHT" CONTENT="Copyright (c) 1997-2008 IBM Corporation and others. All Rights Reserved.">
+	<STYLE TYPE="text/css">
+	<!--
+		@page { size: 8.5in 11in }
+		H1 { border: 1.00pt solid #000000; padding: 0.02in; text-align: center }
+		H4 { text-decoration: underline }
+		H4.western { font-family: "Albany", sans-serif; font-size: 11pt; font-style: italic }
+		H4.cjk { font-family: "HG Mincho Light J"; font-size: 11pt; font-style: italic }
+		H4.ctl { font-family: "Arial Unicode MS"; font-size: 11pt; font-style: italic }
+		H5 { text-decoration: underline }
+		H5.western { font-family: "Albany", sans-serif; font-size: 11pt }
+		H5.cjk { font-family: "HG Mincho Light J"; font-size: 11pt }
+		H5.ctl { font-family: "Arial Unicode MS"; font-size: 11pt }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="en-US" DIR="LTR">
+<H1>ICU4JNI: International Components for Unicode for Java Native
+Interface<BR>ICU4JNI 4.0 ReadMe</H1>
+<P>Version: 2008-Jul-3<BR>Copyright &copy; 1997-2008 International
+Business Machines Corporation and others. All Rights
+Reserved.<BR>Author: Ram Viswanadha, Steven R. Loomis 
+</P>
+<H4 CLASS="western">Contents</H4>
+<UL TYPE=DISC>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="#introduction">Introduction</A>
+		</P>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="#license">License
+	Information</A> 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="#requirements">System
+	Requirements</A> 
+	</P>
+	<LI><P><A HREF="#installation">Installation</A> 
+	</P>
+</UL>
+<H4 CLASS="western"><A NAME="introduction"></A>Introduction</H4>
+<P STYLE="margin-left: 0.5in; margin-right: 0.5in">ICU4JNI contains
+Java Native Interface wrappers for ICU4C's character set conversion
+and collation libraries. <BR>These wrappers provide increased
+performace of conversion and collation, and complete compatibility
+with ICU4C.</P>
+<H4 CLASS="western"><A NAME="license"></A>License Information</H4>
+<P STYLE="margin-left: 0.5in; margin-right: 0.5in">The The X license
+is a non-viral and recommended free software license that is
+compatible with the GNU GPL license. The X license is listed as GPL
+compatible, see the gnu page at
+<A HREF="http://www.gnu.org/philosophy/license-list.html#GPLCompatibleLicenses">http://www.gnu.org/philosophy/license-list.html#GPLCompatibleLicenses</A>.
+Please see <A HREF="license.html">license.html</A> for text of the
+license. 
+</P>
+<H4 CLASS="western"><A NAME="requirements"></A>System Requirements</H4>
+<UL TYPE=DISC>
+	<LI><P STYLE="margin-bottom: 0in">JDK1.3 or above with most recent
+	release updates. 
+	</P>
+	<LI><P>ICU4C built and installed 
+	</P>
+</UL>
+<H5 CLASS="western">Tested Environments</H5>
+<TABLE COLS=4 WIDTH=100% BORDER=1 CELLPADDING=2 CELLSPACING=2>
+	<TR>
+		<TD>
+			<P>&nbsp;Operating System</P>
+		</TD>
+		<TD>
+			<P>&nbsp;Compiler</P>
+		</TD>
+		<TD>
+			<P>&nbsp;Sun's JDK</P>
+		</TD>
+		<TD>
+			<P>&nbsp;Additional Requirements</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>AIX 5.1</P>
+		</TD>
+		<TD>
+			<P>xlC</P>
+		</TD>
+		<TD>
+			<P>1.4.2</P>
+		</TD>
+		<TD>
+			<P>gmake</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>AIX 5.2</P>
+		</TD>
+		<TD>
+			<P>xlC</P>
+		</TD>
+		<TD>
+			<P>1.5.0</P>
+		</TD>
+		<TD>
+			<P>gmake</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>HPUX 11i</P>
+		</TD>
+		<TD>
+			<P>aCC</P>
+		</TD>
+		<TD>
+			<P>1.4.2</P>
+		</TD>
+		<TD>
+			<P>gmake</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>Solaris 2.6</P>
+		</TD>
+		<TD>
+			<P>GCC</P>
+		</TD>
+		<TD>
+			<P>1.4.2</P>
+		</TD>
+		<TD>
+			<P>gmake</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>Solaris 2.7</P>
+		</TD>
+		<TD>
+			<P>CC v6</P>
+		</TD>
+		<TD>
+			<P>1.4.2</P>
+		</TD>
+		<TD>
+			<P>gmake</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>Solaris 2.7</P>
+		</TD>
+		<TD>
+			<P>CC v4.2</P>
+		</TD>
+		<TD>
+			<P>1.4.2</P>
+		</TD>
+		<TD>
+			<P>gmake</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>Solaris 9.0</P>
+		</TD>
+		<TD>
+			<P>CC v5.5</P>
+		</TD>
+		<TD>
+			<P>1.4.2</P>
+		</TD>
+		<TD>
+			<P>gmake</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>RedHat/Linux 7.2</P>
+		</TD>
+		<TD>
+			<P>GCC</P>
+		</TD>
+		<TD>
+			<P>1.4.2</P>
+		</TD>
+		<TD>
+			<P>gmake</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>RedHat/Linux 9.0</P>
+		</TD>
+		<TD>
+			<P>GCC</P>
+		</TD>
+		<TD>
+			<P>1.4.2</P>
+		</TD>
+		<TD>
+			<P>gmake</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>RedHat Enterprise Linux 3.0</P>
+		</TD>
+		<TD>
+			<P>GCC</P>
+		</TD>
+		<TD>
+			<P>1.4.2</P>
+		</TD>
+		<TD>
+			<P>gmake</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P>Windows XP</P>
+		</TD>
+		<TD>
+			<P>CL</P>
+		</TD>
+		<TD>
+			<P>1.4.2</P>
+		</TD>
+		<TD>
+			<P>nmake</P>
+		</TD>
+	</TR>
+</TABLE>
+<P><BR>&nbsp;&nbsp;&nbsp; <I><B>Note: For running ICU Conversion
+service with the JDK 1.4 java.nio.charset API, place the icu4jni.jar
+and ICU4JNIInterface.&lt;dll/so&gt; files in &lt;java_home&gt;/jre/lib/ext/
+directory.</B></I></P>
+<H4 CLASS="western"><A NAME="installation"></A>Installation</H4>
+<H5 CLASS="western">UNIX</H5>
+<OL>
+	<LI><P STYLE="margin-bottom: 0in">Download and install ICU4C from
+	<A HREF="http://ibm.com/software/globalization/icu/downloads.jsp">http://ibm.com/software/globalization/icu/downloads.jsp</A>
+		</P>
+	<LI><P STYLE="margin-bottom: 0in">Ensure that ICU libraries are
+	available in system's dynamic library search path. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">Make sure that <B>'icu-config'</B>
+	is in the system's executable search path defined by PATH
+	environment variable 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">Set the JAVA_HOME environment
+	variable, e.g.:<BR><TT>&nbsp;&nbsp;&nbsp;</TT><TT><FONT FACE="Courier New"><FONT SIZE=2>export
+	JAVA_HOME=/java/jdk1.3</FONT></FONT></TT> 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">Run configure with prefix and jdk
+	options, ./configure --&lt;enable/disable&gt;-jdk14,
+	e.g.:<BR><TT>&nbsp;&nbsp;&nbsp;</TT><TT><FONT FACE="Courier New"><FONT SIZE=2>./configure
+	--prefix=/usr/local/ --enable-jdk14</FONT></FONT></TT> <BR>( use the
+	prefix where ICU is installed, and where you may wish icu4jni to be
+	installed )</P>
+	<LI><P>Run <TT><FONT FACE="Courier New"><FONT SIZE=2>make check</FONT></FONT></TT>
+	to build and run tests. Some failures may be due to JDK variants.</P>
+	<LI><P>Binary output is in 'build/lib'. 
+	</P>
+</OL>
+<P>&nbsp;&nbsp;&nbsp; <BR>&nbsp;&nbsp;&nbsp; <I><B>Note: </B></I>
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in"><I><B>Building ICU4JNI on Solaris
+	need libC.so and libc.so to be present in the search path defined by
+	LD_LIBRARY_PATH environment variable. libC.so should be a symbolic
+	link to libC.so.5</B></I> 
+	</P>
+	<LI><P><I><B>Building ICU4JNI on AIX, Solaris 64bit requires ICU to
+	be built with --disable-64bit-libraries configure option enabled, as
+	Java is often a 32-bit binary. This may prevent you from using the
+	standard ICU4C binaries.  </B></I>
+	</P>
+	<LI><P><I><B>For AIX xlC, set the PATH </B></I><FONT COLOR="#000000"><FONT FACE="Helv, sans-serif"><FONT SIZE=2>
+	PATH=$PATH:/usr/vacpp/bin</FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Helv, sans-serif"><FONT SIZE=2><I><B>
+	to ensure the corect compiler is chosen.</B></I></FONT></FONT></FONT></P>
+</UL>
+<H5 CLASS="western">Win32</H5>
+<P>Make is configured to build with or without JDK 1.4</P>
+<OL>
+	<LI><P STYLE="margin-bottom: 0in">Download and install ICU4C from
+	<A HREF="http://ibm.com/software/globalization/icu/downloads.jsp">http://ibm.com/software/globalization/icu/downloads.jsp</A>
+		</P>
+	<LI><P STYLE="margin-bottom: 0in">Set the JAVA_HOME environment
+	variable or pass JAVAPATH on the command line, e.g.:<BR><TT>&nbsp;&nbsp;&nbsp;</TT><TT><FONT FACE="Courier New"><FONT SIZE=2>set
+	JAVA_HOME=c:\jdk1.3</FONT></FONT></TT> 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">Ensure that the &lt;icu_dir&gt;\bin
+	directory is in your PATH. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">Ensure that your environment is
+	set right for the C compilation. For Microsoft C compilers, ensure
+	that &nbsp;<B>vcvars32.bat&nbsp;</B> has been ran to set the
+	environment variables. 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">Run nmake with the supplied win32
+	makefile. You can set the configuration option by defining CFG.
+	Also, if ICU_DATA is not set, you can provide the path to the ICU
+	bin directory by defining ICUBIN. 
+	</P>
+	<UL TYPE=CIRCLE>
+		<LI><P STYLE="margin-bottom: 0in">To set configuration options
+		define CFG to either Debug or Release, default is Debug 
+		</P>
+		<LI><P>If ICU_DATA is not set, define ICUBIN=&lt;icu&gt;/bin 
+		</P>
+		<LI><P>The ICU_VERSION is the two-digit version of ICU4C that you
+		are building against, so &ldquo;40&rdquo; for ICU 4.0.</P>
+	</UL>
+</OL>
+<P STYLE="margin-left: 0.5in">For example:<BR><TT>&nbsp;&nbsp;&nbsp;</TT><TT><FONT FACE="Courier New"><FONT SIZE=2>nmake
+/f makefile-win32 CFG=&quot;Debug&quot; ICUBIN=&quot;c:\icu\bin</FONT></FONT></TT><TT><FONT FACE="Courier New, monospace"><FONT SIZE=2>&quot;</FONT></FONT></TT>
+<FONT FACE="Courier New, monospace"><FONT SIZE=2>ICU_VERSION=&rdquo;40&rdquo;</FONT></FONT></P>
+<P STYLE="margin-left: 0.5in">For building with JDK 1.4 type the
+following command</P>
+<P STYLE="margin-left: 0.5in">&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+nmake /f makefile-win32 CFG=&quot;Debug&quot; ICUBIN=&quot;&lt;location
+of ICU&gt;\icu\bin&quot; ICU_VERSION=&rdquo;40&rdquo;</P>
+<P STYLE="text-indent: 0.5in">For building with JDK1.3 type the
+following command</P>
+<P STYLE="margin-left: 0.5in">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nmake
+/f makefile-win32 CFG=&quot;Debug&quot; ICUBIN=&quot;&lt;location of
+ICU&gt;\bin&quot; ICU_VERSION=&rdquo;40&rdquo; JDK14=&quot;FALSE&quot;</P>
+<OL START=6>
+	<LI><P>The files are built in the &lt;jniroot&gt;/build directory.
+	The test is com.ibm.icu4jni.test.TestAll. You must define the
+	library path to point to the jni library, and set the classpath to
+	point to the icu4jni class files. E.g.:<BR><TT>&nbsp;&nbsp;&nbsp;</TT><TT><FONT FACE="Courier New"><FONT SIZE=2>java
+	-Djava.library.path=c:\icu4jni\build\lib -classpath
+	;c:\icu4jni\build\classes;
+	com.ibm.icu4jni.test.TestAll</FONT></FONT></TT><BR>Alternatively,
+	you can also run the test by making the 'check' target,
+	e.g.:<BR><TT>&nbsp;&nbsp;&nbsp;</TT><TT><FONT FACE="Courier New"><FONT SIZE=2>&lt;full
+	nmake command as described above&gt;&nbsp;CHECK</FONT></FONT></TT> 
+	</P>
+</OL>
+<H4 CLASS="western">For Integrating into JVM only</H4>
+<P STYLE="margin-left: 0.5in; margin-right: 0.5in">&nbsp;* Place the
+java source files in $(TARGETDIR)/com,i.e, &lt;jdksource&gt;/com <BR>&nbsp;*
+Add the following lines to &lt;jdk&gt;/make/mkinclude/java_java.jmk
+<BR>&nbsp; $(TARGDIR)com/ibm/icu4jni/ICUJNIInterface.java \ <BR>&nbsp;
+$(TARGDIR)com/ibm/icu4jni/CharToByteConverterICU.java \ <BR>&nbsp;
+$(TARGDIR)com/ibm/icu4jni/ByteToCharConverterICU.java \ <BR>&nbsp; #
+the files below are test classes <BR>&nbsp;
+$(TARGDIR)com/ibm/icu4jni/ByteToCharGB18030.java \ <BR>&nbsp;
+$(TARGDIR)com/ibm/icu4jni/CharToByteGB18030.java \ <BR>&nbsp;* The
+JNI wrappers work under the assumption that ICU4C is available and
+installed on the target platform. <BR>&nbsp;* For adding additional
+codepages open CharacterEncoding.java in &lt;jdksource&gt;/sun/io
+directory and add the <BR>&nbsp;&nbsp; aliases to the converter <BR>&nbsp;
+for eg: <BR>&nbsp; For GB18030 support you add: <BR>&nbsp;
+aliasTable.put( &quot;gb18030&quot; , &quot;GB18030&quot;); <BR>&nbsp;
+aliasTable.put( &quot;gb-18030&quot;, &quot;GB18030&quot;); <BR>&nbsp;
+aliasTable.put( &quot;gb_18030&quot;, &quot;GB18030&quot;); <BR>&nbsp;
+aliasTable.put( &quot;GB-18030&quot;, &quot;GB18030&quot;); <BR>&nbsp;*
+Compile JNI wrapper code into dll/so using a C compiler <BR>&nbsp;*
+Package the ICUJNIInterface.dll &lt;jdkbuild&gt;/&lt;platform&gt;/bin
+directory <BR>&nbsp;* Rebuild the JDK source</P>
+</BODY>
+</HTML>
