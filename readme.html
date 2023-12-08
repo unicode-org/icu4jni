@@ -6,7 +6,7 @@
 	<META NAME="GENERATOR" CONTENT="OpenOffice.org 2.4  (Win32)">
 	<META NAME="CREATED" CONTENT="0;0">
 	<META NAME="CHANGED" CONTENT="20080703;15320206">
-	<META NAME="COPYRIGHT" CONTENT="Copyright (c) 1997-2008 IBM Corporation and others. All Rights Reserved.">
+	<META NAME="COPYRIGHT" CONTENT="Copyright (c) 1997-2008 IBM Corporation and others. All Rights Reserved.Copyright © 2016-2023 Unicode, Inc. Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the United States and other countries.">
 	<STYLE TYPE="text/css">
 	<!--
 		@page { size: 8.5in 11in }
@@ -25,21 +25,20 @@
 <BODY LANG="en-US" DIR="LTR">
 <H1>ICU4JNI: International Components for Unicode for Java Native
 Interface<BR>ICU4JNI 4.0 ReadMe</H1>
-<P>Version: 2008-Jul-3<BR>Copyright &copy; 1997-2008 International
-Business Machines Corporation and others. All Rights
-Reserved.<BR>Author: Ram Viswanadha, Steven R. Loomis 
+<P>Version: 2008-Jul-3<BR>Copyright © 2016-2023 Unicode, Inc. Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the United States and other countries.
+<BR>Author: Ram Viswanadha, Steven R. Loomis
 </P>
 <H4 CLASS="western">Contents</H4>
 <UL TYPE=DISC>
 	<LI><P STYLE="margin-bottom: 0in"><A HREF="#introduction">Introduction</A>
 		</P>
 	<LI><P STYLE="margin-bottom: 0in"><A HREF="#license">License
-	Information</A> 
+	Information</A>
 	</P>
 	<LI><P STYLE="margin-bottom: 0in"><A HREF="#requirements">System
-	Requirements</A> 
+	Requirements</A>
 	</P>
-	<LI><P><A HREF="#installation">Installation</A> 
+	<LI><P><A HREF="#installation">Installation</A>
 	</P>
 </UL>
 <H4 CLASS="western"><A NAME="introduction"></A>Introduction</H4>
@@ -49,20 +48,14 @@ and collation libraries. <BR>These wrappers provide increased
 performace of conversion and collation, and complete compatibility
 with ICU4C.</P>
 <H4 CLASS="western"><A NAME="license"></A>License Information</H4>
-<P STYLE="margin-left: 0.5in; margin-right: 0.5in">The The X license
-is a non-viral and recommended free software license that is
-compatible with the GNU GPL license. The X license is listed as GPL
-compatible, see the gnu page at
-<A HREF="http://www.gnu.org/philosophy/license-list.html#GPLCompatibleLicenses">http://www.gnu.org/philosophy/license-list.html#GPLCompatibleLicenses</A>.
-Please see <A HREF="license.html">license.html</A> for text of the
-license. 
+<P STYLE="margin-left: 0.5in; margin-right: 0.5in">This project is released under <a href="./LICENSE">LICENSE</a>.
 </P>
 <H4 CLASS="western"><A NAME="requirements"></A>System Requirements</H4>
 <UL TYPE=DISC>
 	<LI><P STYLE="margin-bottom: 0in">JDK1.3 or above with most recent
-	release updates. 
+	release updates.
 	</P>
-	<LI><P>ICU4C built and installed 
+	<LI><P>ICU4C built and installed
 	</P>
 </UL>
 <H5 CLASS="western">Tested Environments</H5>
@@ -247,15 +240,15 @@ directory.</B></I></P>
 	<A HREF="http://ibm.com/software/globalization/icu/downloads.jsp">http://ibm.com/software/globalization/icu/downloads.jsp</A>
 		</P>
 	<LI><P STYLE="margin-bottom: 0in">Ensure that ICU libraries are
-	available in system's dynamic library search path. 
+	available in system's dynamic library search path.
 	</P>
 	<LI><P STYLE="margin-bottom: 0in">Make sure that <B>'icu-config'</B>
 	is in the system's executable search path defined by PATH
-	environment variable 
+	environment variable
 	</P>
 	<LI><P STYLE="margin-bottom: 0in">Set the JAVA_HOME environment
 	variable, e.g.:<BR><TT>&nbsp;&nbsp;&nbsp;</TT><TT><FONT FACE="Courier New"><FONT SIZE=2>export
-	JAVA_HOME=/java/jdk1.3</FONT></FONT></TT> 
+	JAVA_HOME=/java/jdk1.3</FONT></FONT></TT>
 	</P>
 	<LI><P STYLE="margin-bottom: 0in">Run configure with prefix and jdk
 	options, ./configure --&lt;enable/disable&gt;-jdk14,
@@ -265,7 +258,7 @@ directory.</B></I></P>
 	installed )</P>
 	<LI><P>Run <TT><FONT FACE="Courier New"><FONT SIZE=2>make check</FONT></FONT></TT>
 	to build and run tests. Some failures may be due to JDK variants.</P>
-	<LI><P>Binary output is in 'build/lib'. 
+	<LI><P>Binary output is in 'build/lib'.
 	</P>
 </OL>
 <P>&nbsp;&nbsp;&nbsp; <BR>&nbsp;&nbsp;&nbsp; <I><B>Note: </B></I>
@@ -274,7 +267,7 @@ directory.</B></I></P>
 	<LI><P STYLE="margin-bottom: 0in"><I><B>Building ICU4JNI on Solaris
 	need libC.so and libc.so to be present in the search path defined by
 	LD_LIBRARY_PATH environment variable. libC.so should be a symbolic
-	link to libC.so.5</B></I> 
+	link to libC.so.5</B></I>
 	</P>
 	<LI><P><I><B>Building ICU4JNI on AIX, Solaris 64bit requires ICU to
 	be built with --disable-64bit-libraries configure option enabled, as
@@ -293,26 +286,26 @@ directory.</B></I></P>
 		</P>
 	<LI><P STYLE="margin-bottom: 0in">Set the JAVA_HOME environment
 	variable or pass JAVAPATH on the command line, e.g.:<BR><TT>&nbsp;&nbsp;&nbsp;</TT><TT><FONT FACE="Courier New"><FONT SIZE=2>set
-	JAVA_HOME=c:\jdk1.3</FONT></FONT></TT> 
+	JAVA_HOME=c:\jdk1.3</FONT></FONT></TT>
 	</P>
 	<LI><P STYLE="margin-bottom: 0in">Ensure that the &lt;icu_dir&gt;\bin
-	directory is in your PATH. 
+	directory is in your PATH.
 	</P>
 	<LI><P STYLE="margin-bottom: 0in">Ensure that your environment is
 	set right for the C compilation. For Microsoft C compilers, ensure
 	that &nbsp;<B>vcvars32.bat&nbsp;</B> has been ran to set the
-	environment variables. 
+	environment variables.
 	</P>
 	<LI><P STYLE="margin-bottom: 0in">Run nmake with the supplied win32
 	makefile. You can set the configuration option by defining CFG.
 	Also, if ICU_DATA is not set, you can provide the path to the ICU
-	bin directory by defining ICUBIN. 
+	bin directory by defining ICUBIN.
 	</P>
 	<UL TYPE=CIRCLE>
 		<LI><P STYLE="margin-bottom: 0in">To set configuration options
-		define CFG to either Debug or Release, default is Debug 
+		define CFG to either Debug or Release, default is Debug
 		</P>
-		<LI><P>If ICU_DATA is not set, define ICUBIN=&lt;icu&gt;/bin 
+		<LI><P>If ICU_DATA is not set, define ICUBIN=&lt;icu&gt;/bin
 		</P>
 		<LI><P>The ICU_VERSION is the two-digit version of ICU4C that you
 		are building against, so &ldquo;40&rdquo; for ICU 4.0.</P>
@@ -343,7 +336,7 @@ ICU&gt;\bin&quot; ICU_VERSION=&rdquo;40&rdquo; JDK14=&quot;FALSE&quot;</P>
 	com.ibm.icu4jni.test.TestAll</FONT></FONT></TT><BR>Alternatively,
 	you can also run the test by making the 'check' target,
 	e.g.:<BR><TT>&nbsp;&nbsp;&nbsp;</TT><TT><FONT FACE="Courier New"><FONT SIZE=2>&lt;full
-	nmake command as described above&gt;&nbsp;CHECK</FONT></FONT></TT> 
+	nmake command as described above&gt;&nbsp;CHECK</FONT></FONT></TT>
 	</P>
 </OL>
 <H4 CLASS="western">For Integrating into JVM only</H4>
@@ -368,5 +361,19 @@ aliasTable.put( &quot;GB-18030&quot;, &quot;GB18030&quot;); <BR>&nbsp;*
 Compile JNI wrapper code into dll/so using a C compiler <BR>&nbsp;*
 Package the ICUJNIInterface.dll &lt;jdkbuild&gt;/&lt;platform&gt;/bin
 directory <BR>&nbsp;* Rebuild the JDK source</P>
+	<hr/>
+
+	<p>
+		Copyright © 2016-2023 Unicode, Inc. Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the United States and other countries.
+	</p>
+
+	<p>
+		The project is released under <a href="./LICENSE">LICENSE</a>.
+	</p>
+
+	<p>
+		A CLA is required to contribute to this project - please refer to the <a href="https://github.com/unicode-org/icu/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a> file (or start a Pull Request) for more information.
+
+
 </BODY>
 </HTML>
